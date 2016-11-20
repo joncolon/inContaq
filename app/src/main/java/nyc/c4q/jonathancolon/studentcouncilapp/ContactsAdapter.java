@@ -9,44 +9,77 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by jonathancolon on 10/27/16.
  */
 
-public class ContactsAdapter extends RecyclerView.Adapter {
-    private List<Contacts> contactsList;
+public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactViewHolder> {
+    private List<Data> mData = Collections.emptyList();
     Context context;
 
-    public ContactsAdapter(List<Contacts> contactsList, Context context){
-        this.contactsList = contactsList;
+    // ADAPTER CONSTRUCTORS
+    public ContactsAdapter(List<Data> list, Context context) {
+        this.mData = list;
         this.context = context;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ContactsAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_row, parent, false);
-        return new ContactViewHolder(itemView, context);
+        ContactViewHolder vh = new ContactViewHolder(itemView, context);
+        return vh;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Contacts contacts = contactsList.get(position);
-        ((ContactViewHolder) holder).mContactImage.setImageResource(contacts.getImage());
-        ((ContactViewHolder) holder).mContactName.setText(contacts.getName());
-        ((ContactViewHolder) holder).bind(contacts);
+    public void onBindViewHolder(ContactViewHolder holder, final int position) {
+        Data data = mData.get(position);
+        holder.mContactImage.setImageResource(mData.get(position).imageId);
+        holder.mContactName.setText(mData.get(position).name);
+        holder.mContactName.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                Data contact = mData.get(position);
+                Intent intent = new Intent(context, FragmentView.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                intent.putExtra(MainActivity.CONTACT_NAME_EXTRA, contact.name);
+                intent.putExtra(MainActivity.CONTACT_IMAGE_EXTRA, contact.imageId);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return contactsList.size();
+        return mData.size();
     }
 
-    public static class ContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void updateList(List<Data> data) {
+        mData = data;
+        notifyDataSetChanged();
+    }
+
+    public void addItem(Data data) {
+        mData.add(data);
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(int position) {
+        mData.remove(position);
+        notifyItemRemoved(position);
+    }
+
+//_____________________________________VIEWHOLDER___________________________________________________
+
+    public static class ContactViewHolder extends RecyclerView.ViewHolder {
         private ImageView mContactImage;
         private TextView mContactName;
+
+
         Context context;
 
         public ContactViewHolder(View itemView, Context context) {
@@ -54,30 +87,15 @@ public class ContactsAdapter extends RecyclerView.Adapter {
             this.context = context;
             mContactImage = (ImageView) itemView.findViewById(R.id.contact_image);
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
-            itemView.setOnClickListener(this);
 
         }
 
-        public void bind (Contacts contacts){
+        public void bind(Contacts contacts) {
             mContactName.setText(contacts.getName());
             Integer resource = contacts.getImage();
-            if (resource != null){
+            if (resource != null) {
                 mContactImage.setImageResource(resource);
             }
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            int position = getAdapterPosition();
-            Contacts contacts = MainActivity.contactsList.get(position);
-            Intent intent = new Intent(this.context, FragmentView.class);
-            intent.putExtra(MainActivity.CONTACT_NAME_EXTRA, contacts.getName());
-            intent.putExtra(MainActivity.CONTACT_IMAGE_EXTRA, contacts.getImage());
-            intent.putExtra(MainActivity.CONTACT_NOTE_EXTRA, contacts.getNote());
-            this.context.startActivity(intent);
-
-
         }
     }
 }
