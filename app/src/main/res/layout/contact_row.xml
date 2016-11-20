@@ -23,6 +23,7 @@
         android:layout_marginTop="20dp"
         android:gravity="start"
         android:textAlignment="textStart"
+        android:onClick="openNotePad"
         />
 
     </android.support.v7.widget.CardView>
