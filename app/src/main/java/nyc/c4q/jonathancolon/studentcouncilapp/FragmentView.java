@@ -12,6 +12,8 @@ public class FragmentView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_view);
+        final String CONTACT_KEY = "contact_key_note_editor";
+
         if (savedInstanceState == null) {
             String contact = getIntent().getStringExtra(CONTACT);
             FragmentManager fragmentManager = getFragmentManager();

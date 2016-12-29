@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import nyc.c4q.jonathancolon.studentcouncilapp.contactlist.ContactList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,8 +27,9 @@ public class ContactNoteEditor extends Fragment {
     private Button saveButton;
     private AlertDialog confirmDialogObject;
     private static final String MODIFIED_NOTE = "Modified Note";
+    public static final String CONTACT_KEY = "contact_key_note_editor";
 
-    public ContactNoteEditor(){
+    public ContactNoteEditor() {
         //required empty public constructor
     }
 
@@ -40,28 +43,20 @@ public class ContactNoteEditor extends Fragment {
         contactNote = (EditText) NotepadLayoutFragment.findViewById(R.id.edit_text_notepad);
         if (savedInstanceState != null) {
             String savedNote = savedInstanceState.getString(MODIFIED_NOTE);
-            Log.i("NOTES---START ----- " , savedInstanceState.getString(MODIFIED_NOTE));
+            Log.i("NOTES---START ----- ", savedInstanceState.getString(MODIFIED_NOTE));
             contactNote.setText(savedNote);
         }
 
         //inflates the Note Editor Fragment
         Intent intent = getActivity().getIntent();
 
-            //populate widgets with data
-            Bundle extras = intent.getExtras();
+        //populate widgets with data
+        Bundle extras = intent.getExtras();
 
-            if (savedInstanceState != null){
-                contactNote.setText(savedInstanceState.getString(MODIFIED_NOTE));
-                Log.i("NOTES--- " , savedInstanceState.getString(MODIFIED_NOTE));
-            }
-            else {
-                String noteValue = extras.getString(MainActivity.CONTACT_NOTE_EXTRA);
-                contactNote.setText(noteValue);
-            }
-                String nameValue = extras.getString(MainActivity.CONTACT_NAME_EXTRA);
+        String nameValue = extras.getString(ContactList.CONTACT_NAME_EXTRA);
 
         contactName.setText(nameValue);
-                Log.e(TAG, "TEXT ADDED SUCCESSFULLY");
+        Log.e(TAG, "TEXT ADDED SUCCESSFULLY");
 
         buildConfirmDialog();
 
@@ -85,7 +80,7 @@ public class ContactNoteEditor extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.d("Save Note: ", "Contact Note: " + contactNote.getText());
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), ContactList.class);
                 startActivity(intent);
 
             }
@@ -107,10 +102,6 @@ public class ContactNoteEditor extends Fragment {
         outState.putString(MODIFIED_NOTE, savedNote);
         super.onSaveInstanceState(outState);
     }
-
-
-
-
 
 
 }

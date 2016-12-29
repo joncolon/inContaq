@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp;
+package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
 
 /**
  * Created by jonathancolon on 11/20/16.

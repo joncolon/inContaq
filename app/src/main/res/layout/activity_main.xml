@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#565656"
     android:orientation="vertical"
-    tools:context="nyc.c4q.jonathancolon.studentcouncilapp.MainActivity">
+    tools:context="nyc.c4q.jonathancolon.studentcouncilapp.contactlist.ContactList">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
