@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.FragmentView;
@@ -27,10 +30,12 @@ import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.SqlHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-public class ContactList extends AppCompatActivity implements AlertDialogCallback<String>, ContactsAdapter.Listener {
+public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>, ContactsAdapter.Listener {
     private static final String TAG = "DB DELETE : ";
     private RecyclerView recyclerView;
     private AlertDialog InputContactDialogObject;
+    private FloatingActionButton addContactFab;
+
     public static Activity activity;
 
     private SQLiteDatabase db;
@@ -69,7 +74,7 @@ public class ContactList extends AppCompatActivity implements AlertDialogCallbac
         confirmBuilder.setTitle("Add a contact");
         confirmBuilder.setMessage("Enter contact's name");
 
-        final EditText input = new EditText(ContactList.this);
+        final EditText input = new EditText(ContactListActivity.this);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -84,7 +89,7 @@ public class ContactList extends AppCompatActivity implements AlertDialogCallbac
 
                 // Called when add button is clicked.
 
-                Toast.makeText(ContactList.this, input.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ContactListActivity.this, input.getText(), Toast.LENGTH_SHORT).show();
                 mText = input.getText().toString();
 
                 callback.alertDialogCallback(mText);
@@ -140,7 +145,7 @@ public class ContactList extends AppCompatActivity implements AlertDialogCallbac
 
             refreshRecyclerView();
         } else {
-            Toast.makeText(ContactList.this, "Enter a valid name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ContactListActivity.this, "Enter a valid name", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -155,8 +160,9 @@ public class ContactList extends AppCompatActivity implements AlertDialogCallbac
         Intent intent = new Intent(this, FragmentView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        intent.putExtra(ContactList.CONTACT_NAME_EXTRA, contact.getFirstName() + " " + contact.getLastName());
-        intent.putExtra(ContactList.CONTACT_IMAGE_EXTRA, contact.getContactImage());
+
+        intent.putExtra("Parcelled Contact", Parcels.wrap(contact));
+
         this.startActivity(intent);
 
     }
@@ -175,6 +181,10 @@ public class ContactList extends AppCompatActivity implements AlertDialogCallbac
         cupboard().withDatabase(db).delete(contact);
         refreshRecyclerView();
     }
+
+
+
+
 }
 
 

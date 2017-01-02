@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.florent37.beautifulparallax.ParallaxViewController;
+
 import java.util.List;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
@@ -21,10 +23,20 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     Listener listener;
     List<Contact> contactList;
 
+    ParallaxViewController parallaxViewController = new ParallaxViewController();
+
     // ADAPTER CONSTRUCTORS
     public ContactsAdapter(Listener listener) {
         this.listener = listener;
     }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        parallaxViewController.registerImageParallax(recyclerView);
+    }
+
+
 
 
 
@@ -32,6 +44,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public ContactsAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_row, parent, false);
         ContactViewHolder vh = new ContactViewHolder(itemView);
+        parallaxViewController.imageParallax(vh.mBackGroundImage);
+
         context = parent.getContext();
         return vh;
     }
@@ -66,7 +80,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 //_____________________________________VIEWHOLDER___________________________________________________
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mContactImage;
+        private ImageView mBackGroundImage, mContactImage ;
         private TextView mContactName;
 
 
@@ -74,8 +88,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         public ContactViewHolder(View itemView) {
             super(itemView);
-            mContactImage = (ImageView) itemView.findViewById(R.id.contact_image);
+            mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
+            mContactImage = (ImageView) itemView.findViewById(R.id.contact_image);
 
         }
 
@@ -83,9 +98,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             final Contact contact = c;
 
             mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
-            Integer resource = contact.getContactImage();
+            Integer contactImage = contact.getContactImage();
+            Integer backgroundImage = contact.getBackgroundImage();
 
-            if (resource != null) mContactImage.setImageResource(resource);
+            mContactImage.setImageResource(contactImage);
+            mBackGroundImage.setImageResource(backgroundImage);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

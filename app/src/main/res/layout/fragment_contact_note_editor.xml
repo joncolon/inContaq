@@ -9,26 +9,45 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#795548"
         android:textColor="#ffffff"
         android:id="@+id/editor_contact_name"
         android:text="Contact Name"
         android:textSize="30sp"
         android:gravity="center"
-        android:elevation="2dp"
-        android:layout_gravity="center"/>
+        android:elevation="15dp"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimary" />
 
-    <EditText
-        android:id="@+id/edit_text_notepad"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="333dp"
-        android:gravity="top"
-        android:textColor="#212121"
-        android:inputType="textMultiLine"
-        android:background="#FFFFA5"
-        android:elevation="1dp"
-        android:layout_weight="0.89">
-    </EditText>
+        android:layout_height="400dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/background_image"
+                android:layout_gravity="center"
+                android:layout_height="200dp"
+                android:layout_width="match_parent"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/contact_img"
+                android:layout_gravity="center"
+                android:layout_height="200dp"
+                android:layout_width="160dp"
+                android:scaleType="centerCrop"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+    </FrameLayout>
+
 
     <Button
         android:text="Save"

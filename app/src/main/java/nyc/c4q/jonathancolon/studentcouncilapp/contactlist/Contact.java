@@ -1,6 +1,6 @@
 package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
 
-import java.io.Serializable;
+import org.parceler.Parcel;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
 
@@ -8,31 +8,40 @@ import nyc.c4q.jonathancolon.studentcouncilapp.R;
  * Created by jonathancolon on 10/27/16.
  */
 
-public class Contact implements Serializable{
+@Parcel
+public class Contact {
 
-    private long _id;
-    private long birthDate;
-    private String firstName;
-    private String lastName;
-    private String nickname;
-    private String homePhoneNumber;
-    private String workPhoneNumber;
-    private String cellPhoneNumber;
-    private String address;
-    private String email;
-    private Integer contactImage;
+     Long _id;
+     long birthDate;
+     String firstName;
+     String lastName;
+     String nickname;
+     String homePhoneNumber;
+     String workPhoneNumber;
+     String cellPhoneNumber;
+     String address;
+     String email;
+     Integer contactImage;
+     Integer backgroundImage;
 
     public Contact() {
-        contactImage = R.drawable.c4q;
     }
 
     public Contact(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         contactImage = R.drawable.c4q;
+        backgroundImage = R.drawable.corkboard_land;
     }
 
 
+    public Integer getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(Integer backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
 
     public long getBirthDate() {
         return birthDate;
