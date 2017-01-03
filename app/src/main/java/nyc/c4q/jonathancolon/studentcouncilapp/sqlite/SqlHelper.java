@@ -12,9 +12,6 @@ import nyc.c4q.jonathancolon.studentcouncilapp.contactlist.Contact;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-/**
- * Created by Danny on 12/14/2016.
- */
 
 public class SqlHelper {
 

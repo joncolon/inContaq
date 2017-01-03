@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +20,10 @@ import com.facebook.stetho.Stetho;
 
 import org.parceler.Parcels;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.FragmentView;
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
 import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.SqlHelper;
@@ -34,7 +34,6 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private static final String TAG = "DB DELETE : ";
     private RecyclerView recyclerView;
     private AlertDialog InputContactDialogObject;
-    private FloatingActionButton addContactFab;
 
     public static Activity activity;
 
@@ -50,7 +49,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_contact_list);
         this.activity = this;
 
         Stetho.initializeWithDefaults(this);
@@ -142,7 +141,6 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             Contact contact = new Contact(firstName, lastName);
             addContact(firstName, lastName);
             cupboard().withDatabase(db).put(contact);
-
             refreshRecyclerView();
         } else {
             Toast.makeText(ContactListActivity.this, "Enter a valid name", Toast.LENGTH_SHORT).show();
@@ -157,7 +155,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
     @Override
     public void onContactClicked(Contact contact) {
-        Intent intent = new Intent(this, FragmentView.class);
+        Intent intent = new Intent(this, EditContactActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
@@ -172,6 +170,14 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         db = dbHelper.getWritableDatabase();
         List<Contact> contacts = SqlHelper.selectAllContacts(db);
         ContactsAdapter adapter = (ContactsAdapter) recyclerView.getAdapter();
+
+        Collections.sort(contacts, new Comparator<Contact>()
+        {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return o1.getFirstName().compareToIgnoreCase(o2.getFirstName());
+            }
+        });
         adapter.setData(contacts);
         Log.d(TAG, "RefreshRV : " + contacts.size());;
     }
@@ -184,7 +190,13 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
 
 
-
+    @Override
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        //Refresh your stuff here
+        refreshRecyclerView();
+    }
 }
 
 

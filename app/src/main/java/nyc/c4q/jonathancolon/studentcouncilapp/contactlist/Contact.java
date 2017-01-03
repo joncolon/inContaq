@@ -2,8 +2,6 @@ package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
 
 import org.parceler.Parcel;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.R;
-
 /**
  * Created by jonathancolon on 10/27/16.
  */
@@ -21,8 +19,8 @@ public class Contact {
      String cellPhoneNumber;
      String address;
      String email;
-     Integer contactImage;
-     Integer backgroundImage;
+     byte[] contactImage;
+     byte[] backgroundImage;
 
     public Contact() {
     }
@@ -30,16 +28,14 @@ public class Contact {
     public Contact(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        contactImage = R.drawable.c4q;
-        backgroundImage = R.drawable.corkboard_land;
     }
 
 
-    public Integer getBackgroundImage() {
+    public byte[] getBackgroundImage() {
         return backgroundImage;
     }
 
-    public void setBackgroundImage(Integer backgroundImage) {
+    public void setBackgroundImage(byte[] backgroundImage) {
         this.backgroundImage = backgroundImage;
     }
 
@@ -115,11 +111,11 @@ public class Contact {
         this.email = email;
     }
 
-    public Integer getContactImage() {
+    public byte[] getContactImage() {
         return contactImage;
     }
 
-    public void setContactImage(Integer contactImage) {
+    public void setContactImage(byte[] contactImage) {
         this.contactImage = contactImage;
     }
 }

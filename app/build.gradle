@@ -33,6 +33,11 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.google.code.gson:gson:2.3.1'
 
+    dependencies {
+        compile 'com.github.bumptech.glide:glide:3.7.0'
+        compile 'com.android.support:support-v4:24.1.0'
+    }
+
     //  parceler
     compile 'org.parceler:parceler-api:1.1.6'
     annotationProcessor 'org.parceler:parceler:1.1.6'

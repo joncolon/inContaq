@@ -1,6 +1,8 @@
 package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.github.florent37.beautifulparallax.ParallaxViewController;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
@@ -81,7 +84,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
         private ImageView mBackGroundImage, mContactImage ;
-        private TextView mContactName;
+        private TextView mContactName, mContactInitials;
 
 
         Context context;
@@ -91,6 +94,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
             mContactImage = (ImageView) itemView.findViewById(R.id.contact_image);
+            mContactInitials = (TextView) itemView.findViewById(R.id.contact_initials);
 
         }
 
@@ -98,11 +102,27 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             final Contact contact = c;
 
             mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
-            Integer contactImage = contact.getContactImage();
-            Integer backgroundImage = contact.getBackgroundImage();
+            mContactInitials.setText((contact.getFirstName().substring(0,1).toUpperCase()));
 
-            mContactImage.setImageResource(contactImage);
-            mBackGroundImage.setImageResource(backgroundImage);
+            //Integer contactImage = contact.getContactImage();
+
+            if (contact.getBackgroundImage() != null){
+                byte[] backgroundImage = contact.getBackgroundImage();
+                ByteArrayInputStream imageStream = new ByteArrayInputStream(backgroundImage);
+                Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
+
+                mBackGroundImage.setImageBitmap(decodedImage);
+            }
+
+            if (contact.getContactImage() != null){
+                byte[] contactImage = contact.getContactImage();
+                ByteArrayInputStream imageStream = new ByteArrayInputStream(contactImage);
+                Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
+
+
+                mContactImage.setImageBitmap(decodedImage);
+            }
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,4 +151,5 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         notifyDataSetChanged();
 
     }
+
 }
