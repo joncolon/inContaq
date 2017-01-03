@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -186,77 +187,93 @@ public class EditContactFragment extends Fragment {
         try {
             // When an Image is picked
 
-            switch (requestCode) {
-                case 1:
-                    // Get the Image from data
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            if (resultCode == Activity.RESULT_OK){
 
-                    // Get the cursor
-                    Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(selectedImage,
-                            filePathColumn, null, null, null);
-
-                    // Move to first row
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-                    ImageView imgView = (ImageView) getView().findViewById(R.id.contact_img);
-
-                    // Set the Image in ImageView after decoding the String
-                    Bitmap bitmap = decodeSampledBitmapFromResource(imgDecodableString, 300, 300);
-
-                    imgView.setImageBitmap(bitmap);
+                switch (requestCode) {
+                    case 1:
+                        // Get the Image from data
 
 
-                    //SAVE TO DATABASE
-                    ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getActivity());
-                    db = dbHelper.getWritableDatabase();
+                        Uri selectedImage = data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte imageInByte[] = stream.toByteArray();
+                        // Get the cursor
+                        Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(selectedImage,
+                                filePathColumn, null, null, null);
 
-                    contact.setContactImage(imageInByte);
-                    cupboard().withDatabase(db).put(contact);
-                    break;
+                        // Move to first row
+                        cursor.moveToFirst();
 
-                case 2:
-                    // Get the Image from data
-                    Uri selectedBackgroundImage = data.getData();
-                    String[] filePathColumnBG = {MediaStore.Images.Media.DATA};
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        imgDecodableString = cursor.getString(columnIndex);
+                        cursor.close();
+                        ImageView imgView = (ImageView) getView().findViewById(R.id.contact_img);
 
-                    // Get the cursor
-                    Cursor cursorBG = getActivity().getApplicationContext().getContentResolver().query(selectedBackgroundImage,
-                            filePathColumnBG, null, null, null);
+                        // Set the Image in ImageView after decoding the String
+                        Bitmap bitmap = decodeSampledBitmapFromResource(imgDecodableString, 300, 300);
 
-                    // Move to first row
-                    cursorBG.moveToFirst();
-
-                    int columnIndexBG = cursorBG.getColumnIndex(filePathColumnBG[0]);
-                    imgDecodableString = cursorBG.getString(columnIndexBG);
-                    cursorBG.close();
-                    ImageView imgViewBG = (ImageView) getView().findViewById(R.id.background_image);
+                        imgView.setImageBitmap(bitmap);
 
 
-                    Bitmap bitmapBG = decodeSampledBitmapFromResource(imgDecodableString, 300, 300);
+                        //SAVE TO DATABASE
+                        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getActivity());
+                        db = dbHelper.getWritableDatabase();
 
-                    imgViewBG.setImageBitmap(bitmapBG);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byte imageInByte[] = stream.toByteArray();
 
-                    Toast.makeText(getActivity(), bitmapBG.getHeight() + " " + bitmapBG.getWidth() + " " + bitmapBG.getDensity(), Toast.LENGTH_LONG).show();
-
-                    //SAVE TO DATABASE
-                    ByteArrayOutputStream streamBG = new ByteArrayOutputStream();
-                    bitmapBG.compress(Bitmap.CompressFormat.JPEG, 100, streamBG);
-                    byte imageInByteBG[] = streamBG.toByteArray();
+                        contact.setContactImage(imageInByte);
+                        cupboard().withDatabase(db).put(contact);
 
 
-                    ContactDatabaseHelper dbHelperBG = ContactDatabaseHelper.getInstance(getActivity());
-                    db = dbHelperBG.getWritableDatabase();
-                    contact.setBackgroundImage(imageInByteBG);
-                    cupboard().withDatabase(db).put(contact);
-                    break;
+
+                        Toast.makeText(getActivity(), String.valueOf(Activity.RESULT_OK), Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 2:
+                        // Get the Image from data
+                        Uri selectedBackgroundImage = data.getData();
+                        String[] filePathColumnBG = {MediaStore.Images.Media.DATA};
+
+
+
+                        // Get the cursor
+                        Cursor cursorBG = getActivity().getApplicationContext().getContentResolver().query(selectedBackgroundImage,
+                                filePathColumnBG, null, null, null);
+
+                        // Move to first row
+                        cursorBG.moveToFirst();
+
+                        int columnIndexBG = cursorBG.getColumnIndex(filePathColumnBG[0]);
+                        imgDecodableString = cursorBG.getString(columnIndexBG);
+                        cursorBG.close();
+                        ImageView imgViewBG = (ImageView) getView().findViewById(R.id.background_image);
+
+
+                        Bitmap bitmapBG = decodeSampledBitmapFromResource(imgDecodableString, 300, 300);
+
+                        imgViewBG.setImageBitmap(bitmapBG);
+
+                        Toast.makeText(getActivity(), bitmapBG.getHeight() + " " + bitmapBG.getWidth() + " " + bitmapBG.getDensity(), Toast.LENGTH_LONG).show();
+
+                        //SAVE TO DATABASE
+                        ByteArrayOutputStream streamBG = new ByteArrayOutputStream();
+                        bitmapBG.compress(Bitmap.CompressFormat.JPEG, 100, streamBG);
+                        byte imageInByteBG[] = streamBG.toByteArray();
+
+
+                        ContactDatabaseHelper dbHelperBG = ContactDatabaseHelper.getInstance(getActivity());
+                        db = dbHelperBG.getWritableDatabase();
+                        contact.setBackgroundImage(imageInByteBG);
+                        cupboard().withDatabase(db).put(contact);
+
+                        Toast.makeText(getActivity(), String.valueOf(resultCode), Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            } else{
+                Toast.makeText(getActivity(), "Photo not selected", Toast.LENGTH_LONG)
+                        .show();
             }
         } catch (Exception e) {
             Log.e(TAG, "onActivityResult: " + e.toString());
