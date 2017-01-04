@@ -1,12 +1,16 @@
 package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,10 +43,6 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
     private SQLiteDatabase db;
 
-
-    public static final String CONTACT_NAME_EXTRA = "Contact Name";
-    public static final String CONTACT_IMAGE_EXTRA = "Contact Image";
-
     private String mText = "";
 
 
@@ -51,9 +51,9 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
         this.activity = this;
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         Stetho.initializeWithDefaults(this);
-
 
 
         // Initializing views
@@ -62,6 +62,13 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         // Set the adapter for RecyclerView
         setupRecyclerView();
         refreshRecyclerView();
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, permissions, 2);
+        }
 
         buildInputContactDialog(this, this);
     }
@@ -171,15 +178,15 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         List<Contact> contacts = SqlHelper.selectAllContacts(db);
         ContactsAdapter adapter = (ContactsAdapter) recyclerView.getAdapter();
 
-        Collections.sort(contacts, new Comparator<Contact>()
-        {
+        Collections.sort(contacts, new Comparator<Contact>() {
             @Override
             public int compare(Contact o1, Contact o2) {
                 return o1.getFirstName().compareToIgnoreCase(o2.getFirstName());
             }
         });
         adapter.setData(contacts);
-        Log.d(TAG, "RefreshRV : " + contacts.size());;
+        Log.d(TAG, "RefreshRV : " + contacts.size());
+        ;
     }
 
     @Override
@@ -189,12 +196,9 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     }
 
 
-
     @Override
-    public void onResume()
-    {  // After a pause OR at startup
+    public void onResume() {
         super.onResume();
-        //Refresh your stuff here
         refreshRecyclerView();
     }
 }

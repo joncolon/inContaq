@@ -9,9 +9,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,13 +29,11 @@ import org.parceler.Parcels;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.GregorianCalendar;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
-import nyc.c4q.jonathancolon.studentcouncilapp.smsreader.Sms;
 import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.ContactDatabaseHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -52,7 +50,7 @@ public class EditContactFragment extends Fragment {
     private static ImageView contactImageIV, backgroundImageIV;
     String imgDecodableString;
     private static Contact contact;
-    Cursor c;
+
 
     private SQLiteDatabase db;
 
@@ -73,11 +71,12 @@ public class EditContactFragment extends Fragment {
         backgroundImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.background_image);
         smsList = (TextView) NotepadLayoutFragment.findViewById(R.id.sms);
 
-        //retrieve intent data
-        Intent intent = getActivity().getIntent();
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
 
         displayContactInfo(contact);
+
+        getLastSmsDate();
+
 
 
         contactImageIV.setOnClickListener(new View.OnClickListener() {
@@ -130,41 +129,6 @@ public class EditContactFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // Create intent to Open Image applications like Gallery, Google Photos
-
-                // Assume thisActivity is the current activity
-                int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                // Here, thisActivity is the current activity
-                if (ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                        // Show an explanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-
-                    } else {
-
-                        // No explanation needed, we can request the permission.
-
-                        ActivityCompat.requestPermissions(getActivity(),
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                2);
-
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
-                    }
-                }
-
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 // Start the Intent
@@ -172,7 +136,6 @@ public class EditContactFragment extends Fragment {
             }
         });
 
-        checkReadSmsPermissions();
 
         return NotepadLayoutFragment;
     }
@@ -186,14 +149,11 @@ public class EditContactFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             // When an Image is picked
-
-            if (resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
 
                 switch (requestCode) {
                     case 1:
                         // Get the Image from data
-
-
                         Uri selectedImage = data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -210,10 +170,9 @@ public class EditContactFragment extends Fragment {
                         ImageView imgView = (ImageView) getView().findViewById(R.id.contact_img);
 
                         // Set the Image in ImageView after decoding the String
-                        Bitmap bitmap = decodeSampledBitmapFromResource(imgDecodableString, 300, 300);
+                        Bitmap bitmap = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
 
                         imgView.setImageBitmap(bitmap);
-
 
                         //SAVE TO DATABASE
                         ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getActivity());
@@ -222,20 +181,15 @@ public class EditContactFragment extends Fragment {
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                         byte imageInByte[] = stream.toByteArray();
-
                         contact.setContactImage(imageInByte);
                         cupboard().withDatabase(db).put(contact);
 
-
-
-                        Toast.makeText(getActivity(), String.valueOf(Activity.RESULT_OK), Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
                         // Get the Image from data
                         Uri selectedBackgroundImage = data.getData();
                         String[] filePathColumnBG = {MediaStore.Images.Media.DATA};
-
 
 
                         // Get the cursor
@@ -251,11 +205,9 @@ public class EditContactFragment extends Fragment {
                         ImageView imgViewBG = (ImageView) getView().findViewById(R.id.background_image);
 
 
-                        Bitmap bitmapBG = decodeSampledBitmapFromResource(imgDecodableString, 300, 300);
+                        Bitmap bitmapBG = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
 
                         imgViewBG.setImageBitmap(bitmapBG);
-
-                        Toast.makeText(getActivity(), bitmapBG.getHeight() + " " + bitmapBG.getWidth() + " " + bitmapBG.getDensity(), Toast.LENGTH_LONG).show();
 
                         //SAVE TO DATABASE
                         ByteArrayOutputStream streamBG = new ByteArrayOutputStream();
@@ -268,10 +220,9 @@ public class EditContactFragment extends Fragment {
                         contact.setBackgroundImage(imageInByteBG);
                         cupboard().withDatabase(db).put(contact);
 
-                        Toast.makeText(getActivity(), String.valueOf(resultCode), Toast.LENGTH_SHORT).show();
                         break;
                 }
-            } else{
+            } else {
                 Toast.makeText(getActivity(), "Photo not selected", Toast.LENGTH_LONG)
                         .show();
             }
@@ -306,32 +257,12 @@ public class EditContactFragment extends Fragment {
 
     }
 
-    public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
-        return resizedBitmap;
-    }
-
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight, String filepath) {
         options = new BitmapFactory.Options();
-        // Raw height and width of image
 
+        // Raw height and width of image
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filepath, options);
-        int imageHeight = options.outHeight;
-        int imageWidth = options.outWidth;
-        String imageType = options.outMimeType;
         float height = options.outHeight;
         float width = options.outWidth;
         double inSampleSize = 1D;
@@ -349,7 +280,7 @@ public class EditContactFragment extends Fragment {
         return (int) inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(String filepath,
+    public static Bitmap decodeSampledBitmapFromFilePath(String filepath,
                                                          int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -365,48 +296,7 @@ public class EditContactFragment extends Fragment {
         return BitmapFactory.decodeFile(filepath, options);
     }
 
-    public void checkReadSmsPermissions() {
-        // Assume thisActivity is the current activity
-        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_SMS);
-
-        ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_SMS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.READ_SMS)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_SMS},
-                        1);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-
-
-
-
-        }
-
-
-    }
-
-    public void getLastSmsDate(){
+    public void getLastSmsDate() {
 
         ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
         Cursor cursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
@@ -419,112 +309,71 @@ public class EditContactFragment extends Fragment {
         String smsDate = finaldate.toString();
         Log.d(Contact.class.getName(), smsDate);
 
-
-        getAllSms("inbox");
-
-        List<String> messages = new ArrayList<>();
-
-        List<Sms> smsStuff = getAllSms("inbox");
-
-        for (int i = 0; i < smsStuff.size(); i++) {
-            messages.add(smsStuff.get(i).getMsg());
-        }
-        String text = "";
-        for (int i = 0; i < messages.size(); i++) {
-
-            text += (messages.get(i) + " \n");
-            smsList.setText(text);
-        }
+        getAllSmsFromSender();
 
 
         Toast.makeText(getActivity(), smsDate, Toast.LENGTH_SHORT).show();
     }
 
     public void getAllSmsFromSender() {
-        Uri uri = Uri.parse("content://sms/");
+        StringBuilder smsBuilder = new StringBuilder();
+        final String SMS_URI_INBOX = "content://sms/inbox";
+        final String SMS_URI_ALL = "content://sms/";
+        try {
+            Uri uri = Uri.parse(SMS_URI_INBOX);
+            String[] projection = new String[] { "_id", "address", "person", "body", "date", "type" };
+            Cursor cur = getActivity().getApplicationContext().getContentResolver().query(uri, projection, "address='9172707921'", null, "date desc");
+            if (cur.moveToFirst()) {
+                int index_Address = cur.getColumnIndex("address");
+                int index_Person = cur.getColumnIndex("person");
+                int index_Body = cur.getColumnIndex("body");
+                int index_Date = cur.getColumnIndex("date");
+                int index_Type = cur.getColumnIndex("type");
+                do {
+                    String strAddress = cur.getString(index_Address);
+                    int intPerson = cur.getInt(index_Person);
+                    String strbody = cur.getString(index_Body);
+                    long longDate = cur.getLong(index_Date);
+                    int int_Type = cur.getInt(index_Type);
 
-        ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
+                    smsBuilder.append(strAddress + "\n");
+                    smsBuilder.append(strbody + "\n");
+                    smsBuilder.append(smsDateFormat(longDate));
+                    smsBuilder.append("\n\n");
 
-        String phoneNumber = "19172707921";
-        String sms = "address='" + phoneNumber + "'";
-        Cursor cursor = contentResolver.query(uri, new String[]{"_id", "body"}, sms, null, null);
+                    smsList.setText(smsBuilder);
 
-        if (cursor != null) {
-            smsList.setText(String.valueOf(cursor.getCount()));
-        }
+                } while (cur.moveToNext());
 
-        while (cursor.moveToNext()) {
-            String strbody = cursor.getString(cursor.getColumnIndex("body"));
-            smsList.setText(strbody);
-        }
-    }
-
-        public List<Sms> getAllSms(String folderName) {
-
-
-            List<Sms> lstSms = new ArrayList<Sms>();
-            Sms objSms = new Sms();
-            Uri message = Uri.parse("content://sms/"+folderName);
-            ContentResolver cr = getActivity().getApplicationContext().getContentResolver();
-
-
-            c = cr.query(message, null, null, null, null);
-            getActivity().startManagingCursor(c);
-            int totalSMS = c.getCount();
-
-            if (c.moveToFirst()) {
-                for (int i = 0; i < totalSMS; i++) {
-
-                    objSms = new Sms();
-                    objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
-                    objSms.setAddress(c.getString(c
-                            .getColumnIndexOrThrow("address")));
-                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-                    objSms.setReadState(c.getString(c.getColumnIndex("read")));
-                    objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
-
-                    lstSms.add(objSms);
-                    c.moveToNext();
+                if (!cur.isClosed()) {
+                    cur.close();
                 }
+            } else {
+                smsBuilder.append("no result!");
             }
-            if (!c.isClosed()) {
-                c.close();
-                c = null;
-            }
-
-            return lstSms;
-        }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (c != null) {
-            c.close();
-        }
-        if (db != null) {
-            db.close();
+        } catch (SQLiteException ex) {
+        Log.d("SQLiteException", ex.getMessage());
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (c != null) {
-            c.close();
-        }
-        if (db != null) {
-            db.close();
-        }
+    public String smsDateFormat(long timeInMilli){
+        String amPm;
+        String minutes;
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTimeInMillis(timeInMilli);
+        int month = (calendar.get(Calendar.MONTH)) + 1;
+        int year = (calendar.get(Calendar.YEAR));
+        int dayOfMonth = (calendar.get(Calendar.DAY_OF_MONTH));
+        int hourOfDay = (calendar.get(Calendar.HOUR) + 1);
+        int minute = (calendar.get(Calendar.MINUTE));
+        int isAMorPM = (calendar.get(Calendar.AM_PM));
+
+        minutes = minute == 0 ? String.valueOf(minute) + "0" : String.valueOf(minute);
+        amPm = isAMorPM == 0 ? "AM" : "PM";
+
+        String formattedDate = month + "/" + dayOfMonth + "/" + year + " " + hourOfDay + ":" + minutes + " " + amPm;
+        return formattedDate;
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        if (c != null) {
-            c.close();
-        }
-        if (db != null) {
-            db.close();
-        }
-    }
-    }
+}
