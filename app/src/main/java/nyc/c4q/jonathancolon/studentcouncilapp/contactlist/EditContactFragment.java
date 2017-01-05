@@ -30,7 +30,6 @@ import org.parceler.Parcels;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
@@ -75,7 +74,7 @@ public class EditContactFragment extends Fragment {
 
         displayContactInfo(contact);
 
-        getLastSmsDate();
+        getLastContactedDate();
 
 
 
@@ -296,23 +295,20 @@ public class EditContactFragment extends Fragment {
         return BitmapFactory.decodeFile(filepath, options);
     }
 
-    public void getLastSmsDate() {
+    public void getLastContactedDate() {
 
         ContentResolver contentResolver = getActivity().getApplicationContext().getContentResolver();
-        Cursor cursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        Cursor cursor = contentResolver.query(Uri.parse("content://sms/sent"), null, null, null, null);
         cursor.moveToFirst();
         String date = cursor.getString(cursor.getColumnIndex("date"));
         Long timestamp = Long.parseLong(date);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timestamp);
-        Date finaldate = calendar.getTime();
-        String smsDate = finaldate.toString();
-        Log.d(Contact.class.getName(), smsDate);
+
+        Log.d(Contact.class.getName(), smsDateFormat(timestamp));
 
         getAllSmsFromSender();
 
 
-        Toast.makeText(getActivity(), smsDate, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Last Contacted: " + smsDateFormat(timestamp), Toast.LENGTH_LONG).show();
     }
 
     public void getAllSmsFromSender() {
