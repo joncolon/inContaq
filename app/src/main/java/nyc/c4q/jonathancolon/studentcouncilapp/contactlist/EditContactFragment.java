@@ -3,7 +3,6 @@ package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -55,29 +57,50 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
     private static ImageView contactImageIV, backgroundImageIV;
     String imgDecodableString;
     private static Contact contact;
+    SmsAdapter adapter;
 
     private ArrayList<nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail> lstSms;
 
+    private int mPage;
     private SQLiteDatabase db;
     private RecyclerView recyclerView;
+    private RelativeLayout relativelayout;
+    public static final String ARG_PAGE = "ARG_PAGE";
 
 
     public EditContactFragment() {
         //required empty public constructor
     }
 
+
+    public static EditContactFragment newInstance(int page) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_PAGE, page);
+        EditContactFragment fragment = new EditContactFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
 
         View NotepadLayoutFragment = inflater.inflate(R.layout.fragment_edit_contact, container, false);
         getAllSms();
 
         //get widget references from layout
-        contactName = (TextView) NotepadLayoutFragment.findViewById(R.id.editor_contact_name);
+        contactName = (TextView) NotepadLayoutFragment.findViewById(R.id.contact_name);
         contactImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.background_image);
-        smsList = (TextView) NotepadLayoutFragment.findViewById(R.id.sms);
+
+
 
         // Initializing views
         recyclerView = (RecyclerView) NotepadLayoutFragment.findViewById(R.id.recycler_view);
@@ -89,6 +112,7 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
 
         displayContactInfo(contact);
+        scrollListToBottom();
 
 
 
@@ -139,16 +163,18 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
             }
         });
 
-        backgroundImageIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (backgroundImageIV != null) {
+            backgroundImageIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                // Start the Intent
-                startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
-            }
-        });
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    // Start the Intent
+                    startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
+                }
+            });
+        }
 
 
         return NotepadLayoutFragment;
@@ -256,7 +282,9 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
             ByteArrayInputStream imageStream = new ByteArrayInputStream(backgroundImage);
             Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
 
-            backgroundImageIV.setImageBitmap(decodedImage);
+            if (backgroundImageIV != null) {
+                backgroundImageIV.setImageBitmap(decodedImage);
+            }
         }
 
         if (contact.getContactImage() != null) {
@@ -492,8 +520,9 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
     }
 
     public void refreshRecyclerView() {
-        SmsAdapter adapter = (SmsAdapter) recyclerView.getAdapter();
+        adapter = (SmsAdapter) recyclerView.getAdapter();
 
+        Collections.sort(lstSms);
         adapter.setData(lstSms);
         Log.d(TAG, "RefreshRV : " + lstSms.size());
         ;
@@ -507,5 +536,15 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
     @Override
     public void onContactLongClicked(SmsDetail smsDetail) {
 
+    }
+
+    private void scrollListToBottom() {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+
+            }
+        });
     }
 }

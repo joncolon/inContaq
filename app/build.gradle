@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "nyc.c4q.jonathancolon.studentcouncilapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -37,6 +37,7 @@ dependencies {
         compile 'com.github.bumptech.glide:glide:3.7.0'
         compile 'com.android.support:support-v4:24.1.0'
     }
+
 
     //  parceler
     compile 'org.parceler:parceler-api:1.1.6'

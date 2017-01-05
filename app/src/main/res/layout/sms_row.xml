@@ -42,6 +42,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:background="#ffffff"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:textColor="#000000"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -50,7 +52,10 @@
                 android:textSize="16sp"
                 android:text="Hi, This is Abhay, how you doin ddsk sadjk sdajkds sdjs sdkj ?"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,7 +64,10 @@
                 android:layout_below="@id/senderId"
                 android:visibility="visible"
                 android:textSize="10sp"
-                android:text="17 jul"/>
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="17 jul"
+                android:layout_marginBottom="3dp"/>
 
 
         </LinearLayout>
