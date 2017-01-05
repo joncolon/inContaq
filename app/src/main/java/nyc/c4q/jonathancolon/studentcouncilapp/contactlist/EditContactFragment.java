@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,8 +32,6 @@ import android.widget.Toast;
 
 import org.parceler.Parcels;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -39,11 +39,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
+import nyc.c4q.jonathancolon.studentcouncilapp.bitmap.util.BitmapFromBytesWorkerTask;
+import nyc.c4q.jonathancolon.studentcouncilapp.bitmap.util.BitmapFromFilePathWorkerTask;
 import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsAdapter;
 import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail;
-import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.ContactDatabaseHelper;
-
-import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
 /**
@@ -58,6 +57,7 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
     String imgDecodableString;
     private static Contact contact;
     SmsAdapter adapter;
+    ViewPager viewpager;
 
     private ArrayList<nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail> lstSms;
 
@@ -99,6 +99,8 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
         contactName = (TextView) NotepadLayoutFragment.findViewById(R.id.contact_name);
         contactImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.background_image);
+//        viewpager = (ViewPager) NotepadLayoutFragment.findViewById(R.id.viewpager);
+//        viewpager.setAdapter(buildAdapter());
 
 
 
@@ -207,22 +209,24 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                         imgDecodableString = cursor.getString(columnIndex);
                         cursor.close();
-                        ImageView imgView = (ImageView) getView().findViewById(R.id.contact_img);
+
 
                         // Set the Image in ImageView after decoding the String
-                        Bitmap bitmap = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
 
-                        imgView.setImageBitmap(bitmap);
+                        loadFilePathBitmap(imgDecodableString, contactImageIV);
 
-                        //SAVE TO DATABASE
-                        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getActivity());
-                        db = dbHelper.getWritableDatabase();
 
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        byte imageInByte[] = stream.toByteArray();
-                        contact.setContactImage(imageInByte);
-                        cupboard().withDatabase(db).put(contact);
+//                        Bitmap bitmap = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
+
+//                        //SAVE TO DATABASE
+//                        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getActivity());
+//                        db = dbHelper.getWritableDatabase();
+//
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//                        byte imageInByte[] = stream.toByteArray();
+//                        contact.setContactImage(imageInByte);
+//                        cupboard().withDatabase(db).put(contact);
 
                         break;
 
@@ -242,23 +246,22 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
                         int columnIndexBG = cursorBG.getColumnIndex(filePathColumnBG[0]);
                         imgDecodableString = cursorBG.getString(columnIndexBG);
                         cursorBG.close();
-                        ImageView imgViewBG = (ImageView) getView().findViewById(R.id.background_image);
 
 
-                        Bitmap bitmapBG = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
 
-                        imgViewBG.setImageBitmap(bitmapBG);
+                        loadFilePathBitmap(imgDecodableString, backgroundImageIV);
+//                        Bitmap bitmapBG = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
 
                         //SAVE TO DATABASE
-                        ByteArrayOutputStream streamBG = new ByteArrayOutputStream();
-                        bitmapBG.compress(Bitmap.CompressFormat.JPEG, 100, streamBG);
-                        byte imageInByteBG[] = streamBG.toByteArray();
-
-
-                        ContactDatabaseHelper dbHelperBG = ContactDatabaseHelper.getInstance(getActivity());
-                        db = dbHelperBG.getWritableDatabase();
-                        contact.setBackgroundImage(imageInByteBG);
-                        cupboard().withDatabase(db).put(contact);
+//                        ByteArrayOutputStream streamBG = new ByteArrayOutputStream();
+//                        bitmapBG.compress(Bitmap.CompressFormat.JPEG, 100, streamBG);
+//                        byte imageInByteBG[] = streamBG.toByteArray();
+//
+//
+//                        ContactDatabaseHelper dbHelperBG = ContactDatabaseHelper.getInstance(getActivity());
+//                        db = dbHelperBG.getWritableDatabase();
+//                        contact.setBackgroundImage(imageInByteBG);
+//                        cupboard().withDatabase(db).put(contact);
 
                         break;
                 }
@@ -279,20 +282,12 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
 
         if (contact.getBackgroundImage() != null) {
             byte[] backgroundImage = contact.getBackgroundImage();
-            ByteArrayInputStream imageStream = new ByteArrayInputStream(backgroundImage);
-            Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
-
-            if (backgroundImageIV != null) {
-                backgroundImageIV.setImageBitmap(decodedImage);
-            }
+            loadDecodedBitmap(backgroundImage, contactImageIV);
         }
 
         if (contact.getContactImage() != null) {
             byte[] contactImage = contact.getContactImage();
-            ByteArrayInputStream imageStream = new ByteArrayInputStream(contactImage);
-            Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
-
-            contactImageIV.setImageBitmap(decodedImage);
+            loadDecodedBitmap(contactImage, contactImageIV);
         }
 
         contactName.setText(nameValue);
@@ -328,6 +323,8 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+
+
         BitmapFactory.decodeFile(filepath, options);
 
         // Calculate inSampleSize
@@ -547,4 +544,21 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
             }
         });
     }
+
+    private PagerAdapter buildAdapter() {
+        return(new SampleFragmentPagerAdapter(getChildFragmentManager(), getActivity()));
+    }
+
+    public static void loadFilePathBitmap(String filepath, ImageView imageView) {
+        BitmapFromFilePathWorkerTask task = new BitmapFromFilePathWorkerTask(imageView);
+        task.execute(filepath);
+    }
+
+    public static void loadDecodedBitmap(byte[] bytes, ImageView imageView) {
+        BitmapFromBytesWorkerTask task = new BitmapFromBytesWorkerTask(imageView);
+        task.execute(bytes);
+    }
+
+
+
 }
