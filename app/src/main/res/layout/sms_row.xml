@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:id="@+id/sms_row"
+    android:layout_marginBottom="1dp"
+    >
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/rellyt"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/linlyt"
+            android:layout_marginTop="@dimen/small"
+            android:weightSum="1">
+
+            <View
+                android:id="@+id/view_membership_det"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageview"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/senderId"
+                android:text="8090470606"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="#ffffff"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/messageDetails"
+                android:textSize="16sp"
+                android:text="Hi, This is Abhay, how you doin ddsk sadjk sdajkds sdjs sdkj ?"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeDate"
+                android:layout_below="@id/senderId"
+                android:visibility="visible"
+                android:textSize="10sp"
+                android:text="17 jul"/>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

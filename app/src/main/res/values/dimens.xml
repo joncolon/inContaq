@@ -3,4 +3,20 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="left">20dp</dimen>
+    <dimen name="top">8dp</dimen>
+    <dimen name="small">6dp</dimen>
+    <dimen name="radius">20dp</dimen>
+    <dimen name="radius_buy">5dp</dimen>
+    <dimen name="text_size">13sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="margin_top">12dp</dimen>
+    <dimen name="progress_width">36dp</dimen>
+    <dimen name="progress_height">36dp</dimen>
+    <dimen name="progress_pading">3dp</dimen>
+    <dimen name="padding_btn">30dp</dimen>
+    <dimen name="menu_left">72dp</dimen>
+
 </resources>

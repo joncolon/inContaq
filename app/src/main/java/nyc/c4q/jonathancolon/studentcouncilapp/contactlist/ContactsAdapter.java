@@ -86,9 +86,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         private ImageView mBackGroundImage, mContactImage ;
         private TextView mContactName, mContactInitials;
 
-
-        Context context;
-
         public ContactViewHolder(View itemView) {
             super(itemView);
             mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);

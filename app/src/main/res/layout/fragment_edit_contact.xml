@@ -85,10 +85,18 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/recycler_view"
+            android:scrollbars="vertical">
+        </android.support.v7.widget.RecyclerView>
 
         <ScrollView
             android:layout_width="wrap_content"

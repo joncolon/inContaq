@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +31,14 @@ import org.parceler.Parcels;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
+import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsAdapter;
+import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail;
 import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.ContactDatabaseHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -41,7 +47,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditContactFragment extends Fragment {
+public class EditContactFragment extends Fragment implements SmsAdapter.Listener{
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     String TAG = "SET TEXT REQUEST: ";
     private static TextView contactName, smsList;
@@ -50,8 +56,10 @@ public class EditContactFragment extends Fragment {
     String imgDecodableString;
     private static Contact contact;
 
+    private ArrayList<nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail> lstSms;
 
     private SQLiteDatabase db;
+    private RecyclerView recyclerView;
 
 
     public EditContactFragment() {
@@ -63,6 +71,7 @@ public class EditContactFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View NotepadLayoutFragment = inflater.inflate(R.layout.fragment_edit_contact, container, false);
+        getAllSms();
 
         //get widget references from layout
         contactName = (TextView) NotepadLayoutFragment.findViewById(R.id.editor_contact_name);
@@ -70,11 +79,17 @@ public class EditContactFragment extends Fragment {
         backgroundImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.background_image);
         smsList = (TextView) NotepadLayoutFragment.findViewById(R.id.sms);
 
+        // Initializing views
+        recyclerView = (RecyclerView) NotepadLayoutFragment.findViewById(R.id.recycler_view);
+
+        // Set the adapter for RecyclerView
+        setupRecyclerView();
+        refreshRecyclerView();
+
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
 
         displayContactInfo(contact);
 
-        getLastContactedDate();
 
 
 
@@ -311,38 +326,111 @@ public class EditContactFragment extends Fragment {
         Toast.makeText(getActivity(), "Last Contacted: " + smsDateFormat(timestamp), Toast.LENGTH_LONG).show();
     }
 
+    public List<SmsDetail> getAllSms() {
+        StringBuilder smsBuilder = new StringBuilder();
+        final String SMS_URI_ALL = "content://sms/";
+
+        lstSms = new ArrayList<SmsDetail>();
+        SmsDetail objSms = null;
+
+        try {
+            Uri uri = Uri.parse(SMS_URI_ALL);
+            String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
+            Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, projection, null, null, "date desc");
+            if (c.moveToFirst()) {
+                int index_Address = c.getColumnIndex("address");
+                int index_Person = c.getColumnIndex("person");
+                int index_Body = c.getColumnIndex("body");
+                int index_Date = c.getColumnIndex("date");
+                int index_Type = c.getColumnIndex("type");
+
+                int totalSMS = c.getCount();
+
+                for (int i = 0; i < totalSMS; i++) {
+                    objSms = new nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail();
+                    objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
+                    objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("\\s+", ""));
+                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
+                    objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
+                    objSms.setType(c.getString(c.getColumnIndexOrThrow("type")));
+
+                    if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
+                        objSms.setFolderName("inbox");
+                    } else {
+                        objSms.setFolderName("sent");
+                    }
+                    lstSms.add(objSms);
+                    c.moveToNext();
+                }
+                if (!c.isClosed()) {
+                    c.close();
+                }
+            } else {
+                smsBuilder.append("no result!");
+            }
+        } catch (SQLiteException ex) {
+            Log.d("SQLiteException", ex.getMessage());
+        }
+        lstSms.size();
+        return lstSms;
+    }
+
     public void getAllSmsFromSender() {
         StringBuilder smsBuilder = new StringBuilder();
         final String SMS_URI_INBOX = "content://sms/inbox";
         final String SMS_URI_ALL = "content://sms/";
+
+        lstSms = new ArrayList<SmsDetail>();
+        SmsDetail objSms = null;
+
         try {
             Uri uri = Uri.parse(SMS_URI_INBOX);
             String[] projection = new String[] { "_id", "address", "person", "body", "date", "type" };
-            Cursor cur = getActivity().getApplicationContext().getContentResolver().query(uri, projection, "address='9172707921'", null, "date desc");
-            if (cur.moveToFirst()) {
-                int index_Address = cur.getColumnIndex("address");
-                int index_Person = cur.getColumnIndex("person");
-                int index_Body = cur.getColumnIndex("body");
-                int index_Date = cur.getColumnIndex("date");
-                int index_Type = cur.getColumnIndex("type");
+            Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, projection, "address='9172707921'", null, "date desc");
+            if (c.moveToFirst()) {
+                int index_Address = c.getColumnIndex("address");
+                int index_Person = c.getColumnIndex("person");
+                int index_Body = c.getColumnIndex("body");
+                int index_Date = c.getColumnIndex("date");
+                int index_Type = c.getColumnIndex("type");
+
+                int totalSMS = c.getCount();
+
+                for (int i = 0; i < totalSMS; i++) {
+                    objSms = new nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail();
+                    objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
+                    objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("\\s+", ""));
+                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
+                    objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
+                    objSms.setType(c.getString(c.getColumnIndexOrThrow("type")));
+
+
+                    if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
+                        objSms.setFolderName("inbox");
+                    } else {
+                        objSms.setFolderName("sent");
+                    }
+
+                }
                 do {
-                    String strAddress = cur.getString(index_Address);
-                    int intPerson = cur.getInt(index_Person);
-                    String strbody = cur.getString(index_Body);
-                    long longDate = cur.getLong(index_Date);
-                    int int_Type = cur.getInt(index_Type);
+                    String strAddress = c.getString(index_Address);
+                    int intPerson = c.getInt(index_Person);
+                    String strbody = c.getString(index_Body);
+                    long longDate = c.getLong(index_Date);
+                    int int_Type = c.getInt(index_Type);
 
                     smsBuilder.append(strAddress + "\n");
                     smsBuilder.append(strbody + "\n");
                     smsBuilder.append(smsDateFormat(longDate));
                     smsBuilder.append("\n\n");
 
+                    
                     smsList.setText(smsBuilder);
 
-                } while (cur.moveToNext());
+                } while (c.moveToNext());
 
-                if (!cur.isClosed()) {
-                    cur.close();
+                if (!c.isClosed()) {
+                    c.close();
                 }
             } else {
                 smsBuilder.append("no result!");
@@ -397,4 +485,27 @@ public class EditContactFragment extends Fragment {
         return formattedDate;
     }
 
+
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new SmsAdapter(this));
+    }
+
+    public void refreshRecyclerView() {
+        SmsAdapter adapter = (SmsAdapter) recyclerView.getAdapter();
+
+        adapter.setData(lstSms);
+        Log.d(TAG, "RefreshRV : " + lstSms.size());
+        ;
+    }
+
+    @Override
+    public void onContactClicked(SmsDetail smsDetail) {
+
+    }
+
+    @Override
+    public void onContactLongClicked(SmsDetail smsDetail) {
+
+    }
 }
