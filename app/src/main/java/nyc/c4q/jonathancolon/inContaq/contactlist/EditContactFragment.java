@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fontometrics.Fontometrics;
+
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
@@ -29,12 +30,12 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.Sms;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsAdapter;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.LoadScaledBitmapWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.SetContactImageWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.utilities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsAdapter;
+import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -79,6 +80,9 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
                              Bundle savedInstanceState) {
 
 
+
+
+        inflater = LayoutInflater.from(getActivity());
         View NotepadLayoutFragment = inflater.inflate(R.layout.fragment_edit_contact, container, false);
         lstSms = SmsHelper.getAllSms(getActivity());
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
@@ -88,6 +92,11 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
         backgroundImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) NotepadLayoutFragment.findViewById(R.id.recycler_view);
         displayContactInfo(contact);
+
+        contactName.setTypeface(Fontometrics.amatic_bold(getActivity()));
+
+
+
 
         setupRecyclerView();
         refreshRecyclerView();
@@ -244,9 +253,5 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
     private void setContactImage(byte[] bytes, ImageView imageView){
         SetContactImageWorkerTask task = new SetContactImageWorkerTask(imageView);
         task.execute(bytes);
-    }
-
-    private PagerAdapter buildAdapter() {
-        return(new SampleFragmentPagerAdapter(getChildFragmentManager(), getActivity()));
     }
 }

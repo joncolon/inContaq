@@ -50,6 +50,13 @@ dependencies {
     //beautiful parallax
     compile 'com.github.florent37:beautifulparallax:1.0.0'
 
+    //calligraphy
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+    compile 'org.ishmeetsingh.androbot:fontometrics:1.0.0'
+
+
+
 
     testCompile 'junit:junit:4.12'
 }

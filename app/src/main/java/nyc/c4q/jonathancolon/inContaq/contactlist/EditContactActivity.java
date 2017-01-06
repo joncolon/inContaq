@@ -19,6 +19,7 @@ public class EditContactActivity extends AppCompatActivity {
         Activity EditContactActivity = this;
         ViewPager viewPager;
 
+
         if (savedInstanceState == null) {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -28,5 +29,7 @@ public class EditContactActivity extends AppCompatActivity {
         }
 
 
+
 }
+
 }
