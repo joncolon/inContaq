@@ -23,7 +23,7 @@ import static android.content.ContentValues.TAG;
 public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     Context context;
     Listener listener;
-    List<SmsDetail> smsList;
+    List<Sms> smsList;
 
 
     ParallaxViewController parallaxViewController = new ParallaxViewController();
@@ -51,7 +51,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
     @Override
     public void onBindViewHolder(SmsViewHolder holder, int position) {
-        SmsDetail smsDetail = smsList.get(position);
+        Sms smsDetail = smsList.get(position);
 
 
         holder.bind(smsDetail);
@@ -64,12 +64,12 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         return smsList.size();
     }
 
-    public void updateList(List<SmsDetail> smslist) {
+    public void updateList(List<Sms> smslist) {
         smsList = smslist;
         notifyDataSetChanged();
     }
 
-    public void addItem(SmsDetail smsDetail) {
+    public void addItem(Sms smsDetail) {
         smsList.add(smsDetail);
         notifyDataSetChanged();
     }
@@ -94,8 +94,8 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             timeDate = (TextView) itemView.findViewById(R.id.timeDate);
         }
 
-        public void bind(SmsDetail sms) {
-            final SmsDetail smsDetail = sms;
+        public void bind(Sms sms) {
+            final Sms smsDetail = sms;
             senderId.setText(sms.getAddress());
             SmsHelper Shelper = new SmsHelper();
             String time = SmsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
@@ -120,11 +120,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     }
 
     public interface Listener {
-        void onContactClicked(SmsDetail smsDetail);
-        void onContactLongClicked(SmsDetail smsDetail);
+        void onContactClicked(Sms smsDetail);
+        void onContactLongClicked(Sms smsDetail);
     }
 
-    public void setData(List<SmsDetail> smsDetails) {
+    public void setData(List<Sms> smsDetails) {
         this.smsList = smsDetails;
         notifyDataSetChanged();
 

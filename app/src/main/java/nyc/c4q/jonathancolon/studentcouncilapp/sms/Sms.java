@@ -3,7 +3,7 @@ package nyc.c4q.jonathancolon.studentcouncilapp.sms;
 import org.parceler.Parcel;
 
 @Parcel
-public class SmsDetail implements Comparable<SmsDetail>{
+public class Sms implements Comparable<Sms>{
     public String _id;
     public String _address;
     public String _msg;
@@ -58,7 +58,7 @@ public class SmsDetail implements Comparable<SmsDetail>{
     }
 
     @Override
-    public int compareTo(SmsDetail another) {
+    public int compareTo(Sms another) {
         return getTime().compareTo(another.getTime());
     }
 }
