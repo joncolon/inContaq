@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import org.parceler.Parcels;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -39,7 +40,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
-import nyc.c4q.jonathancolon.studentcouncilapp.bitmap.util.BitmapFromBytesWorkerTask;
 import nyc.c4q.jonathancolon.studentcouncilapp.bitmap.util.BitmapFromFilePathWorkerTask;
 import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsAdapter;
 import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsDetail;
@@ -99,8 +99,6 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
         contactName = (TextView) NotepadLayoutFragment.findViewById(R.id.contact_name);
         contactImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.background_image);
-//        viewpager = (ViewPager) NotepadLayoutFragment.findViewById(R.id.viewpager);
-//        viewpager.setAdapter(buildAdapter());
 
 
 
@@ -213,10 +211,10 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
 
                         // Set the Image in ImageView after decoding the String
 
-                        loadFilePathBitmap(imgDecodableString, contactImageIV);
+                        loadBitmap(imgDecodableString, contactImageIV);
 
 
-//                        Bitmap bitmap = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
+                        Bitmap bitmap = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
 
 //                        //SAVE TO DATABASE
 //                        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getActivity());
@@ -249,8 +247,8 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
 
 
 
-                        loadFilePathBitmap(imgDecodableString, backgroundImageIV);
-//                        Bitmap bitmapBG = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
+                        loadBitmap(imgDecodableString, backgroundImageIV);
+                        Bitmap bitmapBG = decodeSampledBitmapFromFilePath(imgDecodableString, 275, 275);
 
                         //SAVE TO DATABASE
 //                        ByteArrayOutputStream streamBG = new ByteArrayOutputStream();
@@ -282,12 +280,20 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
 
         if (contact.getBackgroundImage() != null) {
             byte[] backgroundImage = contact.getBackgroundImage();
-            loadDecodedBitmap(backgroundImage, contactImageIV);
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(backgroundImage);
+            Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
+
+            if (backgroundImageIV != null) {
+                backgroundImageIV.setImageBitmap(decodedImage);
+            }
         }
 
         if (contact.getContactImage() != null) {
             byte[] contactImage = contact.getContactImage();
-            loadDecodedBitmap(contactImage, contactImageIV);
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(contactImage);
+            Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
+
+            contactImageIV.setImageBitmap(decodedImage);
         }
 
         contactName.setText(nameValue);
@@ -449,7 +455,7 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
                     smsBuilder.append(smsDateFormat(longDate));
                     smsBuilder.append("\n\n");
 
-                    
+
                     smsList.setText(smsBuilder);
 
                 } while (c.moveToNext());
@@ -549,16 +555,9 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
         return(new SampleFragmentPagerAdapter(getChildFragmentManager(), getActivity()));
     }
 
-    public static void loadFilePathBitmap(String filepath, ImageView imageView) {
+    public static void loadBitmap(String filepath, ImageView imageView) {
         BitmapFromFilePathWorkerTask task = new BitmapFromFilePathWorkerTask(imageView);
         task.execute(filepath);
     }
-
-    public static void loadDecodedBitmap(byte[] bytes, ImageView imageView) {
-        BitmapFromBytesWorkerTask task = new BitmapFromBytesWorkerTask(imageView);
-        task.execute(bytes);
-    }
-
-
 
 }
