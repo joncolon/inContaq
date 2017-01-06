@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.sqlite;
+package nyc.c4q.jonathancolon.inContaq.sqlite;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import nl.qbusict.cupboard.QueryResultIterable;
-import nyc.c4q.jonathancolon.studentcouncilapp.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 

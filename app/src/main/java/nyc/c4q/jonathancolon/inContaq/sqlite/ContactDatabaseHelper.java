@@ -1,10 +1,10 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.sqlite;
+package nyc.c4q.jonathancolon.inContaq.sqlite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 

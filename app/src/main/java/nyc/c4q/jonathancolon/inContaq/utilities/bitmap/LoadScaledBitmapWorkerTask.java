@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.utilities.bitmap;
+package nyc.c4q.jonathancolon.inContaq.utilities.bitmap;
 
 import android.content.Context;
 import android.database.Cursor;

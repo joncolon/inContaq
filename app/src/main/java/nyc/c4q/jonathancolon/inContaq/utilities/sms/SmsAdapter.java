@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.utilities.sms;
+package nyc.c4q.jonathancolon.inContaq.utilities.sms;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +12,7 @@ import com.github.florent37.beautifulparallax.ParallaxViewController;
 
 import java.util.List;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.R;
+import nyc.c4q.jonathancolon.inContaq.R;
 
 import static android.content.ContentValues.TAG;
 

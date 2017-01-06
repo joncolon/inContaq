@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

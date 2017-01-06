@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist;
 
 
 import android.app.Activity;
@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.R;
+import nyc.c4q.jonathancolon.inContaq.R;
 
 public class EditContactActivity extends AppCompatActivity {
 

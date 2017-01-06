@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist;
 
 import org.parceler.Parcel;
 

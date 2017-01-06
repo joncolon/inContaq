@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:background="#ECF0F1"
     android:orientation="vertical"
-    tools:context="nyc.c4q.jonathancolon.studentcouncilapp.contactlist.ContactListActivity">
+    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.ContactListActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

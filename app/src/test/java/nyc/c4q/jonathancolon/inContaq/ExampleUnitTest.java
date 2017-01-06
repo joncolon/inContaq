@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp;
+package nyc.c4q.jonathancolon.inContaq;
 
 import org.junit.Test;
 

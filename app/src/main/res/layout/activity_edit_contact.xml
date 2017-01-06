@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context="nyc.c4q.jonathancolon.studentcouncilapp.contactlist.EditContactActivity">
+    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.EditContactActivity">
 
 </FrameLayout>

@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp;
+package nyc.c4q.jonathancolon.inContaq;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

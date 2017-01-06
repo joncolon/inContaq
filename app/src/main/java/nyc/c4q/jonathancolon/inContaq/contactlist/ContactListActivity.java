@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist;
 
 import android.Manifest;
 import android.app.Activity;
@@ -28,9 +28,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.R;
-import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.ContactDatabaseHelper;
-import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.SqlHelper;
+import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.sqlite.ContactDatabaseHelper;
+import nyc.c4q.jonathancolon.inContaq.sqlite.SqlHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 

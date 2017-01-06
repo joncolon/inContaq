@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,7 +15,7 @@ import com.github.florent37.beautifulparallax.ParallaxViewController;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.R;
+import nyc.c4q.jonathancolon.inContaq.R;
 
 /**
  * Created by jonathancolon on 10/27/16.

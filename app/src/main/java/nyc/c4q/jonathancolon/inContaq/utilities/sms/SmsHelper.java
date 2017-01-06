@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.utilities.sms;
+package nyc.c4q.jonathancolon.inContaq.utilities.sms;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import nyc.c4q.jonathancolon.studentcouncilapp.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
 /**
  * Created by jonathancolon on 1/5/17.
