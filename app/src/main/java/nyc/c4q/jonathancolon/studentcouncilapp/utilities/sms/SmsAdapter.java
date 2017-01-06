@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.sms;
+package nyc.c4q.jonathancolon.studentcouncilapp.utilities.sms;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

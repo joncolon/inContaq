@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.studentcouncilapp.sms;
+package nyc.c4q.jonathancolon.studentcouncilapp.utilities.sms;
 
 import org.parceler.Parcel;
 

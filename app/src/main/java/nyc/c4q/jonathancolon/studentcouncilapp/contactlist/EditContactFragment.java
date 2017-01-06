@@ -29,12 +29,12 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.studentcouncilapp.R;
-import nyc.c4q.jonathancolon.studentcouncilapp.bitmap.util.LoadScaledBitmapWorkerTask;
-import nyc.c4q.jonathancolon.studentcouncilapp.bitmap.util.SetContactImageWorkerTask;
-import nyc.c4q.jonathancolon.studentcouncilapp.sms.Sms;
-import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsAdapter;
-import nyc.c4q.jonathancolon.studentcouncilapp.sms.SmsHelper;
+import nyc.c4q.jonathancolon.studentcouncilapp.utilities.sms.Sms;
+import nyc.c4q.jonathancolon.studentcouncilapp.utilities.sms.SmsAdapter;
+import nyc.c4q.jonathancolon.studentcouncilapp.utilities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.studentcouncilapp.sqlite.ContactDatabaseHelper;
+import nyc.c4q.jonathancolon.studentcouncilapp.utilities.bitmap.LoadScaledBitmapWorkerTask;
+import nyc.c4q.jonathancolon.studentcouncilapp.utilities.bitmap.SetContactImageWorkerTask;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
