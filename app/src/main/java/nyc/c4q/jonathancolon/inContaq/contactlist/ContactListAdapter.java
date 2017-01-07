@@ -21,7 +21,7 @@ import nyc.c4q.jonathancolon.inContaq.R;
  * Created by jonathancolon on 10/27/16.
  */
 
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactViewHolder> {
+public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
     Context context;
     Listener listener;
     List<Contact> contactList;
@@ -29,7 +29,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     ParallaxViewController parallaxViewController = new ParallaxViewController();
 
     // ADAPTER CONSTRUCTORS
-    public ContactsAdapter(Listener listener) {
+    public ContactListAdapter(Listener listener) {
         this.listener = listener;
     }
 
@@ -44,7 +44,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
 
     @Override
-    public ContactsAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ContactListAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_row, parent, false);
         ContactViewHolder vh = new ContactViewHolder(itemView);
         parallaxViewController.imageParallax(vh.mBackGroundImage);

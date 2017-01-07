@@ -34,7 +34,7 @@ import nyc.c4q.jonathancolon.inContaq.sqlite.SqlHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>, ContactsAdapter.Listener {
+public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>, ContactListAdapter.Listener {
     private static final String TAG = "DB DELETE : ";
     private RecyclerView recyclerView;
     private AlertDialog InputContactDialogObject;
@@ -44,6 +44,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private SQLiteDatabase db;
 
     private String mText = "";
+
+
 
 
     @Override
@@ -121,7 +123,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         // Add data locally to the list
         Contact contactToAdd = new Contact(firstName, lastName);
         //mData.add(dataToAdd);
-        ContactsAdapter adapter = (ContactsAdapter) recyclerView.getAdapter();
+        ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
         // Update adapter
         adapter.addItem(contactToAdd);
         adapter.notifyDataSetChanged();
@@ -157,13 +159,14 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private void setupRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ContactsAdapter(this));
+        recyclerView.setAdapter(new ContactListAdapter(this));
     }
 
     @Override
     public void onContactClicked(Contact contact) {
-        Intent intent = new Intent(this, EditContactActivity.class);
+        Intent intent = new Intent(this, ContactViewPagerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("sms","ContactSmsFragment, Instance 4");
 
 
         intent.putExtra("Parcelled Contact", Parcels.wrap(contact));
@@ -176,7 +179,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(this);
         db = dbHelper.getWritableDatabase();
         List<Contact> contacts = SqlHelper.selectAllContacts(db);
-        ContactsAdapter adapter = (ContactsAdapter) recyclerView.getAdapter();
+        ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
 
         Collections.sort(contacts, new Comparator<Contact>() {
             @Override

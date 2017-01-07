@@ -103,7 +103,7 @@ public class SmsHelper {
         try {
             Uri uri = Uri.parse(SMS_URI_ALL);
             String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
-            Cursor c = context.getApplicationContext().getContentResolver().query(uri, projection, null, null, "date desc");
+            Cursor c = context.getApplicationContext().getContentResolver().query(uri, projection, "address='9172707921'", null, "date desc");
             if (c.moveToFirst()) {
                 int index_Address = c.getColumnIndex("address");
                 int index_Person = c.getColumnIndex("person");

@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.app.Activity;
@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.LoadScaledBitmapWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.SetContactImageWorkerTask;
@@ -43,7 +44,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditContactFragment extends Fragment implements SmsAdapter.Listener{
+public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener{
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     String TAG = "SET TEXT REQUEST: ";
     private static TextView contactName, smsList;
@@ -59,20 +60,30 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
     private SQLiteDatabase db;
     private RecyclerView recyclerView;
     private RelativeLayout relativelayout;
-    public static final String ARG_PAGE = "ARG_PAGE";
 
 
-    public EditContactFragment() {
+    public ContactSmsFragment() {
         //required empty public constructor
     }
 
 
-    public static EditContactFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        EditContactFragment fragment = new EditContactFragment();
-        fragment.setArguments(args);
+    public static final String ARG_PAGE = "ARG_PAGE";
+
+    public static ContactSmsFragment newInstance(String text) {
+
+        ContactSmsFragment fragment = new ContactSmsFragment();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+
+        fragment.setArguments(b);
+
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPage = getArguments().getInt(ARG_PAGE);
     }
 
     @Override
@@ -83,14 +94,14 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
 
 
         inflater = LayoutInflater.from(getActivity());
-        View NotepadLayoutFragment = inflater.inflate(R.layout.fragment_edit_contact, container, false);
+        View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         lstSms = SmsHelper.getAllSms(getActivity());
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
 
-        contactName = (TextView) NotepadLayoutFragment.findViewById(R.id.contact_name);
-        contactImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.contact_img);
-        backgroundImageIV = (ImageView) NotepadLayoutFragment.findViewById(R.id.background_image);
-        recyclerView = (RecyclerView) NotepadLayoutFragment.findViewById(R.id.recycler_view);
+        contactName = (TextView) view.findViewById(R.id.contact_name);
+        contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
+        backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         displayContactInfo(contact);
 
         contactName.setTypeface(Fontometrics.amatic_bold(getActivity()));
@@ -129,7 +140,7 @@ public class EditContactFragment extends Fragment implements SmsAdapter.Listener
                 }
             });
         }
-        return NotepadLayoutFragment;
+        return view;
     }
 
     @Override

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.EditContactFragment">
+    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment">
 
 
     <android.support.design.widget.AppBarLayout
@@ -14,7 +14,6 @@
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_scrollFlags="scroll|snap|enterAlways">
-
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/main.collapsing"
@@ -57,11 +56,7 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
-
                             <TextView
-
-                                tools:context=""
-                                fontPath="fonts/BrownBagLunch.ttf"
                                 android:id="@+id/contact_name"
                                 android:layout_width="120dp"
                                 android:background="@drawable/bg_polaroid_texture"
@@ -70,11 +65,10 @@
                                 android:text="Contact Name"
                                 android:textAlignment="center"
                                 android:textColor="#000000"
-                                android:paddingBottom="4dp"
                                 android:textSize="20sp"
                                 android:elevation="24dp"
                                 android:layout_height="135dp"
-                                tools:ignore="MissingPrefix" />
+                                android:textStyle="bold" />
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -104,17 +98,13 @@
         <Toolbar
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
         </Toolbar>
-
         <LinearLayout
             android:id="@+id/title_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_scrollFlags="scroll|enterAlways" />
-
         <android.support.design.widget.TabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
@@ -122,9 +112,7 @@
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
             app:tabMode="fixed" />
-
         <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="1"
