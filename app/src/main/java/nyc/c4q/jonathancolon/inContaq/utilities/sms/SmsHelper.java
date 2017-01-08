@@ -93,23 +93,19 @@ public class SmsHelper {
         Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp), Toast.LENGTH_LONG).show();
     }
 
-    public static ArrayList<Sms> getAllSms(Context context) {
+    public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
         StringBuilder smsBuilder = new StringBuilder();
         final String SMS_URI_ALL = "content://sms/";
 
         ArrayList lstSms = new ArrayList<Sms>();
         Sms objSms = null;
 
+        if (contact.getCellPhoneNumber() != null){
         try {
             Uri uri = Uri.parse(SMS_URI_ALL);
             String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
-            Cursor c = context.getApplicationContext().getContentResolver().query(uri, projection, "address='9172707921'", null, "date desc");
+            Cursor c = context.getApplicationContext().getContentResolver().query(uri, projection, "address='" + contact.getCellPhoneNumber() + "'", null, "date desc");
             if (c.moveToFirst()) {
-                int index_Address = c.getColumnIndex("address");
-                int index_Person = c.getColumnIndex("person");
-                int index_Body = c.getColumnIndex("body");
-                int index_Date = c.getColumnIndex("date");
-                int index_Type = c.getColumnIndex("type");
 
                 int totalSMS = c.getCount();
 
@@ -138,8 +134,44 @@ public class SmsHelper {
         } catch (SQLiteException ex) {
             Log.d("SQLiteException", ex.getMessage());
         }
+        } else {
+            try {
+                Uri uri = Uri.parse(SMS_URI_ALL);
+                String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
+                Cursor c = context.getApplicationContext().getContentResolver().query(uri, projection, null, null, "date desc");
+                if (c.moveToFirst()) {
+
+                    int totalSMS = c.getCount();
+
+                    for (int i = 0; i < totalSMS; i++) {
+                        objSms = new Sms();
+                        objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
+                        objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("\\s+", ""));
+                        objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
+                        objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
+                        objSms.setType(c.getString(c.getColumnIndexOrThrow("type")));
+
+                        if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
+                            objSms.setFolderName("inbox");
+                        } else {
+                            objSms.setFolderName("sent");
+                        }
+                        lstSms.add(objSms);
+                        c.moveToNext();
+                    }
+                    if (!c.isClosed()) {
+                        c.close();
+                    }
+                } else {
+                    smsBuilder.append("no result!");
+                }
+            } catch (SQLiteException ex) {
+                Log.d("SQLiteException", ex.getMessage());
+            }
+        }
         lstSms.size();
         return lstSms;
+
     }
 }
 

@@ -95,10 +95,10 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener{
 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
-        lstSms = SmsHelper.getAllSms(getActivity());
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
+        lstSms = SmsHelper.getAllSms(getActivity(), contact);
 
-        contactName = (TextView) view.findViewById(R.id.contact_name);
+        contactName = (TextView) view.findViewById(R.id.name);
         contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -219,6 +219,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener{
             setContactImage(contact.getContactImage(), contactImageIV);
         }
         contactName.setText(nameValue);
+
     }
 
     private void setupRecyclerView() {

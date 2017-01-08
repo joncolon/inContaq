@@ -1,17 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edit_contact"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/second_frag"
-    android:background="#ECF0F1" >
+    android:background="#ECF0F1"
+    android:animateLayoutChanges="true">
 
-    <TextView
-        android:id="@+id/tvFragSecond"
-        android:layout_width="wrap_content"
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="35dp"
-        android:text="TextView" />
+        android:id="@+id/contact_info_card"
+        android:layout_marginTop="169dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@color/cardColor">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_option"
+                android:layout_gravity="end"
+                android:layout_marginBottom="30dp"
+                android:text="EDIT"
+                android:textColor="@color/colorAccent"
+                android:clickable="true"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Name:"
+                    android:textColor="@color/fontColorDark"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="15dp"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/edit_name"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="Enter contact name"
+                    android:enabled="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/mobile_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Mobile:"
+                    android:textColor="@color/fontColorDark"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="15dp"
+                    android:visibility="gone"
+                    android:enabled="false"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:ems="10"
+                    android:id="@+id/edit_mobile_phone"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="Enter Mobile Number"
+                    android:visibility="gone"
+                    android:enabled="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Email:"
+                    android:textColor="@color/fontColorDark"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="15dp"
+                    android:visibility="gone"
+                    android:enabled="false"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:id="@+id/edit_email"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="Enter valid email address"
+                    android:visibility="gone"
+                    android:enabled="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Address:"
+                    android:textColor="@color/fontColorDark"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="15dp"
+                    android:visibility="gone"
+                    android:enabled="false"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress"
+                    android:ems="10"
+                    android:id="@+id/edit_address"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="20dp"
+                    android:hint="Enter Address"
+                    android:visibility="gone"
+                    android:enabled="false"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_scrollFlags="scroll|snap|enterAlways">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|snap|enterAlways">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/background_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="24dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="6dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <TextView
+                                android:id="@+id/contact_name"
+                                android:layout_width="120dp"
+                                android:background="@drawable/bg_polaroid_texture"
+                                android:gravity="center|bottom"
+                                android:paddingTop="110dp"
+                                android:text="Contact Name"
+                                android:textAlignment="center"
+                                android:textColor="#000000"
+                                android:textSize="20sp"
+                                android:elevation="24dp"
+                                android:layout_height="135dp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/contact_img"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_gravity="center"
+                                android:background="#555777"
+                                android:foregroundGravity="center"
+                                android:scaleType="centerCrop"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true" />
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+
+
+                </RelativeLayout>
+            </FrameLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/save_button"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="25dp"
+            app:rippleColor="#FF9F1C"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_save_white_24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="40dp"
+            android:visibility="gone"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -89,7 +89,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         public ContactViewHolder(View itemView) {
             super(itemView);
             mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);
-            mContactName = (TextView) itemView.findViewById(R.id.contact_name);
+            mContactName = (TextView) itemView.findViewById(R.id.name);
             mContactImage = (ImageView) itemView.findViewById(R.id.contact_image);
             mContactInitials = (TextView) itemView.findViewById(R.id.contact_initials);
 

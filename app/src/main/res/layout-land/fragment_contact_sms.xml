@@ -62,7 +62,7 @@
 
                                 tools:context=""
                                 fontPath="fonts/BrownBagLunch.ttf"
-                                android:id="@+id/contact_name"
+                                android:id="@+id/name"
                                 android:layout_width="120dp"
                                 android:background="@drawable/bg_polaroid_texture"
                                 android:gravity="center|bottom"

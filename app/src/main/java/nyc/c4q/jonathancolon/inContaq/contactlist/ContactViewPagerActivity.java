@@ -10,14 +10,14 @@ import org.parceler.Parcels;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 
-public class ContactViewPagerActivity extends FragmentActivity {
+public class ContactViewPagerActivity extends FragmentActivity implements AlertDialogCallback<String>{
     private static Contact contact;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_contact_viewpager);
 
         contact = Parcels.unwrap(getIntent().getParcelableExtra("Parcelled Contact"));
         Intent i = getIntent();
@@ -35,5 +35,11 @@ public class ContactViewPagerActivity extends FragmentActivity {
         if (tabToOpen.equals(tabToOpen)) {
             viewPager.setCurrentItem(1);
         }
+    }
+
+
+    @Override
+    public void alertDialogCallback(String ret) {
+
     }
 }

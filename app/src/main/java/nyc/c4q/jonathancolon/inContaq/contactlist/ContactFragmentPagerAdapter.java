@@ -33,7 +33,7 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int pos) {
         switch(pos) {
 
-            case 0: return ContactInfoFragment.newInstance(contact);
+            case 0: return ContactInfoFragment.newInstance();
             case 1: return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
             case 2: return ContactStatsFragment.newInstance("ContactStatsFragment, Instance 3");
             default: return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
