@@ -53,7 +53,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
         this.activity = this;
-        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_SMS};
 
         Stetho.initializeWithDefaults(this);
 

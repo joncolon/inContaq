@@ -43,7 +43,6 @@ dependencies {
     compile 'org.ishmeetsingh.androbot:fontometrics:1.0.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'org.parceler:parceler:1.1.6'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
     //twilio text message service library
 }
