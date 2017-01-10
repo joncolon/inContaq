@@ -109,7 +109,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener{
 
 
 
-        setupRecyclerView();
+        setupRecyclerView(contact);
         refreshRecyclerView();
         scrollListToBottom();
 
@@ -222,9 +222,9 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener{
 
     }
 
-    private void setupRecyclerView() {
+    private void setupRecyclerView(Contact contact) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new SmsAdapter(this));
+        recyclerView.setAdapter(new SmsAdapter(this, contact));
     }
 
     public void refreshRecyclerView() {

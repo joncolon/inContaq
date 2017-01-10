@@ -11,6 +11,8 @@
     <color name="cardColor">#FDFFFC
     </color>
 
+
     <color name="selectedColor">#E71D36
     </color>
+    <color name="receivedText">#EF7674</color>
 </resources>

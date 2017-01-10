@@ -95,6 +95,7 @@ public class SmsHelper {
 
     public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
         StringBuilder smsBuilder = new StringBuilder();
+        final String SMS_URI_INBOX = "content://sms/inbox";
         final String SMS_URI_ALL = "content://sms/";
 
         ArrayList lstSms = new ArrayList<Sms>();

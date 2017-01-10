@@ -85,7 +85,7 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
+                    android:inputType="number"
                     android:ems="10"
                     android:id="@+id/edit_mobile_phone"
                     android:textColor="@color/colorPrimaryDark"

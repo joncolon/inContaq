@@ -198,7 +198,6 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();

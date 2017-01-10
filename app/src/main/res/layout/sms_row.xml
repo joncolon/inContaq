@@ -1,68 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sms_row"
     android:paddingBottom="5dp"
-    android:background="#ECF0F1"
-    >
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    android:background="#ECF0F1">
 
-        android:background="#ECF0F1"
-        android:id="@+id/rellyt"
-        >
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/messageview"
             android:background="#ECF0F1"
+            android:id="@+id/messageview"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/senderId"
-                android:text="8090470606"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:background="#ECF0F1"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:textColor="@color/fontColorDark"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/messageDetails"
-                android:textSize="16sp"
-                android:background="#ECF0F1"
-                android:text="Hi, This is Abhay, how you doin ddsk sadjk sdajkds sdjs sdkj ?"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                />
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginBottom="2dp"
+                app:cardCornerRadius="10dp"
+                android:elevation="1in"
+                android:id="@+id/chatBubble">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/timeDate"
-                android:background="#ECF0F1"
-                android:layout_below="@id/senderId"
-                android:visibility="visible"
-                android:textSize="10sp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="17 jul"
-                android:layout_marginBottom="3dp"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="type not found"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:id="@+id/type"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="gone"
+                        android:textColor="@color/fontColorDark"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/senderId"
+                        android:text="8090470606"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="gone"
+                        android:textColor="@color/fontColorDark"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/messageDetails"
+                        android:textSize="16sp"
+                        android:text="Hi, This is Abhayd dddfd dfd sdjs sdkj ?"
+                        android:gravity="start"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColorLink="#0000ff"
+                        android:linksClickable="true"
+                        android:autoLink="all"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/timeDate"
+                        android:layout_below="@id/senderId"
+                        android:visibility="visible"
+                        android:textSize="10sp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="17 jul"
+                        android:layout_marginBottom="3dp"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
-    </RelativeLayout>
-
-
-
-
-</RelativeLayout>
+    </LinearLayout>
