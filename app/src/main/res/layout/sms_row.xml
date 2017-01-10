@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ECF0F1"
-            android:id="@+id/messageview"
+            android:id="@+id/chat_view"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView

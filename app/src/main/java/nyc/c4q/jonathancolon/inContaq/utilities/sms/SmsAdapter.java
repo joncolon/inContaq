@@ -91,7 +91,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
     public class SmsViewHolder extends RecyclerView.ViewHolder {
         private TextView senderId, myID,senderCount,messageRecieved,timeStamp,timeDate, messageSent, type;
-        private LinearLayout chatBubble;
+        private LinearLayout linearLayout;
         private CardView cardBubble;
 
 
@@ -101,7 +101,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             senderId = (TextView) itemView.findViewById(R.id.senderId);
             messageRecieved = (TextView) itemView.findViewById(R.id.messageDetails);
             type = (TextView) itemView.findViewById(R.id.type);
-            chatBubble = (LinearLayout) itemView.findViewById(R.id.messageview);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.chat_view);
             cardBubble = (CardView) itemView.findViewById(R.id.chatBubble);
 
             timeDate = (TextView) itemView.findViewById(R.id.timeDate);
@@ -121,7 +121,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             if (sms.getType().toString().equals("1")){
                 if (contact.getCellPhoneNumber() != null){
                     type.setText(contact.getFirstName() + " " + contact.getLastName());
-                    chatBubble.setGravity(Gravity.START);
+                    linearLayout.setGravity(Gravity.START);
                     cardBubble.setCardBackgroundColor(Color.parseColor("#5B9CAC"));
                     messageRecieved.setTextColor(Color.parseColor("#FFFFFF"));
                     timeDate.setTextColor(Color.parseColor("#FFFFFF"));
@@ -130,7 +130,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
                 }
             } else{
-                chatBubble.setGravity(Gravity.END);
+                linearLayout.setGravity(Gravity.END);
                 cardBubble.setCardBackgroundColor(Color.parseColor("#ffffff"));
                 messageRecieved.setTextColor(Color.parseColor("#0E587A"));
                 timeDate.setTextColor(Color.parseColor("#0E587A"));
