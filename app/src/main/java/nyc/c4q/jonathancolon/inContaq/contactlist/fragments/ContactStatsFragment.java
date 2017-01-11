@@ -177,7 +177,7 @@ public class ContactStatsFragment extends Fragment {
 
         // Chart
         mChart.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, 75)
+                .setAxisBorderValues(0, 150)
                 .setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
                 .setLabelsColor(Color.parseColor("#FF9F1C"))
                 .setXAxis(false)
