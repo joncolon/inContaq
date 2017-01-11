@@ -4,14 +4,20 @@
     android:layout_height="match_parent"
     android:background="#ECF0F1" >
 
-
-    <com.db.chart.view.LineChartView
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:id="@+id/daily_chart"
-        android:layout_height="300dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true">
-    </com.db.chart.view.LineChartView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+        <com.db.chart.view.LineChartView
+            android:layout_width="match_parent"
+            android:id="@+id/daily_chart"
+            android:layout_height="300dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true">
+        </com.db.chart.view.LineChartView>
+
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:text="TextView"
@@ -20,9 +26,10 @@
         android:textAlignment="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:layout_marginTop="66dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginTop="131dp"
         android:id="@+id/sms_stats"
         android:scrollbars="vertical"
-        android:layout_below="@+id/daily_chart"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="19dp" />
 </RelativeLayout>

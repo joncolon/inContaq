@@ -177,11 +177,12 @@ public class ContactStatsFragment extends Fragment {
 
         // Chart
         mChart.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, 80)
+                .setAxisBorderValues(0, 75)
                 .setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
                 .setLabelsColor(Color.parseColor("#6a84c3"))
-                .setXAxis(true)
-                .setYAxis(true);
+                .setXAxis(false)
+                .setYAxis(false)
+                .setBackgroundColor(Color.parseColor("#052635"));
         mChart.show();
 
     }
