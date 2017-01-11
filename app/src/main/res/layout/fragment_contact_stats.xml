@@ -4,13 +4,25 @@
     android:layout_height="match_parent"
     android:background="#ECF0F1" >
 
-    <TextView
-        android:id="@+id/tvFragThird"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="35dp"
-        android:text="TextView" />
 
+    <com.db.chart.view.LineChartView
+        android:layout_width="match_parent"
+        android:id="@+id/daily_chart"
+        android:layout_height="300dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true">
+    </com.db.chart.view.LineChartView>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginTop="66dp"
+        android:id="@+id/sms_stats"
+        android:scrollbars="vertical"
+        android:layout_below="@+id/daily_chart"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

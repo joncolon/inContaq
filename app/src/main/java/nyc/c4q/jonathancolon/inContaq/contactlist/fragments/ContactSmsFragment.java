@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,14 +50,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener{
     private static ImageView contactImageIV, backgroundImageIV;
     private static Contact contact;
     SmsAdapter adapter;
-    ViewPager viewpager;
 
     private ArrayList<Sms> lstSms;
 
     private int mPage;
     private SQLiteDatabase db;
     private RecyclerView recyclerView;
-    private RelativeLayout relativelayout;
 
 
     public ContactSmsFragment() {
