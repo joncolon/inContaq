@@ -15,7 +15,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactStatsFragment
 
 public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Contact Info", "Messages", "Stats" };
+    private String tabTitles[] = new String[]{"Contact Info", "Messages", "Stats"};
     private Context context;
     private Contact contact;
 
@@ -31,12 +31,15 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int pos) {
-        switch(pos) {
-
-            case 0: return ContactInfoFragment.newInstance();
-            case 1: return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
-            case 2: return ContactStatsFragment.newInstance("ContactStatsFragment, Instance 3");
-            default: return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
+        switch (pos) {
+            case 0:
+                return ContactInfoFragment.newInstance();
+            case 1:
+                return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
+            case 2:
+                return ContactStatsFragment.newInstance("ContactStatsFragment, Instance 3");
+            default:
+                return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
         }
     }
 

@@ -12,9 +12,11 @@ import java.util.TreeMap;
  * Created by jonathancolon on 1/5/17.
  */
 
-public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void, TreeMap<Integer, Integer>> {
-    TreeMap<Integer, Integer> monthlyTexts;
-    ArrayList<Sms> lstSms;
+public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
+        TreeMap<Integer, Integer>> {
+
+    private TreeMap<Integer, Integer> monthlyTexts;
+    private ArrayList<Sms> lstSms;
 
     public MonthlyReceivedWorkerTask() {
     }
@@ -38,7 +40,6 @@ public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void
 
     private TreeMap<Integer, Integer> getSmsStats(ArrayList<Sms> list){
         ArrayList<String> receievedSms = new ArrayList<>();
-        ArrayList<Sms> sentSms = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getType().equals("1")) {
@@ -50,12 +51,10 @@ public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void
     }
 
     private TreeMap<Integer, Integer> getMonthlyTexts(ArrayList<String> list){
-        DateTime juDate;
-            for (int i = 0; i < list.size(); i++) {
-                long lg;
-                lg = Long.parseLong(list.get(i));
-                juDate = new DateTime(lg);
-                int month = juDate.getMonthOfYear();
+        for (int i = 0; i < list.size(); i++) {
+            long lg = Long.parseLong(list.get(i));
+            DateTime juDate = new DateTime(lg);
+            int month = juDate.getMonthOfYear();
 
                 if (monthlyTexts.containsKey(month)){
                     monthlyTexts.put(month, monthlyTexts.get(month) +1);

@@ -8,19 +8,18 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Contact {
-
-     Long _id;
-     long birthDate;
-     String firstName;
-     String lastName;
-     String nickname;
-     String homePhoneNumber;
-     String workPhoneNumber;
-     String cellPhoneNumber;
-     String address;
-     String email;
-     byte[] contactImage;
-     byte[] backgroundImage;
+    Long _id;
+    long birthDate;
+    String firstName;
+    String lastName;
+    String nickname;
+    String homePhoneNumber;
+    String workPhoneNumber;
+    String cellPhoneNumber;
+    String address;
+    String email;
+    byte[] contactImage;
+    byte[] backgroundImage;
 
     public Contact() {
     }

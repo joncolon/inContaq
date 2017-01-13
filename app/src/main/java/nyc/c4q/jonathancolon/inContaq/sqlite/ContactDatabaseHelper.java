@@ -26,7 +26,6 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     }
 
     static {
-        // register our models
         cupboard().register(Contact.class);
     }
 

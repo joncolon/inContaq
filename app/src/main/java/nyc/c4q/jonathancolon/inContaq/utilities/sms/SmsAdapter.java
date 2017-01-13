@@ -49,7 +49,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
     @Override
     public SmsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.sms_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.sms_row,
+                parent, false);
+
         SmsViewHolder vh = new SmsViewHolder(itemView);
         context = parent.getContext();
 
@@ -90,7 +92,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 //_____________________________________VIEWHOLDER___________________________________________________
 
     public class SmsViewHolder extends RecyclerView.ViewHolder {
-        private TextView senderId, myID,senderCount,messageRecieved,timeStamp,timeDate, messageSent, type;
+        private TextView senderId, messageRecieved, timeDate, type;
         private LinearLayout linearLayout;
         private CardView cardBubble;
 
@@ -116,9 +118,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
             type.setText(sms.getType());
 
-
-
-            if (sms.getType().toString().equals("1")){
+            if (sms.getType().equals("1")){
                 if (contact.getCellPhoneNumber() != null){
                     type.setText(contact.getFirstName() + " " + contact.getLastName());
                     linearLayout.setGravity(Gravity.START);
@@ -127,7 +127,6 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                     timeDate.setTextColor(Color.parseColor("#FFFFFF"));
 
                 } else {
-
                 }
             } else{
                 linearLayout.setGravity(Gravity.END);
@@ -137,19 +136,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
             }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onContactClicked(smsDetail);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onContactClicked(smsDetail));
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    listener.onContactLongClicked(smsDetail);
-                    return true;
-                }
+            itemView.setOnLongClickListener(v -> {
+                listener.onContactLongClicked(smsDetail);
+                return true;
             });
         }
     }

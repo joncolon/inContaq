@@ -3,7 +3,6 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.fontometrics.Fontometrics;
 
@@ -36,8 +34,8 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
  */
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
     Contact contact;
-    private  TextView name, mobilePhone, email, polaroidName, address, editButton;
-    private  ImageView contactImageIV, backgroundImageIV;
+    private TextView name, mobilePhone, email, polaroidName, address, editButton;
+    private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
     private CardView infoCard;
@@ -57,7 +55,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_info, container, false);
 
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
@@ -82,19 +81,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
 
 
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buildSaveEditDialog();
-            }
-        });
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableEditContactMode(contact);
-            }
-        });
+        saveButton.setOnClickListener(view1 -> buildSaveEditDialog());
+        editButton.setOnClickListener(view12 -> enableEditContactMode(contact));
 
         displayContactInfo(contact);
 
@@ -142,66 +130,28 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             editAddress.setVisibility(View.VISIBLE);
             editAddress.setText(contact.getAddress());
         }
-            polaroidName.setText(nameValue);
-            editName.setText(nameValue);
-        }
+        polaroidName.setText(nameValue);
+        editName.setText(nameValue);
+    }
 
-    private void setContactImage(byte[] bytes, ImageView imageView){
+    private void setContactImage(byte[] bytes, ImageView imageView) {
         SetContactImageWorkerTask task = new SetContactImageWorkerTask(imageView);
         task.execute(bytes);
     }
 
-    private String parsePhoneNumber(String input){
-        return input.replaceAll("[()\\s-]+?!@#$%^&*()_", "");
-    }
-
-    private void enableEditContactMode(final Contact contact){
+    private void enableEditContactMode(final Contact contact) {
         infoCard.animate()
                 .alpha(1.0f)
                 .setDuration(3000)
                 .setListener(new AnimatorListenerAdapter() {
-
                     @Override
                     public void onAnimationStart(Animator animation) {
                         infoCard.getLayoutParams();
                         super.onAnimationStart(animation);
-
-                        name.setVisibility(View.VISIBLE);
-                        mobilePhone.setVisibility(View.VISIBLE);
-                        email.setVisibility(View.VISIBLE);
-                        address.setVisibility(View.VISIBLE);
-
-
-                        editName.setVisibility(View.VISIBLE);
-                        editMobile.setVisibility(View.VISIBLE);
-                        editEmail.setVisibility(View.VISIBLE);
-                        editAddress.setVisibility(View.VISIBLE);
-
-                        if (contact.getEmail() == null){
-                            email.setAlpha(0);
-                            editEmail.setAlpha(0);}
-                        if (contact.getAddress() == null){
-                            address.setAlpha(0);
-                            editAddress.setAlpha(0);
-                        }
-                        if (contact.getCellPhoneNumber() == null){
-                            mobilePhone.setAlpha(0);
-                            editMobile.setAlpha(0);
-                        }
-
-                        mobilePhone.animate().alpha(1.0f).setDuration(300);
-                        email.animate().alpha(1.0f).setDuration(500);
-                        address.animate().alpha(1.0f).setDuration(700);
-                        editMobile.animate().alpha(1.0f).setDuration(300);
-                        editEmail.animate().alpha(1.0f).setDuration(500);
-                        editAddress.animate().alpha(1.0f).setDuration(700);
-
-                        editName.setEnabled(true);
-                        editMobile.setEnabled(true);
-                        editEmail.setEnabled(true);
-                        editAddress.setEnabled(true);
+                        showContactInfo();
+                        fadeInContactInfo();
+                        enableEditText();
                         saveButton.setVisibility(View.VISIBLE);
-
                     }
 
                     @Override
@@ -211,75 +161,93 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 });
     }
 
-    public void buildSaveEditDialog(){
+    public void buildSaveEditDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
-        // Setting Dialog Title
         alertDialog.setTitle("Save Changes?");
-
-        // Setting Dialog Message
         alertDialog.setMessage("Are you sure you want to save your changes?");
 
-        // Setting Icon to Dialog
-
-        // Setting Positive "Yes" Button
-        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-
-                // Write your code here to invoke YES event
-                Toast.makeText(getActivity(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                selection = 1;
-                alertDialogCallback(selection);
-
-            }
+        alertDialog.setPositiveButton("YES", (dialog, which) -> {
+            selection = 1;
+            alertDialogCallback(selection);
         });
 
-        // Setting Negative "NO" Button
-        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Write your code here to invoke NO event
-                Toast.makeText(getActivity(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-
-                dialog.cancel();
-            }
+        alertDialog.setNegativeButton("NO", (dialog, which) -> {
+            dialog.cancel();
         });
 
-        // Showing Alert Message
         alertDialog.show();
     }
 
     @Override
     public void alertDialogCallback(Integer ret) {
         ret = selection;
-        if (ret == 1){
+        if (ret == 1) {
             String mText = editName.getText().toString().trim();
 
             if (mText.trim().length() > 0) {
-
-                String name = mText;
                 String lastName = "";
-                String firstName = "";
-                if (name.split("\\w+").length > 1) {
+                String firstName;
+                if (mText.split("\\w+").length > 1) {
 
-                    lastName = name.substring(name.lastIndexOf(" ") + 1);
-                    firstName = name.substring(0, name.lastIndexOf(' '));
+                    lastName = mText.substring(mText.lastIndexOf(" ") + 1);
+                    firstName = mText.substring(0, mText.lastIndexOf(' '));
                 } else {
-                    firstName = name;
+                    firstName = mText;
                 }
                 contact.setFirstName(firstName);
                 contact.setLastName(lastName);
             }
 
-
-            contact.setCellPhoneNumber(parsePhoneNumber(editMobile.getText().toString()));
+            contact.setCellPhoneNumber(editMobile.getText().toString());
             String email = editEmail.getText().toString();
             String address = editAddress.getText().toString();
-
             contact.setEmail(email);
             contact.setAddress(address);
 
             cupboard().withDatabase(db).put(contact);
         }
+    }
+
+    private void showContactInfo() {
+        name.setVisibility(View.VISIBLE);
+        mobilePhone.setVisibility(View.VISIBLE);
+        email.setVisibility(View.VISIBLE);
+        address.setVisibility(View.VISIBLE);
+
+        editName.setVisibility(View.VISIBLE);
+        editMobile.setVisibility(View.VISIBLE);
+        editEmail.setVisibility(View.VISIBLE);
+        editAddress.setVisibility(View.VISIBLE);
+
+        if (contact.getEmail() == null) {
+            email.setAlpha(0);
+            editEmail.setAlpha(0);
+        }
+        if (contact.getAddress() == null) {
+            address.setAlpha(0);
+            editAddress.setAlpha(0);
+        }
+        if (contact.getCellPhoneNumber() == null) {
+            mobilePhone.setAlpha(0);
+            editMobile.setAlpha(0);
+        }
+    }
+
+    private void fadeInContactInfo() {
+        mobilePhone.animate().alpha(1.0f).setDuration(300);
+        email.animate().alpha(1.0f).setDuration(500);
+        address.animate().alpha(1.0f).setDuration(700);
+        editMobile.animate().alpha(1.0f).setDuration(300);
+        editEmail.animate().alpha(1.0f).setDuration(500);
+        editAddress.animate().alpha(1.0f).setDuration(700);
+    }
+
+    private void enableEditText() {
+        editName.setEnabled(true);
+        editMobile.setEnabled(true);
+        editEmail.setEnabled(true);
+        editAddress.setEnabled(true);
     }
 }
 

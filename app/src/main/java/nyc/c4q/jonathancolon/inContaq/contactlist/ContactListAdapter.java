@@ -39,16 +39,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         parallaxViewController.registerImageParallax(recyclerView);
     }
 
-
-
-
-
     @Override
     public ContactListAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_row, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_row,
+                parent, false);
+
         ContactViewHolder vh = new ContactViewHolder(itemView);
         parallaxViewController.imageParallax(vh.mBackGroundImage);
-
         context = parent.getContext();
         return vh;
     }
@@ -57,7 +54,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public void onBindViewHolder(ContactViewHolder holder, int position) {
         Contact contact = contactList.get(position);
         holder.bind(contact);
-
     }
 
     @Override
@@ -65,21 +61,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return contactList.size();
     }
 
-    public void updateList(List<Contact> contacts) {
-        contactList = contacts;
-        notifyDataSetChanged();
-    }
-
     public void addItem(Contact contact) {
         contactList.add(contact);
         notifyDataSetChanged();
     }
-
-    public void removeItem(int position) {
-        contactList.remove(position);
-        notifyItemRemoved(position);
-    }
-
 //_____________________________________VIEWHOLDER___________________________________________________
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -97,7 +82,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         public void bind(Contact c) {
             final Contact contact = c;
-
             mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
             mContactInitials.setText((contact.getFirstName().substring(0,1).toUpperCase()));
 
@@ -107,7 +91,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 byte[] backgroundImage = contact.getBackgroundImage();
                 ByteArrayInputStream imageStream = new ByteArrayInputStream(backgroundImage);
                 Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
-
                 mBackGroundImage.setImageBitmap(decodedImage);
             }
 
@@ -115,25 +98,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 byte[] contactImage = contact.getContactImage();
                 ByteArrayInputStream imageStream = new ByteArrayInputStream(contactImage);
                 Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
-
-
                 mContactImage.setImageBitmap(decodedImage);
             }
 
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onContactClicked(contact);
-                }
-            });
-
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    listener.onContactLongClicked(contact);
-                    return true;
-                }
+            itemView.setOnClickListener(v -> listener.onContactClicked(contact));
+            itemView.setOnLongClickListener(v -> {
+                listener.onContactLongClicked(contact);
+                return true;
             });
         }
     }

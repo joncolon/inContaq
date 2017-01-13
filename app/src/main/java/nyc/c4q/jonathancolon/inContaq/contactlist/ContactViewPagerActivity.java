@@ -10,9 +10,8 @@ import org.parceler.Parcels;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 
-public class ContactViewPagerActivity extends FragmentActivity implements AlertDialogCallback<String>{
+public class ContactViewPagerActivity extends FragmentActivity {
     private static Contact contact;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +34,5 @@ public class ContactViewPagerActivity extends FragmentActivity implements AlertD
         if (tabToOpen.equals(tabToOpen)) {
             viewPager.setCurrentItem(1);
         }
-    }
-
-
-    @Override
-    public void alertDialogCallback(String ret) {
-
     }
 }

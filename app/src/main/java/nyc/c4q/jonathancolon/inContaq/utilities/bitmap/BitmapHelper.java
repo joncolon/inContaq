@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 public class BitmapHelper {
 
-    private void setContactImage(byte[] bytes, ImageView imageView){
+    private void setContactImage(byte[] bytes, ImageView imageView) {
         SetContactImageWorkerTask task = new SetContactImageWorkerTask(imageView);
         task.execute(bytes);
     }

@@ -19,9 +19,12 @@ public class SetContactImageWorkerTask extends AsyncTask<byte[], Void, Bitmap> {
     Context context;
 
     public SetContactImageWorkerTask(ImageView imageView) {
-        // Use a WeakReference to ensure the ImageView can be garbage collected
         imageViewReference = new WeakReference<ImageView>(imageView);
+    }
 
+    public static Bitmap decodeBitmap(byte[] bytes) {
+        ByteArrayInputStream decodedImage = new ByteArrayInputStream(bytes);
+        return BitmapFactory.decodeStream(decodedImage);
     }
 
     @Override
@@ -29,27 +32,18 @@ public class SetContactImageWorkerTask extends AsyncTask<byte[], Void, Bitmap> {
         Log.i("SetImageWorkerTask", "Loading image...");
     }
 
-    // Decode image in background.
-
     @Override
     protected Bitmap doInBackground(byte[]... params) {
         return decodeBitmap(params[0]);
     }
 
-    // Once complete, see if ImageView is still around and set bitmap.
     @Override
     protected void onPostExecute(Bitmap ret) {
-        if (imageViewReference != null && ret != null) {
+        if (ret != null) {
             final ImageView imageView = imageViewReference.get();
             if (imageView != null) {
                 imageView.setImageBitmap(ret);
             }
         }
-    }
-
-    public static Bitmap decodeBitmap(byte[] bytes){
-
-        ByteArrayInputStream decodedImage = new ByteArrayInputStream(bytes);
-        return BitmapFactory.decodeStream(decodedImage);
     }
 }

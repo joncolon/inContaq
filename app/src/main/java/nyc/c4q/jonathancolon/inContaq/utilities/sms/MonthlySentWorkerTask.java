@@ -12,7 +12,9 @@ import java.util.TreeMap;
  * Created by jonathancolon on 1/5/17.
  */
 
-public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void, TreeMap<Integer, Integer>> {
+public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
+        TreeMap<Integer, Integer>> {
+
     TreeMap<Integer, Integer> monthlyTexts;
     ArrayList<Sms> lstSms;
 
@@ -49,11 +51,9 @@ public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void, Tr
     }
 
     private TreeMap<Integer, Integer> getMonthlyTexts(ArrayList<String> list){
-        DateTime juDate;
         for (int i = 0; i < list.size(); i++) {
-            long lg;
-            lg = Long.parseLong(list.get(i));
-            juDate = new DateTime(lg);
+            long lg = Long.parseLong(list.get(i));
+            DateTime juDate = new DateTime(lg);
             int month = juDate.getMonthOfYear();
 
             if (monthlyTexts.containsKey(month)){
