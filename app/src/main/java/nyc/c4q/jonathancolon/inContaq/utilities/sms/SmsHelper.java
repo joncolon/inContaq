@@ -119,7 +119,7 @@ public class SmsHelper {
 
 
     //TODO Split into separate methods. 1. getContactSms 2. getAllSms
-    public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
+    synchronized public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
         StringBuilder smsBuilder = new StringBuilder();
         final String SMS_URI_ALL = URI_ALL;
 

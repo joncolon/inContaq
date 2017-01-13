@@ -75,10 +75,10 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
-        lstSms = SmsHelper.getAllSms(getActivity(), contact);
 
         initViews(view);
         displayContactInfo(contact);
+        lstSms = SmsHelper.getAllSms(getActivity(), contact);
         setupRecyclerView(contact);
         refreshRecyclerView();
         scrollListToBottom();
@@ -110,7 +110,20 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         }
     }
 
-    private void setupRecyclerView(Contact contact) {
+    synchronized private void displayContactInfo(Contact contact) {
+        String nameValue = contact.getFirstName() + " " + contact.getLastName();
+        //Asynchronously load bitmaps from Contact object
+        if (contact.getBackgroundImage() != null) {
+            setContactImage(contact.getBackgroundImage(), backgroundImageIV);
+        }
+        if (contact.getContactImage() != null) {
+            setContactImage(contact.getContactImage(), contactImageIV);
+        }
+        contactName.setText(nameValue);
+
+    }
+
+    synchronized private void setupRecyclerView(Contact contact) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new SmsAdapter(this, contact));
     }
@@ -128,22 +141,9 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         recyclerView.post(() -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
     }
 
-    synchronized private void displayContactInfo(Contact contact) {
-        String nameValue = contact.getFirstName() + " " + contact.getLastName();
-        //Asynchronously load bitmaps from Contact object
-        if (contact.getBackgroundImage() != null) {
-            setContactImage(contact.getBackgroundImage(), backgroundImageIV);
-        }
-        if (contact.getContactImage() != null) {
-            setContactImage(contact.getContactImage(), contactImageIV);
-        }
-        contactName.setText(nameValue);
-
-    }
-
     private void setContactImage(byte[] bytes, ImageView imageView) {
         SetContactImageWorkerTask task = new SetContactImageWorkerTask(imageView);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,bytes);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, bytes);
     }
 
     @Override

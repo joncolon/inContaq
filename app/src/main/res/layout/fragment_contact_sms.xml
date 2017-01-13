@@ -64,7 +64,7 @@
                                 android:paddingTop="110dp"
                                 android:text="@string/contact_name"
                                 android:textAlignment="center"
-                                android:textColor="@color/blue_sapphire"
+                                android:textColor="@color/black_rich"
                                 android:textSize="20sp"
                                 android:elevation="24dp"
                                 android:layout_height="135dp"
