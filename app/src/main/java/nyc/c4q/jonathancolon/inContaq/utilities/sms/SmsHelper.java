@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
 /**
@@ -20,10 +21,22 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
 public class SmsHelper {
 
+    private static final String URI_ALL = "content://sms/";
+    private static final String URI_SENT = "content://sms/sent";
+    private static final String ID = "_id";
+    private static final String ADDRESS = "address";
+    private static final String PERSON = "person";
+    private static final String BODY = "body";
+    private static final String DATE = "date";
+    private static final String TYPE = "type";
+    private static final String DATE_DESC = "date desc";
+    private static final String INBOX = "inbox";
+    private static final String SENT = "sent";
+
     public SmsHelper() {
     }
 
-    public static String smsDateFormat(long timeInMilli) {
+    public static StringBuilder smsDateFormat(long timeInMilli) {
 
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTimeInMillis(timeInMilli);
@@ -73,39 +86,53 @@ public class SmsHelper {
         }
         String amPm = isAMorPM == 0 ? "AM" : "PM";
 
-        String formattedDate = month + "/" + dayOfMonth + "/" + year + " ";
-        formattedDate += hour + ":" + minutes + " " + amPm;
+        StringBuilder formattedDate = new StringBuilder()
+                .append(month)
+                .append("/")
+                .append(dayOfMonth)
+                .append("/")
+                .append(year)
+                .append(" ")
+                .append(hour)
+                .append(":")
+                .append(minutes)
+                .append(" ")
+                .append(amPm);
+
         return formattedDate;
     }
 
     public static void getLastContactedDate(Context context) {
 
         ContentResolver contentResolver = context.getApplicationContext().getContentResolver();
-        Cursor cursor = contentResolver.query(Uri.parse("content://sms/sent"), null, null, null, null);
+        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, null, null, null);
         cursor.moveToFirst();
-        String date = cursor.getString(cursor.getColumnIndex("date"));
+        String date = cursor.getString(cursor.getColumnIndex(DATE));
         Long timestamp = Long.parseLong(date);
 
-        Log.d(Contact.class.getName(), smsDateFormat(timestamp));
+        Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
 
 
         Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
                 Toast.LENGTH_LONG).show();
     }
 
+
+    //TODO Split into separate methods. 1. getContactSms 2. getAllSms
     public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
         StringBuilder smsBuilder = new StringBuilder();
-        final String SMS_URI_ALL = "content://sms/";
+        final String SMS_URI_ALL = URI_ALL;
 
-        ArrayList lstSms = new ArrayList<Sms>();
+        ArrayList<Sms> smsList = new ArrayList<Sms>();
         Sms objSms;
 
         if (contact.getCellPhoneNumber() != null){
+
         try {
             Uri uri = Uri.parse(SMS_URI_ALL);
-            String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
+            String[] projection = new String[]{ID, ADDRESS, PERSON, BODY, DATE, TYPE};
             Cursor c = context.getApplicationContext().getContentResolver().query(uri, projection,
-                    "address='" + contact.getCellPhoneNumber() + "'", null, "date desc");
+                    ADDRESS + "='" + contact.getCellPhoneNumber() + "'", null, DATE_DESC);
 
             if (c.moveToFirst()) {
 
@@ -113,25 +140,25 @@ public class SmsHelper {
 
                 for (int i = 0; i < totalSMS; i++) {
                     objSms = new Sms();
-                    objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
-                    objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("\\s+", ""));
-                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-                    objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
-                    objSms.setType(c.getString(c.getColumnIndexOrThrow("type")));
+                    objSms.setId(c.getString(c.getColumnIndexOrThrow(ID)));
+                    objSms.setAddress(c.getString(c.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
+                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow(BODY)));
+                    objSms.setTime(c.getString(c.getColumnIndexOrThrow(DATE)));
+                    objSms.setType(c.getString(c.getColumnIndexOrThrow(TYPE)));
 
-                    if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
-                        objSms.setFolderName("inbox");
+                    if (c.getString(c.getColumnIndexOrThrow(TYPE)).contains("1")) {
+                        objSms.setFolderName(INBOX);
                     } else {
-                        objSms.setFolderName("sent");
+                        objSms.setFolderName(SENT);
                     }
-                    lstSms.add(objSms);
+                    smsList.add(objSms);
                     c.moveToNext();
                 }
                 if (!c.isClosed()) {
                     c.close();
                 }
             } else {
-                smsBuilder.append("no result!");
+                smsBuilder.append(R.string.sms_no_result);
             }
         } catch (SQLiteException ex) {
             Log.d("SQLiteException", ex.getMessage());
@@ -140,11 +167,11 @@ public class SmsHelper {
             try {
                 Uri uri = Uri.parse(SMS_URI_ALL);
 
-                String[] projection = new String[]{"_id", "address", "person", "body",
-                        "date", "type"};
+                String[] projection = new String[]{ID, ADDRESS, PERSON, BODY,
+                        DATE, TYPE};
 
                 Cursor c = context.getApplicationContext().getContentResolver().query(uri,
-                        projection, null, null, "date desc");
+                        projection, null, null, DATE_DESC);
 
                 if (c.moveToFirst()) {
 
@@ -152,33 +179,33 @@ public class SmsHelper {
 
                     for (int i = 0; i < totalSMS; i++) {
                         objSms = new Sms();
-                        objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
-                        objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")).replaceAll("\\s+", ""));
-                        objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-                        objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
-                        objSms.setType(c.getString(c.getColumnIndexOrThrow("type")));
+                        objSms.setId(c.getString(c.getColumnIndexOrThrow(ID)));
+                        objSms.setAddress(c.getString(c.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
+                        objSms.setMsg(c.getString(c.getColumnIndexOrThrow(BODY)));
+                        objSms.setTime(c.getString(c.getColumnIndexOrThrow(DATE)));
+                        objSms.setType(c.getString(c.getColumnIndexOrThrow(TYPE)));
 
-                        if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
-                            objSms.setFolderName("inbox");
+                        if (c.getString(c.getColumnIndexOrThrow(TYPE)).contains("1")) {
+                            objSms.setFolderName(INBOX);
                         } else {
-                            objSms.setFolderName("sent");
+                            objSms.setFolderName(SENT);
                         }
-                        lstSms.add(objSms);
+                        smsList.add(objSms);
                         c.moveToNext();
                     }
                     if (!c.isClosed()) {
                         c.close();
                     }
                 } else {
-                    smsBuilder.append("no result!");
+                    smsBuilder.append(R.string.sms_no_result);
                 }
             } catch (SQLiteException ex) {
                 Log.d("SQLiteException", ex.getMessage());
             }
         }
-        lstSms.size();
-        return lstSms;
 
+        smsList.size();
+        return smsList;
     }
 }
 

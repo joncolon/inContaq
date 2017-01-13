@@ -12,10 +12,10 @@
         app:cardBackgroundColor="#000000">
 
         <ImageView
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/blue_maastricht"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@drawable/corkboard_land"
+            android:src="@drawable/img_corkboard_land"
             android:id="@+id/background_image"
             android:scaleType="centerCrop"
             android:layout_alignParentTop="true"

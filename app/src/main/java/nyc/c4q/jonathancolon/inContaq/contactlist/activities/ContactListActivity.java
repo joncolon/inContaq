@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -25,6 +25,9 @@ import java.util.Collections;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
 import nyc.c4q.jonathancolon.inContaq.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.sqlite.SqlHelper;
 
@@ -33,11 +36,12 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>,
         ContactListAdapter.Listener {
 
-    private static final String TAG = "DB DELETE : ";
+    public static final String PARCELLED_CONTACT = "Parcelled Contact";
     private RecyclerView recyclerView;
     private AlertDialog InputContactDialogObject;
     private List<Contact> contactList;
     private SQLiteDatabase db;
+    FloatingActionButton addContactFab;
     private String mText = "";
     private String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_SMS};
@@ -47,6 +51,9 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
         Stetho.initializeWithDefaults(this);
+
+        addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
+        addContactFab.setOnClickListener(v -> openEditor());
 
         setupRecyclerView();
         refreshRecyclerView();
@@ -61,7 +68,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
         AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(this);
         confirmBuilder.setTitle("Add a contact");
-        confirmBuilder.setMessage("Enter contact's name");
+        confirmBuilder.setMessage(R.string.enter_name);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -69,12 +76,12 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         input.setLayoutParams(lp);
         confirmBuilder.setView(input);
 
-        confirmBuilder.setPositiveButton("Confirm", (dialog, which) -> {
+        confirmBuilder.setPositiveButton(R.string.positive_button, (dialog, which) -> {
             mText = input.getText().toString();
             callback.alertDialogCallback(mText);
         });
 
-        confirmBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+        confirmBuilder.setNegativeButton(R.string.negative_button, (dialog, which) -> {
             //do nothing
         });
         InputContactDialogObject = confirmBuilder.create();
@@ -99,12 +106,12 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             cupboard().withDatabase(db).put(contact);
             refreshRecyclerView();
         } else {
-            Toast.makeText(ContactListActivity.this, "Enter a valid name",
+            Toast.makeText(ContactListActivity.this, R.string.enter_name,
                     Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void openEditor(View view) {
+    public void openEditor() {
         InputContactDialogObject.show();
     }
 
@@ -125,8 +132,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     public void onContactClicked(Contact contact) {
         Intent intent = new Intent(this, ContactViewPagerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("sms", "ContactSmsFragment, Instance 4");
-        intent.putExtra("Parcelled Contact", Parcels.wrap(contact));
+        intent.putExtra(PARCELLED_CONTACT, Parcels.wrap(contact));
 
         this.startActivity(intent);
     }

@@ -1,65 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_contact_viewpager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ECF0F1"
     android:orientation="vertical"
-    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.ContactListActivity">
-
-
-    <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/toolbar">
-    </Toolbar>
-    <LinearLayout
-        android:id="@+id/title_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-         />
-    <android.support.design.widget.TabLayout
-        android:id="@+id/sliding_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        app:tabGravity="fill"
-        app:tabMaxWidth="0dp"
-        app:tabMode="fixed" />
-    <android.support.v4.view.ViewPager
-        android:layout_width="match_parent"
-        android:id="@+id/viewpager"
-        android:layout_height="0px"
-        android:layout_weight="1"
-        android:background="@android:color/white" />
-
-
+    tools:context=".contactlist.activities.ContactListActivity">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:id="@+id/recycler_view"
         android:scrollbars="vertical">
     </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_inspect_lock"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginRight="25dp"
+            android:id="@+id/fab_add_contact"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginEnd="25dp"
             android:layout_height="wrap_content"
-
             android:src="@drawable/ic_person_add_white_24dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="40dp"
-            android:onClick="openEditor"
             android:layout_width="wrap_content" />
     </RelativeLayout>
 

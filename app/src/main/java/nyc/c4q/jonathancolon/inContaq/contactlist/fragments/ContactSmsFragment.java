@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,51 +30,42 @@ import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.LoadScaledBitmapWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.SetContactImageWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utilities.sms.Sms;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsAdapter;
+import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
 import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener {
-    public static final String ARG_PAGE = "ARG_PAGE";
+
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
-    private static TextView contactName, smsList;
-    private static int RESULT_LOAD_CONTACT_IMG = 1;
+    private static final int RESULT_LOAD_CONTACT_IMG = 1;
+    private static TextView contactName;
     private static ImageView contactImageIV, backgroundImageIV;
     private static Contact contact;
     private String TAG = "SET TEXT REQUEST: ";
-    private int mPage;
-    private SQLiteDatabase db;
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> lstSms;
-
 
     public ContactSmsFragment() {
         //required empty public constructor
     }
 
-    public static ContactSmsFragment newInstance(String text) {
+    public static ContactSmsFragment newInstance() {
         ContactSmsFragment fragment = new ContactSmsFragment();
         Bundle b = new Bundle();
-        b.putString("msg", text);
         fragment.setArguments(b);
-
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
     }
 
     @Override
@@ -82,7 +74,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
-        contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra("Parcelled Contact"));
+        contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
         lstSms = SmsHelper.getAllSms(getActivity(), contact);
 
         initViews(view);
@@ -92,6 +84,66 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         scrollListToBottom();
 
         return view;
+    }
+
+    private void initViews(View view) {
+        contactName = (TextView) view.findViewById(R.id.name);
+        contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
+        backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+        contactName.setTypeface(Fontometrics.amatic_bold(getActivity()));
+
+        contactImageIV.setOnClickListener(v -> {
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
+        });
+        if (backgroundImageIV != null) {
+            backgroundImageIV.setOnClickListener(v -> {
+
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
+            });
+        }
+    }
+
+    private void setupRecyclerView(Contact contact) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new SmsAdapter(this, contact));
+    }
+
+    public void refreshRecyclerView() {
+        adapter = (SmsAdapter) recyclerView.getAdapter();
+
+        Collections.sort(lstSms);
+        adapter.setData(lstSms);
+        Log.d(TAG, "RefreshRV : " + lstSms.size());
+        ;
+    }
+
+    synchronized private void scrollListToBottom() {
+        recyclerView.post(() -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
+    }
+
+    synchronized private void displayContactInfo(Contact contact) {
+        String nameValue = contact.getFirstName() + " " + contact.getLastName();
+        //Asynchronously load bitmaps from Contact object
+        if (contact.getBackgroundImage() != null) {
+            setContactImage(contact.getBackgroundImage(), backgroundImageIV);
+        }
+        if (contact.getContactImage() != null) {
+            setContactImage(contact.getContactImage(), contactImageIV);
+        }
+        contactName.setText(nameValue);
+
+    }
+
+    private void setContactImage(byte[] bytes, ImageView imageView) {
+        SetContactImageWorkerTask task = new SetContactImageWorkerTask(imageView);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,bytes);
     }
 
     @Override
@@ -121,7 +173,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
                         //SAVE TO DATABASE
                         ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getActivity());
-                        db = dbHelper.getWritableDatabase();
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
                         byte imageInByte[] = stream.toByteArray();
                         contact.setContactImage(imageInByte);
                         cupboard().withDatabase(db).put(contact);
@@ -145,42 +197,21 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
                         break;
                 }
             } else {
-                Toast.makeText(getActivity(), "Photo not selected", Toast.LENGTH_LONG)
-                        .show();
+                Toast.makeText(getActivity(), R.string.error_message_photo_not_selected,
+                        Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             Log.e(TAG, "onActivityResult: " + e.toString());
 
-            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG)
+            Toast.makeText(getActivity(), R.string.error_message_general, Toast.LENGTH_LONG)
                     .show();
         }
     }
 
-    private void displayContactInfo(Contact contact) {
-        String nameValue = contact.getFirstName() + " " + contact.getLastName();
-        //Asynchronously load bitmaps from Contact object
-        if (contact.getBackgroundImage() != null) {
-            setContactImage(contact.getBackgroundImage(), backgroundImageIV);
-        }
-        if (contact.getContactImage() != null) {
-            setContactImage(contact.getContactImage(), contactImageIV);
-        }
-        contactName.setText(nameValue);
-
-    }
-
-    private void setupRecyclerView(Contact contact) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new SmsAdapter(this, contact));
-    }
-
-    public void refreshRecyclerView() {
-        adapter = (SmsAdapter) recyclerView.getAdapter();
-
-        Collections.sort(lstSms);
-        adapter.setData(lstSms);
-        Log.d(TAG, "RefreshRV : " + lstSms.size());
-        ;
+    private Bitmap loadScaledBitmap(Uri uri) throws ExecutionException, InterruptedException {
+        LoadScaledBitmapWorkerTask task = new LoadScaledBitmapWorkerTask(uri, getActivity());
+        Bitmap bitmap = task.execute(uri).get();
+        return bitmap;
     }
 
     @Override
@@ -191,44 +222,5 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     @Override
     public void onContactLongClicked(Sms sms) {
         //TODO add functionality
-    }
-
-    private void scrollListToBottom() {
-        recyclerView.post(() -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
-    }
-
-    private Bitmap loadScaledBitmap(Uri uri) throws ExecutionException, InterruptedException {
-        LoadScaledBitmapWorkerTask task = new LoadScaledBitmapWorkerTask(uri, getActivity());
-        Bitmap bitmap = task.execute(uri).get();
-        return bitmap;
-    }
-
-    private void setContactImage(byte[] bytes, ImageView imageView) {
-        SetContactImageWorkerTask task = new SetContactImageWorkerTask(imageView);
-        task.execute(bytes);
-    }
-
-    private void initViews(View view) {
-        contactName = (TextView) view.findViewById(R.id.name);
-        contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
-        backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-
-        contactName.setTypeface(Fontometrics.amatic_bold(getActivity()));
-
-        contactImageIV.setOnClickListener(v -> {
-            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
-        });
-        if (backgroundImageIV != null) {
-            backgroundImageIV.setOnClickListener(v -> {
-
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
-            });
-        }
     }
 }

@@ -8,11 +8,11 @@ import java.util.TreeMap;
  */
 
 public class MonthlyTaskParams {
-    ArrayList<Sms> lstSms;
+    ArrayList<Sms> listSms;
     TreeMap<Integer, Integer> monthlyTexts;
 
-    public MonthlyTaskParams(ArrayList<Sms> lstSms, TreeMap<Integer, Integer> monthlyTexts) {
-        this.lstSms = lstSms;
+    public MonthlyTaskParams(ArrayList<Sms> listSms, TreeMap<Integer, Integer> monthlyTexts) {
+        this.listSms = listSms;
         this.monthlyTexts = monthlyTexts;
     }
 }

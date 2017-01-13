@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,17 +16,17 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
 /**
  * Created by jonathancolon on 10/27/16.
  */
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
-    Context context;
-    Listener listener;
-    List<Contact> contactList;
+    private Listener listener;
+    private List<Contact> contactList;
 
-    ParallaxViewController parallaxViewController = new ParallaxViewController();
+    private ParallaxViewController parallaxViewController = new ParallaxViewController();
 
     // ADAPTER CONSTRUCTORS
     public ContactListAdapter(Listener listener) {
@@ -41,12 +41,12 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     @Override
     public ContactListAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_row,
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemview_contactlist_rv,
                 parent, false);
 
         ContactViewHolder vh = new ContactViewHolder(itemView);
         parallaxViewController.imageParallax(vh.mBackGroundImage);
-        context = parent.getContext();
+        Context context = parent.getContext();
         return vh;
     }
 
@@ -65,13 +65,24 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         contactList.add(contact);
         notifyDataSetChanged();
     }
-//_____________________________________VIEWHOLDER___________________________________________________
 
-    public class ContactViewHolder extends RecyclerView.ViewHolder {
+    public interface Listener {
+        void onContactClicked(Contact contact);
+        void onContactLongClicked(Contact contact);
+    }
+
+    public void setData(List<Contact> contacts) {
+        this.contactList = contacts;
+        notifyDataSetChanged();
+    }
+
+//_____________________________________VIEWHOLDER___________________________________________________
+    class ContactViewHolder extends RecyclerView.ViewHolder {
         private ImageView mBackGroundImage, mContactImage ;
+
         private TextView mContactName, mContactInitials;
 
-        public ContactViewHolder(View itemView) {
+        ContactViewHolder(View itemView) {
             super(itemView);
             mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);
             mContactName = (TextView) itemView.findViewById(R.id.name);
@@ -79,13 +90,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             mContactInitials = (TextView) itemView.findViewById(R.id.contact_initials);
 
         }
-
-        public void bind(Contact c) {
+        void bind(Contact c) {
             final Contact contact = c;
             mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
             mContactInitials.setText((contact.getFirstName().substring(0,1).toUpperCase()));
-
-            //Integer contactImage = contact.getContactImage();
 
             if (contact.getBackgroundImage() != null){
                 byte[] backgroundImage = contact.getBackgroundImage();
@@ -108,16 +116,4 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             });
         }
     }
-
-    public interface Listener {
-        void onContactClicked(Contact contact);
-        void onContactLongClicked(Contact contact);
-    }
-
-    public void setData(List<Contact> contacts) {
-        this.contactList = contacts;
-        notifyDataSetChanged();
-
-    }
-
 }

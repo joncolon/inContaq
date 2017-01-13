@@ -16,7 +16,6 @@ public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void
         TreeMap<Integer, Integer>> {
 
     private TreeMap<Integer, Integer> monthlyTexts;
-    private ArrayList<Sms> lstSms;
 
     public MonthlyReceivedWorkerTask() {
     }
@@ -28,9 +27,9 @@ public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void
 
     @Override
     protected TreeMap<Integer, Integer> doInBackground(MonthlyTaskParams... params) {
-        lstSms = params[0].lstSms;
+        ArrayList<Sms> listSms = params[0].listSms;
         monthlyTexts = params[0].monthlyTexts;
-        return getSmsStats(lstSms);
+        return getSmsStats(listSms);
     }
 
     @Override

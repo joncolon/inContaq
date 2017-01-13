@@ -19,5 +19,31 @@
     <dimen name="padding_btn">30dp</dimen>
     <dimen name="menu_left">72dp</dimen>
     <dimen name="dot_radius">5dp</dimen>
+    <dimen name="text_info_margin_bottom">15dp</dimen>
+    <dimen name="card_margin_start">6dp</dimen>
+    <dimen name="card_margin_end">6dp</dimen>
+    <dimen name="card_margin_top">169dp</dimen>
+    <dimen name="card_linlayout_margin_bottom">30dp</dimen>
+    <dimen name="edit_btn_margin_bottom">30dp</dimen>
+    <dimen name="card_text_margin_start">10dp</dimen>
+    <dimen name="card_info_text_size">20sp</dimen>
+    <dimen name="app_bar_height">150dp</dimen>
+    <dimen name="toolbar_margin_end">64dp</dimen>
+    <dimen name="toolbar_margin_start">48dp</dimen>
+    <dimen name="card_elevation">24dp</dimen>
+    <dimen name="contact_card_margin_left">6dp</dimen>
+    <dimen name="contact_card_margin_top">6dp</dimen>
+    <dimen name="contact_name_width">120dp</dimen>
+    <dimen name="contact_name_pad_top">110dp</dimen>
+    <dimen name="contact_name_text_size">20sp</dimen>
+    <dimen name="contact_name_layout_height">135dp</dimen>
+    <dimen name="contact_img_layout_width">100dp</dimen>
+    <dimen name="contact_img_layout_height">100dp</dimen>
+    <dimen name="contact_img_margin_top">10dp</dimen>
+    <dimen name="fab_margin_right">25dp</dimen>
+    <dimen name="fab_width">56dp</dimen>
+    <dimen name="fab_height">56dp</dimen>
+    <dimen name="card_photo_margin_top">6dp</dimen>
+    <dimen name="card_photo_text_width">120dp</dimen>
 
 </resources>

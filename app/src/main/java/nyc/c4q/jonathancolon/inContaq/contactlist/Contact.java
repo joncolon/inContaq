@@ -5,7 +5,7 @@ import org.parceler.Parcel;
 /**
  * Created by jonathancolon on 10/27/16.
  */
-
+// TODO: 1/13/17 remove Parceler
 @Parcel
 public class Contact {
     Long _id;

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/edit_contact"
+    android:id="@+id/contact_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECF0F1"
+    android:background="@color/white_anti_flash"
     android:animateLayoutChanges="true">
 
 
 
     <android.support.v7.widget.CardView
+        android:id="@+id/contact_info_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/contact_info_card"
-        android:layout_marginTop="169dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginTop="@dimen/card_margin_top"
+        android:layout_marginStart="@dimen/card_margin_start"
+        android:layout_marginEnd="@dimen/card_margin_end"
         android:animateLayoutChanges="true"
-        app:cardBackgroundColor="@color/cardColor">
+        app:cardBackgroundColor="@color/white_baby_powder">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="@dimen/card_linlayout_margin_bottom"
             android:orientation="vertical"
             android:animateLayoutChanges="true">
             <TextView
@@ -31,9 +31,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_option"
                 android:layout_gravity="end"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="@dimen/edit_btn_margin_bottom"
                 android:text="EDIT"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/yellow_crayola"
                 android:clickable="true"/>
 
 
@@ -46,22 +46,22 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="Name:"
-                    android:textColor="@color/fontColorDark"
+                    android:layout_marginStart="@dimen/card_text_margin_start"
+                    android:text="@string/name"
+                    android:textColor="@color/blue_sapphire"
                     android:textSize="20sp"
-                    android:layout_marginBottom="15dp"/>
+                    android:layout_marginBottom="@dimen/text_info_margin_bottom"/>
 
                 <EditText
+                    android:id="@+id/edit_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
-                    android:id="@+id/edit_name"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="20dp"
-                    android:hint="Enter contact name"
+                    android:textColor="@color/blue_maastricht"
+                    android:textSize="@dimen/card_info_text_size"
+                    android:layout_marginStart="@dimen/card_text_margin_start"
+                    android:hint="@string/enter_name"
                     android:enabled="false"/>
             </LinearLayout>
 
@@ -74,22 +74,22 @@
                     android:id="@+id/mobile_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="Mobile:"
-                    android:textColor="@color/fontColorDark"
-                    android:textSize="20sp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="@dimen/card_text_margin_start"
+                    android:text="@string/mobile"
+                    android:textColor="@color/blue_sapphire"
+                    android:textSize="@dimen/card_info_text_size"
+                    android:layout_marginBottom="@dimen/text_info_margin_bottom"
                     android:visibility="gone"
                     android:enabled="false"/>
 
                 <EditText
+                    android:id="@+id/edit_mobile_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/edit_mobile_phone"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
+                    android:textColor="@color/blue_maastricht"
+                    android:textSize="@dimen/card_info_text_size"
                     android:layout_marginLeft="20dp"
                     android:hint="Enter Mobile Number"
                     android:visibility="gone"
@@ -105,23 +105,23 @@
                     android:id="@+id/email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/card_margin_start"
                     android:text="Email:"
-                    android:textColor="@color/fontColorDark"
+                    android:textColor="@color/blue_sapphire"
                     android:textSize="20sp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="@dimen/text_info_margin_bottom"
                     android:visibility="gone"
                     android:enabled="false"/>
 
                 <EditText
+                    android:id="@+id/edit_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:ems="10"
-                    android:id="@+id/edit_email"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/blue_maastricht"
+                    android:textSize="@dimen/card_info_text_size"
+                    android:layout_marginStart="@dimen/card_margin_start"
                     android:hint="Enter valid email address"
                     android:visibility="gone"
                     android:enabled="false"/>
@@ -136,24 +136,24 @@
                     android:id="@+id/address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="Address:"
-                    android:textColor="@color/fontColorDark"
-                    android:textSize="20sp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:text="@string/address"
+                    android:textColor="@color/blue_sapphire"
+                    android:textSize="@dimen/card_info_text_size"
+                    android:layout_marginBottom="@dimen/text_info_margin_bottom"
                     android:visibility="gone"
                     android:enabled="false"/>
 
                 <EditText
+                    android:id="@+id/edit_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textPostalAddress"
                     android:ems="10"
-                    android:id="@+id/edit_address"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="20dp"
-                    android:hint="Enter Address"
+                    android:textColor="@color/blue_maastricht"
+                    android:textSize="@dimen/card_info_text_size"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:hint="@string/enter_address"
                     android:visibility="gone"
                     android:enabled="false"/>
             </LinearLayout>
@@ -161,12 +161,10 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
-
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/main.appbar"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_scrollFlags="scroll|snap|enterAlways">
@@ -176,8 +174,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="@dimen/toolbar_margin_end"
+            app:expandedTitleMarginStart="@dimen/toolbar_margin_start"
             app:layout_scrollFlags="scroll|snap|enterAlways">
 
             <FrameLayout
@@ -204,25 +202,25 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:elevation="24dp"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="6dp">
+                        android:elevation="@dimen/card_elevation"
+                        android:layout_marginLeft="@dimen/contact_card_margin_left"
+                        android:layout_marginTop="@dimen/contact_card_margin_top">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
                             <TextView
                                 android:id="@+id/contact_name"
-                                android:layout_width="120dp"
+                                android:layout_width="@dimen/contact_name_width"
                                 android:background="@drawable/bg_polaroid_texture"
                                 android:gravity="center|bottom"
-                                android:paddingTop="110dp"
-                                android:text="Contact Name"
+                                android:paddingTop="@dimen/contact_name_pad_top"
+                                android:text="@string/contact_name"
                                 android:textAlignment="center"
-                                android:textColor="#000000"
-                                android:textSize="20sp"
-                                android:elevation="24dp"
-                                android:layout_height="135dp"
+                                android:textColor="@color/black_rich"
+                                android:textSize="@dimen/contact_name_text_size"
+                                android:elevation="@dimen/card_elevation"
+                                android:layout_height="@dimen/contact_name_layout_height"
                                 android:textStyle="bold" />
                         </RelativeLayout>
 
@@ -232,11 +230,11 @@
 
                             <ImageView
                                 android:id="@+id/contact_img"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_width="@dimen/contact_img_layout_width"
+                                android:layout_height="@dimen/contact_img_layout_height"
+                                android:layout_marginTop="@dimen/contact_img_margin_top"
                                 android:layout_gravity="center"
-                                android:background="#555777"
+                                android:background="@color/blue_sapphire"
                                 android:foregroundGravity="center"
                                 android:scaleType="centerCrop"
                                 android:layout_alignParentTop="true"
@@ -260,10 +258,10 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/save_button"
             android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginRight="25dp"
-            app:rippleColor="#FF9F1C"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            app:rippleColor="@color/red_rose_madder"
+            android:layout_width="@dimen/fab_width"
+            android:layout_height="@dimen/fab_height"
             android:src="@drawable/ic_save_white_24dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"

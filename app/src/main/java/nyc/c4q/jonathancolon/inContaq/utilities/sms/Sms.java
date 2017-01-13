@@ -58,7 +58,7 @@ public class Sms implements Comparable<Sms>{
     }
 
     @Override
-    public int compareTo(Sms another) {
-        return getTime().compareTo(another.getTime());
+    public int compareTo(Sms sms) {
+        return getTime().compareTo(sms.getTime());
     }
 }

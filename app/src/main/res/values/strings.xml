@@ -1,6 +1,40 @@
 <resources>
     <string name="app_name">inContaq</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- TODO: Organize strings by purpose -->
+
+    <string name="error_message_unselected_img">Network error</string>
+    <string name="error_message_call">Call failed</string>
+    <string name="error_message_map">Map loading failed</string>
+    <string name="name">Name: </string>
+    <string name="mobile">Mobile:</string>
+    <string name="address">Address:</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="contact_name">Contact Name</string>
+    <string name="positive_button">Confirm</string>
+    <string name="negative_button">Cancel</string>
+    <string name="contact_sms_fragment">ContactSmsFragment, Instance 4</string>
+    <string name="contact_stats_fragment">ContactStatsFragment, Instance 3</string>
+    <string name="contact_info">Contact Info</string>
+    <string name="messages">Messages</string>
+    <string name="stats">Stats</string>
+    <string name="jan">Jan</string>
+    <string name="feb">Fev</string>
+    <string name="mar">Mar</string>
+    <string name="apr">Apr</string>
+    <string name="jun">Jun</string>
+    <string name="may">May</string>
+    <string name="jul">Jul</string>
+    <string name="aug">Aug</string>
+    <string name="sep">Sep</string>
+    <string name="oct">Oct</string>
+    <string name="nov">Nov</string>
+    <string name="dec">Dec</string>
+    <string name="parcelled_contact">Parcelled Contact</string>
+    <string name="error_message_photo_not_selected">Photo not selected</string>
+    <string name="error_message_general">Something went wrong</string>
+    <string name="are_you_sure">Are you sure you want to save your changes?</string>
+    <string name="save_changes">Save changes?</string>
+    <string name="enter_name">Enter contact\'s name</string>
+    <string name="sms_no_result">no result!</string>
 </resources>

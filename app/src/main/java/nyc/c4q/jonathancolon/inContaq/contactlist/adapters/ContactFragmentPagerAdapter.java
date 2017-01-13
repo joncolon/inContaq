@@ -1,10 +1,11 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist.adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactInfoFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactStatsFragment;
@@ -14,10 +15,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactStatsFragment
  */
 
 public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[]{"Contact Info", "Messages", "Stats"};
     private Context context;
-    private Contact contact;
 
     public ContactFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -26,7 +24,7 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return 3;
     }
 
     @Override
@@ -35,17 +33,19 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return ContactInfoFragment.newInstance();
             case 1:
-                return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
+                return ContactSmsFragment.newInstance();
             case 2:
-                return ContactStatsFragment.newInstance("ContactStatsFragment, Instance 3");
+                return ContactStatsFragment.newInstance();
             default:
-                return ContactSmsFragment.newInstance("ContactSmsFragment, Instance 4");
+                return ContactSmsFragment.newInstance();
         }
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // Generate title based on item position
+        String[] tabTitles = new String[]{context.getString(R.string.contact_info),
+                context.getString(R.string.messages), context.getString(R.string.stats)};
+
         return tabTitles[position];
     }
 }
