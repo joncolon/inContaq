@@ -13,6 +13,8 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -122,7 +124,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                         showContactInfo();
                         fadeInContactInfo();
                         enableEditText();
-                        saveButton.setVisibility(View.VISIBLE);
+                        showFab();
                     }
 
                     @Override
@@ -254,6 +256,13 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void showFab(){
+        Animation slideIn = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_btm);
+        saveButton.startAnimation(slideIn);
+        saveButton.setVisibility(View.VISIBLE);
+
     }
 }
 

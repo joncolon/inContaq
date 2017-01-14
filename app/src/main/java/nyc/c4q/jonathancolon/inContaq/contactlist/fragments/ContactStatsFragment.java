@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -65,7 +66,8 @@ public class ContactStatsFragment extends Fragment {
 
     private LineChartView lineGraph;
 
-    private float[] values;
+    private float[] receivedValues;
+    private float[] sentValues;
 
     public static ContactStatsFragment newInstance() {
 
@@ -90,7 +92,8 @@ public class ContactStatsFragment extends Fragment {
         //// TODO: 1/13/17 remove setText (used for debugging purposes)
         textview.setText("RECEIVED: " + getMonthlyReceieved(lstSms) + "\n" + "\n" + "SENT: " + getMonthlySent(lstSms));
 
-        values = setReceivedValues(getMonthlyReceieved(lstSms));
+        receivedValues = setValues(getMonthlyReceieved(lstSms));
+        sentValues = setValues(getMonthlySent(lstSms));
         loadGraph();
 
         return view;
@@ -127,7 +130,7 @@ public class ContactStatsFragment extends Fragment {
         return monthlySent;
     }
 
-    public float[] setReceivedValues(TreeMap<Integer, Integer> numberOfTexts) {
+    public float[] setValues(TreeMap<Integer, Integer> numberOfTexts) {
 
         ArrayList<Float> list = new ArrayList<Float>();
         for (Map.Entry<Integer, Integer> entry : numberOfTexts.entrySet()) {
@@ -145,18 +148,29 @@ public class ContactStatsFragment extends Fragment {
                         getString(R.string.jul), getString(R.string.aug), getString(R.string.sep),
                         getString(R.string.oct), getString(R.string.nov), getString(R.string.dec)};
 
-        LineSet dataSet = new LineSet(xAxisLabels, values);
+        LineSet dataSet = new LineSet(xAxisLabels, receivedValues);
         dataSet.setColor(Color.parseColor(YELLOW_CRAYOLA))
-                .setFill(Color.parseColor(BLUE_SAPPHIRE))
                 .setDotsColor(Color.parseColor(RED_ROSE_MADDER))
-                .setThickness(4)
+                .setFill(Color.parseColor(BLUE_SAPPHIRE))
+                .setThickness(6)
                 .beginAt(0);
         lineGraph.addData(dataSet);
 
+        LineSet dataset = new LineSet(xAxisLabels, sentValues);
+        dataset.setColor(Color.parseColor("#b01cff"))
+                .setDotsColor(Color.parseColor("#1cb7ff"))
+                .setDashed(new float[] {15f, 10f})
+                .setThickness(6)
+                .beginAt(0);
+        lineGraph.addData(dataset);
+
         // Chart
+
+        Paint chartPaint = new Paint();
+
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, 150)
-                .setYLabels(AxisRenderer.LabelPosition.OUTSIDE)
+                .setAxisBorderValues(0, 150, 30)
+                .setYLabels(AxisRenderer.LabelPosition.NONE)
                 .setLabelsColor(Color.parseColor(WHITE_BABY_POWDER))
                 .setXAxis(false)
                 .setYAxis(false)
@@ -192,4 +206,6 @@ public class ContactStatsFragment extends Fragment {
         }
         return ret;
     }
+
+
 }

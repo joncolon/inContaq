@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +33,11 @@ import java.util.concurrent.ExecutionException;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
 import nyc.c4q.jonathancolon.inContaq.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.LoadScaledBitmapWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utilities.bitmap.SetContactImageWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utilities.sms.Sms;
-import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
 import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -82,6 +84,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         setupRecyclerView(contact);
         refreshRecyclerView();
         scrollListToBottom();
+        showRecyclerView();
 
         return view;
     }
@@ -123,12 +126,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
     }
 
-    synchronized private void setupRecyclerView(Contact contact) {
+    private void setupRecyclerView(Contact contact) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new SmsAdapter(this, contact));
     }
 
-    public void refreshRecyclerView() {
+    synchronized public void refreshRecyclerView() {
         adapter = (SmsAdapter) recyclerView.getAdapter();
 
         Collections.sort(lstSms);
@@ -212,6 +215,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         LoadScaledBitmapWorkerTask task = new LoadScaledBitmapWorkerTask(uri, getActivity());
         Bitmap bitmap = task.execute(uri).get();
         return bitmap;
+    }
+
+    synchronized private void showRecyclerView(){
+        Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+        recyclerView.startAnimation(fadeIn);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
