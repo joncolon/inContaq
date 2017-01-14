@@ -22,7 +22,7 @@ public class SetContactImageWorkerTask extends AsyncTask<byte[], Void, Bitmap> {
         imageViewReference = new WeakReference<ImageView>(imageView);
     }
 
-    public static Bitmap decodeBitmap(byte[] bytes) {
+    private static Bitmap decodeBitmap(byte[] bytes) {
         ByteArrayInputStream decodedImage = new ByteArrayInputStream(bytes);
         return BitmapFactory.decodeStream(decodedImage);
     }

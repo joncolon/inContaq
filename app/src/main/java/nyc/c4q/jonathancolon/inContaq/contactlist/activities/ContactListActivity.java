@@ -2,7 +2,6 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,9 +40,9 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private AlertDialog InputContactDialogObject;
     private List<Contact> contactList;
     private SQLiteDatabase db;
-    FloatingActionButton addContactFab;
+    private FloatingActionButton addContactFab;
     private String mText = "";
-    private String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_SMS};
 
     @Override
@@ -58,16 +57,15 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         setupRecyclerView();
         refreshRecyclerView();
         checkPermissions();
-        buildInputContactDialog(this, this);
+        buildInputContactDialog(this);
     }
 
-    private void buildInputContactDialog(Context context,
-                                         final AlertDialogCallback<String> callback) {
+    private void buildInputContactDialog(final AlertDialogCallback<String> callback) {
 
         final EditText input = new EditText(ContactListActivity.this);
 
         AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(this);
-        confirmBuilder.setTitle("Add a contact");
+        confirmBuilder.setTitle(R.string.add_contact);
         confirmBuilder.setMessage(R.string.enter_name);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -111,7 +109,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         }
     }
 
-    public void openEditor() {
+    private void openEditor() {
         InputContactDialogObject.show();
     }
 
@@ -142,7 +140,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         db = dbHelper.getWritableDatabase();
         contactList = SqlHelper.selectAllContacts(db);
         ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
-        sortContacts(contactList);
+        sortContacts();
         adapter.setData(contactList);
     }
 
@@ -158,8 +156,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
     }
 
-    private void sortContacts(List<Contact> contacts) {
-        contacts = contactList;
+    private void sortContacts() {
+        List<Contact> contacts = contactList;
         Collections.sort(contacts, (o1, o2) ->
                 o1.getFirstName().compareToIgnoreCase(o2.getFirstName()));
     }

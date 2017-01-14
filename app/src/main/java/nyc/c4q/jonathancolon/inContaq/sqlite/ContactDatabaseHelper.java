@@ -21,7 +21,7 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public ContactDatabaseHelper(Context context) {
+    private ContactDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

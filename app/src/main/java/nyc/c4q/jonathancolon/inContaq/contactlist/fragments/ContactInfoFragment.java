@@ -39,7 +39,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
  */
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
 
-    Contact contact;
+    private Contact contact;
     private TextView name, mobile, email, polaroidName, address, editButton;
     private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
@@ -68,7 +68,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         initViews(view);
         saveButton.setOnClickListener(view1 -> buildSaveEditDialog());
-        editButton.setOnClickListener(view12 -> enableEditContactMode(contact));
+        editButton.setOnClickListener(view12 -> enableEditContactMode());
         displayContactInfo(contact);
 
         return view;
@@ -95,7 +95,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
     }
 
-    public void buildSaveEditDialog() {
+    private void buildSaveEditDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle(R.string.save_changes);
         alertDialog.setMessage(R.string.are_you_sure);
@@ -105,14 +105,12 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             alertDialogCallback(selection);
         });
 
-        alertDialog.setNegativeButton(R.string.negative_button, (dialog, which) -> {
-            dialog.cancel();
-        });
+        alertDialog.setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
 
         alertDialog.show();
     }
 
-    private void enableEditContactMode(final Contact contact) {
+    private void enableEditContactMode() {
         infoCard.animate()
                 .alpha(1.0f)
                 .setDuration(3000)

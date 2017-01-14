@@ -49,7 +49,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private static TextView contactName;
     private static ImageView contactImageIV, backgroundImageIV;
     private static Contact contact;
-    private String TAG = "SET TEXT REQUEST: ";
+    private final String TAG = "SET TEXT REQUEST: ";
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> lstSms;
@@ -131,13 +131,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         recyclerView.setAdapter(new SmsAdapter(this, contact));
     }
 
-    synchronized public void refreshRecyclerView() {
+    private synchronized void refreshRecyclerView() {
         adapter = (SmsAdapter) recyclerView.getAdapter();
 
         Collections.sort(lstSms);
         adapter.setData(lstSms);
         Log.d(TAG, "RefreshRV : " + lstSms.size());
-        ;
     }
 
     synchronized private void scrollListToBottom() {

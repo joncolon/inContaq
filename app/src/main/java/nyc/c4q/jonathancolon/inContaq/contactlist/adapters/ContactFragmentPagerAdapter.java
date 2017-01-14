@@ -15,7 +15,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactStatsFragment
  */
 
 public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
-    private Context context;
+    private final Context context;
 
     public ContactFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);

@@ -37,4 +37,5 @@
     <string name="save_changes">Save changes?</string>
     <string name="enter_name">Enter contact\'s name</string>
     <string name="sms_no_result">no result!</string>
+    <string name="add_contact">Add a contact</string>
 </resources>

@@ -27,7 +27,7 @@ public class LoadScaledBitmapWorkerTask extends AsyncTask<Uri, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Uri... params) {
         Uri uri = params[0];
-        return decodeBitmapFromFilePath(uri, 275, 275);
+        return decodeBitmapFromFilePath(uri);
     }
 
     @Override
@@ -37,10 +37,10 @@ public class LoadScaledBitmapWorkerTask extends AsyncTask<Uri, Void, Bitmap> {
         }
     }
 
-    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight,
-                                     String filepath) {
+    private int calculateInSampleSize(int reqWidth, int reqHeight,
+                                      String filepath) {
 
-        options = new BitmapFactory.Options();
+        BitmapFactory.Options options = new BitmapFactory.Options();
 
         // Raw height and width of image
         options.inJustDecodeBounds = true;
@@ -61,8 +61,7 @@ public class LoadScaledBitmapWorkerTask extends AsyncTask<Uri, Void, Bitmap> {
         return (int) inSampleSize;
     }
 
-    public Bitmap decodeBitmapFromFilePath(Uri uri,
-                                           int reqWidth, int reqHeight) {
+    private Bitmap decodeBitmapFromFilePath(Uri uri) {
 
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -79,7 +78,7 @@ public class LoadScaledBitmapWorkerTask extends AsyncTask<Uri, Void, Bitmap> {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imgDecodableString, options);
 
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight,
+        options.inSampleSize = calculateInSampleSize(275, 275,
                 imgDecodableString);
 
         options.inJustDecodeBounds = false;

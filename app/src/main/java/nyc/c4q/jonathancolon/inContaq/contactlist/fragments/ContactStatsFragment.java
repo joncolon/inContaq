@@ -2,7 +2,6 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -46,9 +45,6 @@ public class ContactStatsFragment extends Fragment {
 
     private static final String MONTHLY_SENT = "Monthly Sent: ";
     private static final String MONTHLY_RECEIVED = "Monthly Received: ";
-
-    private final String TAG = "sms";
-
     private static final int JAN = 1;
     private static final int FEB = 2;
     private static final int MAR = 3;
@@ -61,9 +57,8 @@ public class ContactStatsFragment extends Fragment {
     private static final int OCT = 10;
     private static final int NOV = 11;
     private static final int DEC = 12;
-
     private static final int DEFAULT_VALUE = 0;
-
+    private final String TAG = "sms";
     private LineChartView lineGraph;
 
     private float[] receivedValues;
@@ -90,16 +85,16 @@ public class ContactStatsFragment extends Fragment {
         ArrayList<Sms> lstSms = SmsHelper.getAllSms(getActivity(), contact);
 
         //// TODO: 1/13/17 remove setText (used for debugging purposes)
-        textview.setText("RECEIVED: " + getMonthlyReceieved(lstSms) + "\n" + "\n" + "SENT: " + getMonthlySent(lstSms));
+        textview.setText("RECEIVED: " + getMonthlyReceived(lstSms) + "\n" + "\n" + "SENT: " + getMonthlySent(lstSms));
 
-        receivedValues = setValues(getMonthlyReceieved(lstSms));
+        receivedValues = setValues(getMonthlyReceived(lstSms));
         sentValues = setValues(getMonthlySent(lstSms));
         loadGraph();
 
         return view;
     }
 
-    private TreeMap<Integer, Integer> getMonthlyReceieved(ArrayList<Sms> texts) {
+    private TreeMap<Integer, Integer> getMonthlyReceived(ArrayList<Sms> texts) {
 
         TreeMap<Integer, Integer> monthlyReceived = setUpMonthlyTextMap();
         MonthlyTaskParams receievedParams = new MonthlyTaskParams(texts, monthlyReceived);
@@ -111,7 +106,6 @@ public class ContactStatsFragment extends Fragment {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         return monthlyReceived;
     }
 
@@ -130,7 +124,7 @@ public class ContactStatsFragment extends Fragment {
         return monthlySent;
     }
 
-    public float[] setValues(TreeMap<Integer, Integer> numberOfTexts) {
+    private float[] setValues(TreeMap<Integer, Integer> numberOfTexts) {
 
         ArrayList<Float> list = new ArrayList<Float>();
         for (Map.Entry<Integer, Integer> entry : numberOfTexts.entrySet()) {
@@ -159,15 +153,12 @@ public class ContactStatsFragment extends Fragment {
         LineSet dataset = new LineSet(xAxisLabels, sentValues);
         dataset.setColor(Color.parseColor("#b01cff"))
                 .setDotsColor(Color.parseColor("#1cb7ff"))
-                .setDashed(new float[] {15f, 10f})
+                .setDashed(new float[]{15f, 10f})
                 .setThickness(6)
                 .beginAt(0);
         lineGraph.addData(dataset);
 
         // Chart
-
-        Paint chartPaint = new Paint();
-
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
                 .setAxisBorderValues(0, 150, 30)
                 .setYLabels(AxisRenderer.LabelPosition.NONE)
@@ -206,6 +197,4 @@ public class ContactStatsFragment extends Fragment {
         }
         return ret;
     }
-
-
 }

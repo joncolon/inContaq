@@ -23,7 +23,7 @@
                 android:layout_marginRight="6dp"
                 android:layout_marginBottom="2dp"
                 app:cardCornerRadius="10dp"
-                android:elevation="1in"
+                android:elevation="@dimen/card_elevation"
                 android:id="@+id/chatBubble">
                 <LinearLayout
                     android:layout_width="match_parent"

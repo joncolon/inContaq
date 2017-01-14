@@ -32,12 +32,12 @@ import static android.content.ContentValues.TAG;
 public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String ON_BIND_VIEW_HOLDER = "onBindViewHolder: ";
     private Context context;
-    private Listener listener;
+    private final Listener listener;
     private List<Sms> smsList;
-    private Contact contact;
+    private final Contact contact;
 
 
-    private ParallaxViewController parallaxViewController = new ParallaxViewController();
+    private final ParallaxViewController parallaxViewController = new ParallaxViewController();
 
     // ADAPTER CONSTRUCTORS
     public SmsAdapter(Listener listener, Contact contact) {
@@ -90,13 +90,13 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String BLUE_CADET = "#5B9CAC";
     private static final String BLUE_SAPPHIRE = "#0E587A";
 
-    private TextView senderId, messageRecieved, timeDate, type;
+    private TextView senderId, messageReceived, timeDate, type;
     private CardView cardBubble;
     private LinearLayout linearLayout;
 
         SmsViewHolder(View itemView) {
             super(itemView);
-            initViews(itemView);
+            initViews();
         }
 
         void bind(Sms sms) {
@@ -113,9 +113,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             });
         }
 
-        void initViews(View view){
+        void initViews(){
             senderId = (TextView) itemView.findViewById(R.id.senderId);
-            messageRecieved = (TextView) itemView.findViewById(R.id.messageDetails);
+            messageReceived = (TextView) itemView.findViewById(R.id.messageDetails);
             type = (TextView) itemView.findViewById(R.id.type);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.chat_view);
             cardBubble = (CardView) itemView.findViewById(R.id.chatBubble);
@@ -126,8 +126,8 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             StringBuilder time = SmsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
             senderId.setText(sms.getAddress());
             timeDate.setText(time);
-            messageRecieved.setText(sms.getMsg());
-            messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
+            messageReceived.setText(sms.getMsg());
+            messageReceived.setMovementMethod(LinkMovementMethod.getInstance());
             type.setText(sms.getType());
         }
 
@@ -139,11 +139,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
                     if (Build.VERSION.SDK_INT >= 23) {
                         cardBubble.setCardBackgroundColor(context.getColor(R.color.blue_cadet));
-                        messageRecieved.setTextColor(context.getColor(R.color.white_baby_powder));
+                        messageReceived.setTextColor(context.getColor(R.color.white_baby_powder));
                         timeDate.setTextColor(context.getColor(R.color.white_baby_powder));
                     } else {
                         cardBubble.setCardBackgroundColor(Color.parseColor(BLUE_CADET));
-                        messageRecieved.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
+                        messageReceived.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
                         timeDate.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
                     }
                 }
@@ -151,11 +151,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                 linearLayout.setGravity(Gravity.END);
                 if (Build.VERSION.SDK_INT >= 23) {
                     cardBubble.setCardBackgroundColor(context.getColor(R.color.white_baby_powder));
-                    messageRecieved.setTextColor(context.getColor(R.color.blue_sapphire));
+                    messageReceived.setTextColor(context.getColor(R.color.blue_sapphire));
                     timeDate.setTextColor(context.getColor(R.color.blue_sapphire));
                 } else {
                     cardBubble.setCardBackgroundColor(Color.parseColor(WHITE_BABY_POWDER));
-                    messageRecieved.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
+                    messageReceived.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
                     timeDate.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
                 }
             }

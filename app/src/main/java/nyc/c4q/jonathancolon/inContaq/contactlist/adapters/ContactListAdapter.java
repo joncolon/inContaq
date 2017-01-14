@@ -23,10 +23,10 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
  */
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
-    private Listener listener;
+    private final Listener listener;
     private List<Contact> contactList;
 
-    private ParallaxViewController parallaxViewController = new ParallaxViewController();
+    private final ParallaxViewController parallaxViewController = new ParallaxViewController();
 
     // ADAPTER CONSTRUCTORS
     public ContactListAdapter(Listener listener) {
@@ -78,9 +78,11 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
 //_____________________________________VIEWHOLDER___________________________________________________
     class ContactViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mBackGroundImage, mContactImage ;
+        private final ImageView mBackGroundImage;
+    private final ImageView mContactImage ;
 
-        private TextView mContactName, mContactInitials;
+        private final TextView mContactName;
+    private final TextView mContactInitials;
 
         ContactViewHolder(View itemView) {
             super(itemView);

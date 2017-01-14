@@ -38,14 +38,14 @@ public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void
     }
 
     private TreeMap<Integer, Integer> getSmsStats(ArrayList<Sms> list){
-        ArrayList<String> receievedSms = new ArrayList<>();
+        ArrayList<String> receivedSms = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getType().equals("1")) {
-                receievedSms.add(list.get(i).getTime());
+                receivedSms.add(list.get(i).getTime());
             }
         }
-            monthlyTexts = getMonthlyTexts(receievedSms);
+            monthlyTexts = getMonthlyTexts(receivedSms);
         return monthlyTexts;
     }
 
