@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
-import android.widget.TextView;
 
 import com.db.chart.Tools;
 import com.db.chart.animation.Animation;
 import com.db.chart.model.LineSet;
-import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.view.LineChartView;
 
 import org.parceler.Parcels;
@@ -29,11 +26,14 @@ import java.util.concurrent.ExecutionException;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.MonthlyReceivedWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.MonthlySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.MonthlyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.Sms;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlySentWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
+
+import static android.graphics.Color.parseColor;
+import static com.db.chart.renderer.AxisRenderer.LabelPosition;
 
 
 public class ContactStatsFragment extends Fragment {
@@ -59,17 +59,17 @@ public class ContactStatsFragment extends Fragment {
     private static final int DEC = 12;
     private static final int DEFAULT_VALUE = 0;
     private final String TAG = "sms";
+
+    int highestValue;
     private LineChartView lineGraph;
 
     private float[] receivedValues;
     private float[] sentValues;
 
     public static ContactStatsFragment newInstance() {
-
         ContactStatsFragment fragment = new ContactStatsFragment();
         Bundle b = new Bundle();
         fragment.setArguments(b);
-
         return fragment;
     }
 
@@ -78,18 +78,18 @@ public class ContactStatsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
-        lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
-        TextView textview = (TextView) view.findViewById(R.id.sms_stats);
 
         Contact contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
         ArrayList<Sms> lstSms = SmsHelper.getAllSms(getActivity(), contact);
-
-        //// TODO: 1/13/17 remove setText (used for debugging purposes)
-        textview.setText("RECEIVED: " + getMonthlyReceived(lstSms) + "\n" + "\n" + "SENT: " + getMonthlySent(lstSms));
+        lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
 
         receivedValues = setValues(getMonthlyReceived(lstSms));
         sentValues = setValues(getMonthlySent(lstSms));
+        Log.e(TAG, "onCreateView: " + getYValue(sentValues, receivedValues));
         loadGraph();
+
+        highestValue = getYValue(sentValues, receivedValues);
+        Log.e(TAG,"highest value is " + highestValue);
 
         return view;
     }
@@ -97,11 +97,11 @@ public class ContactStatsFragment extends Fragment {
     private TreeMap<Integer, Integer> getMonthlyReceived(ArrayList<Sms> texts) {
 
         TreeMap<Integer, Integer> monthlyReceived = setUpMonthlyTextMap();
-        MonthlyTaskParams receievedParams = new MonthlyTaskParams(texts, monthlyReceived);
+        MonthlyTaskParams receivedParams = new MonthlyTaskParams(texts, monthlyReceived);
         MonthlyReceivedWorkerTask monthlyReceivedTask = new MonthlyReceivedWorkerTask();
 
         try {
-            monthlyReceived = monthlyReceivedTask.execute(receievedParams).get();
+            monthlyReceived = monthlyReceivedTask.execute(receivedParams).get();
             Log.e(TAG, MONTHLY_RECEIVED + monthlyReceived);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -134,8 +134,37 @@ public class ContactStatsFragment extends Fragment {
         return convertFloats(list);
     }
 
-    private void loadGraph() {
-        // Data
+    synchronized private void loadGraph() {
+        setGraphData();
+        setGraphAttributes();
+        animateGraph();
+    }
+
+    private void animateGraph() {
+        Animation anim = new Animation().setEasing(new BounceInterpolator());
+        lineGraph.show(anim);
+    }
+
+    private void setGraphAttributes() {
+
+        setHighestValueTo100();
+
+        lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
+                .setAxisBorderValues(0, highestValue)
+                .setYLabels(LabelPosition.NONE)
+                .setLabelsColor(parseColor(WHITE_BABY_POWDER))
+                .setXAxis(false)
+                .setYAxis(true)
+                .setBackgroundColor(parseColor(BLUE_MAASTRICHT));
+    }
+
+    private void setHighestValueTo100() {
+        if (highestValue == 0){
+            highestValue = 100;
+        }
+    }
+
+    private void setGraphData() {
         final String[] xAxisLabels =
                 {getString(R.string.jan), getString(R.string.feb), getString(R.string.mar),
                         getString(R.string.apr), getString(R.string.jun), getString(R.string.may),
@@ -143,33 +172,20 @@ public class ContactStatsFragment extends Fragment {
                         getString(R.string.oct), getString(R.string.nov), getString(R.string.dec)};
 
         LineSet dataSet = new LineSet(xAxisLabels, receivedValues);
-        dataSet.setColor(Color.parseColor(YELLOW_CRAYOLA))
-                .setDotsColor(Color.parseColor(RED_ROSE_MADDER))
-                .setFill(Color.parseColor(BLUE_SAPPHIRE))
+        dataSet.setColor(parseColor(YELLOW_CRAYOLA))
+                .setDotsColor(parseColor(RED_ROSE_MADDER))
+                .setFill(parseColor(BLUE_SAPPHIRE))
                 .setThickness(6)
                 .beginAt(0);
         lineGraph.addData(dataSet);
 
         LineSet dataset = new LineSet(xAxisLabels, sentValues);
-        dataset.setColor(Color.parseColor("#b01cff"))
-                .setDotsColor(Color.parseColor("#1cb7ff"))
+        dataset.setColor(parseColor("#b01cff"))
+                .setDotsColor(parseColor("#1cb7ff"))
                 .setDashed(new float[]{15f, 10f})
                 .setThickness(6)
                 .beginAt(0);
         lineGraph.addData(dataset);
-
-        // Chart
-        lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, 150, 30)
-                .setYLabels(AxisRenderer.LabelPosition.NONE)
-                .setLabelsColor(Color.parseColor(WHITE_BABY_POWDER))
-                .setXAxis(false)
-                .setYAxis(false)
-                .setBackgroundColor(Color.parseColor(BLUE_MAASTRICHT));
-
-        Animation anim = new Animation().setEasing(new BounceInterpolator());
-        lineGraph.show(anim);
-
     }
 
     private TreeMap<Integer, Integer> setUpMonthlyTextMap() {
@@ -196,5 +212,28 @@ public class ContactStatsFragment extends Fragment {
             ret[i] = iterator.next().intValue();
         }
         return ret;
+    }
+
+    synchronized private int getYValue(float[] sentValues, float[] receivedValues){
+        int maxSent = getMax(sentValues);
+        int maxReceived = getMax(receivedValues);
+        if (maxSent > maxReceived){
+            return highestValue = (int) getRound(maxSent);
+        }
+        return highestValue = (int) getRound(maxReceived);
+    }
+
+    private long getRound(int input) {
+        return Math.round(input * 1.25);
+    }
+
+    public static int getMax(float[] inputArray){
+        float maxValue = inputArray[0];
+        for(int i=1;i < inputArray.length;i++){
+            if(inputArray[i] > maxValue){
+                maxValue = Math.round(inputArray[i]);
+            }
+        }
+        return (int) maxValue;
     }
 }

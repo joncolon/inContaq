@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utilities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

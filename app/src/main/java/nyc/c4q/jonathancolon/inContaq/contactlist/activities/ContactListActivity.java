@@ -27,8 +27,8 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
-import nyc.c4q.jonathancolon.inContaq.sqlite.ContactDatabaseHelper;
-import nyc.c4q.jonathancolon.inContaq.sqlite.SqlHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -40,7 +40,6 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private AlertDialog InputContactDialogObject;
     private List<Contact> contactList;
     private SQLiteDatabase db;
-    private FloatingActionButton addContactFab;
     private String mText = "";
     private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_SMS};
@@ -51,7 +50,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         setContentView(R.layout.activity_contact_list);
         Stetho.initializeWithDefaults(this);
 
-        addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
+        FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
         addContactFab.setOnClickListener(v -> openEditor());
 
         setupRecyclerView();
@@ -60,6 +59,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         buildInputContactDialog(this);
     }
 
+    // POP UP for Entering a new Contact
     private void buildInputContactDialog(final AlertDialogCallback<String> callback) {
 
         final EditText input = new EditText(ContactListActivity.this);
@@ -123,7 +123,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private void setupRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ContactListAdapter(this));
+        recyclerView.setAdapter(new ContactListAdapter(this, this));
     }
 
     @Override

@@ -9,6 +9,9 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        aaptOptions{
+            cruncherEnabled = false
+        }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {
             enabled true
@@ -39,6 +42,8 @@ dependencies {
             compile 'com.android.support:support-v4:25.1.0'
             compile 'com.android.support:design:25.1.0'
             compile 'com.diogobernardino:williamchart:2.4.0'
+            compile 'com.squareup.picasso:picasso:2.5.2'
+
 
             //cupboard
             compile 'nl.qbusict:cupboard:2.1.4'

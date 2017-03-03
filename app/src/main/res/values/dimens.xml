@@ -13,9 +13,11 @@
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_large">20sp</dimen>
     <dimen name="margin_top">12dp</dimen>
+
     <dimen name="progress_width">36dp</dimen>
     <dimen name="progress_height">36dp</dimen>
     <dimen name="progress_pading">3dp</dimen>
+
     <dimen name="padding_btn">30dp</dimen>
     <dimen name="menu_left">72dp</dimen>
     <dimen name="dot_radius">5dp</dimen>
@@ -31,6 +33,7 @@
     <dimen name="toolbar_margin_end">64dp</dimen>
     <dimen name="toolbar_margin_start">48dp</dimen>
     <dimen name="card_elevation">24dp</dimen>
+
     <dimen name="contact_card_margin_left">6dp</dimen>
     <dimen name="contact_card_margin_top">6dp</dimen>
     <dimen name="contact_name_width">120dp</dimen>
@@ -40,6 +43,7 @@
     <dimen name="contact_img_layout_width">100dp</dimen>
     <dimen name="contact_img_layout_height">100dp</dimen>
     <dimen name="contact_img_margin_top">10dp</dimen>
+
     <dimen name="fab_margin_right">25dp</dimen>
     <dimen name="fab_width">56dp</dimen>
     <dimen name="fab_height">56dp</dimen>

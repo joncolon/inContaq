@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utilities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -52,11 +52,16 @@ public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
     private TreeMap<Integer, Integer> getMonthlyTexts(ArrayList<String> list){
         for (int i = 0; i < list.size(); i++) {
             long lg = Long.parseLong(list.get(i));
-            DateTime juDate = new DateTime(lg);
-            int month = juDate.getMonthOfYear();
+            DateTime juSmsYear = new DateTime(lg);
+            int yearSent = juSmsYear.getYear();
+            long currentTime = System.currentTimeMillis();
+            DateTime juDateYear = new DateTime(currentTime);
+            int currentYear = juDateYear.getYear();
+            int monthSent = juSmsYear.getMonthOfYear();
 
-            if (monthlyTexts.containsKey(month)){
-                monthlyTexts.put(month, monthlyTexts.get(month) +1);
+
+            if (monthlyTexts.containsKey(monthSent)){
+                monthlyTexts.put(monthSent, monthlyTexts.get(monthSent) +1);
                 monthlyTexts.entrySet();
             }
         }

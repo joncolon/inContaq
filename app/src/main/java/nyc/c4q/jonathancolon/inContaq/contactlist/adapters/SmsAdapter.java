@@ -18,10 +18,10 @@ import com.github.florent37.beautifulparallax.ParallaxViewController;
 
 import java.util.List;
 
-import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.Sms;
-import nyc.c4q.jonathancolon.inContaq.utilities.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
 import static android.content.ContentValues.TAG;
 
@@ -90,7 +90,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String BLUE_CADET = "#5B9CAC";
     private static final String BLUE_SAPPHIRE = "#0E587A";
 
-    private TextView senderId, messageReceived, timeDate, type;
+    private TextView senderId, messageRecieved, timeDate, type;
     private CardView cardBubble;
     private LinearLayout linearLayout;
 
@@ -115,7 +115,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
         void initViews(){
             senderId = (TextView) itemView.findViewById(R.id.senderId);
-            messageReceived = (TextView) itemView.findViewById(R.id.messageDetails);
+            messageRecieved = (TextView) itemView.findViewById(R.id.messageDetails);
             type = (TextView) itemView.findViewById(R.id.type);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.chat_view);
             cardBubble = (CardView) itemView.findViewById(R.id.chatBubble);
@@ -126,8 +126,8 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             StringBuilder time = SmsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
             senderId.setText(sms.getAddress());
             timeDate.setText(time);
-            messageReceived.setText(sms.getMsg());
-            messageReceived.setMovementMethod(LinkMovementMethod.getInstance());
+            messageRecieved.setText(sms.getMsg());
+            messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
             type.setText(sms.getType());
         }
 
@@ -139,11 +139,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
                     if (Build.VERSION.SDK_INT >= 23) {
                         cardBubble.setCardBackgroundColor(context.getColor(R.color.blue_cadet));
-                        messageReceived.setTextColor(context.getColor(R.color.white_baby_powder));
+                        messageRecieved.setTextColor(context.getColor(R.color.white_baby_powder));
                         timeDate.setTextColor(context.getColor(R.color.white_baby_powder));
                     } else {
                         cardBubble.setCardBackgroundColor(Color.parseColor(BLUE_CADET));
-                        messageReceived.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
+                        messageRecieved.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
                         timeDate.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
                     }
                 }
@@ -151,11 +151,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                 linearLayout.setGravity(Gravity.END);
                 if (Build.VERSION.SDK_INT >= 23) {
                     cardBubble.setCardBackgroundColor(context.getColor(R.color.white_baby_powder));
-                    messageReceived.setTextColor(context.getColor(R.color.blue_sapphire));
+                    messageRecieved.setTextColor(context.getColor(R.color.blue_sapphire));
                     timeDate.setTextColor(context.getColor(R.color.blue_sapphire));
                 } else {
                     cardBubble.setCardBackgroundColor(Color.parseColor(WHITE_BABY_POWDER));
-                    messageReceived.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
+                    messageRecieved.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
                     timeDate.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
                 }
             }

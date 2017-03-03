@@ -2,9 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.contactlist;
 
 import org.parceler.Parcel;
 
-/**
- * Created by jonathancolon on 10/27/16.
- */
+
 // TODO: 1/13/17 remove Parceler
 @Parcel
 public class Contact {
@@ -18,8 +16,17 @@ public class Contact {
     String cellPhoneNumber;
     String address;
     String email;
-    byte[] contactImage;
-    byte[] backgroundImage;
+    String contactImage;
+
+    public String getContactImage() {
+        return contactImage;
+    }
+
+    public void setContactImage(String contactImage) {
+        this.contactImage = contactImage;
+    }
+
+    String backgroundImage;
 
     public Contact() {
     }
@@ -30,11 +37,11 @@ public class Contact {
     }
 
 
-    public byte[] getBackgroundImage() {
+    public String getBackgroundImage() {
         return backgroundImage;
     }
 
-    public void setBackgroundImage(byte[] backgroundImage) {
+    public void setBackgroundImage(String backgroundImage) {
         this.backgroundImage = backgroundImage;
     }
 
@@ -108,13 +115,5 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public byte[] getContactImage() {
-        return contactImage;
-    }
-
-    public void setContactImage(byte[] contactImage) {
-        this.contactImage = contactImage;
     }
 }

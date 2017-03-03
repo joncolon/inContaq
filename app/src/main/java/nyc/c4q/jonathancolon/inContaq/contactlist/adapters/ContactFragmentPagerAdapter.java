@@ -10,9 +10,6 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactInfoFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactStatsFragment;
 
-/**
- * Created by jonathancolon on 1/6/17.
- */
 
 public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
     private final Context context;

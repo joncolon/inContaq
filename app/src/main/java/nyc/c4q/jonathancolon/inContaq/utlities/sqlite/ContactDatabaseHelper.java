@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.sqlite;
+package nyc.c4q.jonathancolon.inContaq.utlities.sqlite;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

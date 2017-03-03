@@ -1,8 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +10,11 @@ import android.widget.TextView;
 
 import com.github.florent37.beautifulparallax.ParallaxViewController;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 
 /**
  * Created by jonathancolon on 10/27/16.
@@ -24,13 +22,13 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
     private final Listener listener;
+    private final Context context;
+    private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private List<Contact> contactList;
 
-    private final ParallaxViewController parallaxViewController = new ParallaxViewController();
-
-    // ADAPTER CONSTRUCTORS
-    public ContactListAdapter(Listener listener) {
+    public ContactListAdapter(Listener listener, Context context) {
         this.listener = listener;
+        this.context = context;
     }
 
     @Override
@@ -66,23 +64,23 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         notifyDataSetChanged();
     }
 
-    public interface Listener {
-        void onContactClicked(Contact contact);
-        void onContactLongClicked(Contact contact);
-    }
-
     public void setData(List<Contact> contacts) {
         this.contactList = contacts;
         notifyDataSetChanged();
     }
 
-//_____________________________________VIEWHOLDER___________________________________________________
+    public interface Listener {
+        void onContactClicked(Contact contact);
+
+        void onContactLongClicked(Contact contact);
+    }
+
+    //_____________________________________VIEWHOLDER___________________________________________________
     class ContactViewHolder extends RecyclerView.ViewHolder {
         private final ImageView mBackGroundImage;
-    private final ImageView mContactImage ;
-
+        private final ImageView mContactImage;
         private final TextView mContactName;
-    private final TextView mContactInitials;
+        private final TextView mContactInitials;
 
         ContactViewHolder(View itemView) {
             super(itemView);
@@ -92,23 +90,19 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             mContactInitials = (TextView) itemView.findViewById(R.id.contact_initials);
 
         }
+
         void bind(Contact c) {
             final Contact contact = c;
             mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
-            mContactInitials.setText((contact.getFirstName().substring(0,1).toUpperCase()));
+            mContactInitials.setText((contact.getFirstName().substring(0, 1).toUpperCase()));
+            PicassoHelper ph = new PicassoHelper(context);
 
-            if (contact.getBackgroundImage() != null){
-                byte[] backgroundImage = contact.getBackgroundImage();
-                ByteArrayInputStream imageStream = new ByteArrayInputStream(backgroundImage);
-                Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
-                mBackGroundImage.setImageBitmap(decodedImage);
+            if (contact.getBackgroundImage() != null) {
+                ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
             }
 
-            if (contact.getContactImage() != null){
-                byte[] contactImage = contact.getContactImage();
-                ByteArrayInputStream imageStream = new ByteArrayInputStream(contactImage);
-                Bitmap decodedImage = BitmapFactory.decodeStream(imageStream);
-                mContactImage.setImageBitmap(decodedImage);
+            if (contact.getContactImage() != null) {
+                ph.loadImageFromString(contact.getContactImage(), mContactImage);
             }
 
             itemView.setOnClickListener(v -> listener.onContactClicked(contact));

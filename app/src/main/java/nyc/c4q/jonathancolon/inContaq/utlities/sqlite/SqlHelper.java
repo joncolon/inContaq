@@ -1,5 +1,6 @@
-package nyc.c4q.jonathancolon.inContaq.sqlite;
+package nyc.c4q.jonathancolon.inContaq.utlities.sqlite;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -37,4 +38,13 @@ public class SqlHelper {
         Contact contact = cupboard().withDatabase(db).get(Contact.class, rand.nextInt(20));
         return contact;
     }
+
+    public static void saveToDatabase(Contact contact, Context context){
+        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        cupboard().withDatabase(db).put(contact);
+        db.close();
+    }
+
+
 }
