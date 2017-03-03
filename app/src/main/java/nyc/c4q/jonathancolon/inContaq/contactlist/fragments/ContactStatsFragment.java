@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,8 +36,12 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition;
 
-
+//This fragment handles graph logic
 public class ContactStatsFragment extends Fragment {
+
+    /*
+    These color constants are hardcoded for backwards compatibility.
+     */
     private static final String BLUE_SAPPHIRE = "#0E587A";
     private static final String BLUE_MAASTRICHT = "#02283A";
     private static final String RED_ROSE_MADDER = "#E71D36";
@@ -66,6 +71,7 @@ public class ContactStatsFragment extends Fragment {
     private float[] receivedValues;
     private float[] sentValues;
 
+
     public static ContactStatsFragment newInstance() {
         ContactStatsFragment fragment = new ContactStatsFragment();
         Bundle b = new Bundle();
@@ -79,19 +85,53 @@ public class ContactStatsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
 
-        Contact contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
-        ArrayList<Sms> lstSms = SmsHelper.getAllSms(getActivity(), contact);
-        lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
+        initViews(view);
+        Contact contact = unwrapParcelledContact();
 
-        receivedValues = setValues(getMonthlyReceived(lstSms));
-        sentValues = setValues(getMonthlySent(lstSms));
-        Log.e(TAG, "onCreateView: " + getYValue(sentValues, receivedValues));
+        //Retrieves all the text messages to parse through
+        ArrayList<Sms> lstSms = SmsHelper.getAllSms(getActivity(), contact);
+
+        //Sets values for the line graph by parsing through the sms list
+        getLineGraphValues(lstSms);
+        getHigehstValueForYaxis();
         loadGraph();
 
-        highestValue = getYValue(sentValues, receivedValues);
-        Log.e(TAG,"highest value is " + highestValue);
-
         return view;
+    }
+
+    private void initViews(View view) {
+        lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
+    }
+
+    @Nullable
+    private Contact unwrapParcelledContact() {
+        return Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
+    }
+
+    private void getLineGraphValues(ArrayList<Sms> lstSms) {
+        receivedValues = setValues(getMonthlyReceived(lstSms));
+        sentValues = setValues(getMonthlySent(lstSms));
+    }
+
+    private void getHigehstValueForYaxis() {
+        // Get Y Value takes in the total amount of sent and received texts sent
+        highestValue = getYValue(sentValues, receivedValues);
+    }
+
+    synchronized private void loadGraph() {
+        setGraphData();
+        setGraphAttributes();
+        animateGraph();
+    }
+
+    private float[] setValues(TreeMap<Integer, Integer> numberOfTexts) {
+
+        ArrayList<Float> list = new ArrayList<Float>();
+        for (Map.Entry<Integer, Integer> entry : numberOfTexts.entrySet()) {
+            Float value = entry.getValue().floatValue();
+            list.add(value);
+        }
+        return convertFloats(list);
     }
 
     private TreeMap<Integer, Integer> getMonthlyReceived(ArrayList<Sms> texts) {
@@ -124,29 +164,50 @@ public class ContactStatsFragment extends Fragment {
         return monthlySent;
     }
 
-    private float[] setValues(TreeMap<Integer, Integer> numberOfTexts) {
+    /*
+    this compares the total sent / received to find which has the greater value. It then rounds it
+    to an int.
+    */
 
-        ArrayList<Float> list = new ArrayList<Float>();
-        for (Map.Entry<Integer, Integer> entry : numberOfTexts.entrySet()) {
-            Float value = entry.getValue().floatValue();
-            list.add(value);
+    synchronized private int getYValue(float[] sentValues, float[] receivedValues) {
+        int maxSent = getMax(sentValues);
+        int maxReceived = getMax(receivedValues);
+        if (maxSent > maxReceived) {
+            return highestValue = (int) getRound(maxSent);
         }
-        return convertFloats(list);
+        return highestValue = (int) getRound(maxReceived);
     }
 
-    synchronized private void loadGraph() {
-        setGraphData();
-        setGraphAttributes();
-        animateGraph();
-    }
+    // You need to read through the WilliamChart Library docs to see how this graph works.
+    private void setGraphData() {
+        final String[] xAxisLabels =
+                {getString(R.string.jan), getString(R.string.feb), getString(R.string.mar),
+                        getString(R.string.apr), getString(R.string.jun), getString(R.string.may),
+                        getString(R.string.jul), getString(R.string.aug), getString(R.string.sep),
+                        getString(R.string.oct), getString(R.string.nov), getString(R.string.dec)};
 
-    private void animateGraph() {
-        Animation anim = new Animation().setEasing(new BounceInterpolator());
-        lineGraph.show(anim);
+        // Sets data for the first received values line on the graph
+        LineSet dataSet = new LineSet(xAxisLabels, receivedValues);
+        dataSet.setColor(parseColor(YELLOW_CRAYOLA))
+                .setDotsColor(parseColor(RED_ROSE_MADDER))
+                .setFill(parseColor(BLUE_SAPPHIRE))
+                .setThickness(6)
+                .beginAt(0);
+        lineGraph.addData(dataSet);
+
+        // Sets data for the first sent values line on the graph
+        LineSet dataset = new LineSet(xAxisLabels, sentValues);
+        dataset.setColor(parseColor("#b01cff"))
+                .setDotsColor(parseColor("#1cb7ff"))
+                .setDashed(new float[]{15f, 10f})
+                .setThickness(6)
+                .beginAt(0);
+        lineGraph.addData(dataset);
     }
 
     private void setGraphAttributes() {
 
+        //I forgot why I did this but I believe it crashes if we don't set this value to 100 at first
         setHighestValueTo100();
 
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
@@ -158,36 +219,27 @@ public class ContactStatsFragment extends Fragment {
                 .setBackgroundColor(parseColor(BLUE_MAASTRICHT));
     }
 
-    private void setHighestValueTo100() {
-        if (highestValue == 0){
-            highestValue = 100;
+    private void animateGraph() {
+        Animation anim = new Animation().setEasing(new BounceInterpolator());
+        lineGraph.show(anim);
+    }
+
+    // This converts the generic "Float" to primitive float because the graphs only uses primitives
+    private float[] convertFloats(List<Float> floats) {
+        float[] ret = new float[floats.size()];
+        Iterator<Float> iterator = floats.iterator();
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = iterator.next().intValue();
         }
+        return ret;
     }
 
-    private void setGraphData() {
-        final String[] xAxisLabels =
-                {getString(R.string.jan), getString(R.string.feb), getString(R.string.mar),
-                        getString(R.string.apr), getString(R.string.jun), getString(R.string.may),
-                        getString(R.string.jul), getString(R.string.aug), getString(R.string.sep),
-                        getString(R.string.oct), getString(R.string.nov), getString(R.string.dec)};
+    /*
+    Here we create a TreeMap with months as the Key. The Default Value is set to 0 so a count of
+    texts can be added to each month.
 
-        LineSet dataSet = new LineSet(xAxisLabels, receivedValues);
-        dataSet.setColor(parseColor(YELLOW_CRAYOLA))
-                .setDotsColor(parseColor(RED_ROSE_MADDER))
-                .setFill(parseColor(BLUE_SAPPHIRE))
-                .setThickness(6)
-                .beginAt(0);
-        lineGraph.addData(dataSet);
-
-        LineSet dataset = new LineSet(xAxisLabels, sentValues);
-        dataset.setColor(parseColor("#b01cff"))
-                .setDotsColor(parseColor("#1cb7ff"))
-                .setDashed(new float[]{15f, 10f})
-                .setThickness(6)
-                .beginAt(0);
-        lineGraph.addData(dataset);
-    }
-
+    FYI: We use TreeMaps rather than HashMaps because TreeMaps can be sorted.
+     */
     private TreeMap<Integer, Integer> setUpMonthlyTextMap() {
         TreeMap<Integer, Integer> monthlyMap = new TreeMap<>();
         monthlyMap.put(JAN, DEFAULT_VALUE);
@@ -205,35 +257,23 @@ public class ContactStatsFragment extends Fragment {
         return monthlyMap;
     }
 
-    private float[] convertFloats(List<Float> floats) {
-        float[] ret = new float[floats.size()];
-        Iterator<Float> iterator = floats.iterator();
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = iterator.next().intValue();
+    public static int getMax(float[] inputArray) {
+        float maxValue = inputArray[0];
+        for (int i = 1; i < inputArray.length; i++) {
+            if (inputArray[i] > maxValue) {
+                maxValue = Math.round(inputArray[i]);
+            }
         }
-        return ret;
-    }
-
-    synchronized private int getYValue(float[] sentValues, float[] receivedValues){
-        int maxSent = getMax(sentValues);
-        int maxReceived = getMax(receivedValues);
-        if (maxSent > maxReceived){
-            return highestValue = (int) getRound(maxSent);
-        }
-        return highestValue = (int) getRound(maxReceived);
+        return (int) maxValue;
     }
 
     private long getRound(int input) {
         return Math.round(input * 1.25);
     }
 
-    public static int getMax(float[] inputArray){
-        float maxValue = inputArray[0];
-        for(int i=1;i < inputArray.length;i++){
-            if(inputArray[i] > maxValue){
-                maxValue = Math.round(inputArray[i]);
-            }
+    private void setHighestValueTo100() {
+        if (highestValue == 0) {
+            highestValue = 100;
         }
-        return (int) maxValue;
     }
 }

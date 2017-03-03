@@ -89,6 +89,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     public void alertDialogCallback(String dialogFragmentText) {
         mText = dialogFragmentText;
 
+        //splits first and last name into separate strings
         if (mText.trim().length() > 0) {
             String name = mText;
             String lastName = "";
