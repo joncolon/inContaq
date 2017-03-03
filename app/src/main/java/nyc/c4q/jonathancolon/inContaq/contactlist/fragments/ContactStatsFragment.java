@@ -268,6 +268,7 @@ public class ContactStatsFragment extends Fragment {
     }
 
     private long getRound(int input) {
+        //this rounds up and multiples the value by a quarter to customize the Y axis to the contact
         return Math.round(input * 1.25);
     }
 
