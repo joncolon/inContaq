@@ -42,6 +42,7 @@ public class ContactStatsFragment extends Fragment {
     /*
     These color constants are hardcoded for backwards compatibility.
      */
+
     private static final String BLUE_SAPPHIRE = "#0E587A";
     private static final String BLUE_MAASTRICHT = "#02283A";
     private static final String RED_ROSE_MADDER = "#E71D36";
@@ -82,20 +83,22 @@ public class ContactStatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
-
         initViews(view);
+
         Contact contact = unwrapParcelledContact();
+
 
         //Retrieves all the text messages to parse through
         ArrayList<Sms> lstSms = SmsHelper.getAllSms(getActivity(), contact);
 
+
         //Sets values for the line graph by parsing through the sms list
         getLineGraphValues(lstSms);
+        //This method finds out who sent the most texts
         getHigehstValueForYaxis();
-        loadGraph();
 
+        loadGraph();
         return view;
     }
 
@@ -210,6 +213,7 @@ public class ContactStatsFragment extends Fragment {
         //I forgot why I did this but I believe it crashes if we don't set this value to 100 at first
         setHighestValueTo100();
 
+        //sets how the graph looks
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
                 .setAxisBorderValues(0, highestValue)
                 .setYLabels(LabelPosition.NONE)
@@ -236,7 +240,7 @@ public class ContactStatsFragment extends Fragment {
 
     /*
     Here we create a TreeMap with months as the Key. The Default Value is set to 0 so a count of
-    texts can be added to each month.
+    texts messages can be added to each month.
 
     FYI: We use TreeMaps rather than HashMaps because TreeMaps can be sorted.
      */

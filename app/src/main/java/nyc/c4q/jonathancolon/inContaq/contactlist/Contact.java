@@ -16,17 +16,8 @@ public class Contact {
     String cellPhoneNumber;
     String address;
     String email;
-    String contactImage;
-
-    public String getContactImage() {
-        return contactImage;
-    }
-
-    public void setContactImage(String contactImage) {
-        this.contactImage = contactImage;
-    }
-
     String backgroundImage;
+    String contactImage;
 
     public Contact() {
     }
@@ -36,6 +27,13 @@ public class Contact {
         this.lastName = lastName;
     }
 
+    public String getContactImage() {
+        return contactImage;
+    }
+
+    public void setContactImage(String contactImage) {
+        this.contactImage = contactImage;
+    }
 
     public String getBackgroundImage() {
         return backgroundImage;

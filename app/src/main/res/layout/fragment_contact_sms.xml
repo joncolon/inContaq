@@ -94,14 +94,19 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_height="378dp"
         android:scrollbars="vertical"
         android:visibility="invisible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
     </android.support.v7.widget.RecyclerView>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:hint="jibber jabber"
+        android:layout_gravity="bottom"/>
 </android.support.design.widget.CoordinatorLayout>

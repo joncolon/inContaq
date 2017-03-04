@@ -20,5 +20,4 @@ public class PicassoHelper {
     public void loadImageFromString(String uriString, ImageView imageView){
         Picasso.with(context).load(Uri.parse(uriString)).into(imageView);
     }
-
 }

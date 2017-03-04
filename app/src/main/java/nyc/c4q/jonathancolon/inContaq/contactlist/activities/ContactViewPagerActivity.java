@@ -14,10 +14,12 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactFragmentPagerA
 
 public class ContactViewPagerActivity extends FragmentActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_viewpager);
+
 
         Contact contact = Parcels.unwrap(getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
         Intent i = getIntent();
