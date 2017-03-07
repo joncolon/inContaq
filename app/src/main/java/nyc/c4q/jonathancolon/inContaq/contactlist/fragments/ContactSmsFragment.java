@@ -2,16 +2,24 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +53,8 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> SmsList;
+    private static ImageView smsSendButton;
+    private static EditText smsEditText;
 
     public ContactSmsFragment() {
         //required empty public constructor
@@ -69,7 +79,14 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
-
+        smsSendButton = (ImageView) view.findViewById(R.id.send_button);
+        smsEditText = (EditText) view.findViewById(R.id.sms_edit_text);
+        smsSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage(v);
+            }
+        });
         initViews(view);
         enableClickListeners();
         displayContactInfo(contact);
@@ -191,6 +208,39 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
                 startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
             });
         }
+    }
+
+    //getActivity is the equivalent of getContext in fragements
+    public void sendMessage(View v) {
+
+//        String _messageNumber=smsEditText.getText().toString();
+        String _messageNumber=contact.getCellPhoneNumber();
+        String messageText = smsEditText.getText().toString();
+        String sent = "SMS_SENT";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0,
+                new Intent(sent), 0);
+
+        //---when the SMS has been sent---
+        getActivity().registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                if(getResultCode() == Activity.RESULT_OK)
+                {
+                    Toast.makeText(v.getContext(), "SMS sent",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "SMS could not sent",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new IntentFilter(sent));
+
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(_messageNumber, null, messageText, sentPI, null);
+
     }
 
     @Override
