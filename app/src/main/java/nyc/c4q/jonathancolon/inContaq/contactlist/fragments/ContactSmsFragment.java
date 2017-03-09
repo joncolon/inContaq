@@ -2,16 +2,22 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,11 +30,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
-import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
@@ -41,10 +47,13 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private static TextView contactName;
     private static ImageView contactImageIV, backgroundImageIV;
     private static Contact contact;
+    private static ContactSmsFragment inst;
     private final String TAG = "SET TEXT REQUEST: ";
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> SmsList;
+    private static ImageView smsSendButton;
+    private static EditText smsEditText;
 
     public ContactSmsFragment() {
         //required empty public constructor
@@ -62,6 +71,16 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         super.onCreate(savedInstanceState);
     }
 
+    public static ContactSmsFragment instance() {
+        return inst;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        inst = this;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,11 +88,18 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
-
+        smsSendButton = (ImageView) view.findViewById(R.id.send_button);
+        smsEditText = (EditText) view.findViewById(R.id.sms_edit_text);
+        smsSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage(v);
+            }
+        });
         initViews(view);
         enableClickListeners();
         displayContactInfo(contact);
-        SmsList = SmsHelper.getAllSms(getActivity(), contact);
+        populateSmsList();
         setupRecyclerView(contact);
         refreshRecyclerView();
         scrollListToBottom();
@@ -123,11 +149,19 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         recyclerView.setAdapter(new SmsAdapter(this, contact));
     }
 
-    private synchronized void refreshRecyclerView() {
+
+
+    public synchronized void refreshRecyclerView() {
+
         adapter = (SmsAdapter) recyclerView.getAdapter();
         Collections.sort(SmsList);
         adapter.setData(SmsList);
         Log.d(TAG, "RefreshRV : " + SmsList.size());
+        adapter.notifyDataSetChanged();
+    }
+
+    public synchronized void populateSmsList() {
+        SmsList = SmsHelper.getAllSms(getActivity(), contact);
     }
 
     synchronized private void scrollListToBottom() {
@@ -191,6 +225,44 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
                 startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
             });
         }
+    }
+
+    //getActivity is the equivalent of getContext in fragements
+    synchronized public void sendMessage(View v) {
+
+//        String _messageNumber=smsEditText.getText().toString();
+        String _messageNumber=contact.getCellPhoneNumber();
+        String messageText = smsEditText.getText().toString();
+        String sent = "SMS_SENT";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0,
+                new Intent(sent), 0);
+
+        //---when the SMS has been sent---
+        getActivity().registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                if(getResultCode() == Activity.RESULT_OK)
+                {
+                    Toast.makeText(v.getContext(), "SMS sent",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "SMS could not sent",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new IntentFilter(sent));
+
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(_messageNumber, null, messageText, sentPI, null);
+
+        //todo // FIXME: 3/9/17
+        populateSmsList();
+        refreshRecyclerView();
+        scrollListToBottom();
     }
 
     @Override

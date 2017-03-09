@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.db.chart.Tools;
 import com.db.chart.animation.Animation;
@@ -27,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotification;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyReceivedWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlySentWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyTaskParams;
@@ -37,18 +41,13 @@ import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition;
 
 //This fragment handles graph logic
-public class ContactStatsFragment extends Fragment {
-
-    /*
-    These color constants are hardcoded for backwards compatibility.
-     */
+public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static final String BLUE_SAPPHIRE = "#0E587A";
     private static final String BLUE_MAASTRICHT = "#02283A";
     private static final String RED_ROSE_MADDER = "#E71D36";
     private static final String WHITE_BABY_POWDER = "#FDFFFC";
     private static final String YELLOW_CRAYOLA = "#FF9F1C";
-
     private static final String MONTHLY_SENT = "Monthly Sent: ";
     private static final String MONTHLY_RECEIVED = "Monthly Received: ";
     private static final int JAN = 1;
@@ -65,9 +64,15 @@ public class ContactStatsFragment extends Fragment {
     private static final int DEC = 12;
     private static final int DEFAULT_VALUE = 0;
     private final String TAG = "sms";
-
     int highestValue;
+    /*
+    These color constants are hardcoded for backwards compatibility.
+     */
+    private Contact contact;
     private LineChartView lineGraph;
+    private Spinner dateSpinner;
+    private ArrayAdapter<CharSequence> spinnerArrayAdapter;
+    private ContactNotification mContactNotification;
 
     private float[] receivedValues;
     private float[] sentValues;
@@ -84,8 +89,8 @@ public class ContactStatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
-        initViews(view);
 
+        initViews(view);
         Contact contact = unwrapParcelledContact();
 
 
@@ -104,6 +109,17 @@ public class ContactStatsFragment extends Fragment {
 
     private void initViews(View view) {
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
+
+
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+        spinnerArrayAdapter = ArrayAdapter.createFromResource(
+                view.getContext(),
+                R.array.date_spinner_array,
+                R.layout.date_spinner_item);
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
+        dateSpinner.setAdapter(spinnerArrayAdapter);
+        dateSpinner.setOnItemSelectedListener(this);
+
     }
 
     @Nullable
@@ -280,5 +296,36 @@ public class ContactStatsFragment extends Fragment {
         if (highestValue == 0) {
             highestValue = 100;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        Contact contact = unwrapParcelledContact();
+        switch (String.valueOf(parent.getItemAtPosition(position))) {
+            case "WEEKLY":
+                // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
+                mContactNotification = new ContactNotification();
+                mContactNotification.startNotification(getContext(), contact);
+//               Toast.makeText(view.getContext(),"WEEKLY", Toast.LENGTH_SHORT).show();
+                break;
+            case "2 WEEKS":
+                // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification
+//               Toast.makeText(view.getContext(),"2 WEEKS", Toast.LENGTH_SHORT).show();
+                break;
+            case "3 WEEKS":
+                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
+//               Toast.makeText(view.getContext(),"3 WEEKS", Toast.LENGTH_SHORT).show();
+                break;
+            case "MONTHLY":
+                // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
+//               Toast.makeText(view.getContext(),"MONTHLY", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // TODO: 3/8/17 should we send a reminder?
     }
 }

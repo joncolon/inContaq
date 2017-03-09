@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_anti_flash">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:elevation="40dp"
-        app:cardBackgroundColor="#052635"
-        app:cardCornerRadius="15dp"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
-        android:paddingTop="5dp"
+        android:layout_marginTop="24dp"
+        android:elevation="40dp"
         android:paddingBottom="5dp"
         android:paddingLeft="2dp"
-        android:paddingRight="2dp">
+        android:paddingRight="2dp"
+        android:paddingTop="5dp"
+        app:cardBackgroundColor="#052635"
+        app:cardCornerRadius="15dp">
 
         <com.db.chart.view.LineChartView
-            android:layout_width="match_parent"
             android:id="@+id/daily_chart"
-            android:layout_marginTop="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:layout_marginBottom="6dp"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
-            android:layout_height="200dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true">
+            android:layout_marginTop="6dp">
         </com.db.chart.view.LineChartView>
 
     </android.support.v7.widget.CardView>
 
-    <TextView
-        android:text="TextView"
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/date_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:spinnerMode="dropdown">
+    </android.support.v7.widget.AppCompatSpinner>
+
+    <TextView
+        android:id="@+id/days_passed_tv"
+        android:layout_above="@id/date_spinner"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="SET A REMINDER (THIS IS HARDCODED)"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/sms_stats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="131dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:layout_marginBottom="100dp"
-        android:layout_marginTop="131dp"
-        android:id="@+id/sms_stats"
         android:scrollbars="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="19dp" />
+        android:text="TextView"
+        android:textAlignment="center" />
 </RelativeLayout>

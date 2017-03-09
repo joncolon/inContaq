@@ -15,9 +15,6 @@ import java.util.GregorianCalendar;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
-/**
- * Created by jonathancolon on 1/5/17.
- */
 
 public class SmsHelper {
 

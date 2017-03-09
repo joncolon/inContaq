@@ -92,7 +92,6 @@
                     android:textSize="@dimen/card_info_text_size"
                     android:layout_marginLeft="20dp"
                     android:hint="Enter Mobile Number"
-                    android:visibility="gone"
                     android:enabled="false"/>
             </LinearLayout>
 

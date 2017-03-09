@@ -18,8 +18,22 @@ public class Contact {
     String email;
     String backgroundImage;
     String contactImage;
+    Long timeLastContacted;
+
+    public long getTimeLastContacted() {
+        return timeLastContacted;
+    }
+
+    public void setTimeLastContacted(long timeLastContacted) {
+        this.timeLastContacted = System.currentTimeMillis();
+
+    }
 
     public Contact() {
+    }
+
+    public Contact(String firstName) {
+        this.firstName = firstName;
     }
 
     public Contact(String firstName, String lastName) {

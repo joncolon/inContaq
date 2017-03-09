@@ -49,5 +49,6 @@
     <dimen name="fab_height">56dp</dimen>
     <dimen name="card_photo_margin_top">6dp</dimen>
     <dimen name="card_photo_text_width">120dp</dimen>
+    <dimen name="send_message_height">45dp</dimen>
 
 </resources>

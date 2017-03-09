@@ -38,4 +38,13 @@
     <string name="enter_name">Enter contact\'s name</string>
     <string name="sms_no_result">no result!</string>
     <string name="add_contact">Add a contact</string>
+    <string name="reply_label">REPLY</string>
+
+    <string-array
+        name="date_spinner_array">
+        <item>WEEKLY</item>
+        <item>2 WEEKS</item>
+        <item>3 WEEKS</item>
+        <item>MONTHLY</item>
+    </string-array>
 </resources>
