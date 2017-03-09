@@ -36,7 +36,6 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition;
 
-//This fragment handles graph logic
 public class ContactStatsFragment extends Fragment {
 
     /*
@@ -66,7 +65,7 @@ public class ContactStatsFragment extends Fragment {
     private static final int DEFAULT_VALUE = 0;
     private final String TAG = "sms";
 
-    int highestValue;
+    private int highestValue;
     private LineChartView lineGraph;
 
     private float[] receivedValues;
@@ -210,7 +209,7 @@ public class ContactStatsFragment extends Fragment {
 
     private void setGraphAttributes() {
 
-        //I forgot why I did this but I believe it crashes if we don't set this value to 100 at first
+        //todo REVIEW I forgot why I did this but I believe it crashes if we don't set this value to 100
         setHighestValueTo100();
 
         //sets how the graph looks
@@ -261,7 +260,7 @@ public class ContactStatsFragment extends Fragment {
         return monthlyMap;
     }
 
-    public static int getMax(float[] inputArray) {
+    private static int getMax(float[] inputArray) {
         float maxValue = inputArray[0];
         for (int i = 1; i < inputArray.length; i++) {
             if (inputArray[i] > maxValue) {

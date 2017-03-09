@@ -15,9 +15,6 @@ import java.util.GregorianCalendar;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 
-/**
- * Created by jonathancolon on 1/5/17.
- */
 
 public class SmsHelper {
 
@@ -109,9 +106,9 @@ public class SmsHelper {
         cursor.moveToFirst();
         String date = cursor.getString(cursor.getColumnIndex(DATE));
         Long timestamp = Long.parseLong(date);
+        cursor.close();
 
         Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
-
 
         Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
                 Toast.LENGTH_LONG).show();

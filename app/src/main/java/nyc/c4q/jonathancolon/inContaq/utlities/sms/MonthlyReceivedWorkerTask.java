@@ -8,9 +8,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-/**
- * Created by jonathancolon on 1/5/17.
- */
+
 
 public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
         TreeMap<Integer, Integer>> {

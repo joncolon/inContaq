@@ -5,24 +5,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sms_row"
     android:paddingBottom="5dp"
-    android:background="#ECF0F1">
+    android:background="@color/primary_background">
 
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ECF0F1"
+            android:background="@color/primary_background"
             android:id="@+id/chat_view"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginBottom="2dp"
-                app:cardCornerRadius="10dp"
+                android:layout_marginLeft="@dimen/card_margin_start"
+                android:layout_marginRight="@dimen/card_margin_end"
+                android:layout_marginBottom="@dimen/card_chat_margin_btm"
+                app:cardCornerRadius="@dimen/card_chat_corner_radius"
                 android:elevation="@dimen/card_elevation"
                 android:id="@+id/chatBubble">
                 <LinearLayout
@@ -34,12 +34,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="type not found"
-                        android:textSize="16sp"
+                        android:text="@string/type_not_found"
+                        android:textSize="@dimen/type_text_size"
                         android:textStyle="bold"
                         android:id="@+id/type"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="@dimen/sms_rv_margin_start"
+                        android:layout_marginEnd="@dimen/sms_rv_margin_end"
                         android:visibility="gone"
                         android:textColor="@color/blue_sapphire"/>
 
@@ -47,11 +47,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/senderId"
-                        android:text="8090470606"
-                        android:textSize="16sp"
+                        android:text="@string/phone_num_placeholder"
+                        android:textSize="@dimen/sender_id_text_size"
                         android:textStyle="bold"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="@dimen/sms_rv_margin_start"
+                        android:layout_marginEnd="@dimen/sms_rv_margin_end"
                         android:visibility="gone"
                         android:textColor="@color/blue_sapphire"/>
                     <TextView
@@ -59,12 +59,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/messageDetails"
                         android:textSize="16sp"
-                        android:text="Hi, This is Abhayd dddfd dfd sdjs sdkj ?"
+                        android:text="@string/placeholder_text"
                         android:gravity="start"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="@dimen/card_margin_start"
+                        android:layout_marginEnd="@dimen/card_margin_end"
                         android:textColorLink="#0000ff"
                         android:linksClickable="true"
                         android:autoLink="all"
@@ -74,13 +72,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/timeDate"
-                        android:layout_below="@id/senderId"
                         android:visibility="visible"
-                        android:textSize="10sp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:text="17 jul"
-                        android:layout_marginBottom="3dp"/>
+                        android:textSize="@dimen/time_date_text_size"
+                        android:layout_marginStart="@dimen/sms_rv_margin_start"
+                        android:layout_marginEnd="@dimen/sms_rv_margin_end"
+                        android:text="@string/placeholder_date"
+                        android:layout_marginBottom="@dimen/time_date_margin_btm"/>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>

@@ -15,7 +15,7 @@
 
     <!--greyscale-->
     <color name="black_rich">#021620</color>
-    <color name="white_anti_flash">#ECF0F1</color>
+    <color name="primary_background">#ECF0F1</color>
     <color name="white_baby_powder">#FDFFFC</color>
 
     <!--yellow-->

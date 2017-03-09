@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +23,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
-import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
@@ -36,18 +35,17 @@ import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDat
 
 public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener {
 
-    private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
-    private static final int RESULT_LOAD_CONTACT_IMG = 1;
-    private static TextView contactName;
-    private static ImageView contactImageIV, backgroundImageIV;
-    private static Contact contact;
+    private final int RESULT_LOAD_BACKGROUND_IMG = 2;
+    private final int RESULT_LOAD_CONTACT_IMG = 1;
+    private TextView contactName;
+    private ImageView contactImageIV, backgroundImageIV;
+    private Contact contact;
     private final String TAG = "SET TEXT REQUEST: ";
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> SmsList;
 
     public ContactSmsFragment() {
-        //required empty public constructor
     }
 
     public static ContactSmsFragment newInstance() {
@@ -55,11 +53,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         Bundle b = new Bundle();
         fragment.setArguments(b);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -105,6 +98,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         }
     }
 
+    //TODO purify method - return first and last name - set to contact separately
     synchronized private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
         PicassoHelper ph = new PicassoHelper(getActivity());
@@ -127,16 +121,10 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         adapter = (SmsAdapter) recyclerView.getAdapter();
         Collections.sort(SmsList);
         adapter.setData(SmsList);
-        Log.d(TAG, "RefreshRV : " + SmsList.size());
     }
 
     synchronized private void scrollListToBottom() {
         recyclerView.post(() -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,7 +152,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Log.e(TAG, "onActivityResult: " + e.toString());
             Toast.makeText(getActivity(), R.string.error_message_general, Toast.LENGTH_LONG)
                     .show();
         }
@@ -176,7 +163,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         anim.fadeIn(recyclerView);
     }
 
-    public void enableClickListeners(){
+    private void enableClickListeners(){
         contactImageIV.setOnClickListener(v -> {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
