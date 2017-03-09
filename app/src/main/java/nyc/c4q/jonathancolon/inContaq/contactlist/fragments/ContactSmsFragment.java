@@ -99,7 +99,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         initViews(view);
         enableClickListeners();
         displayContactInfo(contact);
-        SmsList = SmsHelper.getAllSms(getActivity(), contact);
+        populateSmsList();
         setupRecyclerView(contact);
         refreshRecyclerView();
         scrollListToBottom();
@@ -152,11 +152,16 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
 
     public synchronized void refreshRecyclerView() {
+
         adapter = (SmsAdapter) recyclerView.getAdapter();
         Collections.sort(SmsList);
         adapter.setData(SmsList);
         Log.d(TAG, "RefreshRV : " + SmsList.size());
         adapter.notifyDataSetChanged();
+    }
+
+    public synchronized void populateSmsList() {
+        SmsList = SmsHelper.getAllSms(getActivity(), contact);
     }
 
     synchronized private void scrollListToBottom() {
@@ -223,7 +228,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     //getActivity is the equivalent of getContext in fragements
-    public void sendMessage(View v) {
+    synchronized public void sendMessage(View v) {
 
 //        String _messageNumber=smsEditText.getText().toString();
         String _messageNumber=contact.getCellPhoneNumber();
@@ -254,10 +259,10 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(_messageNumber, null, messageText, sentPI, null);
 
-        SmsList = SmsHelper.getAllSms(getActivity(), contact);
+        //todo // FIXME: 3/9/17
+        populateSmsList();
         refreshRecyclerView();
         scrollListToBottom();
-        showRecyclerView();
     }
 
     @Override
