@@ -145,6 +145,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         Collections.sort(SmsList);
         adapter.setData(SmsList);
         Log.d(TAG, "RefreshRV : " + SmsList.size());
+        adapter.notifyDataSetChanged();
     }
 
     synchronized private void scrollListToBottom() {
@@ -216,6 +217,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 //        String _messageNumber=smsEditText.getText().toString();
         String _messageNumber=contact.getCellPhoneNumber();
         String messageText = smsEditText.getText().toString();
+        Sms newSms = new Sms();
+        newSms.setMsg(messageText);
+        newSms.setAddress(contact.getCellPhoneNumber());
+        newSms.setTime(String.valueOf(System.currentTimeMillis()));
+        newSms.setType("1");
+        SmsList.add(newSms);
         String sent = "SMS_SENT";
 
         PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0,
@@ -229,6 +236,10 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
                 {
                     Toast.makeText(v.getContext(), "SMS sent",
                             Toast.LENGTH_SHORT).show();
+                    SmsHelper.getAllSms(getContext(), contact);
+                    refreshRecyclerView();
+                    scrollListToBottom();
+
                 }
                 else
                 {
@@ -241,6 +252,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(_messageNumber, null, messageText, sentPI, null);
 
+//        SmsHelper.getAllSms(getActivity(), contact);
+//        setupRecyclerView(contact);
+//        refreshRecyclerView();
+//        scrollListToBottom();
+//        showRecyclerView();
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
