@@ -3,9 +3,6 @@ package nyc.c4q.jonathancolon.inContaq.utlities.sms;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-/**
- * Created by jonathancolon on 1/11/17.
- */
 
 public class MonthlyTaskParams {
     final ArrayList<Sms> listSms;

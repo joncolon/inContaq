@@ -46,6 +46,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     /*
     These color constants are hardcoded for backwards compatibility.
      */
+    private Contact contact;
 
     private static final String BLUE_SAPPHIRE = "#0E587A";
     private static final String BLUE_MAASTRICHT = "#02283A";
@@ -306,7 +307,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
            case "WEEKLY":
                // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
                mContactNotification = new ContactNotification(getContext());
-               mContactNotification.startNotification();
+               mContactNotification.startNotification(contact);
 //               Toast.makeText(view.getContext(),"WEEKLY", Toast.LENGTH_SHORT).show();
                break;
            case "2 WEEKS":

@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +36,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>,
-        ContactListAdapter.Listener {
+        ContactListAdapter.Listener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String PARCELLED_CONTACT = "Parcelled Contact";
     private RecyclerView recyclerView;
@@ -42,7 +45,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private SQLiteDatabase db;
     private String mText = "";
     private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_SMS};
+            Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +91,10 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     @Override
     public void alertDialogCallback(String dialogFragmentText) {
         mText = dialogFragmentText;
+        splitFirstandLastName();
+    }
 
-        //splits first and last name into separate strings
+    private void splitFirstandLastName() {
         if (mText.trim().length() > 0) {
             String name = mText;
             String lastName = "";
@@ -167,8 +172,24 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissions, 2);
+            ActivityCompat.requestPermissions(this, permissions, 3);
         }
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
 
