@@ -26,7 +26,7 @@ public class ContactNotification extends IntentService {
 
     private NotificationCompat.Builder mBuilder;
     private NotificationManager notificationManager;
-    private Context mContext;
+
 
     private static final long WEEK_IN_MILLISECONDS = 604800000;
     private static final int ONE_MINUTE_IN_MILLIS = 60000;
@@ -53,40 +53,38 @@ public class ContactNotification extends IntentService {
     }
 
 
-    public void startNotification(Contact contact) {
+    public void startNotification(Context context, Contact contact) {
 
-        if (hasWeekPassed(contact)){
 
             int NOTIFICATION_ID = 555;
 
-            Intent intent = new Intent(mContext, ContactListActivity.class);
+            Intent intent = new Intent(context, ContactListActivity.class);
 
             int requestID = (int) System.currentTimeMillis();
             int flags = PendingIntent.FLAG_CANCEL_CURRENT; // Cancel old intent and create new one
-            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, requestID, intent, flags);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, requestID, intent, flags);
 
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-            mBuilder = new NotificationCompat.Builder(mContext)
+            mBuilder = new NotificationCompat.Builder(context)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setSmallIcon(R.drawable.heartnotification_icon)
                     .setPriority(PRIORITY_HIGH)
                     .setFullScreenIntent(pendingIntent, true)
-                    .setContentTitle("It's been a week since you've texted " + contact.getFirstName() + " " + contact.getLastName())
-                    .setContentText("Say hello inContaq!")
-                    .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.heartnotification_icon))
+                    .setContentTitle("It's been a week since you've texted " + contact.getFirstName())
+                    .setContentText("Why don't you get inContaq?")
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.heartnotification_icon))
                     .setSound(notification);
 
-            notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
-        }
-
     }
 
-    private boolean hasWeekPassed(Contact contact) {
-        return System.currentTimeMillis() - contact.getTimeLastContacted() > WEEK_IN_MILLISECONDS;
+    private boolean hasWeekPassed(Contact c) {
+
+        return System.currentTimeMillis() - c.getTimeLastContacted() > WEEK_IN_MILLISECONDS;
     }
 
     private void scheduleAlarm() {

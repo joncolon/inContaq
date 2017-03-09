@@ -11,6 +11,7 @@ public class Sms implements Comparable<Sms>{
     public String _time;
     public String _folderName;
     public String _type;
+
     public String getId(){
         return _id;
     }

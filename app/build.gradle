@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "nyc.c4q.jonathancolon.studentcouncilapp"
 
-        minSdkVersion 22
+        minSdkVersion 23
 
         targetSdkVersion 25
         versionCode 1

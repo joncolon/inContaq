@@ -43,17 +43,11 @@ import static com.db.chart.renderer.AxisRenderer.LabelPosition;
 //This fragment handles graph logic
 public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    /*
-    These color constants are hardcoded for backwards compatibility.
-     */
-    private Contact contact;
-
     private static final String BLUE_SAPPHIRE = "#0E587A";
     private static final String BLUE_MAASTRICHT = "#02283A";
     private static final String RED_ROSE_MADDER = "#E71D36";
     private static final String WHITE_BABY_POWDER = "#FDFFFC";
     private static final String YELLOW_CRAYOLA = "#FF9F1C";
-
     private static final String MONTHLY_SENT = "Monthly Sent: ";
     private static final String MONTHLY_RECEIVED = "Monthly Received: ";
     private static final int JAN = 1;
@@ -70,8 +64,11 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     private static final int DEC = 12;
     private static final int DEFAULT_VALUE = 0;
     private final String TAG = "sms";
-
     int highestValue;
+    /*
+    These color constants are hardcoded for backwards compatibility.
+     */
+    private Contact contact;
     private LineChartView lineGraph;
     private Spinner dateSpinner;
     private ArrayAdapter<CharSequence> spinnerArrayAdapter;
@@ -92,8 +89,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
-        initViews(view);
 
+        initViews(view);
         Contact contact = unwrapParcelledContact();
 
 
@@ -303,26 +300,28 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-       switch(String.valueOf(parent.getItemAtPosition(position))){
-           case "WEEKLY":
-               // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
-               mContactNotification = new ContactNotification(getContext());
-               mContactNotification.startNotification(contact);
+
+        Contact contact = unwrapParcelledContact();
+        switch (String.valueOf(parent.getItemAtPosition(position))) {
+            case "WEEKLY":
+                // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
+                mContactNotification = new ContactNotification();
+                mContactNotification.startNotification(getContext(), contact);
 //               Toast.makeText(view.getContext(),"WEEKLY", Toast.LENGTH_SHORT).show();
-               break;
-           case "2 WEEKS":
-               // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification
+                break;
+            case "2 WEEKS":
+                // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification
 //               Toast.makeText(view.getContext(),"2 WEEKS", Toast.LENGTH_SHORT).show();
-               break;
-           case "3 WEEKS":
-               // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
+                break;
+            case "3 WEEKS":
+                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
 //               Toast.makeText(view.getContext(),"3 WEEKS", Toast.LENGTH_SHORT).show();
-               break;
-           case "MONTHLY":
-               // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
+                break;
+            case "MONTHLY":
+                // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
 //               Toast.makeText(view.getContext(),"MONTHLY", Toast.LENGTH_SHORT).show();
-               break;
-       }
+                break;
+        }
     }
 
     @Override

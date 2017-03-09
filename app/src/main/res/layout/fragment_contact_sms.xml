@@ -104,4 +104,28 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     </android.support.v7.widget.RecyclerView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/send_message_height"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/sms_edit_text"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:hint="jibber jabber"
+        android:layout_gravity="bottom"/>
+    <ImageView
+        android:id="@+id/send_button"
+        android:layout_width="80dp"
+        android:layout_height="38dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/send_message_icon"
+        android:onClick="sendMessage"
+        />
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
+
+
