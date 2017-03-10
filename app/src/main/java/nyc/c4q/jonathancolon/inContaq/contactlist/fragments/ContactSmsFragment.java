@@ -99,18 +99,16 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         return view;
     }
 
-    //getActivity is the equivalent of getContext in fragements
     synchronized public void sendMessage(View v) {
 
-//        String _messageNumber=smsEditText.getText().toString();
-        String _messageNumber = contact.getCellPhoneNumber();
+        String messageNumber = contact.getCellPhoneNumber();
         String messageText = smsEditText.getText().toString();
         String sent = "SMS_SENT";
 
         PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0,
                 new Intent(sent), 0);
 
-        //---when the SMS has been sent---
+
         getActivity().registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context arg0, Intent arg1) {
@@ -126,7 +124,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         }, new IntentFilter(sent));
 
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(_messageNumber, null, messageText, sentPI, null);
+        sms.sendTextMessage(messageNumber, null, messageText, sentPI, null);
 
         //todo // FIXME: 3/9/17
         populateSmsList();

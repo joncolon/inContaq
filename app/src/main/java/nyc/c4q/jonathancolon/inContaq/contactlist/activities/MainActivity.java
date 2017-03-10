@@ -31,12 +31,10 @@ import static android.provider.ContactsContract.Contacts;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class MainActivity extends Activity {
-    public TextView outputText;
-    private SQLiteDatabase db;
-
-
     private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
+    public TextView outputText;
+    private SQLiteDatabase db;
     private ImageView profileImage;
 
     @Override
@@ -47,6 +45,14 @@ public class MainActivity extends Activity {
         profileImage = (ImageView) findViewById(R.id.profile_image);
         checkPermissions();
         fetchContacts();
+    }
+
+    synchronized private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissions, 3);
+        }
     }
 
     synchronized public void fetchContacts() {
@@ -74,9 +80,7 @@ public class MainActivity extends Activity {
 
         // Loop for every contact in the phone
         if (cursor.getCount() > 0) {
-
             while (cursor.moveToNext()) {
-
                 String contact_id = getContactId(_ID, cursor);
                 String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
 
@@ -86,8 +90,7 @@ public class MainActivity extends Activity {
 
                     Contact contact = new Contact();
                     splitFirstAndLastName(name, contact);
-
-                    output.append("\n Name:" + name);
+                    output.append("\nName:" + name);
 
                     // Query and loop for every phone number of the contact
                     Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
@@ -97,27 +100,21 @@ public class MainActivity extends Activity {
                         String type = phoneCursor.getString(phoneCursor.getColumnIndex(TYPE));
                         String simplifiedPhoneNumber = simplifyPhoneNumber(phoneNumber);
 
-                        if (type.equals("2")){
+                        if (type.equals(getString(R.string.type_mobile))) {
                             contact.setCellPhoneNumber(simplifiedPhoneNumber);
-                            output.append("\n Type:" + type + "\n Phone number:" + simplifiedPhoneNumber);
+                            output.append("\nType:" + type + "\nPhone number:" + simplifiedPhoneNumber);
                         }
                     }
-
                     phoneCursor.close();
 
                     // Query and loop for every email of the contact
-                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null, EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
-
+                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null,
+                            EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
                     while (emailCursor.moveToNext()) {
-
                         email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
-
                         output.append("\nEmail:" + email);
-
                         contact.setEmail(email);
-
                     }
-
                     ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(this);
                     db = dbHelper.getWritableDatabase();
                     cupboard().withDatabase(db).put(contact);
@@ -126,8 +123,6 @@ public class MainActivity extends Activity {
                 }
                 output.append("\n");
             }
-
-
             outputText.setText(output);
         }
     }
@@ -141,10 +136,10 @@ public class MainActivity extends Activity {
             String lastName = "";
             String firstName;
             if (name.split("\\s+").length > 1) {
-                try{
+                try {
                     lastName = name.substring(name.lastIndexOf(" ") + 1);
                     firstName = name.substring(0, name.lastIndexOf(' '));
-                } catch (Exception exception){
+                } catch (Exception exception) {
                     throw exception;
                 }
             } else {
@@ -157,14 +152,6 @@ public class MainActivity extends Activity {
 
     private String simplifyPhoneNumber(String phoneNumber) {
         return phoneNumber.replaceAll("[()\\s-]+", "");
-    }
-
-    synchronized private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissions, 3);
-        }
     }
 
     // Display all the contacts with numbers
@@ -191,11 +178,9 @@ public class MainActivity extends Activity {
                     InputStream photo_stream = getInputStream(my_contact_Uri, getContentResolver());
                     if (photo_stream != null) {
                         contactImage = getBitmap(photo_stream);
-                    }
-                    else {
+                    } else {
                         contactImage = default_photo;
                     }
-
                     contactItemsList.add(new ContactItems(id, name, phoneNo, contactImage));
                     pCur.close();
                 }
@@ -204,16 +189,17 @@ public class MainActivity extends Activity {
         return contactItemsList;
     }
 
-    private InputStream getInputStream(Uri my_contact_Uri, ContentResolver contentResolver) {
-        return Contacts.openContactPhotoInputStream(contentResolver, my_contact_Uri);
-    }
-
     private Uri getUri(String id) {
         return Uri.withAppendedPath(Contacts.CONTENT_URI, id);
     }
 
+    private InputStream getInputStream(Uri my_contact_Uri, ContentResolver contentResolver) {
+        return Contacts.openContactPhotoInputStream(contentResolver, my_contact_Uri);
+    }
+
     private Bitmap getBitmap(InputStream photo_stream) {
-        Bitmap contactImage;BufferedInputStream buf = new BufferedInputStream(photo_stream);
+        Bitmap contactImage;
+        BufferedInputStream buf = new BufferedInputStream(photo_stream);
         contactImage = BitmapFactory.decodeStream(buf);
         return contactImage;
     }

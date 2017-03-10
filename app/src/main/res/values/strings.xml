@@ -49,6 +49,7 @@
     <string name="placeholder_text">Hi, This is Abhayd dddfd dfd sdjs sdkj ?</string>
     <string name="placeholder_date">17 jul</string>
     <string name="reply_label">REPLY</string>
+    <string name="type_mobile">2</string>
 
     <string-array
         name="date_spinner_array">
