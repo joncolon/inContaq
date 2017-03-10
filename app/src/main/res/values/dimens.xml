@@ -65,5 +65,6 @@
     <dimen name="line_chart_margin_btm">6dp</dimen>
     <dimen name="card_chart_padding">5dp</dimen>
     <dimen name="card_chart_margin_top">24dp</dimen>
+    <dimen name="send_message_height">45dp</dimen>
 
 </resources>

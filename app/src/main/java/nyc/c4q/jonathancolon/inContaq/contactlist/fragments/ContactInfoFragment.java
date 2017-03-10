@@ -86,6 +86,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
         polaroidName.setText(nameValue);
         editName.setText(nameValue);
+        editMobile.setText(contact.getCellPhoneNumber());
         loadImages();
         showMobile();
         showEmail();

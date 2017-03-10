@@ -5,8 +5,13 @@ android {
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "nyc.c4q.jonathancolon.studentcouncilapp"
-
+<<<<<<< HEAD
         minSdkVersion 22
+=======
+
+        minSdkVersion 23
+
+>>>>>>> 7069187ebe2534f5b8035dde6fc039c747497347
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
