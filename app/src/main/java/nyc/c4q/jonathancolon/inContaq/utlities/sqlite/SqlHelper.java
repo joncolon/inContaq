@@ -6,7 +6,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import nl.qbusict.cupboard.QueryResultIterable;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
@@ -31,12 +30,6 @@ public class SqlHelper {
             Log.e("Contact List", "selectAllContacts: ", e);
         }
         return contacts;
-    }
-
-    public static Contact getRandomContact(SQLiteDatabase db) {
-        Random rand = new Random();
-        Contact contact = cupboard().withDatabase(db).get(Contact.class, rand.nextInt(20));
-        return contact;
     }
 
     public static void saveToDatabase(Contact contact, Context context){

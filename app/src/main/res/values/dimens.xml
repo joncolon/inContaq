@@ -49,6 +49,22 @@
     <dimen name="fab_height">56dp</dimen>
     <dimen name="card_photo_margin_top">6dp</dimen>
     <dimen name="card_photo_text_width">120dp</dimen>
+    <dimen name="contact_rv_name_width">20sp</dimen>
+    <dimen name="contact_rv_margin_start_">89dp</dimen>
+    <dimen name="contact_rv_margin_btm">16dp</dimen>
+    <dimen name="sms_rv_margin_start">16dp</dimen>
+    <dimen name="sms_rv_margin_end">16dp</dimen>
+    <dimen name="time_date_text_size">10sp</dimen>
+    <dimen name="sender_id_text_size">16sp</dimen>
+    <dimen name="type_text_size">16sp</dimen>
+    <dimen name="card_chat_margin_btm">2dp</dimen>
+    <dimen name="card_chat_corner_radius">10dp</dimen>
+    <dimen name="time_date_margin_btm">3dp</dimen>
+    <dimen name="line_chart_height">200dp</dimen>
+    <dimen name="line_chart_margin">6dp</dimen>
+    <dimen name="line_chart_margin_btm">6dp</dimen>
+    <dimen name="card_chart_padding">5dp</dimen>
+    <dimen name="card_chart_margin_top">24dp</dimen>
     <dimen name="send_message_height">45dp</dimen>
 
 </resources>

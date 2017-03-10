@@ -5,57 +5,57 @@ import org.parceler.Parcel;
 @Parcel
 public class Sms implements Comparable<Sms>{
     public String _id;
-    public String _address;
-    public String _msg;
-    public String _readState;
-    public String _time;
-    public String _folderName;
-    public String _type;
+    public String address;
+    public String msg;
+    public String readState;
+    public String time;
+    public String foldername;
+    public String type;
 
     public String getId(){
         return _id;
     }
     public String getAddress(){
-        return _address;
+        return address;
     }
     public String getMsg(){
-        return _msg;
+        return msg;
     }
     public String getReadState(){
-        return _readState;
+        return readState;
     }
     public String getTime(){
-        return _time;
+        return time;
     }
     public String getFolderName(){
-        return _folderName;
+        return foldername;
     }
 
     public String getType() {
-        return _type;
+        return type;
     }
     public void setId(String id){
         _id = id;
     }
     public void setAddress(String address){
-        _address = address;
+        this.address = address;
     }
     public void setMsg(String msg){
-        _msg = msg;
+        this.msg = msg;
     }
     public void setReadState(String readState){
-        _readState = readState;
+        this.readState = readState;
     }
     public void setTime(String time){
-        _time = time;
+        this.time = time;
     }
 
     public void setFolderName(String folderName){
-        _folderName = folderName;
+        foldername = folderName;
     }
 
     public void setType(String type) {
-        this._type = type;
+        this.type = type;
     }
 
     @Override

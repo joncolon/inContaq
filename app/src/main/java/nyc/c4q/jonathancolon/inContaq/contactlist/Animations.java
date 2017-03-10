@@ -29,19 +29,5 @@ public class Animations {
         Animation slideOut = AnimationUtils.loadAnimation(context, R.anim.enter_fab);
         view.startAnimation(slideOut);
 
-        Animation.AnimationListener animListener = new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                view.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        };
     }
 }

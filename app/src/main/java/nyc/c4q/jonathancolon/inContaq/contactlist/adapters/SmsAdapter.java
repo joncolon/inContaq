@@ -25,9 +25,6 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by jonathancolon on 10/27/16.
- */
 
 public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String ON_BIND_VIEW_HOLDER = "onBindViewHolder: ";

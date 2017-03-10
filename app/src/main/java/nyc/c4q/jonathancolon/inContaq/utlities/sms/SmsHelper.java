@@ -106,9 +106,9 @@ public class SmsHelper {
         cursor.moveToFirst();
         String date = cursor.getString(cursor.getColumnIndex(DATE));
         Long timestamp = Long.parseLong(date);
+        cursor.close();
 
         Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
-
 
         Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
                 Toast.LENGTH_LONG).show();

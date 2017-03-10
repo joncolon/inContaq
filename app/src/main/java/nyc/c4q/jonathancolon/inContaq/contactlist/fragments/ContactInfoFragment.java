@@ -18,9 +18,9 @@ import org.parceler.Parcels;
 
 import java.util.Objects;
 
-import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
@@ -29,20 +29,20 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
 
     private Contact contact;
-    private TextView name, mobile, email, polaroidName, address, editButton;
+    private TextView mobile, email, polaroidName, address, editButton;
     private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
     private int selection;
     private Animations anim;
     private boolean isEditTextEnabled;
+
     public static ContactInfoFragment newInstance() {
         ContactInfoFragment fragment = new ContactInfoFragment();
         Bundle b = new Bundle();
         fragment.setArguments(b);
         return fragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,8 +61,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private void initViews(View view) {
         polaroidName = (TextView) view.findViewById(R.id.contact_name);
-        name = (TextView) view.findViewById(R.id.name);
-         mobile = (TextView) view.findViewById(R.id.mobile_phone);
+        mobile = (TextView) view.findViewById(R.id.mobile_phone);
         email = (TextView) view.findViewById(R.id.email);
         address = (TextView) view.findViewById(R.id.address);
 
@@ -80,9 +79,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private void setClickListeners() {
         saveButton.setOnClickListener(view1 -> buildSaveEditDialog());
-        editButton.setOnClickListener(view12 -> {
-            ContactInfoFragment.this.enableEditContactMode();
-        });
+        editButton.setOnClickListener(view12 -> ContactInfoFragment.this.enableEditContactMode());
     }
 
     private void displayContactInfo(Contact contact) {
@@ -94,6 +91,39 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         showMobile();
         showEmail();
         showAddress();
+    }
+
+    private void buildSaveEditDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle(R.string.save_changes);
+        alertDialog.setMessage(R.string.are_you_sure);
+
+        alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
+            selection = 1;
+            alertDialogCallback(selection);
+            anim.exitFab(saveButton);
+            isEditTextEnabled = false;
+
+        });
+
+        alertDialog.setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
+        alertDialog.show();
+    }
+
+    private void enableEditContactMode() {
+        enableEditText();
+        fadeInContactInfo();
+        showFab();
+    }
+
+    private void loadImages() {
+        PicassoHelper ph = new PicassoHelper(getActivity());
+        if (contact.getBackgroundImage() != null) {
+            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
+        }
+        if (contact.getContactImage() != null) {
+            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
+        }
     }
 
     synchronized private void showMobile() {
@@ -127,34 +157,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             anim.fadeIn(address);
             anim.fadeIn(editAddress);
         }
-        if (contact.getAddress() != null || Objects.equals(contact.getAddress(), "")){
+        if (contact.getAddress() != null || Objects.equals(contact.getAddress(), "")) {
             address.setVisibility(View.VISIBLE);
             anim.fadeIn(address);
         }
-    }
-
-
-    private void enableEditContactMode() {
-        enableEditText();
-        fadeInContactInfo();
-        showFab();
-    }
-
-    private void buildSaveEditDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle(R.string.save_changes);
-        alertDialog.setMessage(R.string.are_you_sure);
-
-        alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
-            selection = 1;
-            alertDialogCallback(selection);
-            anim.exitFab(saveButton);
-            isEditTextEnabled = false;
-
-        });
-
-        alertDialog.setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
-        alertDialog.show();
     }
 
     @Override
@@ -174,12 +180,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         }
     }
 
-    private void fadeInContactInfo() {
-        showMobile();
-        showEmail();
-        showAddress();
-    }
-
     private void enableEditText() {
         isEditTextEnabled = true;
         editName.setEnabled(true);
@@ -192,29 +192,18 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         editAddress.setVisibility(View.VISIBLE);
     }
 
-    private void loadImages() {
-        PicassoHelper ph = new PicassoHelper(getActivity());
-        if (contact.getBackgroundImage() != null) {
-            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
-        }
-        if (contact.getContactImage() != null) {
-            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
-        }
+    private void fadeInContactInfo() {
+        showMobile();
+        showEmail();
+        showAddress();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        displayContactInfo(contact);
-        polaroidName.setTypeface(Fontometrics.amatic_bold(getActivity()));
-    }
-
-    private void showFab(){
+    private void showFab() {
         saveButton.setVisibility(View.VISIBLE);
         anim.enterFab(saveButton);
     }
 
-    private void splitFirstAndLastName(String input){
+    private void splitFirstAndLastName(String input) {
         if (input.trim().length() > 0) {
             String lastName = "";
             String firstName;
@@ -228,6 +217,13 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             contact.setFirstName(firstName);
             contact.setLastName(lastName);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayContactInfo(contact);
+        polaroidName.setTypeface(Fontometrics.amatic_bold(getActivity()));
     }
 }
 

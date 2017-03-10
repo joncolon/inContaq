@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit">EDIT</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="email">Email:</string>
+    <string name="enter_valid_email_address">Enter valid email address</string>
+    <string name="enter_text">Enter text</string>
+    <string name="unknown">Unknown</string>
+    <string name="type_not_found">type not found</string>
+    <string name="phone_num_placeholder">8090470606</string>
+    <string name="placeholder_text">Hi, This is Abhayd dddfd dfd sdjs sdkj ?</string>
+    <string name="placeholder_date">17 jul</string>
+</resources>

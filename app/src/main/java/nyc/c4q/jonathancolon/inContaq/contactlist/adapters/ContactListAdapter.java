@@ -16,9 +16,6 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 
-/**
- * Created by jonathancolon on 10/27/16.
- */
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
     private final Listener listener;
@@ -44,7 +41,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         ContactViewHolder vh = new ContactViewHolder(itemView);
         parallaxViewController.imageParallax(vh.mBackGroundImage);
-        Context context = parent.getContext();
         return vh;
     }
 

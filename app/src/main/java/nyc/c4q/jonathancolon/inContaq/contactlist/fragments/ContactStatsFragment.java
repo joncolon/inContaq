@@ -40,7 +40,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition;
 
-//This fragment handles graph logic
+
 public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static final String BLUE_SAPPHIRE = "#0E587A";
@@ -64,10 +64,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     private static final int DEC = 12;
     private static final int DEFAULT_VALUE = 0;
     private final String TAG = "sms";
-    int highestValue;
-    /*
-    These color constants are hardcoded for backwards compatibility.
-     */
+    private int highestValue;
+
     private Contact contact;
     private LineChartView lineGraph;
     private Spinner dateSpinner;
@@ -226,7 +224,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     private void setGraphAttributes() {
 
-        //I forgot why I did this but I believe it crashes if we don't set this value to 100 at first
+        //todo REVIEW I forgot why I did this but I believe it crashes if we don't set this value to 100
         setHighestValueTo100();
 
         //sets how the graph looks
@@ -277,7 +275,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         return monthlyMap;
     }
 
-    public static int getMax(float[] inputArray) {
+    private static int getMax(float[] inputArray) {
         float maxValue = inputArray[0];
         for (int i = 1; i < inputArray.length; i++) {
             if (inputArray[i] > maxValue) {
