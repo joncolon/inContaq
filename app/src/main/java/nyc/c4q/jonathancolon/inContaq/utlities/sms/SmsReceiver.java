@@ -22,7 +22,7 @@ public class SmsReceiver extends BroadcastReceiver  {
                 String format = intentExtras.getString("format");
             }
 
-            ContactSmsFragment inst = ContactSmsFragment.instance();
+            ContactSmsFragment inst = ContactSmsFragment.newInstance();
             inst.populateSmsList();
             inst.refreshRecyclerView();
         }
