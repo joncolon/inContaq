@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
  */
 
 public class ContactItems {
+
     String id;
     String name;
     String number;
