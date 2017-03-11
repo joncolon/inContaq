@@ -12,7 +12,7 @@ public class ContactItems {
     String number;
     Bitmap image;
 
-    public ContactItems(String id, String name, String number, Bitmap image) {
+    public ContactItems(String id, String name, String number) {
         this.id = id;
         this.name = name;
         this.number = number;

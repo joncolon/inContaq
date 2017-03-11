@@ -128,31 +128,31 @@ public class SmsHelper {
         try {
             Uri uri = Uri.parse(SMS_URI_ALL);
             String[] projection = new String[]{ID, ADDRESS, PERSON, BODY, DATE, TYPE};
-            Cursor c = context.getApplicationContext().getContentResolver().query(uri, projection,
+            Cursor cursor = context.getApplicationContext().getContentResolver().query(uri, projection,
                     ADDRESS + "='" + contact.getCellPhoneNumber() + "'", null, DATE_DESC);
 
-            if (c.moveToFirst()) {
+            if (cursor.moveToFirst()) {
 
-                int totalSMS = c.getCount();
+                int totalSMS = cursor.getCount();
 
                 for (int i = 0; i < totalSMS; i++) {
                     objSms = new Sms();
-                    objSms.setId(c.getString(c.getColumnIndexOrThrow(ID)));
-                    objSms.setAddress(c.getString(c.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
-                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow(BODY)));
-                    objSms.setTime(c.getString(c.getColumnIndexOrThrow(DATE)));
-                    objSms.setType(c.getString(c.getColumnIndexOrThrow(TYPE)));
+                    objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
+                    objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
+                    objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
+                    objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
+                    objSms.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
 
-                    if (c.getString(c.getColumnIndexOrThrow(TYPE)).contains("1")) {
+                    if (cursor.getString(cursor.getColumnIndexOrThrow(TYPE)).contains("1")) {
                         objSms.setFolderName(INBOX);
                     } else {
                         objSms.setFolderName(SENT);
                     }
                     smsList.add(objSms);
-                    c.moveToNext();
+                    cursor.moveToNext();
                 }
-                if (!c.isClosed()) {
-                    c.close();
+                if (!cursor.isClosed()) {
+                    cursor.close();
                 }
             } else {
                 smsBuilder.append(R.string.sms_no_result);
@@ -167,31 +167,31 @@ public class SmsHelper {
                 String[] projection = new String[]{ID, ADDRESS, PERSON, BODY,
                         DATE, TYPE};
 
-                Cursor c = context.getApplicationContext().getContentResolver().query(uri,
+                Cursor cursor = context.getApplicationContext().getContentResolver().query(uri,
                         projection, null, null, DATE_DESC);
 
-                if (c.moveToFirst()) {
+                if (cursor.moveToFirst()) {
 
-                    int totalSMS = c.getCount();
+                    int totalSMS = cursor.getCount();
 
                     for (int i = 0; i < totalSMS; i++) {
                         objSms = new Sms();
-                        objSms.setId(c.getString(c.getColumnIndexOrThrow(ID)));
-                        objSms.setAddress(c.getString(c.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
-                        objSms.setMsg(c.getString(c.getColumnIndexOrThrow(BODY)));
-                        objSms.setTime(c.getString(c.getColumnIndexOrThrow(DATE)));
-                        objSms.setType(c.getString(c.getColumnIndexOrThrow(TYPE)));
+                        objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
+                        objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
+                        objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
+                        objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
+                        objSms.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
 
-                        if (c.getString(c.getColumnIndexOrThrow(TYPE)).contains("1")) {
+                        if (cursor.getString(cursor.getColumnIndexOrThrow(TYPE)).contains("1")) {
                             objSms.setFolderName(INBOX);
                         } else {
                             objSms.setFolderName(SENT);
                         }
                         smsList.add(objSms);
-                        c.moveToNext();
+                        cursor.moveToNext();
                     }
-                    if (!c.isClosed()) {
-                        c.close();
+                    if (!cursor.isClosed()) {
+                        cursor.close();
                     }
                 } else {
                     smsBuilder.append(R.string.sms_no_result);

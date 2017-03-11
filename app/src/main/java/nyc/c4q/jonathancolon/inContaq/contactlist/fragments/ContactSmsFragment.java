@@ -42,14 +42,13 @@ import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDat
 
 public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener {
 
-
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
     private final String TAG = "SET TEXT REQUEST: ";
     private TextView contactName;
     private ImageView contactImageIV, backgroundImageIV;
     private Contact contact;
-    private ContactSmsFragment inst;
+    private static ContactSmsFragment inst;
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> SmsList;
@@ -64,6 +63,15 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         Bundle b = new Bundle();
         fragment.setArguments(b);
         return fragment;
+    }
+
+    public static ContactSmsFragment instance() {
+        return inst;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -172,7 +180,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         }
     }
 
-    //TODO purify method - return first and last name - set to contact separately
     synchronized private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
         PicassoHelper ph = new PicassoHelper(getActivity());
@@ -191,13 +198,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     private void setupRecyclerView(Contact contact) {
+        adapter = (SmsAdapter) recyclerView.getAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new SmsAdapter(this, contact));
     }
 
     public synchronized void refreshRecyclerView() {
-
-        adapter = (SmsAdapter) recyclerView.getAdapter();
         Collections.sort(SmsList);
         adapter.setData(SmsList);
         Log.d(TAG, "RefreshRV : " + SmsList.size());

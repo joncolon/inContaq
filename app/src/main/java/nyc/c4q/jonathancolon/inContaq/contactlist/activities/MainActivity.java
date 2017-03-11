@@ -6,8 +6,6 @@ import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -16,11 +14,10 @@ import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import nyc.c4q.jonathancolon.inContaq.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
@@ -41,10 +38,15 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import_contacts);
-        outputText = (TextView) findViewById(R.id.textView1);
-        profileImage = (ImageView) findViewById(R.id.profile_image);
+
+        initViews();
         checkPermissions();
         fetchContacts();
+    }
+
+    private void initViews() {
+        outputText = (TextView) findViewById(R.id.textView1);
+        profileImage = (ImageView) findViewById(R.id.profile_image);
     }
 
     synchronized private void checkPermissions() {
@@ -56,7 +58,6 @@ public class MainActivity extends Activity {
     }
 
     synchronized public void fetchContacts() {
-
         String phoneNumber = null;
         String email = null;
 
@@ -89,8 +90,11 @@ public class MainActivity extends Activity {
                 if (hasPhoneNumber > 0) {
 
                     Contact contact = new Contact();
-                    splitFirstAndLastName(name, contact);
-                    output.append("\nName:" + name);
+                    NameSplitter nameSplitter = new NameSplitter();
+                    String[] splitName = nameSplitter.splitFirstAndLastName(name);
+                    contact.setFirstName(splitName[0]);
+                    contact.setLastName(splitName[1]);
+                    output.append("\nName: " + contact.getFirstName() + contact.getLastName());
 
                     // Query and loop for every phone number of the contact
                     Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
@@ -106,7 +110,6 @@ public class MainActivity extends Activity {
                         }
                     }
                     phoneCursor.close();
-
                     // Query and loop for every email of the contact
                     Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null,
                             EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
@@ -131,30 +134,10 @@ public class MainActivity extends Activity {
         return cursor.getString(cursor.getColumnIndex(_ID));
     }
 
-    private void splitFirstAndLastName(String name, Contact contact) {
-        if (name.trim().length() > 0) {
-            String lastName = "";
-            String firstName;
-            if (name.split("\\s+").length > 1) {
-                try {
-                    lastName = name.substring(name.lastIndexOf(" ") + 1);
-                    firstName = name.substring(0, name.lastIndexOf(' '));
-                } catch (Exception exception) {
-                    throw exception;
-                }
-            } else {
-                firstName = name;
-            }
-            contact.setFirstName(firstName);
-            contact.setLastName(lastName);
-        }
-    }
-
     private String simplifyPhoneNumber(String phoneNumber) {
         return phoneNumber.replaceAll("[()\\s-]+", "");
     }
 
-    // Display all the contacts with numbers
     private List<ContactItems> displayContacts() {
 
         List<ContactItems> contactItemsList = new ArrayList<>();
@@ -165,42 +148,20 @@ public class MainActivity extends Activity {
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String phoneNo = "";
+
                 if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    Bitmap contactImage;
-                    Bitmap default_photo = BitmapFactory.decodeResource(getApplicationContext().getResources(), android.R.drawable.ic_menu_myplaces);
                     Cursor pCur = cr.query(Phone.CONTENT_URI, null,
                             Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+
                     while (pCur.moveToNext()) {
                         phoneNo += pCur.getString(pCur.getColumnIndex(Phone.NUMBER)) + (pCur.isLast() ? "" : "\n");
                     }
 
-                    Uri my_contact_Uri = getUri(id);
-                    InputStream photo_stream = getInputStream(my_contact_Uri, getContentResolver());
-                    if (photo_stream != null) {
-                        contactImage = getBitmap(photo_stream);
-                    } else {
-                        contactImage = default_photo;
-                    }
-                    contactItemsList.add(new ContactItems(id, name, phoneNo, contactImage));
+                    contactItemsList.add(new ContactItems(id, name, phoneNo));
                     pCur.close();
                 }
             }
         }
         return contactItemsList;
-    }
-
-    private Uri getUri(String id) {
-        return Uri.withAppendedPath(Contacts.CONTENT_URI, id);
-    }
-
-    private InputStream getInputStream(Uri my_contact_Uri, ContentResolver contentResolver) {
-        return Contacts.openContactPhotoInputStream(contentResolver, my_contact_Uri);
-    }
-
-    private Bitmap getBitmap(InputStream photo_stream) {
-        Bitmap contactImage;
-        BufferedInputStream buf = new BufferedInputStream(photo_stream);
-        contactImage = BitmapFactory.decodeStream(buf);
-        return contactImage;
     }
 }

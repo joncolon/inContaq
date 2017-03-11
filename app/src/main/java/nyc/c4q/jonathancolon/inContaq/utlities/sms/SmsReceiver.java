@@ -10,7 +10,6 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment;
 public class SmsReceiver extends BroadcastReceiver  {
 
     //todo create listener to refresh sms fragment upon receiving text
-
     public static final String SMS_BUNDLE = "pdus";
 
     public void onReceive(Context context, Intent intent) {
@@ -19,12 +18,15 @@ public class SmsReceiver extends BroadcastReceiver  {
         if (intentExtras != null) {
             Object[] sms = (Object[]) intentExtras.get(SMS_BUNDLE);
             for (int i = 0; i < sms.length; ++i) {
+
                 String format = intentExtras.getString("format");
             }
 
-            ContactSmsFragment inst = ContactSmsFragment.newInstance();
+            ContactSmsFragment inst = ContactSmsFragment.instance();
+
             inst.populateSmsList();
             inst.refreshRecyclerView();
+
         }
     }
 }
