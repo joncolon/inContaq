@@ -198,12 +198,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     private void setupRecyclerView(Contact contact) {
-        adapter = (SmsAdapter) recyclerView.getAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new SmsAdapter(this, contact));
     }
 
     public synchronized void refreshRecyclerView() {
+        adapter = (SmsAdapter) recyclerView.getAdapter();
         Collections.sort(SmsList);
         adapter.setData(SmsList);
         Log.d(TAG, "RefreshRV : " + SmsList.size());
