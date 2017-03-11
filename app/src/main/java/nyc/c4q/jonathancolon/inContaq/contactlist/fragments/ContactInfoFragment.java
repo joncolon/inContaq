@@ -1,6 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -78,8 +79,18 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void setClickListeners() {
-        saveButton.setOnClickListener(view1 -> buildSaveEditDialog());
-        editButton.setOnClickListener(view12 -> ContactInfoFragment.this.enableEditContactMode());
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                ContactInfoFragment.this.buildSaveEditDialog();
+            }
+        });
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view12) {
+                ContactInfoFragment.this.enableEditContactMode();
+            }
+        });
     }
 
     private void displayContactInfo(Contact contact) {
@@ -98,15 +109,23 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         alertDialog.setTitle(R.string.save_changes);
         alertDialog.setMessage(R.string.are_you_sure);
 
-        alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
-            selection = 1;
-            alertDialogCallback(selection);
-            anim.exitFab(saveButton);
-            isEditTextEnabled = false;
+        alertDialog.setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selection = 1;
+                ContactInfoFragment.this.alertDialogCallback(selection);
+                anim.exitFab(saveButton);
+                isEditTextEnabled = false;
 
+            }
         });
 
-        alertDialog.setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
+        alertDialog.setNegativeButton(R.string.negative_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
         alertDialog.show();
     }
 
