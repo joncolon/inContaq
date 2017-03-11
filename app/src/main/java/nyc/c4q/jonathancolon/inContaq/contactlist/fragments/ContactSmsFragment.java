@@ -210,9 +210,9 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     private void setupRecyclerView(Contact contact) {
-        adapter = (SmsAdapter) recyclerView.getAdapter();
+        adapter = new SmsAdapter(this, contact);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new SmsAdapter(this, contact));
+        recyclerView.setAdapter(adapter);
     }
 
     public synchronized void refreshRecyclerView() {

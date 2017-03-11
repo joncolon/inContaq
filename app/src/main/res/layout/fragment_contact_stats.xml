@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/primary_background">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_background">
 
 
     <android.support.v7.widget.CardView
+        android:id="@+id/graph_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/card_margin_end"
@@ -28,24 +29,65 @@
 
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/date_spinner"
+    <RelativeLayout
+        android:id="@+id/graph_btn"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/graph_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/yearly_btn"
+            android:text="@string/yearly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/monthly_btn"
+            android:text="@string/monthly"
+            android:layout_toEndOf="@id/yearly_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/weekly_btn"
+            android:text="@string/weekly"
+            android:layout_toEndOf="@id/monthly_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/daily_btn"
+            android:text="@string/daily"
+            android:layout_toEndOf="@id/weekly_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/dayscounted_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@id/graph_btn">
+
+        <TextView
+            android:id="@+id/days_passed_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="SET A REMINDER (THIS IS HARDCODED)"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/date_spinner"
+        android:layout_below="@id/dayscounted_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:spinnerMode="dropdown">
     </android.support.v7.widget.AppCompatSpinner>
-
-    <TextView
-        android:id="@+id/days_passed_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/date_spinner"
-        android:gravity="center"
-        android:text="SET A REMINDER (THIS IS HARDCODED)"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/sms_stats"
@@ -59,5 +101,5 @@
         android:paddingRight="5dp"
         android:scrollbars="vertical"
         android:text="TextView"
-        android:textAlignment="center"/>
+        android:textAlignment="center" />
 </RelativeLayout>
