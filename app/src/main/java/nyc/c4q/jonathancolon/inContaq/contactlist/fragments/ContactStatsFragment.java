@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotification;
-import nyc.c4q.jonathancolon.inContaq.utlities.graphs.MonthlyGraph;
+import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.contactlist.graphs.MonthlyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
@@ -31,14 +31,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     private LineChartView lineGraph;
     private Spinner dateSpinner;
     private ArrayAdapter<CharSequence> spinnerArrayAdapter;
-    private ContactNotification mContactNotification;
+    private ContactNotificationService mContactNotificationService;
 
-    public static ContactStatsFragment newInstance() {
-        ContactStatsFragment fragment = new ContactStatsFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,8 +72,6 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         switch (String.valueOf(parent.getItemAtPosition(position))) {
             case "WEEKLY":
                 // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
-                mContactNotification = new ContactNotification();
-                mContactNotification.startNotification(getContext(), contact);
                 break;
             case "2 WEEKS":
                 // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification

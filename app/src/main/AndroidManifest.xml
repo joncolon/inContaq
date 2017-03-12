@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -23,9 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".contactlist.activities.ContactViewPagerActivity"/>
-        <activity android:name=".contactlist.activities.MainActivity">
-        </activity>
 
+        <service android:name=".notifications.ContactNotificationService"/>
         <receiver android:name=".utlities.sms.SmsReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>

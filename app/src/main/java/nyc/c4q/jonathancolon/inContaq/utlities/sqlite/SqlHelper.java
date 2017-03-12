@@ -32,6 +32,8 @@ public class SqlHelper {
         return contacts;
     }
 
+
+
     public static void saveToDatabase(Contact contact, Context context){
         ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();

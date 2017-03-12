@@ -1,17 +1,10 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,22 +23,23 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
+import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
+import nyc.c4q.jonathancolon.inContaq.utlities.PermissionChecker;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>,
-        ContactListAdapter.Listener, LoaderManager.LoaderCallbacks<Cursor> {
+        ContactListAdapter.Listener {
 
     public static final String PARCELLED_CONTACT = "Parcelled Contact";
     private RecyclerView recyclerView;
     private AlertDialog InputContactDialogObject;
     private List<Contact> contactList;
     private SQLiteDatabase db;
-    private String mText = "";
-    private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
+    private String name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +47,39 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         setContentView(R.layout.activity_contact_list);
         Stetho.initializeWithDefaults(this);
 
+        PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
+        permissionChecker.checkPermissions();
+
         FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
         addContactFab.setOnClickListener(v -> openEditor());
 
         setupRecyclerView();
         refreshRecyclerView();
-        checkPermissions();
-        buildInputContactDialog(this);
+        buildEnterContactDialog(this);
+        checkServiceCreated();
+    }
+
+    private void openEditor() {
+        InputContactDialogObject.show();
+    }
+
+    private void setupRecyclerView() {
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new ContactListAdapter(this, this));
+    }
+
+    private void refreshRecyclerView() {
+        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(this);
+        db = dbHelper.getWritableDatabase();
+        contactList = SqlHelper.selectAllContacts(db);
+        ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
+        sortContacts();
+        adapter.setData(contactList);
     }
 
     // POP UP for Entering a new Contact
-    private void buildInputContactDialog(final AlertDialogCallback<String> callback) {
+    private void buildEnterContactDialog(final AlertDialogCallback<String> callback) {
 
         final EditText input = new EditText(ContactListActivity.this);
 
@@ -78,8 +94,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         confirmBuilder.setView(input);
 
         confirmBuilder.setPositiveButton(R.string.positive_button, (dialog, which) -> {
-            mText = input.getText().toString();
-            callback.alertDialogCallback(mText);
+            name = input.getText().toString();
+            callback.alertDialogCallback(name);
         });
 
         confirmBuilder.setNegativeButton(R.string.negative_button, (dialog, which) -> {
@@ -88,25 +104,22 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         InputContactDialogObject = confirmBuilder.create();
     }
 
-    @Override
-    public void alertDialogCallback(String dialogFragmentText) {
-        mText = dialogFragmentText;
-        splitFirstandLastName();
+    private void sortContacts() {
+        List<Contact> contacts = contactList;
+        Collections.sort(contacts, (o1, o2) ->
+                o1.getFirstName().compareToIgnoreCase(o2.getFirstName()));
     }
 
-    private void splitFirstandLastName() {
-        if (mText.trim().length() > 0) {
-            String name = mText;
-            String lastName = "";
-            String firstName;
-            if (name.split("\\w+").length > 1) {
-                lastName = name.substring(name.lastIndexOf(" ") + 1);
-                firstName = name.substring(0, name.lastIndexOf(' '));
-            } else {
-                firstName = name;
-            }
-            Contact contact = new Contact(firstName, lastName);
-            addContact(firstName, lastName);
+    @Override
+    public void alertDialogCallback(String userInput) {
+        name = userInput;
+        if (!isEmptyString(name)) {
+            NameSplitter nameSplitter = new NameSplitter();
+            String[] splitName = nameSplitter.splitFirstAndLastName(name);
+
+            Contact contact = new Contact();
+            contact.setFirstName(splitName[0]);
+            contact.setLastName(splitName[1]);
             cupboard().withDatabase(db).put(contact);
             refreshRecyclerView();
         } else {
@@ -115,21 +128,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         }
     }
 
-    private void openEditor() {
-        InputContactDialogObject.show();
-    }
-
-    private void addContact(String firstName, String lastName) {
-        Contact contactToAdd = new Contact(firstName, lastName);
-        ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
-        adapter.addItem(contactToAdd);
-        adapter.notifyDataSetChanged();
-    }
-
-    private void setupRecyclerView() {
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ContactListAdapter(this, this));
+    private boolean isEmptyString(String string) {
+        return string.trim().length() < 0;
     }
 
     @Override
@@ -137,17 +137,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         Intent intent = new Intent(this, ContactViewPagerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(PARCELLED_CONTACT, Parcels.wrap(contact));
-
         this.startActivity(intent);
-    }
-
-    private void refreshRecyclerView() {
-        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(this);
-        db = dbHelper.getWritableDatabase();
-        contactList = SqlHelper.selectAllContacts(db);
-        ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
-        sortContacts();
-        adapter.setData(contactList);
     }
 
     @Override
@@ -162,34 +152,12 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
     }
 
-    private void sortContacts() {
-        List<Contact> contacts = contactList;
-        Collections.sort(contacts, (o1, o2) ->
-                o1.getFirstName().compareToIgnoreCase(o2.getFirstName()));
-    }
-
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissions, 3);
+    public void checkServiceCreated() {
+        if (!ContactNotificationService.hasStarted) {
+            System.out.println("Starting service...");
+            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
+            startService(intent);
         }
-    }
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 }
 

@@ -37,12 +37,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private Animations anim;
     private boolean isEditTextEnabled;
 
-    public static ContactInfoFragment newInstance() {
-        ContactInfoFragment fragment = new ContactInfoFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
