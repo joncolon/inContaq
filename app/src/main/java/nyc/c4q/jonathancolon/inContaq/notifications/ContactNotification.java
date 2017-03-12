@@ -18,10 +18,6 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity
 
 import static android.app.Notification.PRIORITY_HIGH;
 
-/**
- * Created by Hyun on 3/8/17.
- */
-
 public class ContactNotification extends IntentService {
 
     private NotificationCompat.Builder mBuilder;

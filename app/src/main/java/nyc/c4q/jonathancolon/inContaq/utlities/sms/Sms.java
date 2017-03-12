@@ -15,12 +15,15 @@ public class Sms implements Comparable<Sms>{
     public String getId(){
         return _id;
     }
+
     public String getAddress(){
         return address;
     }
+
     public String getMsg(){
         return msg;
     }
+
     public String getReadState(){
         return readState;
     }
