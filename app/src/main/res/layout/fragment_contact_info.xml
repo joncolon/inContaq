@@ -161,6 +161,51 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/photo_notes_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/contact_info_card"
+        android:orientation="horizontal">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/photo_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_margin_start"
+        android:layout_marginEnd="@dimen/card_margin_end"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@color/white_baby_powder">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="PHOTOS"
+            android:textSize="30dp"/>
+
+
+    </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/notes_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/card_margin_start"
+            android:layout_marginEnd="@dimen/card_margin_end"
+            android:animateLayoutChanges="true"
+            app:cardBackgroundColor="@color/white_baby_powder">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="NOTES"
+                android:textSize="30dp"/>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/contact_header"
         android:layout_width="match_parent"

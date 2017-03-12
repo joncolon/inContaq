@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
+    private CardView photoCard, notesCard;
     private int selection;
     private Animations anim;
     private boolean isEditTextEnabled;
@@ -76,6 +78,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+
+        photoCard = (CardView) view.findViewById(R.id.photo_card);
+        notesCard = (CardView) view.findViewById(R.id.notes_card);
     }
 
     private void setClickListeners() {
@@ -89,6 +94,19 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             @Override
             public void onClick(View view12) {
                 ContactInfoFragment.this.enableEditContactMode();
+            }
+        });
+
+        photoCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        notesCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
