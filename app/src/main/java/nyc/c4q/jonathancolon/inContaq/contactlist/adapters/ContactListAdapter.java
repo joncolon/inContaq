@@ -101,10 +101,18 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 ph.loadImageFromString(contact.getContactImage(), mContactImage);
             }
 
-            itemView.setOnClickListener(v -> listener.onContactClicked(contact));
-            itemView.setOnLongClickListener(v -> {
-                listener.onContactLongClicked(contact);
-                return true;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onContactClicked(contact);
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listener.onContactLongClicked(contact);
+                    return true;
+                }
             });
         }
     }

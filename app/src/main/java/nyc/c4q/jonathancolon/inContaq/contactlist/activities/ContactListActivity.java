@@ -1,6 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import com.facebook.stetho.Stetho;
 import org.parceler.Parcels;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
@@ -51,7 +54,12 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         permissionChecker.checkPermissions();
 
         FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
-        addContactFab.setOnClickListener(v -> openEditor());
+        addContactFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContactListActivity.this.openEditor();
+            }
+        });
 
         setupRecyclerView();
         refreshRecyclerView();
@@ -93,21 +101,22 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         input.setLayoutParams(lp);
         confirmBuilder.setView(input);
 
-        confirmBuilder.setPositiveButton(R.string.positive_button, (dialog, which) -> {
-            name = input.getText().toString();
-            callback.alertDialogCallback(name);
+
+        confirmBuilder.setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                name = input.getText().toString();
+                callback.alertDialogCallback(name);
+            }
         });
 
-        confirmBuilder.setNegativeButton(R.string.negative_button, (dialog, which) -> {
-            //do nothing
+        confirmBuilder.setNegativeButton(R.string.negative_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //do nothing
+            }
         });
         InputContactDialogObject = confirmBuilder.create();
-    }
-
-    private void sortContacts() {
-        List<Contact> contacts = contactList;
-        Collections.sort(contacts, (o1, o2) ->
-                o1.getFirstName().compareToIgnoreCase(o2.getFirstName()));
     }
 
     @Override
@@ -159,6 +168,17 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             startService(intent);
         }
     }
+
+    private void sortContacts() {
+        List<Contact> contacts = contactList;
+        Collections.sort(contacts, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return o1.getFirstName().compareToIgnoreCase(o2.getFirstName());
+            }
+        });
+    }
+
 }
 
 
