@@ -67,7 +67,7 @@ public class MonthlyGraph {
 
     public void showMonthlyGraph(){
         getLineGraphValues(lstSms);
-        getHigehstValueForYaxis();
+        getHighestValueForYaxis();
         loadGraph();
     }
 
@@ -153,7 +153,7 @@ public class MonthlyGraph {
     to an int.
     */
 
-    private void getHigehstValueForYaxis() {
+    private void getHighestValueForYaxis() {
         // Get Y Value takes in the total amount of sent and received texts sent
         highestValue = getYValue(sentValues, receivedValues);
     }
@@ -188,6 +188,8 @@ public class MonthlyGraph {
         animateGraph();
     }
 
+    LineSet dataSetMonthly;
+    LineSet dataset;
     // You need to read through the WilliamChart Library docs to see how this graph works.
     private void setGraphData() {
         final String[] xAxisLabels = {
@@ -199,16 +201,16 @@ public class MonthlyGraph {
                 context.getString(R.string.nov), context.getString(R.string.dec)};
 
         // Sets data for the first received values line on the graph
-        LineSet dataSet = new LineSet(xAxisLabels, receivedValues);
-        dataSet.setColor(parseColor(YELLOW_CRAYOLA))
+        dataSetMonthly = new LineSet(xAxisLabels, receivedValues);
+        dataSetMonthly.setColor(parseColor(YELLOW_CRAYOLA))
                 .setDotsColor(parseColor(RED_ROSE_MADDER))
                 .setFill(parseColor(BLUE_SAPPHIRE))
                 .setThickness(6)
                 .beginAt(0);
-        lineGraph.addData(dataSet);
+        lineGraph.addData(dataSetMonthly);
 
         // Sets data for the first sent values line on the graph
-        LineSet dataset = new LineSet(xAxisLabels, sentValues);
+        dataset = new LineSet(xAxisLabels, sentValues);
         dataset.setColor(parseColor("#b01cff"))
                 .setDotsColor(parseColor("#1cb7ff"))
                 .setDashed(new float[]{15f, 10f})
@@ -242,5 +244,9 @@ public class MonthlyGraph {
         if (highestValue == 0) {
             highestValue = 100;
         }
+    }
+
+    public LineChartView getLineGraph() {
+        return lineGraph;
     }
 }

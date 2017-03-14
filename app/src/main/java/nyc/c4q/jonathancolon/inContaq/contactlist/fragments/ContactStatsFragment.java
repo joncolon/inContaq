@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.db.chart.view.LineChartView;
@@ -20,18 +21,19 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotification;
+import nyc.c4q.jonathancolon.inContaq.utlities.graphs.DailyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.graphs.MonthlyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
 
-public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private LineChartView lineGraph;
     private Spinner dateSpinner;
     private ArrayAdapter<CharSequence> spinnerArrayAdapter;
-    private ContactNotification mContactNotification;
+    private Button monthlyBtn, weeklyBtn, dailyBtn;
+    private ArrayList<Sms> lstSms;
 
     public static ContactStatsFragment newInstance() {
         ContactStatsFragment fragment = new ContactStatsFragment();
@@ -47,10 +49,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
         initViews(view);
         Contact contact = unwrapParcelledContact();
-        ArrayList<Sms> lstSms = SmsHelper.getAllSms(getActivity(), contact);
+        lstSms = SmsHelper.getAllSms(getActivity(), contact);
 
-        MonthlyGraph monthlyGraph = new MonthlyGraph(getContext(), lineGraph, lstSms);
-        monthlyGraph.showMonthlyGraph();
         return view;
     }
 
@@ -64,6 +64,12 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
         dateSpinner.setAdapter(spinnerArrayAdapter);
         dateSpinner.setOnItemSelectedListener(this);
+        monthlyBtn = (Button) view.findViewById(R.id.monthly_btn);
+        weeklyBtn = (Button) view.findViewById(R.id.weekly_btn);
+        dailyBtn = (Button) view.findViewById(R.id.daily_btn);
+        monthlyBtn.setOnClickListener(this);
+        weeklyBtn.setOnClickListener(this);
+        dailyBtn.setOnClickListener(this);
     }
 
     @Nullable
@@ -78,8 +84,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         switch (String.valueOf(parent.getItemAtPosition(position))) {
             case "WEEKLY":
                 // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
-                mContactNotification = new ContactNotification();
-                mContactNotification.startNotification(getContext(), contact);
+//                mContactNotification = new ContactNotification();
+//                mContactNotification.startNotification(getContext(), contact);
                 break;
             case "2 WEEKS":
                 // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification
@@ -95,5 +101,45 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        DailyGraph dailyGraph = new DailyGraph(getContext(), lineGraph, lstSms);
+        MonthlyGraph monthlyGraph = new MonthlyGraph(getContext(), lineGraph, lstSms);
+
+        LineChartView dailyLcv = dailyGraph.getLineGraph();
+        LineChartView monthlyLcv = monthlyGraph.getLineGraph();
+
+        switch (v.getId()) {
+            case R.id.monthly_btn:
+                lineGraphUpdate();
+                dailyLcv.reset();
+//                dailyLcv.invalidate();
+                dailyLcv.notifyDataUpdate();
+                monthlyLcv.reset();
+                monthlyGraph.showMonthlyGraph();
+                break;
+            case R.id.weekly_btn:
+                lineGraphUpdate();
+                break;
+            case R.id.daily_btn:
+                lineGraphUpdate();
+                monthlyLcv.reset();
+//                monthlyLcv.invalidate();
+                monthlyLcv.notifyDataUpdate();
+                dailyLcv.reset();
+                dailyGraph.showDailyGraph();
+                break;
+            default:
+                monthlyGraph.showMonthlyGraph();
+                break;
+        }
+    }
+    private void lineGraphUpdate(){
+        lineGraph.reset();
+        lineGraph.invalidate();
+        lineGraph.notifyDataUpdate();
     }
 }

@@ -177,7 +177,7 @@ public class SmsHelper {
                     for (int i = 0; i < totalSMS; i++) {
                         objSms = new Sms();
                         objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
-                        objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
+//                        objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
                         objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
                         objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
                         objSms.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
