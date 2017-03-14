@@ -4,20 +4,26 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
+import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
 
 import static android.provider.ContactsContract.CommonDataKinds.Email;
 import static android.provider.ContactsContract.CommonDataKinds.Phone;
 import static android.provider.ContactsContract.Contacts;
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
+
 
 public class ImportContacts {
+
     private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     private Context context;
+    private SQLiteDatabase db;
 
     public ImportContacts(Context context) {
         this.context = context;
@@ -79,12 +85,13 @@ public class ImportContacts {
                         contact.setEmail(email);
                     }
                     emailCursor.close();
+                    ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(context);
+                    db = dbHelper.getWritableDatabase();
+                    cupboard().withDatabase(db).put(contact);
                 }
             }
         }
     }
-
-
 
     private String getId(String _ID, Cursor cursor) {
         return cursor.getString(cursor.getColumnIndex(_ID));

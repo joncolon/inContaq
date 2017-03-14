@@ -1,6 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
@@ -25,8 +28,10 @@ import java.util.List;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
-import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.PreCachingLayoutManager;
+import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PermissionChecker;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
@@ -39,10 +44,12 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
     public static final String PARCELLED_CONTACT = "Parcelled Contact";
     private RecyclerView recyclerView;
+    private TextView importContactsTV;
     private AlertDialog InputContactDialogObject;
     private List<Contact> contactList;
     private SQLiteDatabase db;
     private String name = "";
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,19 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
         permissionChecker.checkPermissions();
 
+        context = getApplicationContext();
+
+        importContactsTV = (TextView) findViewById(R.id.import_contacts);
+
+        importContactsTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImportContacts importContacts = new ImportContacts(context);
+                importContacts.getContactsFromContentProvider();
+                refreshRecyclerView();
+            }
+        });
+
         FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
         addContactFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,20 +81,16 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             }
         });
 
+        // on some click or some loading we need to wait for...
+        ProgressBar pb = (ProgressBar) findViewById(R.id.pbLoading);
+        pb.setVisibility(ProgressBar.VISIBLE);
+        // run a background job and once complete
+
+        pb.setVisibility(ProgressBar.INVISIBLE);
         setupRecyclerView();
         refreshRecyclerView();
         buildEnterContactDialog(this);
-        checkServiceCreated();
-    }
-
-    private void openEditor() {
-        InputContactDialogObject.show();
-    }
-
-    private void setupRecyclerView() {
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ContactListAdapter(this, this));
+//        checkServiceCreated();
     }
 
     private void refreshRecyclerView() {
@@ -84,6 +100,21 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
         sortContacts();
         adapter.setData(contactList);
+    }
+
+    private void openEditor() {
+        InputContactDialogObject.show();
+    }
+
+    private void setupRecyclerView() {
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(context));
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new ContactListAdapter(this, this));
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
     }
 
     // POP UP for Entering a new Contact
@@ -117,6 +148,28 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             }
         });
         InputContactDialogObject = confirmBuilder.create();
+    }
+
+    private void sortContacts() {
+        List<Contact> contacts = contactList;
+        Collections.sort(contacts, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return o1.getFirstName().compareToIgnoreCase(o2.getFirstName());
+            }
+        });
+    }
+
+    private void preloadContactListImages() {
+        PicassoHelper pHelper = new PicassoHelper(context);
+        for (int i = 0; i < contactList.size(); i++) {
+            if (contactList.get(i).getBackgroundImage() != null) {
+                pHelper.preloadImages(contactList.get(i).getBackgroundImage());
+            }
+            if (contactList.get(i).getContactImage() != null) {
+                pHelper.preloadImages(contactList.get(i).getContactImage());
+            }
+        }
     }
 
     @Override
@@ -155,28 +208,18 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
     }
 
+//    public void checkServiceCreated() {
+//        if (!ContactNotificationService.hasStarted) {
+//            System.out.println("Starting service...");
+//            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
+//            startService(intent);
+//        }
+//    }
+
     @Override
     public void onResume() {
         super.onResume();
         refreshRecyclerView();
-    }
-
-    public void checkServiceCreated() {
-        if (!ContactNotificationService.hasStarted) {
-            System.out.println("Starting service...");
-            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
-            startService(intent);
-        }
-    }
-
-    private void sortContacts() {
-        List<Contact> contacts = contactList;
-        Collections.sort(contacts, new Comparator<Contact>() {
-            @Override
-            public int compare(Contact o1, Contact o2) {
-                return o1.getFirstName().compareToIgnoreCase(o2.getFirstName());
-            }
-        });
     }
 
 }

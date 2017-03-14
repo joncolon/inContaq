@@ -25,9 +25,6 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
-/**
- * Created by jonathancolon on 3/11/17.
- */
 
 public class MonthlyGraph {
 
@@ -228,7 +225,7 @@ public class MonthlyGraph {
                 .setYLabels(NONE)
                 .setLabelsColor(parseColor(WHITE_BABY_POWDER))
                 .setXAxis(false)
-                .setYAxis(true)
+                .setYAxis(false)
                 .setBackgroundColor(parseColor(BLUE_MAASTRICHT));
     }
 

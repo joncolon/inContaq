@@ -22,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.fontometrics.Fontometrics;
-
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -138,8 +136,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        contactName.setTypeface(Fontometrics.amatic_bold(getActivity()));
-
         contactImageIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

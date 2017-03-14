@@ -51,14 +51,20 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public int getItemCount() {
         return contactList.size();
     }
 
-    public void addItem(Contact contact) {
-        contactList.add(contact);
-        notifyDataSetChanged();
-    }
 
     public void setData(List<Contact> contacts) {
         this.contactList = contacts;
@@ -93,12 +99,16 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             mContactInitials.setText((contact.getFirstName().substring(0, 1).toUpperCase()));
             PicassoHelper ph = new PicassoHelper(context);
 
-            if (contact.getBackgroundImage() != null) {
+
+            if (hasBackgroundImage(contact)) {
                 ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
+
             }
 
-            if (contact.getContactImage() != null) {
+            if (hasContactImage(contact)) {
                 ph.loadImageFromString(contact.getContactImage(), mContactImage);
+            } else {
+                mBackGroundImage.refreshDrawableState();
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -115,5 +125,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 }
             });
         }
+    }
+
+    private boolean hasContactImage(Contact contact) {
+        return contact.getContactImage() != null;
+    }
+
+    private boolean hasBackgroundImage(Contact contact) {
+        return contact.getBackgroundImage() != null;
     }
 }
