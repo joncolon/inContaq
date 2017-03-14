@@ -55,6 +55,26 @@
     <string name="monthly">MONTHLY</string>
     <string name="yearly">YEARLY</string>
 
+
+    <!-- Detection activity -->
+    <string name="image">Image:</string>
+    <string name="select_image">Select\nImage</string>
+    <string name="result">Result:</string>
+    <string name="detect">Detect</string>
+    <string name="detection">Detection</string>
+    <string name="view_log">View Log</string>
+    <string name="progress_dialog_title">Please wait</string>
+
+    <!-- Select image activity -->
+    <string name="select_an_image">Select an Image</string>
+    <string name="take_photo">Take a Photo</string>
+    <string name="select_image_in_album">From Gallery</string>
+
+
+    <!--Subscription-->
+    <string name="subscription_key">1169d07917894faea0e3dc56de461b9d</string>
+
+
     <string-array name="date_spinner_array">
         <item>WEEKLY</item>
         <item>2 WEEKS</item>

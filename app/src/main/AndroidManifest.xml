@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".contactlist.activities.ContactViewPagerActivity" />
-        <activity android:name=".contactlist.activities.MainActivity"></activity>
+        <activity android:name=".contactlist.activities.MainActivity" />
 
         <receiver android:name=".utlities.sms.SmsReceiver">
             <intent-filter>
@@ -32,7 +34,10 @@
         </receiver>
 
         <activity android:name=".utlities.sms.SmsSender" />
-        <activity android:name=".contactlist.activities.PhotoFeedActivity"></activity>
+        <activity android:name=".contactlist.activities.PhotoFeedActivity" />
+        <activity android:name=".contactlist.activities.RegisterPhotoActivity" />
+        <activity android:name=".contactlist.activities.DetectionLogActivity" />
+        <activity android:name=".contactlist.activities.SelectImageActivity"></activity>
     </application>
 
 </manifest>

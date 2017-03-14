@@ -49,6 +49,9 @@ dependencies {
             compile 'com.diogobernardino:williamchart:2.4.0'
             compile 'com.squareup.picasso:picasso:2.5.2'
 
+            //Microsoft photo import
+            compile 'com.microsoft.projectoxford:face:1.2.1'
+
             //cupboard
             compile 'nl.qbusict:cupboard:2.1.4'
             compile 'com.facebook.stetho:stetho:1.4.1'

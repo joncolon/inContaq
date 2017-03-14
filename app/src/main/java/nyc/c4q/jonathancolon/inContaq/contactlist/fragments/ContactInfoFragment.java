@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.contactlist.activities.RegisterPhotoActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
@@ -35,6 +38,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
+    private Button registerPhotoButton;
     private CardView photoCard, notesCard;
     private int selection;
     private Animations anim;
@@ -75,6 +79,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         saveButton = (FloatingActionButton) view.findViewById(R.id.save_button);
         editButton = (TextView) view.findViewById(R.id.edit_option);
+        registerPhotoButton = (Button) view.findViewById(R.id.register_photo_button);
 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
@@ -94,6 +99,13 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             @Override
             public void onClick(View view12) {
                 ContactInfoFragment.this.enableEditContactMode();
+            }
+        });
+
+        registerPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerPhoto();
             }
         });
 
@@ -261,6 +273,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         super.onResume();
         displayContactInfo(contact);
         polaroidName.setTypeface(Fontometrics.amatic_bold(getActivity()));
+    }
+
+    public void registerPhoto(){
+        Intent intent = new Intent(getContext(), RegisterPhotoActivity.class);
+        startActivity(intent);
     }
 }
 
