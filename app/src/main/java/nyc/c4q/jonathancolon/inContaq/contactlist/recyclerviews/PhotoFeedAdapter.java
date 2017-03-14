@@ -7,9 +7,6 @@ import android.view.ViewGroup;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 
-/**
- * Created by wesniemarcelin on 3/12/17.
- */
 
 public class PhotoFeedAdapter extends RecyclerView.Adapter<PhotoFeedViewHolder> {
     @Override
