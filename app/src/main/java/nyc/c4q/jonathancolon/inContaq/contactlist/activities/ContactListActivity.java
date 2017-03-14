@@ -61,9 +61,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         permissionChecker.checkPermissions();
 
         context = getApplicationContext();
-
         importContactsTV = (TextView) findViewById(R.id.import_contacts);
-
         importContactsTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,13 +78,6 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
                 ContactListActivity.this.openEditor();
             }
         });
-
-        // on some click or some loading we need to wait for...
-        ProgressBar pb = (ProgressBar) findViewById(R.id.pbLoading);
-        pb.setVisibility(ProgressBar.VISIBLE);
-        // run a background job and once complete
-
-        pb.setVisibility(ProgressBar.INVISIBLE);
         setupRecyclerView();
         refreshRecyclerView();
         buildEnterContactDialog(this);
