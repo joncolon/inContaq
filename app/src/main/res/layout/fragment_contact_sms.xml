@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/primary_background"
     tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment">
 
 
@@ -95,37 +94,49 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="378dp"
-        android:scrollbars="vertical"
-        android:visibility="invisible"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/send_message_height"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:visibility="invisible"
+            android:layout_above="@+id/sms_edit_text"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </android.support.v7.widget.RecyclerView>
 
-    <EditText
-        android:id="@+id/sms_edit_text"
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:hint="@string/enter_text"
-        android:layout_gravity="bottom"/>
-    <ImageView
-        android:id="@+id/send_button"
-        android:layout_width="80dp"
-        android:layout_height="38dp"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:src="@drawable/send_message_icon"
-        android:onClick="sendMessage"
-        />
-    </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_above="@id/sms_edit_text"/>
+        <EditText
+            android:id="@+id/sms_edit_text"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:hint="@string/enter_text"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"/>
+
+        <ImageView
+            android:id="@+id/send_button"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignBottom="@id/sms_edit_text"
+            android:layout_alignParentEnd="true"
+            android:onClick="sendMessage"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:src="@drawable/send_message_icon" />
+
+    </RelativeLayout>
+
+
+
 </android.support.design.widget.CoordinatorLayout>
 
 

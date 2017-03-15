@@ -16,7 +16,7 @@
     <!--greyscale-->
     <color name="black_rich">#021620</color>
     <color name="primary_background">#ECF0F1</color>
-    <color name="cardBackgroundColor">#D2D7DF</color>
+    <color name="cardBackgroundColor">#ffffff</color>
 
     <!--yellow-->
     <color name="accent_color">#FF9F1C</color>
