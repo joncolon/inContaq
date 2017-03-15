@@ -14,12 +14,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.florent37.beautifulparallax.ParallaxViewController;
-
 import java.util.List;
 
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
@@ -34,7 +32,6 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private final Contact contact;
 
 
-    private final ParallaxViewController parallaxViewController = new ParallaxViewController();
 
     // ADAPTER CONSTRUCTORS
     public SmsAdapter(Listener listener, Contact contact) {
@@ -45,7 +42,6 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        parallaxViewController.registerImageParallax(recyclerView);
     }
 
     @Override
@@ -144,8 +140,8 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
                     if (Build.VERSION.SDK_INT >= 23) {
                         cardBubble.setCardBackgroundColor(context.getColor(R.color.blue_cadet));
-                        messageRecieved.setTextColor(context.getColor(R.color.white_baby_powder));
-                        timeDate.setTextColor(context.getColor(R.color.white_baby_powder));
+                        messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
+                        timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
                     } else {
                         cardBubble.setCardBackgroundColor(Color.parseColor(BLUE_CADET));
                         messageRecieved.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
@@ -155,7 +151,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             } else {
                 linearLayout.setGravity(Gravity.END);
                 if (Build.VERSION.SDK_INT >= 23) {
-                    cardBubble.setCardBackgroundColor(context.getColor(R.color.white_baby_powder));
+                    cardBubble.setCardBackgroundColor(context.getColor(R.color.cardBackgroundColor));
                     messageRecieved.setTextColor(context.getColor(R.color.blue_sapphire));
                     timeDate.setTextColor(context.getColor(R.color.blue_sapphire));
                 } else {

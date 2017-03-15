@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -123,52 +124,13 @@ public class SmsHelper {
         ArrayList<Sms> smsList = new ArrayList<Sms>();
         Sms objSms;
 
-        if (contact.getCellPhoneNumber() != null){
+        if (contact.getCellPhoneNumber() != null) {
 
-        try {
-            Uri uri = Uri.parse(SMS_URI_ALL);
-            String[] projection = new String[]{ID, ADDRESS, PERSON, BODY, DATE, TYPE};
-            Cursor cursor = context.getApplicationContext().getContentResolver().query(uri, projection,
-                    ADDRESS + "='" + contact.getCellPhoneNumber() + "'", null, DATE_DESC);
-
-            if (cursor.moveToFirst()) {
-
-                int totalSMS = cursor.getCount();
-
-                for (int i = 0; i < totalSMS; i++) {
-                    objSms = new Sms();
-                    objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
-                    objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
-                    objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
-                    objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
-                    objSms.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
-
-                    if (cursor.getString(cursor.getColumnIndexOrThrow(TYPE)).contains("1")) {
-                        objSms.setFolderName(INBOX);
-                    } else {
-                        objSms.setFolderName(SENT);
-                    }
-                    smsList.add(objSms);
-                    cursor.moveToNext();
-                }
-                if (!cursor.isClosed()) {
-                    cursor.close();
-                }
-            } else {
-                smsBuilder.append(R.string.sms_no_result);
-            }
-        } catch (SQLiteException ex) {
-            Log.d("SQLiteException", ex.getMessage());
-        }
-        } else {
             try {
                 Uri uri = Uri.parse(SMS_URI_ALL);
-
-                String[] projection = new String[]{ID, ADDRESS, PERSON, BODY,
-                        DATE, TYPE};
-
-                Cursor cursor = context.getApplicationContext().getContentResolver().query(uri,
-                        projection, null, null, DATE_DESC);
+                String[] projection = new String[]{ID, ADDRESS, PERSON, BODY, DATE, TYPE};
+                Cursor cursor = context.getApplicationContext().getContentResolver().query(uri, projection,
+                        ADDRESS + "='" + contact.getCellPhoneNumber() + "'", null, DATE_DESC);
 
                 if (cursor.moveToFirst()) {
 
@@ -199,10 +161,72 @@ public class SmsHelper {
             } catch (SQLiteException ex) {
                 Log.d("SQLiteException", ex.getMessage());
             }
-        }
+        } else {
+            try {
+                Uri uri = Uri.parse(SMS_URI_ALL);
 
+                String[] projection = new String[]{ID, ADDRESS, PERSON, BODY,
+                        DATE, TYPE};
+
+                Cursor cursor = context.getApplicationContext().getContentResolver().query(uri,
+                        projection, null, null, DATE_DESC);
+
+                if (cursor.moveToFirst()) {
+
+                    int totalSMS = cursor.getCount();
+
+                    for (int i = 0; i < totalSMS; i++) {
+                        objSms = new Sms();
+                        objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
+                        //todo why does this cause an error?
+//                        objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
+                        objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
+                        objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
+                        objSms.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
+
+                        if (cursor.getString(cursor.getColumnIndexOrThrow(TYPE)).contains("1")) {
+                            objSms.setFolderName(INBOX);
+                        } else {
+                            objSms.setFolderName(SENT);
+                        }
+                        smsList.add(objSms);
+                        cursor.moveToNext();
+                    }
+                    if (!cursor.isClosed()) {
+                        cursor.close();
+                    }
+                } else {
+                    smsBuilder.append(R.string.sms_no_result);
+                }
+            } catch (SQLiteException ex) {
+                Log.d("SQLiteException", ex.getMessage());
+            }
+        }
         smsList.size();
         return smsList;
+    }
+
+    @NonNull
+    static ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
+        ArrayList<Sms> sentSms = new ArrayList<Sms>();
+
+        for (int i = 0; i < smsList.size(); i++) {
+            if (smsList.get(i).getType().equals("2")) {
+                sentSms.add(smsList.get(i));
+            }
+        }
+        return sentSms;
+    }
+
+    @NonNull
+    static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
+        ArrayList<Sms> receivedSms = new ArrayList<Sms>();
+
+        for (int i = 0; i < smsList.size(); i++) {
+            receivedSms.add(smsList.get(i));
+        }
+
+        return receivedSms;
     }
 }
 

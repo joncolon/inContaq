@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--TODO: Organize color by hue-->
+    <!--TODO: Organize and Rename by usage-->
 
     <!--blue-->
     <color name="blue_cadet">#5B9CAC</color>
@@ -16,7 +16,7 @@
     <!--greyscale-->
     <color name="black_rich">#021620</color>
     <color name="primary_background">#ECF0F1</color>
-    <color name="white_baby_powder">#FDFFFC</color>
+    <color name="cardBackgroundColor">#ffffff</color>
 
     <!--yellow-->
     <color name="yellow_crayola">#FF9F1C</color>
@@ -25,4 +25,5 @@
     <color name="button_pressed_background">#66B2FF</color>
     <color name="button_enabled_background">#3399FF</color>
     <color name="button_disabled_background">#C0C0C0</color>
+    <color name="accent_color">#FF9F1C</color>
 </resources>

@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -24,8 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".contactlist.activities.ContactViewPagerActivity" />
-        <activity android:name=".contactlist.activities.MainActivity" />
+        <activity android:name=".contactlist.activities.ContactViewPagerActivity"/>
+
+        <service android:name=".notifications.ContactNotificationService"/>
 
         <receiver android:name=".utlities.sms.SmsReceiver">
             <intent-filter>
@@ -38,6 +41,8 @@
         <activity android:name=".contactlist.activities.RegisterPhotoActivity" />
         <activity android:name=".contactlist.activities.DetectionLogActivity" />
         <activity android:name=".contactlist.activities.SelectImageActivity"></activity>
+        <activity android:name=".contactlist.activities.SplashScreenActivity">
+        </activity>
     </application>
 
 </manifest>

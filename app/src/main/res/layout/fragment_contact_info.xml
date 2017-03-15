@@ -17,7 +17,7 @@
         android:layout_marginStart="@dimen/card_margin_start"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:animateLayoutChanges="true"
-        app:cardBackgroundColor="@color/white_baby_powder">
+        app:cardBackgroundColor="@color/cardBackgroundColor">
 
 
         <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_gravity="end"
                 android:layout_marginBottom="@dimen/edit_btn_margin_bottom"
                 android:text="@string/edit"
-                android:textColor="@color/yellow_crayola"
+                android:textColor="@color/accent_color"
                 android:clickable="true"/>
 
             <Button
@@ -182,7 +182,7 @@
         android:layout_marginStart="@dimen/card_margin_start"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:animateLayoutChanges="true"
-        app:cardBackgroundColor="@color/white_baby_powder">
+        app:cardBackgroundColor="@color/primary_background">
 
         <TextView
             android:layout_width="match_parent"
@@ -200,7 +200,7 @@
             android:layout_marginStart="@dimen/card_margin_start"
             android:layout_marginEnd="@dimen/card_margin_end"
             android:animateLayoutChanges="true"
-            app:cardBackgroundColor="@color/white_baby_powder">
+            app:cardBackgroundColor="@color/primary_background">
 
             <TextView
                 android:layout_width="match_parent"

@@ -14,7 +14,7 @@ public class MyAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         System.out.println("Called AlarmReceiver...");
-        Intent i = new Intent(context, ContactNotification.class);
+        Intent i = new Intent(context, ContactNotificationService.class);
         context.startService(i);
     }
 }
