@@ -136,9 +136,6 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
                 showMonthlyGraphFragment();
                 break;
             case R.id.weekly_btn:
-                lineGraph.dismissAllTooltips();
-                lineGraph.dismiss(new Animation().setEasing(new BounceInterpolator()));
-                lineGraph.removeView(lineGraph);
                 break;
             case R.id.daily_btn:
                 showDailyGraphFragment();
