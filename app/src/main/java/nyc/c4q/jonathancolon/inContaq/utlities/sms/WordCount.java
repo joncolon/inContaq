@@ -51,7 +51,10 @@ public class WordCount {
         for (int i = 0; i < numbers.size(); i++) {
             sum = sum + numbers.get(i);
         }
-        int average = sum / numbers.size();
-        return average;
+        if(sum != 0){
+            int average = sum / numbers.size();
+            return average;
+        }
+        return sum;
     }
 }
