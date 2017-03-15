@@ -1,6 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.db.chart.Tools;
 import com.db.chart.animation.Animation;
-import com.db.chart.view.LineChartView;
+import com.db.chart.model.BarSet;
+import com.db.chart.renderer.XRenderer;
+import com.db.chart.renderer.YRenderer;
+import com.db.chart.view.BarChartView;
 
 import org.parceler.Parcels;
 
@@ -25,7 +30,6 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
-import nyc.c4q.jonathancolon.inContaq.contactlist.graphs.MonthlyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.WordCount;
@@ -40,6 +44,12 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     private Button monthlyBtn, weeklyBtn, dailyBtn;
     private TextView smsStatsTV;
+
+    private BarChartView mChart;
+
+    private String[] mLabels = {"Sent"};
+
+    private float[][] mValues = {{6.5f}, {7.5f}};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +67,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
         smsStatsTV.setText("Averge words sent: " + averageWordCountSent + "\n" +
         "Average words received: " + averageWordCountReceived);
+
+        showAverageWordCountGraph();
         return view;
     }
 
@@ -90,6 +102,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         monthlyBtn.setOnClickListener(this);
         weeklyBtn.setOnClickListener(this);
         dailyBtn.setOnClickListener(this);
+        mChart = (BarChartView) view.findViewById(R.id.bar_chart_word_average);
     }
 
     @Nullable
@@ -136,6 +149,30 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
             default:
                 break;
         }
+    }
+
+
+    public void showAverageWordCountGraph() {
+
+        // Data
+        BarSet barSet = new BarSet(mLabels, mValues[0]);
+        barSet.setColor(Color.parseColor("#fc2a53"));
+        barSet.addBar("Received", 12f);
+        mChart.addData(barSet);
+        mChart.setBarSpacing(Tools.fromDpToPx(10));
+        mChart.setRoundCorners(Tools.fromDpToPx(2));
+        mChart.setBarBackgroundColor(Color.parseColor("#592932"));
+
+        // Chart
+        mChart.setXAxis(false)
+                .setYAxis(false)
+                .setXLabels(XRenderer.LabelPosition.OUTSIDE)
+                .setYLabels(YRenderer.LabelPosition.NONE)
+                .setLabelsColor(Color.parseColor("#86705c"))
+                .setAxisColor(Color.parseColor("#86705c"));
+
+
+        mChart.show();
     }
 
 }
