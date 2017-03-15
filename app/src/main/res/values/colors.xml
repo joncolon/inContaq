@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--TODO: Organize color by hue-->
+    <!--TODO: Organize and Rename by usage-->
 
     <!--blue-->
     <color name="blue_cadet">#5B9CAC</color>

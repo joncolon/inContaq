@@ -236,7 +236,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onResume() {
         super.onResume();
         displayContactInfo(contact);
-        polaroidName.setTypeface(Fontometrics.amatic_bold(getActivity()));
     }
 }
 

@@ -104,7 +104,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(context));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new ContactListAdapter(this, this));
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(30);
         recyclerView.setDrawingCacheEnabled(true);
     }
 
