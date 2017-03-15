@@ -28,15 +28,17 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int pos) {
         switch (pos) {
             case 0:
-                return ContactInfoFragment.newInstance();
+                return new ContactInfoFragment();
             case 1:
-                return ContactSmsFragment.newInstance();
+                return new ContactSmsFragment();
             case 2:
-                return ContactStatsFragment.newInstance();
+                return new ContactStatsFragment();
             default:
-                return ContactSmsFragment.newInstance();
+                return new ContactSmsFragment();
         }
     }
+
+
 
     @Override
     public CharSequence getPageTitle(int position) {

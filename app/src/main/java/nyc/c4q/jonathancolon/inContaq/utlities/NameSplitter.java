@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq;
+package nyc.c4q.jonathancolon.inContaq.utlities;
 
 /**
  * Created by jonathancolon on 3/9/17.

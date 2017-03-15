@@ -23,10 +23,8 @@ public class SmsReceiver extends BroadcastReceiver  {
             }
 
             ContactSmsFragment inst = ContactSmsFragment.instance();
-
             inst.populateSmsList();
             inst.refreshRecyclerView();
-
         }
     }
 }
