@@ -223,6 +223,7 @@ public class SmsHelper {
         ArrayList<Sms> receivedSms = new ArrayList<Sms>();
 
         for (int i = 0; i < smsList.size(); i++) {
+            if (smsList.get(i).getType().equals("1")) {
                 receivedSms.add(smsList.get(i));
             }
         }

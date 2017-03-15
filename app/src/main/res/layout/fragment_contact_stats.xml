@@ -10,8 +10,7 @@
         android:id="@+id/graph_frag_container"
         android:name="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </FrameLayout>
+        android:layout_height="wrap_content"></FrameLayout>
 
     <RelativeLayout
         android:id="@+id/graph_btn"
@@ -64,7 +63,9 @@
         android:layout_below="@id/dayscounted_tv"
         android:layout_gravity="center"
         android:spinnerMode="dropdown">
+
     </android.support.v7.widget.AppCompatSpinner>
+
 
     <TextView
         android:id="@+id/sms_stats"
@@ -77,6 +78,14 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:scrollbars="vertical"
-        android:text="TextView"
         android:textAlignment="center" />
+
+    <com.db.chart.view.BarChartView
+        android:id="@+id/bar_chart_word_average"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/date_spinner"
+        android:layout_alignStart="@id/date_spinner">
+
+    </com.db.chart.view.BarChartView>
 </RelativeLayout>
