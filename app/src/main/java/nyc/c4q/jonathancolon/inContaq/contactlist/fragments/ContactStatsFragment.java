@@ -25,6 +25,7 @@ import com.db.chart.view.BarChartView;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
@@ -49,7 +50,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     private String[] mLabels = {"Sent", "Received"};
 
-    private float[][] sentValues = {{1f, 6f},{1f, 8f}};
+    private float[][] sentValues = {{1f, 6f}, {1f, 8f}};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,8 +66,16 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         String averageWordCountSent = String.valueOf(WordCount.getAverageWordCountSent(smsList));
         String averageWordCountReceived = String.valueOf(WordCount.getAverageWordCountReceived(smsList));
 
-        smsStatsTV.setText("Averge words sent: " + averageWordCountSent + "\n" +
-        "Average words received: " + averageWordCountReceived);
+
+        if (smsList.size() != 0){
+            Date date1 = new Date((Long.valueOf(smsList.get(0).getTime())));
+            Date date2 = new Date(System.currentTimeMillis());
+            long difference = date2.getTime() - date1.getTime();
+            long differenceDays = difference / (1000 * 60 * 60 * 24);
+            smsStatsTV.setText("Averge words sent: " + averageWordCountSent + "\n" +
+                    "Average words received: " + averageWordCountReceived + "\n" + "Last contacted " + differenceDays + " days ago");
+        }
+
 
         showAverageWordCountGraph();
         return view;
