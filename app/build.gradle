@@ -69,9 +69,6 @@ dependencies {
             compile 'org.parceler:parceler-api:1.1.6'
             annotationProcessor 'org.parceler:parceler:1.1.6'
 
-            //Todo add twilio text message service library
         }
     })
-
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
 }
