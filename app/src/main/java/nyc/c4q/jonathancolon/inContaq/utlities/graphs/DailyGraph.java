@@ -16,9 +16,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.dailysms.DailyReceivedWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.dailysms.DailySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.dailysms.DailyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.DailyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.DailySentWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
 import static android.graphics.Color.parseColor;

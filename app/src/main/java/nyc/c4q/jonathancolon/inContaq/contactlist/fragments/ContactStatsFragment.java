@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
 import com.db.chart.view.LineChartView;
@@ -27,6 +28,7 @@ import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.contactlist.graphs.MonthlyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.WordCount;
 
 
 public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -37,6 +39,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     private ContactNotificationService mContactNotificationService;
 
     private Button monthlyBtn, weeklyBtn, dailyBtn;
+    private TextView smsStatsTV;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +51,12 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
             showMonthlyGraphFragment();
         }
 
+        ArrayList<Sms> smsList = SmsHelper.getAllSms(getContext(), unwrapParcelledContact());
+        String averageWordCountSent = String.valueOf(WordCount.getAverageWordCountSent(smsList));
+        String averageWordCountReceived = String.valueOf(WordCount.getAverageWordCountReceived(smsList));
+
+        smsStatsTV.setText("Averge words sent: " + averageWordCountSent + "\n" +
+        "Average words received: " + averageWordCountReceived);
         return view;
     }
 
@@ -66,14 +75,15 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void initViews(View view) {
-                dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.date_spinner_array,
                 R.layout.date_spinner_item);
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
         dateSpinner.setAdapter(spinnerArrayAdapter);
         dateSpinner.setOnItemSelectedListener(this);
+        smsStatsTV = (TextView) view.findViewById(R.id.sms_stats);
         monthlyBtn = (Button) view.findViewById(R.id.monthly_btn);
         weeklyBtn = (Button) view.findViewById(R.id.weekly_btn);
         dailyBtn = (Button) view.findViewById(R.id.daily_btn);
