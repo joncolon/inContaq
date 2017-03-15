@@ -48,11 +48,12 @@ public class WordCount {
 
     private static int calculateAverage(ArrayList<Integer> numbers) {
         int sum = 0;
-        for (int i = 0; i < numbers.size(); i++) {
+        int arraySize = numbers.size();
+        for (int i = 0; i < arraySize; i++) {
             sum = sum + numbers.get(i);
         }
         if(sum != 0){
-            int average = sum / numbers.size();
+            int average = sum / arraySize;
             return average;
         }
         return sum;
