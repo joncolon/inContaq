@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.dailysms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,8 +8,6 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TreeMap;
-
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
 /**
  * Created by Hyun on 3/11/17.

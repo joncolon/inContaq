@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -177,6 +178,7 @@ public class SmsHelper {
                     for (int i = 0; i < totalSMS; i++) {
                         objSms = new Sms();
                         objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
+                        //todo why does this cause an error?
 //                        objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
                         objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
                         objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
@@ -200,9 +202,31 @@ public class SmsHelper {
                 Log.d("SQLiteException", ex.getMessage());
             }
         }
-
         smsList.size();
         return smsList;
+    }
+
+    @NonNull
+    static ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
+        ArrayList<Sms> sentSms = new ArrayList<Sms>();
+
+        for (int i = 0; i < smsList.size(); i++) {
+            if (smsList.get(i).getType().equals("2")) {
+                sentSms.add(smsList.get(i));
+            }
+        }
+        return sentSms;
+    }
+
+    @NonNull
+    static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
+        ArrayList<Sms> receivedSms = new ArrayList<Sms>();
+
+        for (int i = 0; i < smsList.size(); i++) {
+                receivedSms.add(smsList.get(i));
+            }
+        }
+        return receivedSms;
     }
 }
 
