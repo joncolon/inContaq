@@ -28,6 +28,7 @@ import static android.provider.ContactsContract.Contacts;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class MainActivity extends Activity {
+
     private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};
     public TextView outputText;

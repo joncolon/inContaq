@@ -2,7 +2,9 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -12,13 +14,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.fontometrics.Fontometrics;
-
 import org.parceler.Parcels;
-
 import java.util.Objects;
-
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
@@ -78,11 +76,39 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
     }
 
+
+    private static final int SELECT_PICTURE = 1;
+
+
     private void setClickListeners() {
+
+
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
                 ContactInfoFragment.this.buildSaveEditDialog();
+
+
+// ...
+
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+                Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+                chooserIntent.putExtra
+                        (
+                                Intent.EXTRA_INITIAL_INTENTS,
+                                new Intent[] { takePhotoIntent }
+                        );
+
+                startActivityForResult(chooserIntent, SELECT_PICTURE);
+
+
             }
         });
         editButton.setOnClickListener(new View.OnClickListener() {

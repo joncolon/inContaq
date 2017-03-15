@@ -241,6 +241,7 @@
                                 android:scaleType="centerCrop"
                                 android:layout_alignParentTop="true"
                                 android:layout_centerHorizontal="true" />
+
                         </RelativeLayout>
                     </android.support.v7.widget.CardView>
                 </RelativeLayout>

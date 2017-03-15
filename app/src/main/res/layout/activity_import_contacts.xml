@@ -1,9 +1,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".contactlist.activities.MainActivity"
-    android:scrollbars="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    tools:context=".contactlist.activities.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,14 +17,14 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="10dp"
-            android:textSize="20dp"
             android:gravity="center"
-            android:text="Contacts Information" />
+            android:text="Contacts Information"
+            android:textSize="20dp" />
 
         <ImageView
             android:id="@+id/profile_image"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView1"
@@ -46,10 +46,7 @@
             android:layout_alignParentRight="true" />
 
 
-
-
     </RelativeLayout>
-
 
 
 </ScrollView>
