@@ -6,12 +6,12 @@
     android:background="@color/primary_background">
 
 
-    <fragment
+    <FrameLayout
         android:id="@+id/graph_frag_container"
         android:name="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </fragment>
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/graph_btn"

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment">
+    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.MonthlyGraphFragment">
 
     <android.support.v7.widget.CardView
         android:id="@+id/graph_cardview"

@@ -18,7 +18,6 @@ import com.db.chart.view.LineChartView;
 
 import org.parceler.Parcels;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
@@ -55,19 +54,28 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         lstSms = SmsHelper.getAllSms(getActivity(), contact);
 
         if (savedInstanceState == null) {
-
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.graph_frag_container, new GraphFragment())
-                    .commit();
+            showMonthlyGraphFragment();
         }
 
         return view;
     }
 
+    private void showMonthlyGraphFragment() {
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.graph_frag_container, new MonthlyGraphFragment())
+                .commit();
+    }
+
+    private void showDailyGraphFragment() {
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.graph_frag_container, new DailyGraphFragment())
+                .commit();
+    }
+
     private void initViews(View view) {
-        lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
-        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+                dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.date_spinner_array,
@@ -125,7 +133,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
         switch (v.getId()) {
             case R.id.monthly_btn:
-                monthlyGraph.showMonthlyGraph();
+                showMonthlyGraphFragment();
                 break;
             case R.id.weekly_btn:
                 lineGraph.dismissAllTooltips();
@@ -133,12 +141,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
                 lineGraph.removeView(lineGraph);
                 break;
             case R.id.daily_btn:
-                lineGraphUpdate();
-                monthlyLcv.reset();
-//                monthlyLcv.invalidate();
-                monthlyLcv.notifyDataUpdate();
-                dailyLcv.reset();
-                dailyGraph.showDailyGraph();
+                showDailyGraphFragment();
                 break;
             default:
                 monthlyGraph.showMonthlyGraph();
