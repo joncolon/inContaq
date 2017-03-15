@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.fontometrics.Fontometrics;
 
 import org.parceler.Parcels;
 
