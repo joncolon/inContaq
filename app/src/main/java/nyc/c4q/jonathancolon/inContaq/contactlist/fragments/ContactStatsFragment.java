@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,8 +15,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.db.chart.Tools;
-import com.db.chart.animation.Animation;
+import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
+import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.renderer.XRenderer;
 import com.db.chart.renderer.YRenderer;
 import com.db.chart.view.BarChartView;
@@ -47,9 +47,9 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     private BarChartView mChart;
 
-    private String[] mLabels = {"Sent"};
+    private String[] mLabels = {"Sent", "Received"};
 
-    private float[][] mValues = {{6.5f}, {7.5f}};
+    private float[][] sentValues = {{1f, 6f},{1f, 8f}};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,19 +155,25 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     public void showAverageWordCountGraph() {
 
         // Data
-        BarSet barSet = new BarSet(mLabels, mValues[0]);
-        barSet.setColor(Color.parseColor("#fc2a53"));
-        barSet.addBar("Received", 12f);
+        BarSet barSet = new BarSet();
+        Bar barSent = new Bar(mLabels[0], sentValues[0][0]);
+        Bar barReceived = new Bar(mLabels[1], sentValues[1][1]);
+        barReceived.setColor(Color.parseColor("#FF9F1C"));
+        barSent.setColor(Color.parseColor("#b01cff"));
+        barSet.addBar(barSent);
+        barSet.addBar(barReceived);
+
         mChart.addData(barSet);
         mChart.setBarSpacing(Tools.fromDpToPx(10));
         mChart.setRoundCorners(Tools.fromDpToPx(2));
         mChart.setBarBackgroundColor(Color.parseColor("#592932"));
 
         // Chart
-        mChart.setXAxis(false)
-                .setYAxis(false)
+        mChart.setXAxis(true)
+                .setYAxis(true)
+                .setAxisBorderValues(0, 25)
                 .setXLabels(XRenderer.LabelPosition.OUTSIDE)
-                .setYLabels(YRenderer.LabelPosition.NONE)
+                .setYLabels(YRenderer.LabelPosition.OUTSIDE)
                 .setLabelsColor(Color.parseColor("#86705c"))
                 .setAxisColor(Color.parseColor("#86705c"));
 
