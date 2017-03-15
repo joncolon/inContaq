@@ -38,6 +38,8 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+
+
     @Override
     public CharSequence getPageTitle(int position) {
         String[] tabTitles = new String[]{context.getString(R.string.contact_info),

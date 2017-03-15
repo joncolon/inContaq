@@ -10,7 +10,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        aaptOptions{
+        aaptOptions {
             cruncherEnabled = false
         }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -45,11 +45,9 @@ dependencies {
             compile 'com.diogobernardino:williamchart:2.4.0'
             compile 'com.squareup.picasso:picasso:2.5.2'
 
-
             //cupboard
             compile 'nl.qbusict:cupboard:2.1.4'
             compile 'com.facebook.stetho:stetho:1.4.1'
-
 
             //custom font
             compile 'org.ishmeetsingh.androbot:fontometrics:1.0.0'
@@ -70,4 +68,5 @@ dependencies {
         }
     })
 
+    compile 'com.android.support:support-v4:25.3.0'
 }

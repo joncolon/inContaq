@@ -7,15 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.db.chart.animation.Animation;
 import com.db.chart.view.LineChartView;
 
 import org.parceler.Parcels;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
@@ -50,6 +53,14 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         initViews(view);
         Contact contact = unwrapParcelledContact();
         lstSms = SmsHelper.getAllSms(getActivity(), contact);
+
+        if (savedInstanceState == null) {
+
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.graph_frag_container, new GraphFragment())
+                    .commit();
+        }
 
         return view;
     }
@@ -114,15 +125,12 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
         switch (v.getId()) {
             case R.id.monthly_btn:
-                lineGraphUpdate();
-                dailyLcv.reset();
-//                dailyLcv.invalidate();
-                dailyLcv.notifyDataUpdate();
-                monthlyLcv.reset();
                 monthlyGraph.showMonthlyGraph();
                 break;
             case R.id.weekly_btn:
-                lineGraphUpdate();
+                lineGraph.dismissAllTooltips();
+                lineGraph.dismiss(new Animation().setEasing(new BounceInterpolator()));
+                lineGraph.removeView(lineGraph);
                 break;
             case R.id.daily_btn:
                 lineGraphUpdate();
@@ -137,9 +145,10 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
                 break;
         }
     }
-    private void lineGraphUpdate(){
+    private void lineGraphUpdate() {
         lineGraph.reset();
         lineGraph.invalidate();
         lineGraph.notifyDataUpdate();
     }
+
 }

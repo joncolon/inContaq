@@ -27,11 +27,14 @@ public class ContactViewPagerActivity extends FragmentActivity {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_contact_tabs);
         viewPager.setAdapter(new ContactFragmentPagerAdapter(getSupportFragmentManager(),
-                ContactViewPagerActivity.this));
+                ContactViewPagerActivity.this){
+
+        });
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout_contact_tabs);
         tabLayout.setupWithViewPager(viewPager);
             viewPager.setCurrentItem(1);
     }
+
 }
