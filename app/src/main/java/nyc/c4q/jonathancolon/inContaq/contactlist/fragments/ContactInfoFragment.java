@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.example.fontometrics.Fontometrics;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import nyc.c4q.jonathancolon.inContaq.R;
@@ -28,6 +30,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.contactlist.activities.PhotoFeedActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.RegisterPhotoActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
@@ -112,7 +115,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         photoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getContext(), PhotoFeedActivity.class);
+                startActivity(intent);
             }
         });
         notesCard.setOnClickListener(new View.OnClickListener() {
