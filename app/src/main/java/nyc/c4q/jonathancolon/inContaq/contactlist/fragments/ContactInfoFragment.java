@@ -1,19 +1,25 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.fontometrics.Fontometrics;
 import org.parceler.Parcels;
 import java.util.Objects;
@@ -25,6 +31,9 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
+import static android.app.Activity.RESULT_OK;
+import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
+
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
 
     private Contact contact;
@@ -35,6 +44,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private int selection;
     private Animations anim;
     private boolean isEditTextEnabled;
+    private ImageButton takePicture, choosePicture;
+
+
+    private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
+    private static final int RESULT_LOAD_CONTACT_IMG = 1;
 
     public static ContactInfoFragment newInstance() {
         ContactInfoFragment fragment = new ContactInfoFragment();
@@ -74,40 +88,20 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+
+        takePicture = (ImageButton) view.findViewById(R.id.take_picture);
+        choosePicture = (ImageButton) view.findViewById(R.id.choose_picture);
+
     }
 
 
-    private static final int SELECT_PICTURE = 1;
-
 
     private void setClickListeners() {
-
-
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
                 ContactInfoFragment.this.buildSaveEditDialog();
-
-
-// ...
-
-                Intent pickIntent = new Intent();
-                pickIntent.setType("image/*");
-                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
-                Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-                chooserIntent.putExtra
-                        (
-                                Intent.EXTRA_INITIAL_INTENTS,
-                                new Intent[] { takePhotoIntent }
-                        );
-
-                startActivityForResult(chooserIntent, SELECT_PICTURE);
-
 
             }
         });
@@ -117,7 +111,85 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 ContactInfoFragment.this.enableEditContactMode();
             }
         });
+
+        contactImageIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                DialogFragment dialogFragment = new DialogFragment ();
+                dialogFragment.show(fm, "Choose Picture");
+
+//                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                ContactInfoFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
+            }
+        });
+//        if (backgroundImageIV != null) {
+//            backgroundImageIV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                    ContactInfoFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
+//                }
+//            });
+//        }
+
     }
+
+
+
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        try {
+//            if (resultCode == Activity.RESULT_OK) {
+//                PicassoHelper ph = new PicassoHelper(getActivity());
+//
+//                switch (requestCode) {
+//                    case 0:
+//                        Uri contactUri = data.getData();
+//                        ph.loadImageFromUri(contactUri, contactImageIV);
+//                        contact.setContactImage(contactUri.toString());
+//                        saveToDatabase(contact, getActivity());
+//                        break;
+//                    case 1:
+//                        Uri backgroundUri = data.getData();
+//                        ph.loadImageFromUri(backgroundUri, backgroundImageIV);
+//                        contact.setBackgroundImage(backgroundUri.toString());
+//                        saveToDatabase(contact, getActivity());
+//                        break;
+//                }
+//            } else {
+//                Toast.makeText(getActivity(), R.string.error_message_photo_not_selected,
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        } catch (Exception e) {
+//            Toast.makeText(getActivity(), R.string.error_message_general, Toast.LENGTH_LONG)
+//                    .show();
+//        }
+//    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch(requestCode) {
+            case 0:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    contactImageIV.setImageURI(selectedImage);
+                }
+
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    contactImageIV.setImageURI(selectedImage);
+                }
+                break;
+        }
+    }
+
 
     private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
@@ -131,6 +203,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void buildSaveEditDialog() {
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle(R.string.save_changes);
         alertDialog.setMessage(R.string.are_you_sure);
