@@ -141,37 +141,30 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     synchronized private void showMobile() {
         if (isEditTextEnabled == true) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(mobile);
-            anim.fadeIn(editMobile);
+
         }
 
         if (contact.getCellPhoneNumber() != null || Objects.equals(contact.getCellPhoneNumber(), "")) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(mobile);
         }
     }
 
     synchronized private void showEmail() {
         if (isEditTextEnabled == true) {
             email.setVisibility(View.VISIBLE);
-            anim.fadeIn(email);
-            anim.fadeIn(editEmail);
+
         }
         if (contact.getEmail() != null || Objects.equals(contact.getEmail(), "")) {
             email.setVisibility(View.VISIBLE);
-            anim.fadeIn(email);
+
         }
     }
 
     synchronized private void showAddress() {
         if (isEditTextEnabled == true) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(address);
-            anim.fadeIn(editAddress);
         }
         if (contact.getAddress() != null || Objects.equals(contact.getAddress(), "")) {
-            address.setVisibility(View.VISIBLE);
-            anim.fadeIn(address);
         }
     }
 

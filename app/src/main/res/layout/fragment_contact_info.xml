@@ -16,7 +16,6 @@
         android:layout_marginTop="@dimen/card_margin_top"
         android:layout_marginStart="@dimen/card_margin_start"
         android:layout_marginEnd="@dimen/card_margin_end"
-        android:animateLayoutChanges="true"
         app:cardBackgroundColor="@color/cardBackgroundColor">
 
 
@@ -49,7 +48,7 @@
                     android:layout_marginStart="@dimen/card_text_margin_start"
                     android:text="@string/name"
                     android:textColor="@color/blue_sapphire"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/card_info_text_size"
                     android:layout_marginBottom="@dimen/text_info_margin_bottom"/>
 
                 <EditText
@@ -58,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
-                    android:textColor="@color/blue_maastricht"
+                    android:textColor="@color/text_color"
                     android:textSize="@dimen/card_info_text_size"
                     android:layout_marginStart="@dimen/card_text_margin_start"
                     android:hint="@string/enter_name"
@@ -79,7 +78,6 @@
                     android:textColor="@color/blue_sapphire"
                     android:textSize="@dimen/card_info_text_size"
                     android:layout_marginBottom="@dimen/text_info_margin_bottom"
-                    android:visibility="gone"
                     android:enabled="false"/>
 
                 <EditText
@@ -88,11 +86,11 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:textColor="@color/blue_maastricht"
+                    android:textColor="@color/text_color"
                     android:textSize="@dimen/card_info_text_size"
                     android:layout_marginEnd="20dp"
                     android:hint="@string/enter_mobile_number"
-                    android:visibility="gone"/>
+                    android:enabled="false"/>
 
             </LinearLayout>
 
@@ -108,9 +106,8 @@
                     android:layout_marginStart="@dimen/card_margin_start"
                     android:text="@string/email"
                     android:textColor="@color/blue_sapphire"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/card_info_text_size"
                     android:layout_marginBottom="@dimen/text_info_margin_bottom"
-                    android:visibility="gone"
                     android:enabled="false"/>
 
                 <EditText
@@ -119,11 +116,10 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:ems="10"
-                    android:textColor="@color/blue_maastricht"
+                    android:textColor="@color/text_color"
                     android:textSize="@dimen/card_info_text_size"
                     android:layout_marginStart="@dimen/card_margin_start"
                     android:hint="@string/enter_valid_email_address"
-                    android:visibility="gone"
                     android:enabled="false"/>
             </LinearLayout>
 
@@ -141,7 +137,6 @@
                     android:textColor="@color/blue_sapphire"
                     android:textSize="@dimen/card_info_text_size"
                     android:layout_marginBottom="@dimen/text_info_margin_bottom"
-                    android:visibility="gone"
                     android:enabled="false"/>
 
                 <EditText
@@ -150,11 +145,10 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPostalAddress"
                     android:ems="10"
-                    android:textColor="@color/blue_maastricht"
+                    android:textColor="@color/text_color"
                     android:textSize="@dimen/card_info_text_size"
                     android:layout_marginStart="@dimen/card_margin_start"
                     android:hint="@string/enter_address"
-                    android:visibility="gone"
                     android:enabled="false"/>
             </LinearLayout>
 
@@ -216,10 +210,9 @@
                                 android:layout_width="@dimen/contact_name_width"
                                 android:background="@drawable/bg_polaroid_texture"
                                 android:gravity="center|bottom"
-                                android:paddingTop="@dimen/contact_name_pad_top"
                                 android:text="@string/contact_name"
                                 android:textAlignment="center"
-                                android:textColor="@color/black_rich"
+                                android:textColor="@color/text_color"
                                 android:textSize="@dimen/contact_name_text_size"
                                 android:elevation="@dimen/card_elevation"
                                 android:layout_height="@dimen/contact_name_layout_height"
@@ -259,7 +252,7 @@
             android:id="@+id/save_button"
             android:layout_marginStart="@dimen/fab_margin"
             android:layout_marginEnd="@dimen/fab_margin_right"
-            app:rippleColor="@color/red_rose_madder"
+            app:rippleColor="@color/selected_tab_text_color"
             android:layout_width="@dimen/fab_width"
             android:layout_height="70dp"
             android:src="@drawable/ic_save_white_24dp"

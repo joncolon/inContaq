@@ -1,126 +1,107 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment">
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/contact_header"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_scrollFlags="scroll|snap|enterAlways">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/main.collapsing"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|snap|enterAlways">
+            android:layout_height="155dp"
+            app:cardCornerRadius="0dp"
+            android:layout_above="@id/recycler_view"
+            >
 
-            <FrameLayout
+            <ImageView
+                android:id="@+id/background_image"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/transparent_gloss"
+                android:scaleType="centerCrop"/>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/contact_dark_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="10"
+                android:background="#55000000"/>
 
-                    <ImageView
-                        android:id="@+id/background_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@color/blue_maastricht"
-                        android:scaleType="centerCrop" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:elevation="@dimen/card_elevation"
-                        android:layout_marginStart="@dimen/card_margin_start"
-                        android:layout_marginTop="@dimen/card_photo_margin_top">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                            <TextView
-                                android:id="@+id/name"
-                                android:layout_width="@dimen/card_photo_text_width"
-                                android:background="@drawable/bg_polaroid_texture"
-                                android:gravity="center|bottom"
-                                android:paddingTop="110dp"
-                                android:text="@string/contact_name"
-                                android:textAlignment="center"
-                                android:textColor="@color/black_rich"
-                                android:textSize="20sp"
-                                android:elevation="24dp"
-                                android:layout_height="135dp"
-                                android:textStyle="bold" />
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:id="@+id/contact_img"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_gravity="center"
-                                android:background="@color/blue_sapphire_lite"
-                                android:foregroundGravity="center"
-                                android:scaleType="centerCrop"
-                                android:layout_alignParentTop="true"
-                                android:layout_centerHorizontal="true" />
-                        </RelativeLayout>
-                    </android.support.v7.widget.CardView>
-                </RelativeLayout>
-            </FrameLayout>
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+            <TextView
+                android:id="@+id/contact_initials"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="start|center_vertical|center_horizontal"
+                android:layout_marginLeft="5dp"
+                android:background="@color/cardview_dark_background"
+                android:elevation="20dp"
+                android:gravity="center|fill"
+                android:padding="1dp"
+                android:paddingTop="1dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="55sp"/>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/contact_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="start|center_vertical|center_horizontal"
+                android:layout_marginStart="5dp"
+                android:elevation="20dp"
+                android:src="@drawable/transparent_gloss"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="90dp"
+                android:layout_marginTop="63dp"
+                android:gravity="start"
+                android:text="@string/unknown"
+                android:textAlignment="textStart"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/contact_rv_name_width"
+                android:textStyle="bold"
+                android:typeface="normal"/>
+
+        </android.support.v7.widget.CardView>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:visibility="invisible"
+            android:layout_height="422dp"
             android:layout_above="@+id/sms_edit_text"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:scrollbars="vertical"
+            android:visibility="invisible">
         </android.support.v7.widget.RecyclerView>
 
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            android:layout_above="@id/sms_edit_text"/>
+            android:layout_above="@id/sms_edit_text"
+            android:background="@android:color/darker_gray"/>
+
         <EditText
             android:id="@+id/sms_edit_text"
             android:layout_width="300dp"
             android:layout_height="45dp"
-            android:hint="@string/enter_text"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"/>
+            android:hint="@string/enter_text"/>
 
         <ImageView
             android:id="@+id/send_button"
@@ -131,10 +112,9 @@
             android:onClick="sendMessage"
             android:paddingRight="5dp"
             android:paddingTop="5dp"
-            android:src="@drawable/send_message_icon" />
+            android:src="@drawable/send_message_icon"/>
 
     </RelativeLayout>
-
 
 
 </android.support.design.widget.CoordinatorLayout>
