@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.faceapi.FaceClient;
 import nyc.c4q.jonathancolon.inContaq.contactlist.faceapi.ImageHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.faceapi.LogHelper;
-
 
 public class RegisterPhotoActivity extends AppCompatActivity {
     // Background task of face detection.
@@ -44,17 +45,21 @@ public class RegisterPhotoActivity extends AppCompatActivity {
         protected Face[] doInBackground(InputStream... params) {
             // Get an instance of face service client to detect faces in image.
             FaceServiceClient faceServiceClient = FaceClient.getFaceServiceClient();
+            Log.d("Face Service Client", " fc is " +faceServiceClient);
+
             try {
                 publishProgress("Detecting...");
+                Log.d("Publish progress", "in the try catch");
 
                 // Start detection.
                 return faceServiceClient.detect(
+
                         params[0],  /* Input stream of image to detect */
                         true,       /* Whether to return face ID */
                         true,       /* Whether to return face landmarks */
                         /* Which face attributes to analyze, currently we support:
                            age,gender,headPose,smile,facialHair */
-                        new FaceServiceClient.FaceAttributeType[]{
+                        new FaceServiceClient.FaceAttributeType[] {
                                 FaceServiceClient.FaceAttributeType.Age,
                                 FaceServiceClient.FaceAttributeType.Gender,
                                 FaceServiceClient.FaceAttributeType.Glasses,
@@ -65,6 +70,7 @@ public class RegisterPhotoActivity extends AppCompatActivity {
                 mSucceed = false;
                 publishProgress(e.getMessage());
                 addLog(e.getMessage());
+                Log.d("Detecting...", "null in detecting.");
                 return null;
             }
         }
@@ -156,6 +162,8 @@ public class RegisterPhotoActivity extends AppCompatActivity {
                         imageView.setImageBitmap(mBitmap);
 
                         // Add detection log.
+                        Log.d("Image", mImageUri + "imaged");
+                        Log.d("Bitmap", mBitmap + " the bitmappppp");
                         addLog("Image: " + mImageUri + " resized to " + mBitmap.getWidth()
                                 + "x" + mBitmap.getHeight());
                     }
@@ -186,9 +194,13 @@ public class RegisterPhotoActivity extends AppCompatActivity {
     // Called when the "Detect" button is clicked.
     public void detect(View view) {
         // Put the image into an input stream for detection.
+
+        Log.d("Detect", "detect method" + view);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
+        Log.d("OutputStream", "output " +output);
         mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(output.toByteArray());
+        Log.d("inputStream callled " , "input stream name" +inputStream);
 
         // Start a background task to detect faces in the image.
         new DetectionTask().execute(inputStream);

@@ -7,12 +7,11 @@ import com.microsoft.projectoxford.face.FaceServiceRestClient;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 
-
 public class FaceClient extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sFaceServiceClient = new FaceServiceRestClient(getString(R.string.subscription_key));
+        sFaceServiceClient = new FaceServiceRestClient("1169d07917894faea0e3dc56de461b9d");
     }
 
     public static FaceServiceClient getFaceServiceClient() {
@@ -20,5 +19,4 @@ public class FaceClient extends Application {
     }
 
     private static FaceServiceClient sFaceServiceClient;
-
 }
