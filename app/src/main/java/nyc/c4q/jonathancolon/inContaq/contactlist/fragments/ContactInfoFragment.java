@@ -30,6 +30,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.contactlist.activities.IdentificationActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.PhotoFeedActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.RegisterPhotoActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
@@ -273,7 +274,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     public void registerPhoto(){
-        Intent intent = new Intent(getContext(), RegisterPhotoActivity.class);
+        Intent intent = new Intent(getContext(), IdentificationActivity.class);
         startActivity(intent);
     }
 }
