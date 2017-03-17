@@ -8,9 +8,9 @@ public class Photo {
     public String imagePath;
     public String imageText;
 
-    public Photo(String imagePath) {
-        this.imagePath = imagePath;
-    }
+//    public Photo(String imagePath) {
+//        this.imagePath = imagePath;
+//    }
 
     public String getImagePath() {
 
