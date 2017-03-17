@@ -63,5 +63,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="contact_list_font">fonts/jaapokkiregular.ttf</string>
 
 </resources>

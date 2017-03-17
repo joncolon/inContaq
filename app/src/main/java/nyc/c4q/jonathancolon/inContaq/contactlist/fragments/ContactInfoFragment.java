@@ -41,12 +41,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_contact_info, container, false);
-        contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
+        contact = Parcels.unwrap(getActivity().getIntent().
+                getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
         anim = new Animations(ContactInfoFragment.this.getActivity());
         isEditTextEnabled = false;
-
         initViews(view);
         setClickListeners();
         displayContactInfo(contact);

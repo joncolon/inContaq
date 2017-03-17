@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import java.util.List;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.font.CustomFont;
 
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
@@ -23,6 +23,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private final Context context;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private List<Contact> contactList;
+    private CustomFont customFont;
 
     public ContactListAdapter(Listener listener, Context context) {
         this.listener = listener;
@@ -40,7 +41,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemview_contactlist_rv,
                 parent, false);
 
-        ContactViewHolder vh = new ContactViewHolder(itemView);
+        customFont = new CustomFont(context);
+        ContactViewHolder vh = new ContactViewHolder(itemView, customFont);
         parallaxViewController.imageParallax(vh.mBackGroundImage);
         return vh;
     }
@@ -85,18 +87,16 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         private final TextView mContactName;
         private final TextView mContactInitials;
 
-        ContactViewHolder(View itemView) {
+
+
+        ContactViewHolder(View itemView, CustomFont customFont) {
             super(itemView);
             mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);
             mContactName = (TextView) itemView.findViewById(R.id.name);
             mContactImage = (ImageView) itemView.findViewById(R.id.contact_image);
             mContactInitials = (TextView) itemView.findViewById(R.id.contact_initials);
-            Typeface jaapokkiContactName = Typeface.createFromAsset(mContactName.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
-            mContactName.setTypeface(jaapokkiContactName);
-
-            Typeface jaapokkiInitials = Typeface.createFromAsset(mContactInitials.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
-            mContactInitials.setTypeface(jaapokkiInitials);
-
+            customFont.setCustomFont(mContactName);
+            customFont.setCustomFont(mContactInitials);
         }
 
         void bind(Contact c) {
