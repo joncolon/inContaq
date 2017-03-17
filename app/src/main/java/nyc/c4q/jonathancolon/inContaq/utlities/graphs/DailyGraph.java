@@ -23,13 +23,16 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
+import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
 
 /**
  * Created by Hyun on 3/11/17.
  */
 
-public class DailyGraph{
-    private final String BLUE_SAPPHIRE = "#0E587A";
+public class DailyGraph {
+    private static final String SENT_COLOR = "#EF7674";
+    private static final String LABEL_COLOR = "#FDFFFC";
+    private static final String RECEIVED_COLOR = "#FDFFFC";
     private final String BLUE_MAASTRICHT = "#02283A";
     private final String RED_ROSE_MADDER = "#E71D36";
     private final String WHITE_BABY_POWDER = "#FDFFFC";
@@ -66,28 +69,42 @@ public class DailyGraph{
     }
 
     private void setGraphData() {
-        final String[] xAxisLabels = new String[12];
-        for (int i = 0; i < 12; i++) {
-            if(i==0){
-                xAxisLabels[i] = "12AM";
-            } else if (i < 12) {
-                xAxisLabels[i] = String.valueOf(i) + "AM";
+        final String[] xAxisLabels = new String[9];
+        int n = 0;
+        for (int i = 0; i < 4; i++) { // 12am=0, 3am=1, 6am=2 ,9am=3
+            if (i == 0) {
+                xAxisLabels[n] = "12AM";
+                n += 1;
+            } else {
+                xAxisLabels[n] = String.valueOf(i * 3) + "AM";
+                n += 1;
+            }
+        }
+        for (int i = 0; i <= 4; i++) { // 12pm=0, 3pm=1, 6pm=2, 9pm=3, 12am=4
+            if (i == 0) {
+                xAxisLabels[n] = "12PM";
+                n += 1;
+            } else if (i == 4) {
+                xAxisLabels[n] = "12AM";
+                n += 1;
+            } else {
+                xAxisLabels[n] = String.valueOf(i * 3) + "PM";
+                n += 1;
             }
         }
 
         dataReceivedValues = new LineSet(xAxisLabels, receivedValues);
-        dataReceivedValues.setColor(parseColor(YELLOW_CRAYOLA))
-                .setDotsColor(parseColor(RED_ROSE_MADDER))
-                .setFill(parseColor(BLUE_SAPPHIRE))
-                .setThickness(6)
+        dataReceivedValues.setColor(parseColor(RECEIVED_COLOR))
+                .setDotsColor(parseColor(RECEIVED_COLOR))
+                .setThickness(4)
                 .beginAt(0);
         lineGraph.addData(dataReceivedValues);
 
         dataSentValues = new LineSet(xAxisLabels, sentValues);
-        dataSentValues.setColor(parseColor("#b01cff"))
-                .setDotsColor(parseColor("#1cb7ff"))
-                .setDashed(new float[]{15f, 10f})
-                .setThickness(6)
+        dataSentValues.setColor(parseColor(SENT_COLOR))
+                .setDotsColor(parseColor(SENT_COLOR))
+                .setDashed(new float[]{1f, 1f})
+                .setThickness(4)
                 .beginAt(0);
         lineGraph.addData(dataSentValues);
     }
@@ -101,17 +118,48 @@ public class DailyGraph{
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
                 .setAxisBorderValues(0, highestValue)
                 .setYLabels(NONE)
-                .setLabelsColor(parseColor(WHITE_BABY_POWDER))
+                .setXLabels(OUTSIDE)
+                .setFontSize(24)
+                .setAxisLabelsSpacing(15f)
+                .setLabelsColor(parseColor(LABEL_COLOR))
                 .setXAxis(false)
-                .setYAxis(true)
-                .setBackgroundColor(parseColor(BLUE_MAASTRICHT));
-    }
+                .setYAxis(false);}
 
     private TreeMap<Integer, Integer> setUpDailyTextMap() {
         TreeMap<Integer, Integer> dailyMap = new TreeMap<>();
-        for (int i = 0; i < 12; i++) {
-            dailyMap.put(i, DEFAULT_VALUE);
+        int m = 0;
+        for (int i = 0; i < 9; i++) { // 12am=0, 3am=1, 6am=2 ,9am=3,12pm=4, (15)3pm=5, (18)6pm=6, (21)9pm=7, (24)12am=8
+            if (i == 0) {
+                dailyMap.put(0,DEFAULT_VALUE);
+                m += 1;
+            } else {
+                dailyMap.put((i * 3),DEFAULT_VALUE);
+                m += 1;
+            }
         }
+//
+//        int m = 0;
+//        for (int i = 0; i < 4; i++) { // 12am=0, 3am=1, 6am=2 ,9am=3,12pm=4
+//            if (i == 0) {
+//                dailyMap.put(12,DEFAULT_VALUE);
+//                m += 1;
+//            } else {
+//                dailyMap.put((i * 3),DEFAULT_VALUE);
+//                m += 1;
+//            }
+//        }
+//        for (int i = 0; i <= 4; i++) { // 12pm=0, 3pm=1, 6pm=2, 9pm=3, 12am=4
+//            if (i == 0) {
+//                dailyMap.put(12,DEFAULT_VALUE);
+//                m += 1;
+//            } else if (i == 4) {
+//                dailyMap.put(12,DEFAULT_VALUE);
+//                m += 1;
+//            } else {
+//                dailyMap.put((i * 3),DEFAULT_VALUE);
+//                m += 1;
+//            }
+//        }
         return dailyMap;
     }
 
@@ -136,10 +184,10 @@ public class DailyGraph{
         sentValues = setValues(getDailySent(lstSms));
     }
 
+
     private TreeMap<Integer, Integer> getDailyReceived(ArrayList<Sms> texts) {
 
         TreeMap<Integer, Integer> dailyReceived = setUpDailyTextMap();
-
         DailyTaskParams receivedParams = new DailyTaskParams(texts, dailyReceived);
         DailyReceivedWorkerTask dailyReceivedWorkerTask = new DailyReceivedWorkerTask();
 
@@ -210,7 +258,4 @@ public class DailyGraph{
         lineGraph.show(anim);
     }
 
-    public LineChartView getLineGraph() {
-        return lineGraph;
-    }
 }

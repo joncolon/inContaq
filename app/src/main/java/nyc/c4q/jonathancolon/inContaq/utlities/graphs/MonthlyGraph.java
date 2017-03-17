@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist.graphs;
+package nyc.c4q.jonathancolon.inContaq.utlities.graphs;
 
 import android.content.Context;
 import android.util.Log;
@@ -24,15 +24,14 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
+import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
 
 
 public class MonthlyGraph {
 
-    private static final String BLUE_SAPPHIRE = "#0E587A";
-    private static final String BLUE_MAASTRICHT = "#02283A";
-    private static final String RED_ROSE_MADDER = "#E71D36";
-    private static final String WHITE_BABY_POWDER = "#FDFFFC";
-    private static final String YELLOW_CRAYOLA = "#FF9F1C";
+    private static final String SENT_COLOR = "#EF7674";
+    private static final String LABEL_COLOR = "#FDFFFC";
+    private static final String RECEIVED_COLOR = "#FDFFFC";
     private static final String MONTHLY_SENT = "Monthly Sent: ";
     private static final String MONTHLY_RECEIVED = "Monthly Received: ";
     private static final int JAN = 1;
@@ -199,19 +198,19 @@ public class MonthlyGraph {
 
         // Sets data for the first received values line on the graph
         dataSetMonthly = new LineSet(xAxisLabels, receivedValues);
-        dataSetMonthly.setColor(parseColor(YELLOW_CRAYOLA))
-                .setDotsColor(parseColor(RED_ROSE_MADDER))
-                .setFill(parseColor(BLUE_SAPPHIRE))
-                .setThickness(6)
+        dataSetMonthly.setColor(parseColor(RECEIVED_COLOR))
+                .setDotsColor(parseColor(RECEIVED_COLOR))
+                .setThickness(4)
                 .beginAt(0);
+
         lineGraph.addData(dataSetMonthly);
 
         // Sets data for the first sent values line on the graph
         dataset = new LineSet(xAxisLabels, sentValues);
-        dataset.setColor(parseColor("#b01cff"))
-                .setDotsColor(parseColor("#1cb7ff"))
-                .setDashed(new float[]{15f, 10f})
-                .setThickness(6)
+        dataset.setColor(parseColor(SENT_COLOR))
+                .setDotsColor(parseColor(SENT_COLOR))
+                .setDashed(new float[]{1f, 1f})
+                .setThickness(4)
                 .beginAt(0);
         lineGraph.addData(dataset);
     }
@@ -225,11 +224,12 @@ public class MonthlyGraph {
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
                 .setAxisBorderValues(0, highestValue)
                 .setYLabels(NONE)
-                .setLabelsColor(parseColor(WHITE_BABY_POWDER))
+                .setXLabels(OUTSIDE)
+                .setFontSize(24)
+                .setAxisLabelsSpacing(15f)
+                .setLabelsColor(parseColor(LABEL_COLOR))
                 .setXAxis(false)
-                .setYAxis(false)
-                .setBackgroundColor(parseColor(BLUE_MAASTRICHT));
-    }
+                .setYAxis(false);}
 
     private void animateGraph() {
         Animation anim = new Animation().setEasing(new BounceInterpolator());

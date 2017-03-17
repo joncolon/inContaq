@@ -139,7 +139,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                     linearLayout.setGravity(Gravity.START);
 
                     if (Build.VERSION.SDK_INT >= 23) {
-                        cardBubble.setCardBackgroundColor(context.getColor(R.color.blue_cadet));
+                        cardBubble.setCardBackgroundColor(context.getColor(R.color.received_chat_bubble_color));
                         messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
                         timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
                     } else {
@@ -151,9 +151,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             } else {
                 linearLayout.setGravity(Gravity.END);
                 if (Build.VERSION.SDK_INT >= 23) {
-                    cardBubble.setCardBackgroundColor(context.getColor(R.color.cardBackgroundColor));
-                    messageRecieved.setTextColor(context.getColor(R.color.blue_sapphire));
-                    timeDate.setTextColor(context.getColor(R.color.blue_sapphire));
+                    cardBubble.setCardBackgroundColor(context.getColor(R.color.sent_chat_bubble_color));
+                    messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
+                    timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
                 } else {
                     cardBubble.setCardBackgroundColor(Color.parseColor(WHITE_BABY_POWDER));
                     messageRecieved.setTextColor(Color.parseColor(BLUE_SAPPHIRE));

@@ -1,9 +1,10 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".contactlist.activities.ImportContacts"
-    android:scrollbars="vertical">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    tools:context=".contactlist.activities.ImportContacts">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,9 +18,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="10dp"
-            android:textSize="20dp"
             android:gravity="center"
-            android:text="Contacts Information" />
+            android:text="Contacts Information"
+            android:textSize="20dp"/>
 
         <ImageView
             android:id="@+id/profile_image"
@@ -34,7 +35,7 @@
             android:layout_alignRight="@+id/textView"
             android:layout_below="@+id/textView"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"/>
 
         <ProgressBar
             android:id="@+id/progressBar1"
@@ -43,13 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/textView1"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true" />
-
-
-
-
+            android:layout_alignParentRight="true"/>
     </RelativeLayout>
-
 
 
 </ScrollView>

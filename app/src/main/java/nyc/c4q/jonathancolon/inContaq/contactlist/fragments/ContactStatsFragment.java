@@ -7,28 +7,27 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.db.chart.animation.Animation;
-import com.db.chart.view.LineChartView;
+import com.db.chart.view.BarChartView;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.utlities.graphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
-import nyc.c4q.jonathancolon.inContaq.contactlist.graphs.MonthlyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.WordCount;
+
 
 
 public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -40,6 +39,16 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     private Button monthlyBtn, weeklyBtn, dailyBtn;
     private TextView smsStatsTV;
+    private ArrayList<Sms> smsList;
+    private BarChartView mChart;
+
+    private String[] mLabels = {"Sent", "Received"};
+
+
+    int averageWordCountSent;
+    int averageWordCountReceived;
+    private float[][] sentValues = {{1f, 6f}, {1f, 8f}};
+    private int highestValue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,13 +60,29 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
             showMonthlyGraphFragment();
         }
 
-        ArrayList<Sms> smsList = SmsHelper.getAllSms(getContext(), unwrapParcelledContact());
-        String averageWordCountSent = String.valueOf(WordCount.getAverageWordCountSent(smsList));
-        String averageWordCountReceived = String.valueOf(WordCount.getAverageWordCountReceived(smsList));
+        smsList = SmsHelper.getAllSms(getContext(), unwrapParcelledContact());
 
-        smsStatsTV.setText("Averge words sent: " + averageWordCountSent + "\n" +
-        "Average words received: " + averageWordCountReceived);
+        getAxisValues(smsList);
+
+        if (smsList.size() != 0){
+            Date date1 = new Date((Long.valueOf(smsList.get(0).getTime())));
+            Date date2 = new Date(System.currentTimeMillis());
+            long difference = date2.getTime() - date1.getTime();
+            long differenceDays = difference / (1000 * 60 * 60 * 24);
+            smsStatsTV.setText("Averge words sent: " + String.valueOf(averageWordCountSent) + "\n" +
+                    "Average words received: " + String.valueOf(averageWordCountReceived) + "\n" + "Last contacted " + differenceDays + " days ago");
+        }
+
+        WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(mChart, smsList);
+        wordCountBarGraph.showBarGraph();
+
+
+
         return view;
+    }
+    private void getAxisValues(ArrayList<Sms> smsList) {
+        averageWordCountSent = WordCount.getAverageWordCountSent(smsList);
+        averageWordCountReceived = WordCount.getAverageWordCountReceived(smsList);
     }
 
     private void showMonthlyGraphFragment() {
@@ -75,6 +100,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void initViews(View view) {
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.date_spinner_array,
@@ -90,6 +116,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         monthlyBtn.setOnClickListener(this);
         weeklyBtn.setOnClickListener(this);
         dailyBtn.setOnClickListener(this);
+        mChart = (BarChartView) view.findViewById(R.id.bar_chart_word_average);
     }
 
     @Nullable
@@ -133,9 +160,6 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
             case R.id.daily_btn:
                 showDailyGraphFragment();
                 break;
-            default:
-                break;
         }
     }
-
 }
