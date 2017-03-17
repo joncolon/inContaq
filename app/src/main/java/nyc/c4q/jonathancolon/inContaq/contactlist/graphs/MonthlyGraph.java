@@ -227,7 +227,7 @@ public class MonthlyGraph {
                 .setYLabels(NONE)
                 .setXLabels(OUTSIDE)
                 .setFontSize(24)
-                .setAxisLabelsSpacing(1f)
+                .setAxisLabelsSpacing(15f)
                 .setLabelsColor(parseColor(WHITE_BABY_POWDER))
                 .setXAxis(false)
                 .setYAxis(false);}

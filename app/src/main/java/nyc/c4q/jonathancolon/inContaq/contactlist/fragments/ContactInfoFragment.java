@@ -67,7 +67,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         saveButton = (FloatingActionButton) view.findViewById(R.id.save_button);
         editButton = (TextView) view.findViewById(R.id.edit_option);
 
-        contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
+        contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
     }
 

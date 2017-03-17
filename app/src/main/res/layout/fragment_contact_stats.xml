@@ -1,91 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/primary_background">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary_background">
 
 
     <FrameLayout
         android:id="@+id/graph_frag_container"
         android:name="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/graph_btn">
 
-    <RelativeLayout
-        android:id="@+id/graph_btn"
+    </FrameLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_word_count"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="@dimen/card_margin_top"
+        android:layout_marginBottom="@dimen/card_margin_btm"
+        android:layout_alignStart="@id/graph_frag_container"
+        android:layout_below="@id/graph_frag_container"
+        android:layout_marginEnd="@dimen/card_margin_end"
+        android:layout_marginStart="@dimen/card_margin_start"
+        android:elevation="0dp"
+        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardCornerRadius="@dimen/card_chat_corner_radius">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/transparent_gloss"/>
+
+        <com.db.chart.view.BarChartView
+            android:id="@+id/bar_chart_word_average"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            >
+        </com.db.chart.view.BarChartView>
+
+
+    </android.support.v7.widget.CardView>
+    <TextView
+        android:id="@+id/sms_stats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/graph_frag_container"
+        android:layout_below="@id/card_word_count"
+        android:layout_alignStart="@id/card_word_count"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:scrollbars="vertical"/>
+
+    <RelativeLayout
+        android:id="@id/graph_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/monthly_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/monthly" />
+            android:text="@string/monthly"/>
 
         <Button
             android:id="@+id/weekly_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/monthly_btn"
-            android:text="@string/weekly" />
+            android:text="@string/weekly"/>
 
         <Button
             android:id="@+id/daily_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/weekly_btn"
-            android:text="@string/daily" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/dayscounted_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/graph_btn">
-
-        <TextView
-            android:id="@+id/days_passed_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="SET A REMINDER (THIS IS HARDCODED)"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="@string/daily"/>
     </RelativeLayout>
 
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/date_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dayscounted_tv"
         android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
         android:spinnerMode="dropdown">
-
     </android.support.v7.widget.AppCompatSpinner>
 
 
-    <TextView
-        android:id="@+id/sms_stats"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="131dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:scrollbars="vertical"
-        android:textAlignment="center" />
-
-    <com.db.chart.view.BarChartView
-        android:id="@+id/bar_chart_word_average"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/date_spinner"
-        android:layout_alignStart="@id/date_spinner">
-
-    </com.db.chart.view.BarChartView>
 </RelativeLayout>

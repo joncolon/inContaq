@@ -164,7 +164,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
             case R.id.send_button:
                 sendMessage(view);
                 break;
-            case R.id.contact_img:
+            case R.id.contact_image:
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 

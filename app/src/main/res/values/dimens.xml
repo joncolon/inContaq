@@ -27,7 +27,7 @@
     <dimen name="text_info_margin_bottom">15dp</dimen>
     <dimen name="card_margin_start">6dp</dimen>
     <dimen name="card_margin_end">6dp</dimen>
-    <dimen name="card_margin_top">169dp</dimen>
+    <dimen name="card_margin_top">2dp</dimen>
     <dimen name="card_linlayout_margin_bottom">10dp</dimen>
     <dimen name="edit_btn_margin_bottom">5dp</dimen>
     <dimen name="card_text_margin_start">10dp</dimen>
@@ -63,12 +63,12 @@
     <dimen name="card_chat_margin_btm">2dp</dimen>
     <dimen name="card_chat_corner_radius">10dp</dimen>
     <dimen name="time_date_margin_btm">3dp</dimen>
-    <dimen name="line_chart_height">200dp</dimen>
-    <dimen name="line_chart_margin">2dp</dimen>
+    <dimen name="line_chart_margin">8dp</dimen>
     <dimen name="line_chart_margin_btm">6dp</dimen>
     <dimen name="card_chart_padding">5dp</dimen>
     <dimen name="card_chart_margin_top">24dp</dimen>
     <dimen name="send_message_height">45dp</dimen>
     <dimen name="default_text_size">16sp</dimen>
+    <dimen name="card_margin_btm">2dp</dimen>
 
 </resources>
