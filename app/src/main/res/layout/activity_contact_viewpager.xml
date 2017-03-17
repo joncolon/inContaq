@@ -25,8 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="20dp"
-        app:tabSelectedTextColor="@color/selected_tab_text_color"
-        app:tabTextColor="@color/blue_sapphire"></android.support.design.widget.TabLayout>
+        app:tabSelectedTextColor="@color/accent_color"
+        app:tabTextColor="@color/text_color"></android.support.design.widget.TabLayout>
 
 
 </LinearLayout>

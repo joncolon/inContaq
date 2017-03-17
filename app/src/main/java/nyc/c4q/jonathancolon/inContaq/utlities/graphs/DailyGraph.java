@@ -23,13 +23,16 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
+import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
 
 /**
  * Created by Hyun on 3/11/17.
  */
 
 public class DailyGraph {
-    private final String BLUE_SAPPHIRE = "#0E587A";
+    private static final String SENT_COLOR = "#EF7674";
+    private static final String LABEL_COLOR = "#FDFFFC";
+    private static final String RECEIVED_COLOR = "#FDFFFC";
     private final String BLUE_MAASTRICHT = "#02283A";
     private final String RED_ROSE_MADDER = "#E71D36";
     private final String WHITE_BABY_POWDER = "#FDFFFC";
@@ -91,18 +94,17 @@ public class DailyGraph {
         }
 
         dataReceivedValues = new LineSet(xAxisLabels, receivedValues);
-        dataReceivedValues.setColor(parseColor(YELLOW_CRAYOLA))
-                .setDotsColor(parseColor(RED_ROSE_MADDER))
-                .setFill(parseColor(BLUE_SAPPHIRE))
-                .setThickness(6)
+        dataReceivedValues.setColor(parseColor(RECEIVED_COLOR))
+                .setDotsColor(parseColor(RECEIVED_COLOR))
+                .setThickness(4)
                 .beginAt(0);
         lineGraph.addData(dataReceivedValues);
 
         dataSentValues = new LineSet(xAxisLabels, sentValues);
-        dataSentValues.setColor(parseColor("#b01cff"))
-                .setDotsColor(parseColor("#1cb7ff"))
-                .setDashed(new float[]{15f, 10f})
-                .setThickness(6)
+        dataSentValues.setColor(parseColor(SENT_COLOR))
+                .setDotsColor(parseColor(SENT_COLOR))
+                .setDashed(new float[]{1f, 1f})
+                .setThickness(4)
                 .beginAt(0);
         lineGraph.addData(dataSentValues);
     }
@@ -116,11 +118,12 @@ public class DailyGraph {
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
                 .setAxisBorderValues(0, highestValue)
                 .setYLabels(NONE)
-                .setLabelsColor(parseColor(WHITE_BABY_POWDER))
+                .setXLabels(OUTSIDE)
+                .setFontSize(24)
+                .setAxisLabelsSpacing(15f)
+                .setLabelsColor(parseColor(LABEL_COLOR))
                 .setXAxis(false)
-                .setYAxis(true)
-                .setBackgroundColor(parseColor(BLUE_MAASTRICHT));
-    }
+                .setYAxis(false);}
 
     private TreeMap<Integer, Integer> setUpDailyTextMap() {
         TreeMap<Integer, Integer> dailyMap = new TreeMap<>();

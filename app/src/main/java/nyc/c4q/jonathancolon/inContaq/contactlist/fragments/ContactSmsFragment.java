@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -129,6 +130,9 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+        Typeface jaapokkiRegular = Typeface.createFromAsset(contactName.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
+        contactName.setTypeface(jaapokkiRegular);
 
         int value = getActivity().getResources().getConfiguration().orientation;
         if (value == Configuration.ORIENTATION_PORTRAIT) {

@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist.graphs;
+package nyc.c4q.jonathancolon.inContaq.utlities.graphs;
 
 import android.content.Context;
 import android.util.Log;
@@ -29,10 +29,9 @@ import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
 
 public class MonthlyGraph {
 
-    private static final String FILL_COLOR = "#021620";
-    private static final String RED_ROSE_MADDER = "#EF7674";
-    private static final String WHITE_BABY_POWDER = "#FDFFFC";
-    private static final String YELLOW_CRAYOLA = "#FF9F1C";
+    private static final String SENT_COLOR = "#EF7674";
+    private static final String LABEL_COLOR = "#FDFFFC";
+    private static final String RECEIVED_COLOR = "#FDFFFC";
     private static final String MONTHLY_SENT = "Monthly Sent: ";
     private static final String MONTHLY_RECEIVED = "Monthly Received: ";
     private static final int JAN = 1;
@@ -199,8 +198,8 @@ public class MonthlyGraph {
 
         // Sets data for the first received values line on the graph
         dataSetMonthly = new LineSet(xAxisLabels, receivedValues);
-        dataSetMonthly.setColor(parseColor(WHITE_BABY_POWDER))
-                .setDotsColor(parseColor(WHITE_BABY_POWDER))
+        dataSetMonthly.setColor(parseColor(RECEIVED_COLOR))
+                .setDotsColor(parseColor(RECEIVED_COLOR))
                 .setThickness(4)
                 .beginAt(0);
 
@@ -208,8 +207,8 @@ public class MonthlyGraph {
 
         // Sets data for the first sent values line on the graph
         dataset = new LineSet(xAxisLabels, sentValues);
-        dataset.setColor(parseColor(RED_ROSE_MADDER))
-                .setDotsColor(parseColor(RED_ROSE_MADDER))
+        dataset.setColor(parseColor(SENT_COLOR))
+                .setDotsColor(parseColor(SENT_COLOR))
                 .setDashed(new float[]{1f, 1f})
                 .setThickness(4)
                 .beginAt(0);
@@ -228,7 +227,7 @@ public class MonthlyGraph {
                 .setXLabels(OUTSIDE)
                 .setFontSize(24)
                 .setAxisLabelsSpacing(15f)
-                .setLabelsColor(parseColor(WHITE_BABY_POWDER))
+                .setLabelsColor(parseColor(LABEL_COLOR))
                 .setXAxis(false)
                 .setYAxis(false);}
 

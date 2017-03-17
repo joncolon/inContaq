@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist.graphs;
+package nyc.c4q.jonathancolon.inContaq.utlities.graphs;
 
 import android.graphics.Color;
 

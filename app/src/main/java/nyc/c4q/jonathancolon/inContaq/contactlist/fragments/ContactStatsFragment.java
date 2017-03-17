@@ -18,11 +18,11 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
-import org.parceler.Parcels;
+
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.contactlist.graphs.WordCountBarGraph;
+import nyc.c4q.jonathancolon.inContaq.utlities.graphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
