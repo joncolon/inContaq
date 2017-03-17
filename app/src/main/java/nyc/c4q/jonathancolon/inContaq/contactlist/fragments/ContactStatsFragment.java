@@ -12,14 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.db.chart.view.BarChartView;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
-
+import org.parceler.Parcels;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
@@ -28,6 +27,7 @@ import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.WordCount;
+
 
 
 public class ContactStatsFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -100,6 +100,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void initViews(View view) {
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.date_spinner_array,
@@ -158,8 +159,6 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
                 break;
             case R.id.daily_btn:
                 showDailyGraphFragment();
-                break;
-            default:
                 break;
         }
     }
