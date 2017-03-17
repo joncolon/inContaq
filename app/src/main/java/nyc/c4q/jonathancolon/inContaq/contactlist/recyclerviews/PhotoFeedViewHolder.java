@@ -15,7 +15,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 public class PhotoFeedViewHolder extends RecyclerView.ViewHolder {
     TextView photoText;
     ImageView photoView;
-    private Contact contact;
+    private String contactPhoto;
     View view;
     public PhotoFeedViewHolder(View itemView) {
         super(itemView);
@@ -25,9 +25,12 @@ public class PhotoFeedViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bind(Contact contact) {
-        this.contact = contact;
+    public void bind(String contactPhoto) {
+        Photo photo = ;
+        int resID = .getResources().getIdentifier("img"+number, "raw", getPackageName());
+
+        this.contactPhoto = contactPhoto;
         photoText.setText("1");
-        photoView.setImageResource(R.drawable.bg_polaroid_texture);
+        photoView.setImageResource(Integer.parseInt(photo.getImagePath());
     }
 }

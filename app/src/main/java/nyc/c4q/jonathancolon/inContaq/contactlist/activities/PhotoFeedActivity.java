@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.faceapi.GalleryImagesHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.recyclerviews.PhotoFeedAdapter;
 
 public class PhotoFeedActivity extends AppCompatActivity {
@@ -20,6 +21,8 @@ public class PhotoFeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_feed);
         rvContacts = (RecyclerView) findViewById(R.id.photo_rv);
+
+        GalleryImagesHelper.getAllImagesPath(getApplicationContext());
 
 
         PhotoFeedAdapter adapter = new PhotoFeedAdapter(contacts, getApplicationContext());

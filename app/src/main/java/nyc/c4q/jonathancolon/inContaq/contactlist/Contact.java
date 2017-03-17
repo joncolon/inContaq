@@ -19,6 +19,15 @@ public class Contact {
     String backgroundImage;
     String contactImage;
     Long timeLastContacted;
+    String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public long getTimeLastContacted() {
         return timeLastContacted;
