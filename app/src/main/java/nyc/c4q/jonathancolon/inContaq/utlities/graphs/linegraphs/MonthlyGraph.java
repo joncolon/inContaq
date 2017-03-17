@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.graphs;
+package nyc.c4q.jonathancolon.inContaq.utlities.graphs.linegraphs;
 
 import android.content.Context;
 import android.util.Log;

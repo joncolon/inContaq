@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.utlities.graphs.DailyGraph;
+import nyc.c4q.jonathancolon.inContaq.utlities.graphs.linegraphs.DailyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
@@ -37,12 +37,10 @@ public class DailyGraphFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_graph, container, false);
-
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
         Contact contact = unwrapParcelledContact();
         lstSms = SmsHelper.getAllSms(getActivity(), contact);
         showDailyGraph();
-
         return view;
     }
 
