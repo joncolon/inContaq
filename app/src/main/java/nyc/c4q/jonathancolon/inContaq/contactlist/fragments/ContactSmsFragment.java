@@ -23,12 +23,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.parceler.Parcels;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
@@ -37,13 +34,13 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
-
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
 public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener {
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
+
     private final String TAG = "SET TEXT REQUEST: ";
     private TextView contactName;
     private ImageView contactImageIV, backgroundImageIV;
@@ -140,27 +137,27 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
             displayContactInfo(contact);
 
-            contactImageIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                    ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
-                }
-            });
-
-            if (backgroundImageIV != null) {
-                backgroundImageIV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                        ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
-                    }
-                });
-            }
+//            contactImageIV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                    ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
+//                }
+//            });
+//
+//            if (backgroundImageIV != null) {
+//                backgroundImageIV.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                        ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
+//                    }
+//                });
+//            }
         }
     }
 
@@ -170,18 +167,20 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
             case R.id.send_button:
                 sendMessage(view);
                 break;
-            case R.id.contact_image:
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
-                break;
-            case R.id.background_image:
-                Intent bgIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                startActivityForResult(bgIntent, RESULT_LOAD_BACKGROUND_IMG);
-                break;
+//            case R.id.contact_image:
+//                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
+//                break;
+//
+//            case R.id.background_image:
+//                Intent bgIntent = new Intent(Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                startActivityForResult(bgIntent, RESULT_LOAD_BACKGROUND_IMG);
+//                break;
         }
     }
 

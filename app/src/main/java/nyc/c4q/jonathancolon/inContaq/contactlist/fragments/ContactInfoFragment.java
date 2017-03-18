@@ -1,10 +1,11 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,7 +28,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity
 import static android.app.Activity.RESULT_OK;
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
-public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
+public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, ProfileDialogFragment.Callback {
 
     private Contact contact;
     private TextView mobile, email, polaroidName, address, editButton;
@@ -38,13 +39,12 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private Animations anim;
     private boolean isEditTextEnabled;
     private ImageButton takePicture, choosePicture;
-
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_contact_info, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().
                 getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
@@ -100,8 +100,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                DialogFragment dialogFragment = new DialogFragment ();
-                dialogFragment.show(fm, "Choose Picture");
+                ProfileDialogFragment profileDialogFragment = new ProfileDialogFragment();
+                profileDialogFragment.show(fm, "Choose Picture");
+                profileDialogFragment.addCallback(ContactInfoFragment.this);
             }
         });
 
@@ -109,8 +110,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                DialogFragment dialogFragment = new DialogFragment ();
-                dialogFragment.show(fm, "Choose Picture");
+                ProfileDialogFragment profileDialogFragment = new ProfileDialogFragment();
+                profileDialogFragment.show(fm, "Choose Picture");
+                profileDialogFragment.addCallback(ContactInfoFragment.this);
             }
         });
     }
@@ -137,6 +139,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
+        PicassoHelper ph = new PicassoHelper(getActivity());
+
         polaroidName.setText(nameValue);
         editName.setText(nameValue);
         editMobile.setText(contact.getCellPhoneNumber());
@@ -144,6 +148,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         showMobile();
         showEmail();
         showAddress();
+
+        if (contact.getBackgroundImage() != null) {
+            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
+        }
+
+        if (contact.getContactImage() != null) {
+            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
+        }
     }
 
 
@@ -282,6 +294,17 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onResume() {
         super.onResume();
         displayContactInfo(contact);
+    }
+
+    @Override
+    public void onFinished(Uri contactUri) {
+
+        PicassoHelper ph = new PicassoHelper(getContext());
+
+        ph.loadImageFromUri(contactUri, contactImageIV);
+        contact.setContactImage(contactUri.toString());
+        saveToDatabase(contact, getContext());
+
     }
 }
 

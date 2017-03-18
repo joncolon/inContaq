@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,23 +16,30 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
-public class DialogFragment extends android.support.v4.app.DialogFragment implements View.OnClickListener {
+public class ProfileDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    private static final String TAG = "Camera";
+    interface Callback {
+        void onFinished(Uri contactUri);
+    }
 
+    Context context;
     ImageButton takePicture, choosePicture;
     Contact contact;
     ImageView contactImageIV, backgroundImageIV;
+    private List<Callback> callbacks = new ArrayList<>();
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +50,8 @@ public class DialogFragment extends android.support.v4.app.DialogFragment implem
         contact = Parcels.unwrap(getActivity().getIntent().
                 getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
 
+        contactImageIV = (ImageView) rootView.findViewById(R.id.contact_image);
+
         takePicture = (ImageButton) rootView.findViewById(R.id.take_picture);
         choosePicture = (ImageButton) rootView.findViewById(R.id.choose_picture);
 
@@ -51,11 +61,12 @@ public class DialogFragment extends android.support.v4.app.DialogFragment implem
         return rootView;
     }
 
-    static DialogFragment newInstance(){
-        return new DialogFragment();
+    public ProfileDialogFragment(){
     }
 
-    Context context;
+    public void addCallback(Callback callback) {
+        callbacks.add(callback);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -69,13 +80,11 @@ public class DialogFragment extends android.support.v4.app.DialogFragment implem
 
             case R.id.take_picture:
                 Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
                 startActivityForResult(takePicture, RESULT_LOAD_CONTACT_IMG);
                 break;
 
             case R.id.choose_picture:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
                 startActivityForResult(pickPhoto, RESULT_LOAD_CONTACT_IMG);
                 break;
 
@@ -88,49 +97,34 @@ public class DialogFragment extends android.support.v4.app.DialogFragment implem
         super.onActivityResult(requestCode, resultCode, data);
 
         try {
-            if (resultCode == Activity.RESULT_OK) {
-                Log.d(TAG, "onActivityResult: rc " + resultCode);
-                Log.d(TAG, "onActivityResult: ar " + Activity.RESULT_OK);
 
-                PicassoHelper ph = new PicassoHelper(context);
-                    Log.d(TAG, "onActivityResult:  " + ph);
+            if (resultCode == Activity.RESULT_OK) {
 
                 switch (requestCode) {
 
-
                     case 1:
                         Uri contactUri = data.getData();
-                        ph.loadImageFromUri(contactUri, contactImageIV);
-                        contact.setContactImage(contactUri.toString());
-                        saveToDatabase(contact, context);
+                        for (Callback callback : callbacks) {
+                            callback.onFinished(contactUri);
+                        }
+
                         break;
 
                     case 2:
                         Uri backgroundUri = data.getData();
-                        ph.loadImageFromUri(backgroundUri, backgroundImageIV);
-                        contact.setBackgroundImage(backgroundUri.toString());
-                        saveToDatabase(contact, context);
+                        for (Callback callback : callbacks) {
+                            callback.onFinished(backgroundUri);
+                        }
                         break;
                 }
+
             } else {
                 Toast.makeText(context, R.string.error_message_photo_not_selected,
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Log.d("camera", "onActivityResult: " + e);
             Toast.makeText(context, R.string.error_message_general, Toast.LENGTH_LONG)
                     .show();
         }
-
     }
-
-//    private void loadImages() {
-//        PicassoHelper ph = new PicassoHelper(getActivity());
-//        if (contact.getBackgroundImage() != null) {
-//            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
-//        }
-//        if (contact.getContactImage() != null) {
-//            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
-//        }
-//    }
 }

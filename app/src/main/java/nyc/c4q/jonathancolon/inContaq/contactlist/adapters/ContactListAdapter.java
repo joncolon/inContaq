@@ -17,8 +17,8 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.font.CustomFont;
 
-
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
+
     private final Listener listener;
     private final Context context;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
@@ -38,8 +38,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     @Override
     public ContactListAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemview_contactlist_rv,
-                parent, false);
+
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemview_contactlist_rv, parent, false);
 
         customFont = new CustomFont(context);
         ContactViewHolder vh = new ContactViewHolder(itemView, customFont);
@@ -68,7 +68,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return contactList.size();
     }
 
-
     public void setData(List<Contact> contacts) {
         this.contactList = contacts;
         notifyDataSetChanged();
@@ -82,14 +81,15 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     //_____________________________________VIEWHOLDER___________________________________________________
     class ContactViewHolder extends RecyclerView.ViewHolder {
+
         private final ImageView mBackGroundImage;
         private final ImageView mContactImage;
         private final TextView mContactName;
         private final TextView mContactInitials;
 
 
-
         ContactViewHolder(View itemView, CustomFont customFont) {
+
             super(itemView);
             mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);
             mContactName = (TextView) itemView.findViewById(R.id.name);
@@ -100,19 +100,22 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         }
 
         void bind(Contact c) {
+
             final Contact contact = c;
             mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
             mContactInitials.setText((contact.getFirstName().substring(0, 1).toUpperCase()));
             PicassoHelper ph = new PicassoHelper(context);
 
-
             if (hasBackgroundImage(contact)) {
                 ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
 
+            } else {
+                mBackGroundImage.setImageDrawable(null);
             }
 
             if (hasContactImage(contact)) {
                 ph.loadImageFromString(contact.getContactImage(), mContactImage);
+
             } else {
                 mBackGroundImage.refreshDrawableState();
             }
@@ -123,6 +126,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     listener.onContactClicked(contact);
                 }
             });
+
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
