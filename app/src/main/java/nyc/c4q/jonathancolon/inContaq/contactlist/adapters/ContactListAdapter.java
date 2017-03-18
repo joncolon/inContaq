@@ -105,10 +105,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             mContactInitials.setText((contact.getFirstName().substring(0, 1).toUpperCase()));
             PicassoHelper ph = new PicassoHelper(context);
 
-
             if (hasBackgroundImage(contact)) {
                 ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
-
+            } else {
+                mBackGroundImage.setImageDrawable(null);
             }
 
             if (hasContactImage(contact)) {

@@ -24,14 +24,12 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
 public class DailyGraphFragment extends Fragment {
 
-
     private LineChartView lineGraph;
     private ArrayList<Sms> lstSms;
 
     public DailyGraphFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
