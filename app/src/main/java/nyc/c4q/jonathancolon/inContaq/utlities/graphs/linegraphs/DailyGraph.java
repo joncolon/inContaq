@@ -16,10 +16,6 @@ import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
 
-/**
- * Created by Hyun on 3/11/17.
- */
-
 public class DailyGraph {
     private static final String SENT_COLOR = "#EF7674";
     private static final String LABEL_COLOR = "#FDFFFC";
@@ -29,9 +25,6 @@ public class DailyGraph {
     private LineChartView lineGraph;
     private ArrayList<Sms> lstSms;
     private DailyGraphHelper dailyGraphHelper;
-    private String[] xAxisLabels;
-    private float[] sentValues;
-    private float[] receivedValues;
 
     public DailyGraph(Context context, LineChartView lineGraph, ArrayList<Sms> lstSms) {
         this.context = context;
@@ -51,9 +44,9 @@ public class DailyGraph {
 
     private void setGraphData() {
         dailyGraphHelper = new DailyGraphHelper(lstSms);
-        xAxisLabels = dailyGraphHelper.getXAxisLabels();
-        receivedValues = dailyGraphHelper.getReceivedValue();
-        sentValues = dailyGraphHelper.getSentValues();
+        String[] xAxisLabels = dailyGraphHelper.getXAxisLabels();
+        float[] receivedValues = dailyGraphHelper.getReceivedValue();
+        float[] sentValues = dailyGraphHelper.getSentValues();
 
         prepareReceivedLineSet(xAxisLabels, receivedValues);
         prepareSentLineSet(xAxisLabels, sentValues);
