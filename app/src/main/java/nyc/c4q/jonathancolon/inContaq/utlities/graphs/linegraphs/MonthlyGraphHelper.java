@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.utlities.graphs.data.SmsAnalytics;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 /**
  * Created by jonathancolon on 3/17/17.

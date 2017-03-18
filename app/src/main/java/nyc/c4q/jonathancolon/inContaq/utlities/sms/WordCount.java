@@ -1,10 +1,10 @@
 package nyc.c4q.jonathancolon.inContaq.utlities.sms;
 
-import android.icu.text.UnicodeSet;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 import static android.content.ContentValues.TAG;
 

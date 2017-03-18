@@ -24,7 +24,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.graphs.bargraphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.WordCount;
 

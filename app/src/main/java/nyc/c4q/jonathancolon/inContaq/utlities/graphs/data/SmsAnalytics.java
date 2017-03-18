@@ -13,7 +13,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyReceivedWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlySentWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 /**
  * Created by jonathancolon on 3/17/17.

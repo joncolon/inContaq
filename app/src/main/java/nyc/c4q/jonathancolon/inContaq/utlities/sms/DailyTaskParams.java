@@ -3,7 +3,7 @@ package nyc.c4q.jonathancolon.inContaq.utlities.sms;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 /**
  * Created by Hyun on 3/11/17.

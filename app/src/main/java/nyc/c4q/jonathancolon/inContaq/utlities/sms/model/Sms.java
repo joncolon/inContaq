@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms.model;
 
 import org.parceler.Parcel;
 

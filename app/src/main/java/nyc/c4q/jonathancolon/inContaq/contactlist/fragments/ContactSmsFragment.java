@@ -35,7 +35,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
