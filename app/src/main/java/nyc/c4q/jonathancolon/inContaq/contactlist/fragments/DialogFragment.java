@@ -24,6 +24,10 @@ public class DialogFragment extends android.support.v4.app.DialogFragment implem
     Contact contact;
     ImageView contactImageIV, backgroundImageIV;
 
+    private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
+    private static final int RESULT_LOAD_CONTACT_IMG = 1;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,12 +50,12 @@ public class DialogFragment extends android.support.v4.app.DialogFragment implem
 
             case R.id.take_picture:
                 Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePicture, 0);
+                startActivityForResult(takePicture, RESULT_LOAD_CONTACT_IMG);
                 break;
 
             case R.id.choose_picture:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, 1);
+                startActivityForResult(pickPhoto, RESULT_LOAD_CONTACT_IMG);
                 break;
 
             default:
@@ -68,14 +72,14 @@ public class DialogFragment extends android.support.v4.app.DialogFragment implem
                 PicassoHelper ph = new PicassoHelper(getActivity());
                 switch (requestCode) {
 
-                    case 0:
+                    case 1:
                         Uri contactUri = data.getData();
                         ph.loadImageFromUri(contactUri, contactImageIV);
                         contact.setContactImage(contactUri.toString());
                         saveToDatabase(contact, getActivity());
                         break;
 
-                    case 1:
+                    case 2:
                         Uri backgroundUri = data.getData();
                         ph.loadImageFromUri(backgroundUri, backgroundImageIV);
                         contact.setBackgroundImage(backgroundUri.toString());

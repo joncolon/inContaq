@@ -1,46 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="125dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="100dp">
+
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/card_margin_end"
+        android:layout_marginStart="@dimen/card_margin_start"
         android:layout_marginBottom="4dp"
-        app:cardBackgroundColor="#000000">
+        >
 
         <ImageView
-            android:background="@color/blue_maastricht"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/img_corkboard_land"
+            android:layout_height="155dp"
             android:id="@+id/background_image"
+            android:src="@drawable/transparent_gloss"
             android:scaleType="centerCrop"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 
         <TextView
+            android:id="@+id/contact_dark_filter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#55000000"
-            android:alpha="10"/>
+            android:alpha="10"
+            android:background="#55000000" />
 
         <TextView
+            android:id="@+id/contact_initials"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:id="@+id/contact_initials"
             android:text=""
             android:textSize="55sp"
             android:textAlignment="center"
             android:textColor="#ffffff"
-            android:background="#6BB9F0"
+            android:background="@color/cardview_dark_background"
             android:layout_gravity="start|center_vertical|center_horizontal"
             android:layout_marginLeft="5dp"
             android:padding="1dp"
             android:paddingTop="1dp"
             android:gravity="center|fill"
-            android:elevation="20dp"/>
+            android:elevation="20dp"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
+
+
+
 
         <ImageView
             android:layout_width="80dp"
@@ -49,32 +59,26 @@
             android:layout_gravity="start|center_vertical|center_horizontal"
             android:layout_marginStart="5dp"
             android:elevation="20dp"
+            android:src="@drawable/transparent_gloss"
             android:scaleType="centerCrop" />
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/name"
-                android:textColor="@color/white_baby_powder"
-                android:textSize="@dimen/contact_rv_name_width"
-                android:text="@string/unknown"
-                android:gravity="start"
-                android:textAlignment="textStart"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/contact_rv_margin_start_"
-                android:layout_marginBottom="@dimen/contact_rv_margin_btm"
-                android:typeface="normal"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_marginTop="63dp"
+            android:layout_marginStart="90dp"
+            android:text="@string/unknown"
+            android:textAlignment="textStart"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/contact_rv_name_width"
+            android:textStyle="bold"
+            android:typeface="normal"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
 
     </android.support.v7.widget.CardView>
-
-
 </RelativeLayout>

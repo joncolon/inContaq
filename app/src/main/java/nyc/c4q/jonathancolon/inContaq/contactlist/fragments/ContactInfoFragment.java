@@ -16,9 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.fontometrics.Fontometrics;
 import org.parceler.Parcels;
 import java.util.Objects;
 import nyc.c4q.jonathancolon.inContaq.R;
@@ -27,7 +24,6 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 import static android.app.Activity.RESULT_OK;
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
@@ -47,21 +43,15 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
 
-    public static ContactInfoFragment newInstance() {
-        ContactInfoFragment fragment = new ContactInfoFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_info, container, false);
-        contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
+        contact = Parcels.unwrap(getActivity().getIntent().
+                getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
         anim = new Animations(ContactInfoFragment.this.getActivity());
         isEditTextEnabled = false;
-
         initViews(view);
         setClickListeners();
         displayContactInfo(contact);
@@ -82,7 +72,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         saveButton = (FloatingActionButton) view.findViewById(R.id.save_button);
         editButton = (TextView) view.findViewById(R.id.edit_option);
 
-        contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
+        contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
 
         takePicture = (ImageButton) view.findViewById(R.id.take_picture);
@@ -114,27 +104,36 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 dialogFragment.show(fm, "Choose Picture");
             }
         });
+
+        backgroundImageIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                DialogFragment dialogFragment = new DialogFragment ();
+                dialogFragment.show(fm, "Choose Picture");
+            }
+        });
     }
 
-
-    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch(requestCode) {
-            case 0:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    contactImageIV.setImageURI(selectedImage);
-                }
-
-                break;
-            case 1:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    contactImageIV.setImageURI(selectedImage);
-                }
-                break;
-        }
-    }
+//
+//    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+//        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+//        switch(requestCode) {
+//            case 0:
+//                if(resultCode == RESULT_OK){
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    contactImageIV.setImageURI(selectedImage);
+//                }
+//
+//                break;
+//            case 1:
+//                if(resultCode == RESULT_OK){
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    contactImageIV.setImageURI(selectedImage);
+//                }
+//                break;
+//        }
+//    }
 
     private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
@@ -192,37 +191,30 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     synchronized private void showMobile() {
         if (isEditTextEnabled == true) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(mobile);
-            anim.fadeIn(editMobile);
+
         }
 
         if (contact.getCellPhoneNumber() != null || Objects.equals(contact.getCellPhoneNumber(), "")) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(mobile);
         }
     }
 
     synchronized private void showEmail() {
         if (isEditTextEnabled == true) {
             email.setVisibility(View.VISIBLE);
-            anim.fadeIn(email);
-            anim.fadeIn(editEmail);
+
         }
         if (contact.getEmail() != null || Objects.equals(contact.getEmail(), "")) {
             email.setVisibility(View.VISIBLE);
-            anim.fadeIn(email);
+
         }
     }
 
     synchronized private void showAddress() {
         if (isEditTextEnabled == true) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(address);
-            anim.fadeIn(editAddress);
         }
         if (contact.getAddress() != null || Objects.equals(contact.getAddress(), "")) {
-            address.setVisibility(View.VISIBLE);
-            anim.fadeIn(address);
         }
     }
 
@@ -286,7 +278,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onResume() {
         super.onResume();
         displayContactInfo(contact);
-        polaroidName.setTypeface(Fontometrics.amatic_bold(getActivity()));
     }
 }
 

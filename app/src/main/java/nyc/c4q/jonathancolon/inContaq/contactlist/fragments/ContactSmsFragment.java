@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,8 +23,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.fontometrics.Fontometrics;
 
 import org.parceler.Parcels;
 
@@ -58,13 +58,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     public ContactSmsFragment() {
     }
 
-    public static ContactSmsFragment newInstance() {
-        ContactSmsFragment fragment = new ContactSmsFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
-    }
-
     public static ContactSmsFragment instance() {
         return inst;
     }
@@ -87,17 +80,9 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
-        smsSendButton = (ImageView) view.findViewById(R.id.send_button);
-        smsEditText = (EditText) view.findViewById(R.id.sms_edit_text);
-        smsSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage(v);
-            }
-        });
+
         initViews(view);
-//        enableClickListeners();
-        displayContactInfo(contact);
+        enableClickListeners(view);
         populateSmsList();
         setupRecyclerView(contact);
         refreshRecyclerView();
@@ -143,54 +128,61 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private void initViews(View view) {
 
         contactName = (TextView) view.findViewById(R.id.name);
-        contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
+        contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        contactName.setTypeface(Fontometrics.amatic_bold(getActivity()));
 
-//        contactImageIV.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
-//            }
-//        });
-//        if (backgroundImageIV != null) {
-//            backgroundImageIV.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                    ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
-//                }
-//            });
-//        }
-    }
+        Typeface jaapokkiRegular = Typeface.createFromAsset(contactName.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
+        contactName.setTypeface(jaapokkiRegular);
 
-    private void enableClickListeners() {
+        int value = getActivity().getResources().getConfiguration().orientation;
 
-        contactImageIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (value == Configuration.ORIENTATION_PORTRAIT) {
 
-                ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
-            }
-        });
-        if (backgroundImageIV != null) {
-            backgroundImageIV.setOnClickListener(new View.OnClickListener() {
+            displayContactInfo(contact);
+
+
+            contactImageIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                    ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
+                    ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
                 }
             });
+            if (backgroundImageIV != null) {
+                backgroundImageIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                        ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
+                    }
+                });
+            }
+        }
+    }
+
+    private void enableClickListeners(View view) {
+        switch (view.getId()) {
+
+            case R.id.send_button:
+                sendMessage(view);
+                break;
+            case R.id.contact_image:
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
+                break;
+            case R.id.background_image:
+                Intent bgIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(bgIntent, RESULT_LOAD_BACKGROUND_IMG);
+                break;
         }
     }
 
@@ -218,6 +210,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     public synchronized void refreshRecyclerView() {
+        adapter = (SmsAdapter) recyclerView.getAdapter();
         Collections.sort(SmsList);
         adapter.setData(SmsList);
         Log.d(TAG, "RefreshRV : " + SmsList.size());
@@ -239,35 +232,35 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         anim.fadeIn(recyclerView);
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        try {
-//            if (resultCode == Activity.RESULT_OK) {
-//                PicassoHelper ph = new PicassoHelper(getActivity());
-//
-//                switch (requestCode) {
-//                    case 1:
-//                        Uri contactUri = data.getData();
-//                        ph.loadImageFromUri(contactUri, contactImageIV);
-//                        contact.setContactImage(contactUri.toString());
-//                        saveToDatabase(contact, getActivity());
-//                        break;
-//                    case 2:
-//                        Uri backgroundUri = data.getData();
-//                        ph.loadImageFromUri(backgroundUri, backgroundImageIV);
-//                        contact.setBackgroundImage(backgroundUri.toString());
-//                        saveToDatabase(contact, getActivity());
-//                        break;
-//                }
-//            } else {
-//                Toast.makeText(getActivity(), R.string.error_message_photo_not_selected,
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        } catch (Exception e) {
-//            Toast.makeText(getActivity(), R.string.error_message_general, Toast.LENGTH_LONG)
-//                    .show();
-//        }
-//    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == Activity.RESULT_OK) {
+                PicassoHelper ph = new PicassoHelper(getActivity());
+
+                switch (requestCode) {
+                    case 1:
+                        Uri contactUri = data.getData();
+                        ph.loadImageFromUri(contactUri, contactImageIV);
+                        contact.setContactImage(contactUri.toString());
+                        saveToDatabase(contact, getActivity());
+                        break;
+                    case 2:
+                        Uri backgroundUri = data.getData();
+                        ph.loadImageFromUri(backgroundUri, backgroundImageIV);
+                        contact.setBackgroundImage(backgroundUri.toString());
+                        saveToDatabase(contact, getActivity());
+                        break;
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.error_message_photo_not_selected,
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), R.string.error_message_general, Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
 
     @Override
     public void onContactClicked(Sms sms) {
@@ -278,4 +271,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     public void onContactLongClicked(Sms sms) {
         //TODO add functionality
     }
+
+
 }

@@ -10,4 +10,5 @@
     <string name="phone_num_placeholder">8090470606</string>
     <string name="placeholder_text">Hi, This is Abhayd dddfd dfd sdjs sdkj ?</string>
     <string name="placeholder_date">17 jul</string>
+    <string name="contact_list_font">fonts/jaapokkiregular.ttf</string>
 </resources>

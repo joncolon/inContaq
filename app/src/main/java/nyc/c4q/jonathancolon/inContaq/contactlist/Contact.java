@@ -26,7 +26,6 @@ public class Contact {
 
     public void setTimeLastContacted(long timeLastContacted) {
         this.timeLastContacted = System.currentTimeMillis();
-
     }
 
     public Contact() {
@@ -39,6 +38,12 @@ public class Contact {
     public Contact(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Contact(String firstName, String lastName, String cellPhoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cellPhoneNumber = cellPhoneNumber;
     }
 
     public String getContactImage() {
@@ -128,4 +133,6 @@ public class Contact {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 }

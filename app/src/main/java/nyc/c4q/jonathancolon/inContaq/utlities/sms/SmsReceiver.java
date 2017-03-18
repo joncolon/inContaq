@@ -18,15 +18,11 @@ public class SmsReceiver extends BroadcastReceiver  {
         if (intentExtras != null) {
             Object[] sms = (Object[]) intentExtras.get(SMS_BUNDLE);
             for (int i = 0; i < sms.length; ++i) {
-
-                String format = intentExtras.getString("format");
             }
 
             ContactSmsFragment inst = ContactSmsFragment.instance();
-
             inst.populateSmsList();
             inst.refreshRecyclerView();
-
         }
     }
 }

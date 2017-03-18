@@ -1,9 +1,11 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    tools:context=".contactlist.activities.MainActivity">
+    tools:context=".contactlist.activities.ImportContacts">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +36,7 @@
             android:layout_alignRight="@+id/textView"
             android:layout_below="@+id/textView"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"/>
 
         <ProgressBar
             android:id="@+id/progressBar1"
@@ -44,8 +46,6 @@
             android:layout_above="@+id/textView1"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true" />
-
-
     </RelativeLayout>
 
 

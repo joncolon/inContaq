@@ -1,0 +1,33 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.MonthlyGraphFragment">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/graph_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginEnd="@dimen/card_margin_end"
+        android:layout_marginStart="@dimen/card_margin_start"
+        android:elevation="0dp"
+        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardCornerRadius="@dimen/card_chat_corner_radius">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/transparent_gloss"
+            android:scaleType="fitXY"/>
+
+        <com.db.chart.view.LineChartView
+            android:id="@+id/daily_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/line_chart_margin">
+        </com.db.chart.view.LineChartView>
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
