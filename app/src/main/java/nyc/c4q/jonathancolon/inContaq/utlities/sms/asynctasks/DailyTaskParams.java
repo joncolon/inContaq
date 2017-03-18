@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -19,11 +19,11 @@ public class DailyTaskParams {
         dailyTexts = dailyTextMsg;
     }
 
-    protected static ArrayList<Sms> getdailyListSms() {
+    static ArrayList<Sms> getdailySmsList() {
         return dailyListSms;
     }
 
-    protected static TreeMap<Integer, Integer> getDailyTexts() {
+    static TreeMap<Integer, Integer> getDailyTexts() {
         return dailyTexts;
     }
 }

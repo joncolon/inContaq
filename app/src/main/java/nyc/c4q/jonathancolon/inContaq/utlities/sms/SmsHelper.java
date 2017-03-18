@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
@@ -208,7 +208,7 @@ public class SmsHelper {
     }
 
     @NonNull
-    static ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
+    public static ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
         ArrayList<Sms> sentSms = new ArrayList<Sms>();
 
         for (int i = 0; i < smsList.size(); i++) {
@@ -220,7 +220,7 @@ public class SmsHelper {
     }
 
     @NonNull
-    static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
+    public static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
         ArrayList<Sms> receivedSms = new ArrayList<Sms>();
 
         for (int i = 0; i < smsList.size(); i++) {

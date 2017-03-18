@@ -20,13 +20,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.utlities.graphs.bargraphs.TotalSmsBarChart;
 import nyc.c4q.jonathancolon.inContaq.utlities.graphs.bargraphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.data.WordFrequency;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.WordCount;
+import nyc.c4q.jonathancolon.inContaq.data.WordCount;
 
 
 
@@ -40,15 +42,10 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
     private Button monthlyBtn, weeklyBtn, dailyBtn;
     private TextView smsStatsTV;
     private ArrayList<Sms> smsList;
-    private BarChartView mChart;
-
-    private String[] mLabels = {"Sent", "Received"};
-
+    private BarChartView wordAverageChart, totalWordCountChart;
 
     int averageWordCountSent;
     int averageWordCountReceived;
-    private float[][] sentValues = {{1f, 6f}, {1f, 8f}};
-    private int highestValue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,13 +67,18 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
             long difference = date2.getTime() - date1.getTime();
             long differenceDays = difference / (1000 * 60 * 60 * 24);
             smsStatsTV.setText("Averge words sent: " + String.valueOf(averageWordCountSent) + "\n" +
-                    "Average words received: " + String.valueOf(averageWordCountReceived) + "\n" + "Last contacted " + differenceDays + " days ago");
+                    "Average words received: " + String.valueOf(averageWordCountReceived) + "\n" +
+                    "Last contacted " + differenceDays + " days ago");
+
+            WordFrequency wordFrequency = new WordFrequency(smsList);
+            smsStatsTV.setText("Common Sent: " + wordFrequency.mostCommonWordSent() + " Common Received: " + wordFrequency.mostCommonWordReceived());
+
         }
 
-        WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(mChart, smsList);
+        WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart, smsList);
+        TotalSmsBarChart totalSmsBarChart = new TotalSmsBarChart(totalWordCountChart, smsList);
         wordCountBarGraph.showBarGraph();
-
-
+        totalSmsBarChart.showBarGraph();
 
         return view;
     }
@@ -116,7 +118,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         monthlyBtn.setOnClickListener(this);
         weeklyBtn.setOnClickListener(this);
         dailyBtn.setOnClickListener(this);
-        mChart = (BarChartView) view.findViewById(R.id.bar_chart_word_average);
+        wordAverageChart = (BarChartView) view.findViewById(R.id.bar_chart_word_average);
+        totalWordCountChart = (BarChartView) view.findViewById(R.id.bar_chart_total_sms);
     }
 
     @Nullable

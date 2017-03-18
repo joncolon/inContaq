@@ -45,6 +45,37 @@
 
 
     </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_total_sms"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="@dimen/card_margin_top"
+        android:layout_marginBottom="@dimen/card_margin_btm"
+        android:layout_below="@id/graph_frag_container"
+        android:layout_marginEnd="@dimen/card_margin_end"
+        android:layout_marginStart="@dimen/card_margin_start"
+        android:elevation="0dp"
+        android:layout_toEndOf="@id/card_word_count"
+        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardCornerRadius="@dimen/card_chat_corner_radius">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/transparent_gloss"/>
+
+        <com.db.chart.view.BarChartView
+            android:id="@+id/bar_chart_total_sms"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            >
+        </com.db.chart.view.BarChartView>
+
+
+    </android.support.v7.widget.CardView>
     <TextView
         android:id="@+id/sms_stats"
         android:layout_width="match_parent"

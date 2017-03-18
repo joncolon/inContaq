@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -29,8 +29,8 @@ public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap
 
     @Override
     protected TreeMap<Integer, Integer> doInBackground(DailyTaskParams... params) {
-        listSms = params[0].getdailyListSms();
-        dailyTexts = params[0].getDailyTexts();
+        listSms = DailyTaskParams.getdailySmsList();
+        dailyTexts = DailyTaskParams.getDailyTexts();
         return getSmsStats(listSms);
     }
 

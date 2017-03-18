@@ -9,27 +9,27 @@ import com.db.chart.view.BarChartView;
 
 import java.util.ArrayList;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.data.WordCount;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
 /**
- * Created by jonathancolon on 3/16/17.
+ * Created by jonathancolon on 3/17/17.
  */
 
-public class WordCountBarGraph {
+public class TotalSmsBarChart {
     private static final String FILL_COLOR = "#7F000000";
     private static final String SENT_COLOR = "#EF7674";
     private static final String RECEIVED_COLOR = "#FDFFFC";
-    private int averageWordCountSent;
-    private int averageWordCountReceived;
+    private int totalWordsSent;
+    private int totalWordsReceived;
     private BarChartView barChartView;
     private String[] mLabels = {"Sent", "Received"};
     private ArrayList<Sms> smsList;
     private int highestValue;
 
-    public WordCountBarGraph(BarChartView barChartView, ArrayList<Sms> smsList) {
+    public TotalSmsBarChart(BarChartView barChartView, ArrayList<Sms> smsList) {
         this.barChartView = barChartView;
         this.smsList = smsList;
     }
@@ -40,8 +40,8 @@ public class WordCountBarGraph {
     }
 
     private void getBarGraphValues(ArrayList<Sms> smsList) {
-        averageWordCountSent = WordCount.getAverageWordCountSent(smsList);
-        averageWordCountReceived = WordCount.getAverageWordCountReceived(smsList);
+        totalWordsSent = WordCount.getTotalSent(smsList);
+        totalWordsReceived = WordCount.getTotalReceived(smsList);
         this.smsList = smsList;
     }
 
@@ -53,8 +53,8 @@ public class WordCountBarGraph {
 
     private void setGraphData() {
         BarSet barSet = new BarSet();
-        Bar barSent = new Bar(mLabels[0], averageWordCountSent);
-        Bar barReceived = new Bar(mLabels[1], averageWordCountReceived);
+        Bar barSent = new Bar(mLabels[0], totalWordsSent);
+        Bar barReceived = new Bar(mLabels[1], totalWordsReceived);
         barReceived.setColor(Color.parseColor(RECEIVED_COLOR));
         barSent.setColor(Color.parseColor(SENT_COLOR));
         barSet.addBar(barSent);
@@ -67,7 +67,6 @@ public class WordCountBarGraph {
     }
 
     private void setGraphAttributes() {
-        // Chart
         barChartView.setXAxis(false)
                 .setYAxis(false)
                 .setAxisBorderValues(0, increaseByQuarter(highestValue))
@@ -77,7 +76,7 @@ public class WordCountBarGraph {
     }
 
     private void getYvalue() {
-        highestValue = Math.max(averageWordCountReceived, averageWordCountSent);
+        highestValue = Math.max(totalWordsReceived, totalWordsSent);
         if (highestValue == 0){
             highestValue = 10;
         }
@@ -86,5 +85,4 @@ public class WordCountBarGraph {
     private int increaseByQuarter(int input) {
         return (int) Math.round(input * 1.25);
     }
-
 }

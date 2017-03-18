@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.utlities.graphs.data.SmsAnalytics;
+import nyc.c4q.jonathancolon.inContaq.data.SmsAnalytics;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 /**
