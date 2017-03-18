@@ -1,12 +1,10 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,7 +28,6 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
-
 import static android.app.Activity.RESULT_OK;
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
@@ -58,8 +55,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_contact_info, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
@@ -94,8 +90,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     }
 
-
-
     private void setClickListeners() {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -118,58 +112,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 FragmentManager fm = getFragmentManager();
                 DialogFragment dialogFragment = new DialogFragment ();
                 dialogFragment.show(fm, "Choose Picture");
-
-//                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                ContactInfoFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
             }
         });
-//        if (backgroundImageIV != null) {
-//            backgroundImageIV.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                    ContactInfoFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
-//                }
-//            });
-//        }
-
     }
 
-
-
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        try {
-//            if (resultCode == Activity.RESULT_OK) {
-//                PicassoHelper ph = new PicassoHelper(getActivity());
-//
-//                switch (requestCode) {
-//                    case 0:
-//                        Uri contactUri = data.getData();
-//                        ph.loadImageFromUri(contactUri, contactImageIV);
-//                        contact.setContactImage(contactUri.toString());
-//                        saveToDatabase(contact, getActivity());
-//                        break;
-//                    case 1:
-//                        Uri backgroundUri = data.getData();
-//                        ph.loadImageFromUri(backgroundUri, backgroundImageIV);
-//                        contact.setBackgroundImage(backgroundUri.toString());
-//                        saveToDatabase(contact, getActivity());
-//                        break;
-//                }
-//            } else {
-//                Toast.makeText(getActivity(), R.string.error_message_photo_not_selected,
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        } catch (Exception e) {
-//            Toast.makeText(getActivity(), R.string.error_message_general, Toast.LENGTH_LONG)
-//                    .show();
-//        }
-//    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
@@ -189,7 +135,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 break;
         }
     }
-
 
     private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
@@ -294,7 +239,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             contact.setAddress(address);
             contact.setCellPhoneNumber(editMobile.getText().toString());
 
-            SqlHelper.saveToDatabase(contact, getActivity());
+            saveToDatabase(contact, getActivity());
         }
     }
 
