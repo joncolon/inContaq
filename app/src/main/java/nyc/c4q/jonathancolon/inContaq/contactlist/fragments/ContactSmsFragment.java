@@ -74,8 +74,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
@@ -141,7 +140,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
             displayContactInfo(contact);
 
-
             contactImageIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -151,6 +149,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
                     ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
                 }
             });
+
             if (backgroundImageIV != null) {
                 backgroundImageIV.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -187,15 +186,18 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     synchronized private void displayContactInfo(Contact contact) {
+
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
         PicassoHelper ph = new PicassoHelper(getActivity());
 
         if (contact.getBackgroundImage() != null) {
             ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
         }
+
         if (contact.getContactImage() != null) {
             ph.loadImageFromString(contact.getContactImage(), contactImageIV);
         }
+
         contactName.setText(nameValue);
     }
 
@@ -234,6 +236,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         try {
             if (resultCode == Activity.RESULT_OK) {
                 PicassoHelper ph = new PicassoHelper(getActivity());
@@ -271,6 +274,4 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     public void onContactLongClicked(Sms sms) {
         //TODO add functionality
     }
-
-
 }

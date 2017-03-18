@@ -39,10 +39,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private boolean isEditTextEnabled;
     private ImageButton takePicture, choosePicture;
 
-
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,10 +53,12 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         initViews(view);
         setClickListeners();
         displayContactInfo(contact);
+
         return view;
     }
 
     private void initViews(View view) {
+
         polaroidName = (TextView) view.findViewById(R.id.contact_name);
         mobile = (TextView) view.findViewById(R.id.mobile_phone);
         email = (TextView) view.findViewById(R.id.email);
@@ -115,25 +115,25 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         });
     }
 
-//
-//    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-//        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-//        switch(requestCode) {
-//            case 0:
-//                if(resultCode == RESULT_OK){
-//                    Uri selectedImage = imageReturnedIntent.getData();
-//                    contactImageIV.setImageURI(selectedImage);
-//                }
-//
-//                break;
-//            case 1:
-//                if(resultCode == RESULT_OK){
-//                    Uri selectedImage = imageReturnedIntent.getData();
-//                    contactImageIV.setImageURI(selectedImage);
-//                }
-//                break;
-//        }
-//    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch(requestCode) {
+            case 0:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    contactImageIV.setImageURI(selectedImage);
+                }
+
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    contactImageIV.setImageURI(selectedImage);
+                }
+                break;
+        }
+    }
 
     private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
@@ -145,6 +145,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         showEmail();
         showAddress();
     }
+
+
 
     private void buildSaveEditDialog() {
 
@@ -179,7 +181,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void loadImages() {
+
         PicassoHelper ph = new PicassoHelper(getActivity());
+
         if (contact.getBackgroundImage() != null) {
             ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
         }
