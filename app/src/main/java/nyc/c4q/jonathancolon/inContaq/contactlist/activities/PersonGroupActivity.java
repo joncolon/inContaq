@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -236,6 +237,8 @@ public class PersonGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_group);
+
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {

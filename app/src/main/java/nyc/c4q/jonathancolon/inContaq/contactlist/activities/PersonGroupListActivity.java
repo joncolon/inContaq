@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -96,6 +97,7 @@ public class PersonGroupListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_group_list);
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle(getString(R.string.progress_dialog_title));

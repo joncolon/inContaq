@@ -49,7 +49,8 @@
         <activity android:name=".contactlist.activities.PersonGroupListActivity" />
         <activity android:name=".contactlist.activities.PersonGroupActivity" />
         <activity android:name=".contactlist.activities.PersonActivity" />
-        <activity android:name=".contactlist.activities.AddFaceToPersonActivity"></activity>
+        <activity android:name=".contactlist.activities.AddFaceToPersonActivity" />
+        <activity android:name=".contactlist.activities.ScanActivity"></activity>
     </application>
 
 </manifest>

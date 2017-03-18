@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -55,6 +56,9 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
+
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
+
         Stetho.initializeWithDefaults(this);
 
         PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());

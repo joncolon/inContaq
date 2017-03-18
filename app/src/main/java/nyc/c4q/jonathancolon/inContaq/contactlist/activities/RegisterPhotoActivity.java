@@ -116,6 +116,7 @@ public class RegisterPhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_photo);
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle(getString(R.string.progress_dialog_title));

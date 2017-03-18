@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -216,7 +217,7 @@ public class AddFaceToPersonActivity extends AppCompatActivity {
 
     String mPersonGroupId;
     String mPersonId;
-    String mImageUriStr;
+    static String mImageUriStr;
     Bitmap mBitmap;
     FaceGridViewAdapter mFaceGridViewAdapter;
 
@@ -227,6 +228,9 @@ public class AddFaceToPersonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_face_to_person);
+
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
+
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {

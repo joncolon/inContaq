@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import org.parceler.Parcels;
 
@@ -14,24 +15,20 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactFragmentPagerA
 
 public class ContactViewPagerActivity extends FragmentActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_viewpager);
-
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
 
         Contact contact = Parcels.unwrap(getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
         Intent i = getIntent();
 
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_contact_tabs);
         viewPager.setAdapter(new ContactFragmentPagerAdapter(getSupportFragmentManager(),
                 ContactViewPagerActivity.this){
-
         });
 
-        // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout_contact_tabs);
         tabLayout.setupWithViewPager(viewPager);
             viewPager.setCurrentItem(1);

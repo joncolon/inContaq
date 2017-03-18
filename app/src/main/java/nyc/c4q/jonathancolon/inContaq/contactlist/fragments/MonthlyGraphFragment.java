@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.contactlist.graphs.MonthlyGraph;
+import nyc.c4q.jonathancolon.inContaq.utlities.graphs.linegraphs.MonthlyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class DetectionLogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detection_log);
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
 
         LogAdapter logAdapter = new LogAdapter();
         ListView listView = (ListView) findViewById(R.id.log);

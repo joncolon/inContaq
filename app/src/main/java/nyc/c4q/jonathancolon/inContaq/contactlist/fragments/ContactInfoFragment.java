@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.fontometrics.Fontometrics;
 
 import org.parceler.Parcels;
 
@@ -52,12 +51,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_contact_info, container, false);
-        contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
+        contact = Parcels.unwrap(getActivity().getIntent().
+                getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
         anim = new Animations(ContactInfoFragment.this.getActivity());
         isEditTextEnabled = false;
-
         initViews(view);
         setClickListeners();
         displayContactInfo(contact);
@@ -79,7 +77,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         editButton = (TextView) view.findViewById(R.id.edit_option);
         registerPhotoButton = (Button) view.findViewById(R.id.register_photo_button);
 
-        contactImageIV = (ImageView) view.findViewById(R.id.contact_img);
+        contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
 
         photoCard = (CardView) view.findViewById(R.id.photo_card);
@@ -177,37 +175,30 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     synchronized private void showMobile() {
         if (isEditTextEnabled == true) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(mobile);
-            anim.fadeIn(editMobile);
+
         }
 
         if (contact.getCellPhoneNumber() != null || Objects.equals(contact.getCellPhoneNumber(), "")) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(mobile);
         }
     }
 
     synchronized private void showEmail() {
         if (isEditTextEnabled == true) {
             email.setVisibility(View.VISIBLE);
-            anim.fadeIn(email);
-            anim.fadeIn(editEmail);
+
         }
         if (contact.getEmail() != null || Objects.equals(contact.getEmail(), "")) {
             email.setVisibility(View.VISIBLE);
-            anim.fadeIn(email);
+
         }
     }
 
     synchronized private void showAddress() {
         if (isEditTextEnabled == true) {
             mobile.setVisibility(View.VISIBLE);
-            anim.fadeIn(address);
-            anim.fadeIn(editAddress);
         }
         if (contact.getAddress() != null || Objects.equals(contact.getAddress(), "")) {
-            address.setVisibility(View.VISIBLE);
-            anim.fadeIn(address);
         }
     }
 

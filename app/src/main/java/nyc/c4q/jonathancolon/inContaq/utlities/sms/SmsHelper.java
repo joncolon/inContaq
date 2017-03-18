@@ -224,6 +224,9 @@ public class SmsHelper {
 
         for (int i = 0; i < smsList.size(); i++) {
             receivedSms.add(smsList.get(i));
+            if (smsList.get(i).getType().equals("1")) {
+                receivedSms.add(smsList.get(i));
+            }
         }
 
         return receivedSms;

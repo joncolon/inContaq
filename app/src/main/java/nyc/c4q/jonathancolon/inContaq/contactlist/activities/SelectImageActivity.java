@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class SelectImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_image);
+        Log.d("jjjjj", "onCreate: " + this.getClass().getSimpleName());
     }
 
     // Save the activity state when it's going to stop.

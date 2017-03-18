@@ -25,7 +25,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="@string/person_group_name" />
+            android:text="@string/contact_name_" />
 
         <EditText
             android:id="@+id/edit_person_group_name"
