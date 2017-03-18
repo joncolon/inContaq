@@ -17,14 +17,13 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyReceivedWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.monthly.MonthlyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.monthly.MonthlySentWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.monthly.MonthlyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
-
 
 public class MonthlyGraph {
 
@@ -62,7 +61,7 @@ public class MonthlyGraph {
         this.lstSms = lstSms;
     }
 
-    public void showMonthlyGraph(){
+    public void showMonthlyGraph() {
         getLineGraphValues(lstSms);
         getHighestValueForYaxis();
         loadGraph();
@@ -185,21 +184,28 @@ public class MonthlyGraph {
         animateGraph();
     }
 
-    LineSet dataSetMonthly;
-    LineSet dataset;
     // You need to read through the WilliamChart Library docs to see how this graph works.
     private void setGraphData() {
         final String[] xAxisLabels = {
-                context.getString(R.string.jan), context.getString(R.string.feb),
-                context.getString(R.string.mar), context.getString(R.string.apr),
-                context.getString(R.string.jun), context.getString(R.string.may),
-                context.getString(R.string.jul), context.getString(R.string.aug),
-                context.getString(R.string.sep), context.getString(R.string.oct),
-                context.getString(R.string.nov), context.getString(R.string.dec)};
+                context.getString(R.string.jan),
+                context.getString(R.string.feb),
+                context.getString(R.string.mar),
+                context.getString(R.string.apr),
+                context.getString(R.string.jun),
+                context.getString(R.string.may),
+                context.getString(R.string.jul),
+                context.getString(R.string.aug),
+                context.getString(R.string.sep),
+                context.getString(R.string.oct),
+                context.getString(R.string.nov),
+                context.getString(R.string.dec)
+        };
 
         // Sets data for the first received values line on the graph
-        dataSetMonthly = new LineSet(xAxisLabels, receivedValues);
-        dataSetMonthly.setColor(parseColor(YELLOW_CRAYOLA))
+        LineSet dataSetMonthly = new LineSet(xAxisLabels, receivedValues);
+        dataSetMonthly.setColor(parseColor(YELLOW_CRAYOLA));
+        LineSet dataSet = new LineSet(xAxisLabels, receivedValues);
+        dataSet.setColor(parseColor(YELLOW_CRAYOLA))
                 .setDotsColor(parseColor(RED_ROSE_MADDER))
                 .setFill(parseColor(BLUE_SAPPHIRE))
                 .setThickness(6)
@@ -207,7 +213,7 @@ public class MonthlyGraph {
         lineGraph.addData(dataSetMonthly);
 
         // Sets data for the first sent values line on the graph
-        dataset = new LineSet(xAxisLabels, sentValues);
+        LineSet dataset = new LineSet(xAxisLabels, sentValues);
         dataset.setColor(parseColor("#b01cff"))
                 .setDotsColor(parseColor("#1cb7ff"))
                 .setDashed(new float[]{15f, 10f})
@@ -243,7 +249,4 @@ public class MonthlyGraph {
         }
     }
 
-    public LineChartView getLineGraph() {
-        return lineGraph;
-    }
 }

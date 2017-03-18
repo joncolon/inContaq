@@ -1,7 +1,9 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms.monthly;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
 
 public class MonthlyTaskParams {

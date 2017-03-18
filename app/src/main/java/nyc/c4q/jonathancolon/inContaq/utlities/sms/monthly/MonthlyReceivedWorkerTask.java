@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms.monthly;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,18 +8,20 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
-public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
+
+public class MonthlyReceivedWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
         TreeMap<Integer, Integer>> {
 
     private TreeMap<Integer, Integer> monthlyTexts;
 
-    public MonthlySentWorkerTask() {
+    public MonthlyReceivedWorkerTask() {
     }
 
     @Override
     protected void onPreExecute() {
-        Log.i("MonthlySentTask", "Getting Monthly Total Sent...");
+        Log.i("MonthlyReceivedTask", "Getting Monthly Total Received...");
     }
 
     @Override
@@ -35,33 +37,28 @@ public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
     }
 
     private TreeMap<Integer, Integer> getSmsStats(ArrayList<Sms> list){
-        ArrayList<String> sentSms = new ArrayList<>();
+        ArrayList<String> receivedSms = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getType().equals("2")) {
-                sentSms.add(list.get(i).getTime());
+            if (list.get(i).getType().equals("1")) {
+                receivedSms.add(list.get(i).getTime());
             }
         }
-        monthlyTexts = getMonthlyTexts(sentSms);
+            monthlyTexts = getMonthlyTexts(receivedSms);
         return monthlyTexts;
     }
 
     private TreeMap<Integer, Integer> getMonthlyTexts(ArrayList<String> list){
         for (int i = 0; i < list.size(); i++) {
             long lg = Long.parseLong(list.get(i));
-            DateTime juSmsYear = new DateTime(lg);
-            int yearSent = juSmsYear.getYear();
-            long currentTime = System.currentTimeMillis();
-            DateTime juDateYear = new DateTime(currentTime);
-            int currentYear = juDateYear.getYear();
-            int monthSent = juSmsYear.getMonthOfYear();
+            DateTime juDate = new DateTime(lg);
+            int month = juDate.getMonthOfYear();
 
-
-            if (monthlyTexts.containsKey(monthSent)){
-                monthlyTexts.put(monthSent, monthlyTexts.get(monthSent) +1);
-                monthlyTexts.entrySet();
+                if (monthlyTexts.containsKey(month)){
+                    monthlyTexts.put(month, monthlyTexts.get(month) +1);
+                    monthlyTexts.entrySet();
+                }
             }
-        }
         return monthlyTexts;
     }
 }

@@ -25,6 +25,15 @@
     <string name="jun">Jun</string>
     <string name="may">May</string>
     <string name="jul">Jul</string>
+
+    <string name="sun">Sun</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+
     <string name="aug">Aug</string>
     <string name="sep">Sep</string>
     <string name="oct">Oct</string>
