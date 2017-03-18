@@ -6,13 +6,9 @@ import android.widget.TextView;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 
-/**
- * Created by jonathancolon on 3/17/17.
- */
 
 public class CustomFont {
     Context context;
-
 
     public CustomFont(Context context) {
         this.context = context;

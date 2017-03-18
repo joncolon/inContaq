@@ -1,18 +1,23 @@
 package nyc.c4q.jonathancolon.inContaq.utlities.graphs.linegraphs;
 
-import android.support.annotation.NonNull;
+import android.content.Context;
 
 import java.util.ArrayList;
 
+import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.utlities.graphs.data.SmsAnalytics;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
 
+/**
+ * Created by jonathancolon on 3/17/17.
+ */
 
-class DailyGraphHelper {
+class MonthlyGraphHelper {
     private SmsAnalytics smsAnalytics;
+    private Context context;
 
-
-    DailyGraphHelper(ArrayList<Sms> smsList) {
+    MonthlyGraphHelper(Context context, ArrayList<Sms> smsList) {
+        this.context = context;
         smsAnalytics = new SmsAnalytics(smsList);
     }
 
@@ -20,6 +25,10 @@ class DailyGraphHelper {
         int maxSent = findMaximumValue(getSentValues());
         int maxReceived = findMaximumValue(getReceivedValue());
         int highestValue = Math.max(maxSent, maxReceived);
+
+        if (highestValue == 0){
+            highestValue = 100;
+        }
         return increaseByQuarter(highestValue);
     }
 
@@ -34,42 +43,27 @@ class DailyGraphHelper {
     }
 
     float[] getSentValues() {
-        return smsAnalytics.getHourlySentValues();
+        return smsAnalytics.getMonthlySentValues();
     }
 
     float[] getReceivedValue() {
-        return smsAnalytics.getHourlyReceivedValues();
+        return smsAnalytics.getMonthlyReceivedValues();
     }
 
     private int increaseByQuarter(int input) {
         return (int) Math.round(input * 1.25);
     }
 
-    @NonNull
-    String[] getXAxisLabels() {
-        final String[] xAxisLabels = new String[9];
-        int n = 0;
-        for (int i = 0; i < 4; i++) { // 12am=0, 3am=1, 6am=2 ,9am=3
-            if (i == 0) {
-                xAxisLabels[n] = "12AM";
-                n += 1;
-            } else {
-                xAxisLabels[n] = String.valueOf(i * 3) + "AM";
-                n += 1;
-            }
-        }
-        for (int i = 0; i <= 4; i++) { // 12pm=0, 3pm=1, 6pm=2, 9pm=3, 12am=4
-            if (i == 0) {
-                xAxisLabels[n] = "12PM";
-                n += 1;
-            } else if (i == 4) {
-                xAxisLabels[n] = "12AM";
-                n += 1;
-            } else {
-                xAxisLabels[n] = String.valueOf(i * 3) + "PM";
-                n += 1;
-            }
-        }
+    String[] getXAxisLabels(){
+        String[] xAxisLabels = new String[]{
+                context.getString(R.string.jan), context.getString(R.string.feb),
+                context.getString(R.string.mar), context.getString(R.string.apr),
+                context.getString(R.string.jun), context.getString(R.string.may),
+                context.getString(R.string.jul), context.getString(R.string.aug),
+                context.getString(R.string.sep), context.getString(R.string.oct),
+                context.getString(R.string.nov), context.getString(R.string.dec)
+        };
+
         return xAxisLabels;
     }
 }
