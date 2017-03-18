@@ -25,6 +25,10 @@ class MonthlyGraphHelper {
         int maxSent = findMaximumValue(getSentValues());
         int maxReceived = findMaximumValue(getReceivedValue());
         int highestValue = Math.max(maxSent, maxReceived);
+
+        if (highestValue == 0){
+            highestValue = 100;
+        }
         return increaseByQuarter(highestValue);
     }
 

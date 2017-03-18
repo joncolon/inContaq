@@ -74,6 +74,9 @@ public class WordCountBarGraph {
 
     private void getYvalue() {
         highestValue = Math.max(averageWordCountReceived, averageWordCountSent);
+        if (highestValue == 0){
+            highestValue = 10;
+        }
     }
 
     private int increaseByQuarter(int input) {
