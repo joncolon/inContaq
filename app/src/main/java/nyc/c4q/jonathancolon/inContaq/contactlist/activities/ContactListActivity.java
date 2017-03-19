@@ -29,7 +29,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
-import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.PreCachingLayoutManager;
+import nyc.c4q.jonathancolon.inContaq.contactlist.PreCachingLayoutManager;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PermissionChecker;

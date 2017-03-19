@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist.adapters;
+package nyc.c4q.jonathancolon.inContaq.contactlist;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

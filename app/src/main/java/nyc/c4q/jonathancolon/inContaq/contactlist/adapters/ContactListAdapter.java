@@ -108,13 +108,15 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             if (hasBackgroundImage(contact)) {
                 ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
             } else {
+                mBackGroundImage.refreshDrawableState();
                 mBackGroundImage.setImageDrawable(null);
             }
 
             if (hasContactImage(contact)) {
                 ph.loadImageFromString(contact.getContactImage(), mContactImage);
             } else {
-                mBackGroundImage.refreshDrawableState();
+                mContactImage.refreshDrawableState();
+                mContactImage.setImageDrawable(null);
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
