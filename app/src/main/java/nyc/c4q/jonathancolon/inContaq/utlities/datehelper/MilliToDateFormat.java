@@ -6,15 +6,11 @@ import java.util.Date;
 
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 
-/**
- * Created by jonathancolon on 3/8/17.
- */
 
 public class MilliToDateFormat {
 
     private DateFormat calanderDateformatter = new SimpleDateFormat("MM/dd/yyyy");
     private SimpleDateFormat timeDateFormatter = new SimpleDateFormat("hh:mm:ss a");
-
 
     public String convertToCalendarFormat(Contact contact) {
         return calanderDateformatter.format(new Date(contact.getTimeLastContacted()));
