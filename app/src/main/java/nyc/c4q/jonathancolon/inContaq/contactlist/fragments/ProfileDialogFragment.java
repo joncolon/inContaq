@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +21,13 @@ import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
-import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
 public class ProfileDialogFragment extends DialogFragment implements View.OnClickListener {
 
     interface Callback {
-        void onFinished(Uri contactUri);
+        void onContactFinished(Uri contactUri);
+        void onBackgroundFinished(Uri backgroundUri);
     }
 
     Context context;
@@ -38,8 +36,8 @@ public class ProfileDialogFragment extends DialogFragment implements View.OnClic
     ImageView contactImageIV, backgroundImageIV;
     private List<Callback> callbacks = new ArrayList<>();
 
-    private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
-    private static final int RESULT_LOAD_CONTACT_IMG = 1;
+    private static final int RESULT_LOAD_GALLERY_IMG = 2;
+    private static final int RESULT_LOAD_TAKEN_IMG = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +49,7 @@ public class ProfileDialogFragment extends DialogFragment implements View.OnClic
                 getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
 
         contactImageIV = (ImageView) rootView.findViewById(R.id.contact_image);
+        backgroundImageIV = (ImageView) rootView.findViewById(R.id.background_image);
 
         takePicture = (ImageButton) rootView.findViewById(R.id.take_picture);
         choosePicture = (ImageButton) rootView.findViewById(R.id.choose_picture);
@@ -80,12 +79,12 @@ public class ProfileDialogFragment extends DialogFragment implements View.OnClic
 
             case R.id.take_picture:
                 Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePicture, RESULT_LOAD_CONTACT_IMG);
+                startActivityForResult(takePicture, RESULT_LOAD_TAKEN_IMG);
                 break;
 
             case R.id.choose_picture:
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, RESULT_LOAD_CONTACT_IMG);
+                startActivityForResult(pickPhoto, RESULT_LOAD_GALLERY_IMG);
                 break;
 
             default:
@@ -105,7 +104,8 @@ public class ProfileDialogFragment extends DialogFragment implements View.OnClic
                     case 1:
                         Uri contactUri = data.getData();
                         for (Callback callback : callbacks) {
-                            callback.onFinished(contactUri);
+                            callback.onContactFinished(contactUri);
+                            dismiss();
                         }
 
                         break;
@@ -113,7 +113,8 @@ public class ProfileDialogFragment extends DialogFragment implements View.OnClic
                     case 2:
                         Uri backgroundUri = data.getData();
                         for (Callback callback : callbacks) {
-                            callback.onFinished(backgroundUri);
+                            callback.onBackgroundFinished(backgroundUri);
+                            dismiss();
                         }
                         break;
                 }

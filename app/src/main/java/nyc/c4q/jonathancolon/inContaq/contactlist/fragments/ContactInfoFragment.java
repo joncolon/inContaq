@@ -39,8 +39,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private Animations anim;
     private boolean isEditTextEnabled;
     private ImageButton takePicture, choosePicture;
-    private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
-    private static final int RESULT_LOAD_CONTACT_IMG = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,17 +119,17 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch(requestCode) {
-            case 0:
+            case 1:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
                     contactImageIV.setImageURI(selectedImage);
                 }
 
                 break;
-            case 1:
+            case 2:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    contactImageIV.setImageURI(selectedImage);
+                    backgroundImageIV.setImageURI(selectedImage);
                 }
                 break;
         }
@@ -297,12 +295,23 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     @Override
-    public void onFinished(Uri contactUri) {
+    public void onContactFinished(Uri contactUri) {
 
         PicassoHelper ph = new PicassoHelper(getContext());
 
         ph.loadImageFromUri(contactUri, contactImageIV);
         contact.setContactImage(contactUri.toString());
+        saveToDatabase(contact, getContext());
+
+    }
+
+    @Override
+    public void onBackgroundFinished(Uri backgroundUri) {
+
+        PicassoHelper ph = new PicassoHelper(getContext());
+
+        ph.loadImageFromUri(backgroundUri, backgroundImageIV);
+        contact.setContactImage(backgroundUri.toString());
         saveToDatabase(contact, getContext());
 
     }
