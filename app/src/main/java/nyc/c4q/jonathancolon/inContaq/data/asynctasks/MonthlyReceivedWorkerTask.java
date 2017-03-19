@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks;
+package nyc.c4q.jonathancolon.inContaq.data.asynctasks;
 
 import android.os.AsyncTask;
 import android.util.Log;

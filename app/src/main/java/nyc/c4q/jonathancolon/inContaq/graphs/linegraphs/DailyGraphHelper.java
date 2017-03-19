@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.graphs.linegraphs;
+package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs;
 
 import android.support.annotation.NonNull;
 

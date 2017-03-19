@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks.DailyReceivedWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks.DailySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks.DailyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks.MonthlyReceivedWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks.MonthlySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.asynctasks.MonthlyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailySentWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlySentWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyTaskParams;
 
 
 public class SmsAnalytics {

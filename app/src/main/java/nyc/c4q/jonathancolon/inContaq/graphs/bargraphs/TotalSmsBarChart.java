@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.graphs.bargraphs;
+package nyc.c4q.jonathancolon.inContaq.graphs.bargraphs;
 
 import android.graphics.Color;
 

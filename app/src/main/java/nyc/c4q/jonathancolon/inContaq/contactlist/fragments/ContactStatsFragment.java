@@ -1,6 +1,5 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,8 +21,8 @@ import java.util.Date;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.utlities.graphs.bargraphs.TotalSmsBarChart;
-import nyc.c4q.jonathancolon.inContaq.utlities.graphs.bargraphs.WordCountBarGraph;
+import nyc.c4q.jonathancolon.inContaq.graphs.bargraphs.TotalSmsBarChart;
+import nyc.c4q.jonathancolon.inContaq.graphs.bargraphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.data.WordFrequency;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
@@ -36,9 +35,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     private Spinner dateSpinner;
     private ArrayAdapter<CharSequence> spinnerArrayAdapter;
-
     private ContactNotificationService mContactNotificationService;
-
     private Button monthlyBtn, weeklyBtn, dailyBtn;
     private TextView smsStatsTV;
     private ArrayList<Sms> smsList;
@@ -46,19 +43,23 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
     int averageWordCountSent;
     int averageWordCountReceived;
+    public static ContactStatsFragment newInstance() {
+        ContactStatsFragment fragment = new ContactStatsFragment();
+        Bundle b = new Bundle();
+        fragment.setArguments(b);
+        return fragment;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
         initViews(view);
         if (savedInstanceState == null) {
             showMonthlyGraphFragment();
         }
 
         smsList = SmsHelper.getAllSms(getContext(), unwrapParcelledContact());
-
         getAxisValues(smsList);
 
         if (smsList.size() != 0){
@@ -71,8 +72,8 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
                     "Last contacted " + differenceDays + " days ago");
 
             WordFrequency wordFrequency = new WordFrequency(smsList);
-            smsStatsTV.setText("Common Sent: " + wordFrequency.mostCommonWordSent() + " Common Received: " + wordFrequency.mostCommonWordReceived());
-
+            smsStatsTV.setText("Common Sent: " + wordFrequency.mostCommonWordSent() +
+                    " Common Received: " + wordFrequency.mostCommonWordReceived());
         }
 
         WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart, smsList);
@@ -91,6 +92,13 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.graph_frag_container, new MonthlyGraphFragment())
+                .commit();
+    }
+
+    private void showWeeklyGraphFragment() {
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.graph_frag_container, new WeeklyGraphFragment())
                 .commit();
     }
 
@@ -132,6 +140,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
 
         Contact contact = unwrapParcelledContact();
         switch (String.valueOf(parent.getItemAtPosition(position))) {
+
             case "WEEKLY":
                 // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
                 break;
@@ -159,6 +168,7 @@ public class ContactStatsFragment extends Fragment implements AdapterView.OnItem
                 showMonthlyGraphFragment();
                 break;
             case R.id.weekly_btn:
+                showWeeklyGraphFragment();
                 break;
             case R.id.daily_btn:
                 showDailyGraphFragment();
