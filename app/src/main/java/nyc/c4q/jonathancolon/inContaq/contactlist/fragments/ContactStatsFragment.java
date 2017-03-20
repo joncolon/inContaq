@@ -162,4 +162,6 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
+
+
 }

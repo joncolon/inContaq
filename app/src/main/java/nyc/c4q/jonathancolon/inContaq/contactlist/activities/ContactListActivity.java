@@ -1,6 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
 import android.app.AlertDialog;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
+import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.SplashScreenFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;

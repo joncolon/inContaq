@@ -12,6 +12,17 @@ public class Sms implements Comparable<Sms>{
     String foldername;
     public String type;
 
+    public Sms(String address, String msg, String time, String type) {
+        this.address = address;
+        this.msg = msg;
+        this.time = time;
+        this.type = type;
+    }
+
+    public Sms() {
+
+    }
+
     public String getId(){
         return _id;
     }
