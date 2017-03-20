@@ -241,15 +241,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         switch (String.valueOf(parent.getItemAtPosition(position))) {
 
-            case "WEEKLY":
+            case "DAILY":
                 // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
+                break;
+            case "WEEKLY":
                 mContactNotificationService = new ContactNotificationService();
-                mContactNotificationService.startNotification(contact);
+                mContactNotificationService.startNotification(contact, getContext());
                 break;
             case "2 WEEKS":
-                // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification
-                break;
-            case "3 WEEKS":
                 // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
                 break;
             case "MONTHLY":
