@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.graphs.linegraphs;
+package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs;
 
 import android.content.Context;
 import android.view.animation.BounceInterpolator;
@@ -10,7 +10,7 @@ import com.db.chart.view.LineChartView;
 
 import java.util.ArrayList;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;

@@ -1,10 +1,11 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.data;
 
-import android.icu.text.UnicodeSet;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 import static android.content.ContentValues.TAG;
 
@@ -13,13 +14,32 @@ public class WordCount {
     public WordCount() {
     }
 
-    private static ArrayList<Integer> getTotalWordCount(ArrayList<Sms> smsList) {
+    public static int getTotalSent(ArrayList<Sms> smsList) {
+        smsList = SmsHelper.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<Integer>();
 
         for (int i = 0; i < smsList.size(); i++) {
             wordCount.add(getWordCountPerMessage(smsList.get(i)));
         }
-        return wordCount;
+        return calculateTotalWords(wordCount);
+    }
+
+    public static int getTotalReceived(ArrayList<Sms> smsList) {
+        smsList = SmsHelper.parseReceivedSms(smsList);
+        ArrayList<Integer> wordCount = new ArrayList<Integer>();
+        for (int i = 0; i < smsList.size(); i++) {
+            wordCount.add(getWordCountPerMessage(smsList.get(i)));
+        }
+        return calculateTotalWords(wordCount);
+    }
+
+    private static int calculateTotalWords(ArrayList<Integer> numbers) {
+        int sum = 0;
+        int arraySize = numbers.size();
+        for (int i = 0; i < arraySize; i++) {
+            sum = sum + numbers.get(i);
+        }
+        return sum;
     }
 
     private static int getWordCountPerMessage(Sms sms) {
@@ -29,6 +49,14 @@ public class WordCount {
         }
         String[] words = input.split("\\s+");
         return words.length;
+    }
+
+    private static ArrayList<Integer> getTotalWordCount(ArrayList<Sms> smsList) {
+        ArrayList<Integer> wordCount = new ArrayList<Integer>();
+        for (int i = 0; i < smsList.size(); i++) {
+            wordCount.add(getWordCountPerMessage(smsList.get(i)));
+        }
+        return wordCount;
     }
 
     public static int getAverageWordCountSent(ArrayList<Sms> smsList) {
@@ -45,15 +73,10 @@ public class WordCount {
         return calculateAverage(getTotalWordCount(receivedSms));
     }
 
-
     private static int calculateAverage(ArrayList<Integer> numbers) {
-        int sum = 0;
-        int arraySize = numbers.size();
-        for (int i = 0; i < arraySize; i++) {
-            sum = sum + numbers.get(i);
-        }
-        if(sum != 0){
-            int average = sum / arraySize;
+        int sum = calculateTotalWords(numbers);
+        if (sum != 0) {
+            int average = sum / numbers.size();
             return average;
         }
         return sum;

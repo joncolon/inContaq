@@ -1,26 +1,29 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.utlities.sms.model;
 
 import org.parceler.Parcel;
 
 @Parcel
 public class Sms implements Comparable<Sms>{
-    public String _id;
+    String _id;
     public String address;
-    public String msg;
-    public String readState;
+    String msg;
+    String readState;
     public String time;
-    public String foldername;
+    String foldername;
     public String type;
 
     public String getId(){
         return _id;
     }
+
     public String getAddress(){
         return address;
     }
+
     public String getMsg(){
         return msg;
     }
+
     public String getReadState(){
         return readState;
     }

@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.MonthlyGraphFragment">
+    tools:context="nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.MonthlyGraphFragment">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/graph_cardview"
+        android:id="@+id/card_text_pattern"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_marginEnd="@dimen/card_margin_end"
@@ -15,17 +15,31 @@
         app:cardBackgroundColor="@color/cardview_dark_background"
         app:cardCornerRadius="@dimen/card_chat_corner_radius">
 
+        <TextView
+            android:id="@+id/texts_over_time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
+            android:text="Texts Over Time"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal|top"
+            android:textColor="@color/light_font"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            />
+
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/transparent_gloss"
+            android:layout_height="100dp"
+            android:src="@drawable/carousel_glare"
             android:scaleType="fitXY"/>
 
         <com.db.chart.view.LineChartView
             android:id="@+id/daily_chart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom"
             android:layout_margin="@dimen/line_chart_margin">
         </com.db.chart.view.LineChartView>
     </android.support.v7.widget.CardView>

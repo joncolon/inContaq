@@ -21,7 +21,7 @@ import java.util.Objects;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
@@ -71,18 +71,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void setClickListeners() {
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view1) {
-                ContactInfoFragment.this.buildSaveEditDialog();
-            }
-        });
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view12) {
-                ContactInfoFragment.this.enableEditContactMode();
-            }
-        });
+        saveButton.setOnClickListener(view1 -> ContactInfoFragment.this.buildSaveEditDialog());
+        editButton.setOnClickListener(view12 -> ContactInfoFragment.this.enableEditContactMode());
     }
 
     private void displayContactInfo(Contact contact) {

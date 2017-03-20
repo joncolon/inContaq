@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.graphs.bargraphs;
+package nyc.c4q.jonathancolon.inContaq.graphs.bargraphs;
 
 import android.graphics.Color;
 
@@ -9,8 +9,8 @@ import com.db.chart.view.BarChartView;
 
 import java.util.ArrayList;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.WordCount;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.data.WordCount;
 
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
@@ -19,11 +19,11 @@ import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
  */
 
 public class WordCountBarGraph {
-    private static final String FILL_COLOR = "#021620";
-    private static final String RED_ROSE_MADDER = "#EF7674";
-    private static final String WHITE_BABY_POWDER = "#FDFFFC";
-    int averageWordCountSent;
-    int averageWordCountReceived;
+    private static final String FILL_COLOR = "#000000";
+    private static final String SENT_COLOR = "#EF7674";
+    private static final String RECEIVED_COLOR = "#FDFFFC";
+    private int averageWordCountSent;
+    private int averageWordCountReceived;
     private BarChartView barChartView;
     private String[] mLabels = {"Sent", "Received"};
     private ArrayList<Sms> smsList;
@@ -46,23 +46,27 @@ public class WordCountBarGraph {
     }
 
     private void loadGraph() {
-
         getYvalue();
+        setGraphData();
+        setGraphAttributes();
+    }
 
-        // Data
+    private void setGraphData() {
         BarSet barSet = new BarSet();
         Bar barSent = new Bar(mLabels[0], averageWordCountSent);
         Bar barReceived = new Bar(mLabels[1], averageWordCountReceived);
-        barReceived.setColor(Color.parseColor(WHITE_BABY_POWDER));
-        barSent.setColor(Color.parseColor(RED_ROSE_MADDER));
+        barReceived.setColor(Color.parseColor(RECEIVED_COLOR));
+        barSent.setColor(Color.parseColor(SENT_COLOR));
         barSet.addBar(barSent);
         barSet.addBar(barReceived);
 
         barChartView.addData(barSet);
         barChartView.setBarSpacing(Tools.fromDpToPx(15));
         barChartView.setRoundCorners(Tools.fromDpToPx(2));
-        barChartView.setBarBackgroundColor(Color.parseColor("#7F000000"));
+        barChartView.setBarBackgroundColor(Color.parseColor(FILL_COLOR));
+    }
 
+    private void setGraphAttributes() {
         // Chart
         barChartView.setXAxis(false)
                 .setYAxis(false)

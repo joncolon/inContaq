@@ -1,11 +1,11 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.graphs.linegraphs;
+package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs;
 
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.graphs.data.SmsAnalytics;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.data.SmsAnalytics;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
 class DailyGraphHelper {

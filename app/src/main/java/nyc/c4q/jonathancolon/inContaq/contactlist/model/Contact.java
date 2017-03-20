@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist;
+package nyc.c4q.jonathancolon.inContaq.contactlist.model;
 
 import org.parceler.Parcel;
 

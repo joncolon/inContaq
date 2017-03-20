@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.data.asynctasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,16 +8,17 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+
 /**
  * Created by Hyun on 3/11/17.
  */
 
-public class DailyReceivedWorkerTask extends AsyncTask<DailyTaskParams, Void, TreeMap<Integer, Integer>> {
+public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap<Integer, Integer>> {
 
     private TreeMap<Integer, Integer> dailyReceivedText;
-    private ArrayList<Sms> listSms;
 
-    public DailyReceivedWorkerTask() {
+    public DailySentWorkerTask() {
     }
 
     @Override
@@ -27,8 +28,8 @@ public class DailyReceivedWorkerTask extends AsyncTask<DailyTaskParams, Void, Tr
 
     @Override
     protected TreeMap<Integer, Integer> doInBackground(DailyTaskParams... params) {
-        listSms = params[0].getdailyListSms();
-        dailyReceivedText = params[0].getDailyTexts();
+        ArrayList<Sms> listSms = DailyTaskParams.getdailySmsList();
+        dailyReceivedText = DailyTaskParams.getDailyTexts();
         return getSmsStats(listSms);
     }
 

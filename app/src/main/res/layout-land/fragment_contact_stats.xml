@@ -9,10 +9,13 @@
     <FrameLayout
         android:id="@+id/graph_frag_container"
         android:name="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="@dimen/card_margin_top"
-        android:layout_below="@+id/graph_btn">
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/stats_text_card"
+        android:layout_below="@id/graph_btn"
+        >
 
     </FrameLayout>
 
@@ -20,12 +23,12 @@
         android:id="@+id/card_word_count"
         android:layout_width="110dp"
         android:layout_height="110dp"
-        android:layout_alignStart="@id/graph_frag_container"
-        android:layout_below="@id/graph_frag_container"
         android:layout_marginBottom="@dimen/card_margin_btm"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:layout_marginStart="@dimen/card_margin_start"
         android:layout_marginTop="@dimen/card_margin_top"
+        android:layout_toStartOf="@id/card_total_sms"
+        android:layout_below="@id/graph_frag_container"
         android:elevation="@dimen/card_elevation"
         app:cardBackgroundColor="@color/cardview_dark_background"
         app:cardCornerRadius="@dimen/card_chat_corner_radius">
@@ -35,10 +38,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="3dp"
             android:text="Average Text Length"
             android:textAlignment="center"
+            android:layout_gravity="center_horizontal|top"
             android:textColor="@color/light_font"
             android:textSize="10sp"
             android:textStyle="bold"
@@ -66,24 +69,23 @@
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_below="@id/graph_frag_container"
+        android:layout_toStartOf="@id/stats_text_card"
         android:layout_marginBottom="@dimen/card_margin_btm"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:layout_marginStart="@dimen/card_margin_start"
         android:layout_marginTop="@dimen/card_margin_top"
-        android:layout_toEndOf="@id/card_word_count"
         android:elevation="@dimen/card_elevation"
         app:cardBackgroundColor="@color/cardview_dark_background"
         app:cardCornerRadius="@dimen/card_chat_corner_radius">
-
         <TextView
             android:id="@+id/total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="3dp"
             android:text="Total Message Count"
             android:textAlignment="center"
+            android:layout_gravity="center_horizontal|top"
             android:textColor="@color/light_font"
             android:textSize="10sp"
             android:textStyle="bold"
@@ -109,9 +111,10 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/stats_text_card"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/card_total_sms"
+        android:layout_below="@id/graph_btn"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="@dimen/card_margin_btm"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:layout_marginStart="@dimen/card_margin_start"
@@ -120,22 +123,43 @@
         app:cardBackgroundColor="@color/cardview_dark_background"
         app:cardCornerRadius="@dimen/card_chat_corner_radius">
 
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/carousel_glare"/>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:scrollbarStyle="insideOverlay">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:src="@drawable/carousel_glare"/>
+
+            <TextView
+                android:id="@+id/stats_text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
+                android:text="Stats"
+                android:textAlignment="center"
+                android:textColor="@color/light_font"
+                android:textSize="25sp"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/cardview_shadow_start_color"
+                android:layout_marginEnd="@dimen/card_text_margin_start"
+                android:layout_marginStart="@dimen/card_text_margin_start"
+                android:layout_below="@id/stats_text_title"/>
 
             <TextView
                 android:id="@+id/day_counter_tv"
@@ -144,7 +168,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="@dimen/card_text_margin_start"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="60dp"
                 android:layout_toEndOf="@id/day_counter_tv"
                 android:text="10"
                 android:textAlignment="center"
@@ -215,19 +239,20 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/avg_received_counter_tv"
+                android:background="@color/cardview_shadow_start_color"
                 android:layout_marginEnd="@dimen/card_text_margin_start"
                 android:layout_marginStart="@dimen/card_text_margin_start"
                 android:layout_marginTop="15dp"
-                android:background="@color/cardview_shadow_start_color"/>
+                android:layout_below="@id/avg_received_counter_tv"/>
 
             <TextView
                 android:id="@+id/first_word_bold_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/day_counter_tv"
-                android:layout_below="@id/avg_received_counter_tv"
                 android:layout_marginTop="25dp"
+                android:layout_alignStart="@id/day_counter_tv"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/avg_received_counter_tv"
                 android:text="You"
                 android:textAlignment="center"
                 android:textColor="@color/light_font"
@@ -294,8 +319,6 @@
                 android:scrollbars="vertical"
                 android:text="is your most commonly used word"
                 android:textColor="#ffffff"/>
-
-
         </RelativeLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

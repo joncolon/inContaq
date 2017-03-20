@@ -1,6 +1,5 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +15,5 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
-        inContaq = (TextView) findViewById(R.id.app_name);
-        Typeface robotoreg = Typeface.createFromAsset(inContaq.getContext().getApplicationContext().getAssets(), "fonts/jaapokkisubtractregular.ttf");
-        inContaq.setTypeface(robotoreg);
     }
 }

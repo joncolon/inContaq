@@ -13,7 +13,7 @@ import com.github.florent37.beautifulparallax.ParallaxViewController;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.font.CustomFont;
 
@@ -105,16 +105,18 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             mContactInitials.setText((contact.getFirstName().substring(0, 1).toUpperCase()));
             PicassoHelper ph = new PicassoHelper(context);
 
-
             if (hasBackgroundImage(contact)) {
                 ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
-
+            } else {
+                mBackGroundImage.refreshDrawableState();
+                mBackGroundImage.setImageDrawable(null);
             }
 
             if (hasContactImage(contact)) {
                 ph.loadImageFromString(contact.getContactImage(), mContactImage);
             } else {
-                mBackGroundImage.refreshDrawableState();
+                mContactImage.refreshDrawableState();
+                mContactImage.setImageDrawable(null);
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {

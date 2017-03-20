@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.qbusict.cupboard.QueryResultIterable;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 

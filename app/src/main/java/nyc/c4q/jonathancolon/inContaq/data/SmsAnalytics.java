@@ -1,4 +1,6 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.graphs.data;
+package nyc.c4q.jonathancolon.inContaq.data;
+
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,17 +9,14 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.DailyReceivedWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.DailySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.DailyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyReceivedWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.MonthlyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailySentWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlySentWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-/**
- * Created by jonathancolon on 3/17/17.
- */
 
 public class SmsAnalytics {
 
@@ -39,7 +38,7 @@ public class SmsAnalytics {
     public SmsAnalytics(ArrayList<Sms> smsList) {
         this.smsList = smsList;
     }
-
+//todo make these methods static
     public float[] getMonthlySentValues() {
         return convertTreeMapToFloats(getMonthlySent(smsList));
     }
@@ -78,7 +77,7 @@ public class SmsAnalytics {
         return dailySent;
     }
 
-    public TreeMap<Integer, Integer> getHourlyReceived(ArrayList<Sms> texts) {
+    private TreeMap<Integer, Integer> getHourlyReceived(ArrayList<Sms> texts) {
         TreeMap<Integer, Integer> dailyReceived = setUpDailyTextMap();
         DailyTaskParams receivedParams = new DailyTaskParams(texts, dailyReceived);
         DailyReceivedWorkerTask dailyReceivedWorkerTask = new DailyReceivedWorkerTask();
@@ -92,7 +91,7 @@ public class SmsAnalytics {
         return dailyReceived;
     }
 
-    public TreeMap<Integer, Integer> getMonthlySent(ArrayList<Sms> texts) {
+    private TreeMap<Integer, Integer> getMonthlySent(ArrayList<Sms> texts) {
         TreeMap<Integer, Integer> monthlySent = setUpMonthlyTextMap();
         MonthlyTaskParams sentParams = new MonthlyTaskParams(texts, monthlySent);
         MonthlySentWorkerTask monthlySentWorkerTask = new MonthlySentWorkerTask();
@@ -157,5 +156,33 @@ public class SmsAnalytics {
             list.add(value);
         }
         return convertFloats(list);
+    }
+
+    public String maxTimeReceivedText() {
+        ArrayList<String> timeContactedList = new ArrayList<>();
+        TreeMap<Integer, Integer> timeReceived = getHourlyReceived(smsList);
+        Map.Entry<Integer, Integer> maxEntry = getMaxEntry(timeReceived);
+        return String.valueOf(maxEntry.getKey());
+    }
+
+    public String maxTimeSentText() {
+        ArrayList<String> timeContactedList = new ArrayList<>();
+        TreeMap<Integer, Integer> timeReceived = getHourlyReceived(smsList);
+        Map.Entry<Integer, Integer> maxEntry = getMaxEntry(timeReceived);
+        return String.valueOf(maxEntry.getKey());
+    }
+
+    @Nullable
+    private Map.Entry<Integer, Integer> getMaxEntry(TreeMap<Integer, Integer> timeReceived) {
+        Map.Entry<Integer, Integer> maxEntry = null;
+
+        for (Map.Entry<Integer, Integer> entry : timeReceived.entrySet())
+        {
+            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+            {
+                maxEntry = entry;
+            }
+        }
+        return maxEntry;
     }
 }

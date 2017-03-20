@@ -16,7 +16,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;

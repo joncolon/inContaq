@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import org.parceler.Parcels;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactFragmentPagerAdapter;
 
 public class ContactViewPagerActivity extends FragmentActivity {

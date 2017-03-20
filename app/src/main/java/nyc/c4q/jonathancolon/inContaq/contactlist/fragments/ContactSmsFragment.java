@@ -31,12 +31,12 @@ import java.util.Collections;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.Sms;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
@@ -131,11 +131,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
-        Typeface jaapokkiRegular = Typeface.createFromAsset(contactName.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
-        contactName.setTypeface(jaapokkiRegular);
 
         int value = getActivity().getResources().getConfiguration().orientation;
         if (value == Configuration.ORIENTATION_PORTRAIT) {
+
+            Typeface jaapokkiRegular = Typeface.createFromAsset(contactName.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
+            contactName.setTypeface(jaapokkiRegular);
 
             displayContactInfo(contact);
 
