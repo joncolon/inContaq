@@ -28,11 +28,11 @@
 
         <service android:name=".notifications.ContactNotificationService"/>
 
-        <receiver android:name=".utlities.sms.SmsReceiver">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".utlities.sms.SmsReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.provider.Telephony.SMS_RECEIVED"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <activity android:name=".utlities.sms.SmsSender"/>
         <activity android:name=".contactlist.activities.ContactListActivity">
