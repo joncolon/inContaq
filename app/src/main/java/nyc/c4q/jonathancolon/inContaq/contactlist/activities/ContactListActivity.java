@@ -10,21 +10,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.stetho.Stetho;
-
 import org.parceler.Parcels;
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
@@ -36,11 +34,9 @@ import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PermissionChecker;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
-
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>,
-        ContactListAdapter.Listener {
+public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>, ContactListAdapter.Listener{
 
     public static final String PARCELLED_CONTACT = "Parcelled Contact";
     private RecyclerView recyclerView;
@@ -51,6 +47,9 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private String name = "";
     private Context context;
 
+    public EditText search;
+    public ContactListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +58,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
         PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
         permissionChecker.checkPermissions();
+
+        search = (EditText) findViewById( R.id.search);
 
         context = getApplicationContext();
         importContactsTV = (TextView) findViewById(R.id.import_contacts);
@@ -82,6 +83,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
         buildEnterContactDialog(this);
 //        checkServiceCreated();
+
+        addTextListener();
     }
 
     private void refreshRecyclerView() {
@@ -213,6 +216,43 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
     }
 
+    public void addTextListener(){
+
+        search.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+            }
+
+            public void onTextChanged(CharSequence query, int start, int before, int count) {
+
+                query = query.toString().toLowerCase();
+
+                final List<Contact> filteredList = new ArrayList<>();
+
+                for (int i = 0; i < contactList.size(); i++) {
+
+                    final String text = contactList.get(i).toString().toLowerCase();
+
+                    if (text.contains(query)) {
+
+                        filteredList.add(contactList.get(i));
+                    }
+                }
+
+                recyclerView.setLayoutManager(new LinearLayoutManager(ContactListActivity.this));
+                adapter = new ContactListAdapter(ContactListActivity.this, filteredList, ContactListActivity.this);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();  // data set changed
+            }
+        });
+    }
 }
 
 

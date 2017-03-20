@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import java.util.List;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
+import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.font.CustomFont;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
 
     private final Listener listener;
+    private List<Contact> filteredList;
     private final Context context;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private List<Contact> contactList;
@@ -29,6 +32,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         this.listener = listener;
         this.context = context;
     }
+
+    public ContactListAdapter(Listener listener, List<Contact> filteredList, Context context) {
+        this.listener = listener;
+        this.filteredList = filteredList;
+        this.context = context;
+    }
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -80,6 +90,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     //_____________________________________VIEWHOLDER___________________________________________________
+
+
     class ContactViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView mBackGroundImage;
