@@ -16,7 +16,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap<Integer, Integer>> {
 
-    private TreeMap<Integer, Integer> dailyReceivedText;
+    private TreeMap<Integer, Integer> dailySentTexts;
 
     public DailySentWorkerTask() {
     }
@@ -29,7 +29,7 @@ public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap
     @Override
     protected TreeMap<Integer, Integer> doInBackground(DailyTaskParams... params) {
         ArrayList<Sms> listSms = DailyTaskParams.getdailySmsList();
-        dailyReceivedText = DailyTaskParams.getDailyTexts();
+        dailySentTexts = DailyTaskParams.getDailyTexts();
         return getSmsStats(listSms);
     }
 
@@ -43,12 +43,12 @@ public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap
 
         for (int i = 0; i < list.size(); i++) {
             String p = list.get(i).getType();
-            if (p.equals("1")) {
+            if (p.equals("2")) {
                 receivedSms.add(list.get(i).getTime());
             }
         }
-        dailyReceivedText = getDailyTexts(receivedSms);
-        return dailyReceivedText;
+        dailySentTexts = getDailyTexts(receivedSms);
+        return dailySentTexts;
     }
 
     // 12am=0, 3am=1, 6am=2 ,9am=3,12pm=4, (15)3pm=5, (18)6pm=6, (21)9pm=7, (24)12am=8
@@ -61,55 +61,55 @@ public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap
 
 
             if (hourOfDay == 0) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(0);
                 } else {
                     intoGetDailyTexts(0);
                 }
             } else if (hourOfDay < 3) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(3);
                 } else {
                     intoGetDailyTexts(3);
                 }
             }  else if (hourOfDay < 6) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(6);
                 } else {
                     intoGetDailyTexts(6);
                 }
             } else if (hourOfDay < 9) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(9);
                 } else {
                     intoGetDailyTexts(9);
                 }
             } else if (hourOfDay < 12) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(12);
                 } else {
                     intoGetDailyTexts(12);
                 }
             } else if (hourOfDay < 15) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(15);
                 } else {
                     intoGetDailyTexts(15);
                 }
             } else if (hourOfDay < 18) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(18);
                 } else {
                     intoGetDailyTexts(18);
                 }
             } else if (hourOfDay < 21) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(21);
                 } else {
                     intoGetDailyTexts(21);
                 }
             } else if (hourOfDay < 24) {
-                if (dailyReceivedText.containsKey(hourOfDay)) {
+                if (dailySentTexts.containsKey(hourOfDay)) {
                     findGetDailyTexts(24);
                 } else {
                     intoGetDailyTexts(24);
@@ -117,16 +117,16 @@ public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap
             }
 
         }
-        return dailyReceivedText;
+        return dailySentTexts;
     }
 
     private void findGetDailyTexts(int hourOfDay) {
-        dailyReceivedText.put(hourOfDay, dailyReceivedText.get(hourOfDay) + 1);
-        dailyReceivedText.entrySet();
+        dailySentTexts.put(hourOfDay, dailySentTexts.get(hourOfDay) + 1);
+        dailySentTexts.entrySet();
     }
 
     private void intoGetDailyTexts(int hourOfDay) {
-        dailyReceivedText.put(hourOfDay, 1);
-        dailyReceivedText.entrySet();
+        dailySentTexts.put(hourOfDay, 1);
+        dailySentTexts.entrySet();
     }
 }
