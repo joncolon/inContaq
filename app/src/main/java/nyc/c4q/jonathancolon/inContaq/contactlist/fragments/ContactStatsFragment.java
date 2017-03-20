@@ -7,9 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.db.chart.view.BarChartView;
@@ -31,25 +29,22 @@ import nyc.c4q.jonathancolon.inContaq.graphs.bargraphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.DailyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.MonthlyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.WeeklyGraphFragment;
-import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
 public class ContactStatsFragment extends Fragment implements View.OnClickListener {
 
-    private Spinner dateSpinner;
-    private ArrayAdapter<CharSequence> spinnerArrayAdapter;
-    private ContactNotificationService mContactNotificationService;
+
     private Button monthlyBtn, weeklyBtn, dailyBtn;
     private TextView avgWordSentTV, avgWordsReceivedTV, daysSinceContactedTV, getAvgWordSentInfoTV,
             getGetAvgWordReceivedInfoTV, getDaysSinceContactedInfoTV, timeOfFeedbackTv,
             commonWordSentTv, commonWordReceivedTv;
     private ArrayList<Sms> smsList;
     private BarChartView wordAverageChart, totalWordCountChart;
-
     int averageWordCountSent;
     int averageWordCountReceived;
+
     public static ContactStatsFragment newInstance() {
         ContactStatsFragment fragment = new ContactStatsFragment();
         Bundle b = new Bundle();
@@ -129,15 +124,6 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     }
 
     private void initViews(View view) {
-//        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
-//        spinnerArrayAdapter = ArrayAdapter.createFromResource(
-//                view.getContext(),
-//                R.array.date_spinner_array,
-//                R.layout.date_spinner_item);
-//        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
-//        spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
-//        dateSpinner.setAdapter(spinnerArrayAdapter);
-//        dateSpinner.setOnItemSelectedListener(this);
         avgWordSentTV = (TextView) view.findViewById(R.id.avg_sent_counter_tv);
         avgWordsReceivedTV = (TextView) view.findViewById(R.id.avg_received_counter_tv);
         daysSinceContactedTV = (TextView) view.findViewById(R.id.day_counter_tv);
@@ -160,30 +146,6 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         return Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
     }
 
-//    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//        Contact contact = unwrapParcelledContact();
-//        switch (String.valueOf(parent.getItemAtPosition(position))) {
-//
-//            case "WEEKLY":
-//                // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
-//                break;
-//            case "2 WEEKS":
-//                // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification
-//                break;
-//            case "3 WEEKS":
-//                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
-//                break;
-//            case "MONTHLY":
-//                // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
-//                break;
-//        }
-//    }
-
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) {
-//    }
 
     @Override
     public void onClick(View v) {

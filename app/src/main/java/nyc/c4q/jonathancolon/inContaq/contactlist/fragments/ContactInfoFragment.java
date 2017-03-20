@@ -9,10 +9,12 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
-
 
 import org.parceler.Parcels;
 
@@ -21,12 +23,13 @@ import java.util.Objects;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
-import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
-public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
+public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
 
     private Contact contact;
     private TextView mobile, email, polaroidName, address, editButton;
@@ -36,7 +39,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private int selection;
     private Animations anim;
     private boolean isEditTextEnabled;
-
+    private Spinner dateSpinner;
+    private ArrayAdapter<CharSequence> spinnerArrayAdapter;
+    private ContactNotificationService mContactNotificationService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +73,16 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+        spinnerArrayAdapter = ArrayAdapter.createFromResource(
+                view.getContext(),
+                R.array.date_spinner_array,
+                R.layout.date_spinner_item);
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+        dateSpinner.setAdapter(spinnerArrayAdapter);
+        dateSpinner.setOnItemSelectedListener(this);
     }
 
     private void setClickListeners() {
@@ -217,6 +232,34 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onResume() {
         super.onResume();
         displayContactInfo(contact);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+//        Contact contact = unwrapParcelledContact();
+
+        switch (String.valueOf(parent.getItemAtPosition(position))) {
+
+            case "WEEKLY":
+                // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
+                mContactNotificationService = new ContactNotificationService();
+                mContactNotificationService.startNotification(contact);
+                break;
+            case "2 WEEKS":
+                // TODO: 3/8/17 if last sent text == to 14 days + last sent text date then, notification
+                break;
+            case "3 WEEKS":
+                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
+                break;
+            case "MONTHLY":
+                // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 }
 

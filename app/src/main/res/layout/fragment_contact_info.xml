@@ -243,6 +243,16 @@
 
     </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/date_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/contact_info_card"
+        android:layout_gravity="center"
+        android:spinnerMode="dropdown">
+    </android.support.v7.widget.AppCompatSpinner>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
