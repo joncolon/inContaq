@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".contactlist.activities.ContactListActivity">
+        <activity android:name=".contactlist.activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -35,7 +35,7 @@
         </receiver>
 
         <activity android:name=".utlities.sms.SmsSender"/>
-        <activity android:name=".contactlist.activities.SplashScreenActivity">
+        <activity android:name=".contactlist.activities.ContactListActivity">
         </activity>
     </application>
 
