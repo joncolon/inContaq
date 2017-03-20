@@ -31,11 +31,6 @@ public class WeeklyReceived extends AsyncTask<WeeklyTask, Void, TreeMap<Integer,
         return getSmsStats(listSms);
     }
 
-    @Override
-    protected void onPostExecute(TreeMap<Integer, Integer> ret) {
-        super.onPostExecute(ret);
-    }
-
     private TreeMap<Integer, Integer> getSmsStats(ArrayList<Sms> list) {
 
         ArrayList<String> receivedSms = new ArrayList<>();
@@ -71,23 +66,26 @@ public class WeeklyReceived extends AsyncTask<WeeklyTask, Void, TreeMap<Integer,
 
             int diffBetDays = (todayDayIs - smsDayIs);
 
-            fallsInWeek = isWithinTheWeek(todayDayOfWeek, diffBetDays,
-                    smsYear, todayYear,
-                    smsMonth, todayMonth);
+//            fallsInWeek = isWithinTheWeek(todayDayOfWeek, diffBetDays,
+//                    smsYear, todayYear,
+//                    smsMonth, todayMonth);
 
-            if (fallsInWeek) {
-                if (weeklyTexts.containsKey(smsDayOfWeek)) {
-                    weeklyTexts.put(smsDayOfWeek, weeklyTexts.get(smsDayOfWeek) + 1);
-                    weeklyTexts.entrySet();
-                }
+            if (weeklyTexts.containsKey(smsDayOfWeek)) {
+                weeklyTexts.put(smsDayOfWeek, weeklyTexts.get(smsDayOfWeek) + 1);
+                weeklyTexts.entrySet();
             }
         }
         return weeklyTexts;
     }
 
-    private boolean isWithinTheWeek(int todayDayinWeek, int diffDays,
-                                    int smsYear, int todayYear,
-                                    int smsMonth, int todayMonth) {
-        return diffDays < todayDayinWeek && smsYear == todayYear && smsMonth == todayMonth;
+    @Override
+    protected void onPostExecute(TreeMap<Integer, Integer> ret) {
+        super.onPostExecute(ret);
     }
+
+//    private boolean isWithinTheWeek(int todayDayinWeek, int diffDays,
+//                                    int smsYear, int todayYear,
+//                                    int smsMonth, int todayMonth) {
+//        return diffDays < todayDayinWeek && smsYear == todayYear && smsMonth == todayMonth;
 }
+

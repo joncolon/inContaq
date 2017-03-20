@@ -18,8 +18,8 @@ import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
  * Created by jonathancolon on 3/17/17.
  */
 
-public class TotalSmsBarChart {
-    private static final String FILL_COLOR = "#7F000000";
+public class TotalSmsBarGraph {
+    private static final String FILL_COLOR = "#000000";
     private static final String SENT_COLOR = "#EF7674";
     private static final String RECEIVED_COLOR = "#FDFFFC";
     private int totalWordsSent;
@@ -29,7 +29,7 @@ public class TotalSmsBarChart {
     private ArrayList<Sms> smsList;
     private int highestValue;
 
-    public TotalSmsBarChart(BarChartView barChartView, ArrayList<Sms> smsList) {
+    public TotalSmsBarGraph(BarChartView barChartView, ArrayList<Sms> smsList) {
         this.barChartView = barChartView;
         this.smsList = smsList;
     }

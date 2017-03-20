@@ -1,5 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.data;
 
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +14,8 @@ import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailySentWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyReceivedWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
 public class SmsAnalytics {
@@ -154,5 +156,33 @@ public class SmsAnalytics {
             list.add(value);
         }
         return convertFloats(list);
+    }
+
+    public String maxTimeReceivedText() {
+        ArrayList<String> timeContactedList = new ArrayList<>();
+        TreeMap<Integer, Integer> timeReceived = getHourlyReceived(smsList);
+        Map.Entry<Integer, Integer> maxEntry = getMaxEntry(timeReceived);
+        return String.valueOf(maxEntry.getKey());
+    }
+
+    public String maxTimeSentText() {
+        ArrayList<String> timeContactedList = new ArrayList<>();
+        TreeMap<Integer, Integer> timeReceived = getHourlyReceived(smsList);
+        Map.Entry<Integer, Integer> maxEntry = getMaxEntry(timeReceived);
+        return String.valueOf(maxEntry.getKey());
+    }
+
+    @Nullable
+    private Map.Entry<Integer, Integer> getMaxEntry(TreeMap<Integer, Integer> timeReceived) {
+        Map.Entry<Integer, Integer> maxEntry = null;
+
+        for (Map.Entry<Integer, Integer> entry : timeReceived.entrySet())
+        {
+            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+            {
+                maxEntry = entry;
+            }
+        }
+        return maxEntry;
     }
 }

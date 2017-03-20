@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.graphs;
+package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs;
 
 import android.content.Context;
 import android.util.Log;
@@ -24,14 +24,13 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.weekly.WeeklyTask;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
+import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
 
 public class WeeklyGraph {
 
-    private static final String BLUE_SAPPHIRE = "#0E587A";
-    private static final String BLUE_MASTRICHT = "#02283A";
-    private static final String RED_ROSE_MADDER = "#E71D36";
-    private static final String WHITE_BABY_POWDER = "#FDFFFC";
-    private static final String YELLOW_CRAYOLA = "#FF9F1C";
+    private static final String SENT_COLOR = "#EF7674";
+    private static final String LABEL_COLOR = "#FDFFFC";
+    private static final String RECEIVED_COLOR = "#FDFFFC";
     private static final String WEEKLY_SENT = "Monthly Sent: ";
     private static final String WEEKLY_RECEIVED = "Monthly Received: ";
     private static final int SUN = 1;
@@ -169,7 +168,6 @@ public class WeeklyGraph {
     }
 
     synchronized private void loadGraph() {
-
         setGraphData();
         setGraphAttributes();
         animateGraph();
@@ -188,34 +186,34 @@ public class WeeklyGraph {
         };
 
         LineSet receivedValueDataSet = new LineSet(xAxisLabels, receivedValues);
-        receivedValueDataSet.setColor(parseColor(YELLOW_CRAYOLA))
-                .setDotsColor(parseColor(RED_ROSE_MADDER))
-                .setFill(parseColor(BLUE_SAPPHIRE))
-                .setThickness(6)
+        receivedValueDataSet.setColor(parseColor(RECEIVED_COLOR))
+                .setDotsColor(parseColor(RECEIVED_COLOR))
+                .setThickness(4)
                 .beginAt(0);
         lineGraph.addData(receivedValueDataSet);
 
         LineSet sentValueDataSet = new LineSet(xAxisLabels, sentValues);
-        sentValueDataSet.setColor(parseColor("#b01cff"))
-                .setDotsColor(parseColor("#1cb7ff"))
-                .setDashed(new float[]{15f, 10f})
-                .setThickness(6)
+        sentValueDataSet.setColor(parseColor(SENT_COLOR))
+                .setDotsColor(parseColor(SENT_COLOR))
+                .setDashed(new float[]{1f, 1f})
+                .setThickness(4)
                 .beginAt(0);
         lineGraph.addData(sentValueDataSet);
     }
 
     private void setGraphAttributes() {
 
-        //todo REVIEW I forgot why I did this but I believe it crashes if we don't set this value to 100
         setHighestValueTo100();
 
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
                 .setAxisBorderValues(0, highestValue)
                 .setYLabels(NONE)
-                .setLabelsColor(parseColor(WHITE_BABY_POWDER))
+                .setXLabels(OUTSIDE)
+                .setFontSize(24)
+                .setAxisLabelsSpacing(15f)
+                .setLabelsColor(parseColor(LABEL_COLOR))
                 .setXAxis(false)
-                .setYAxis(true)
-                .setBackgroundColor(parseColor(BLUE_MASTRICHT));
+                .setYAxis(false);
     }
 
     private void animateGraph() {

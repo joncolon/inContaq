@@ -1,4 +1,5 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
+package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments;
+
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,21 +17,18 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.graphs.WeeklyGraph;
+import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.MonthlyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-/**
- * Created by Hyun on 3/17/17.
- */
 
-public class WeeklyGraphFragment extends Fragment {
+public class MonthlyGraphFragment extends Fragment {
 
 
     private LineChartView lineGraph;
     private ArrayList<Sms> lstSms;
 
-    public WeeklyGraphFragment() {
+    public MonthlyGraphFragment() {
         // Required empty public constructor
     }
 
@@ -43,14 +41,14 @@ public class WeeklyGraphFragment extends Fragment {
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
         Contact contact = unwrapParcelledContact();
         lstSms = SmsHelper.getAllSms(getActivity(), contact);
-        showWeeklyGraph();
+        showMonthlyGraph();
 
         return view;
     }
 
-    private void showWeeklyGraph() {
-        WeeklyGraph weeklyGraph = new WeeklyGraph(getContext(), lineGraph, lstSms);
-        weeklyGraph.showWeeklyGraph();
+    private void showMonthlyGraph() {
+        MonthlyGraph monthlyGraph = new MonthlyGraph(getContext(), lineGraph, lstSms);
+        monthlyGraph.showMonthlyGraph();
     }
 
     @Nullable
@@ -59,4 +57,3 @@ public class WeeklyGraphFragment extends Fragment {
     }
 
 }
-

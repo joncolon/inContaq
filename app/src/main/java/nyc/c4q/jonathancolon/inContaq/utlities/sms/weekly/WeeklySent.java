@@ -74,22 +74,21 @@ public class WeeklySent extends AsyncTask<WeeklyTask, Void, TreeMap<Integer, Int
 
             int diffBetDays = (todayDayIs - smsDayIs);
 
-            fallsInWeek = isWithinTheWeek(todayDayOfWeek, diffBetDays,
-                    smsYear, todayYear,
-                    smsMonth, todayMonth);
+//            fallsInWeek = isWithinTheWeek(todayDayOfWeek, diffBetDays,
+//                    smsYear, todayYear,
+//                    smsMonth, todayMonth);
 
-            if (fallsInWeek) {
                 if (weeklyTexts.containsKey(smsDayOfWeek)) {
                     weeklyTexts.put(smsDayOfWeek, weeklyTexts.get(smsDayOfWeek) + 1);
                     weeklyTexts.entrySet();
-                }
             }
         }
         return weeklyTexts;
     }
 
-    private boolean isWithinTheWeek(int todayDayinWeek, int diffDays,
-                                    int smsYear, int todayYear,
-                                    int smsMonth, int todayMonth) {
-        return diffDays < todayDayinWeek && smsYear == todayYear && smsMonth == todayMonth;
-    }}
+//    private boolean isWithinTheWeek(int todayDayinWeek, int diffDays,
+//                                    int smsYear, int todayYear,
+//                                    int smsMonth, int todayMonth) {
+//        return diffDays < todayDayinWeek && smsYear == todayYear && smsMonth == todayMonth;
+//    }
+}

@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
+package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments;
 
 
 import android.os.Bundle;
@@ -15,11 +15,11 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.DailyGraph;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
 public class DailyGraphFragment extends Fragment {

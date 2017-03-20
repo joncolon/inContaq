@@ -19,7 +19,7 @@ import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
  */
 
 public class WordCountBarGraph {
-    private static final String FILL_COLOR = "#7F000000";
+    private static final String FILL_COLOR = "#000000";
     private static final String SENT_COLOR = "#EF7674";
     private static final String RECEIVED_COLOR = "#FDFFFC";
     private int averageWordCountSent;
