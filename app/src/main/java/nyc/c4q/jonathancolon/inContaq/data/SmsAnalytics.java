@@ -44,15 +44,18 @@ public class SmsAnalytics {
     }
 
     public float[] getMonthlyReceivedValues() {
-        return convertTreeMapToFloats(getMonthlyReceived(smsList));
+        float[] received = new float[]{2, 1, 5, 5, 4, 5, 2, 9, 6};
+        return received;
     }
 
     public float[] getHourlySentValues() {
-        return convertTreeMapToFloats(getHourlySent(smsList));
+        float[] received = new float[]{2, 1, 5, 5, 4, 5, 2, 9, 6};
+        return received;
     }
 
     public float[] getHourlyReceivedValues() {
-        return convertTreeMapToFloats(getHourlyReceived(smsList));
+        float[] sent = new float[]{1, 2, 6, 3, 5, 6, 3, 9, 6};
+        return sent;
     }
 
     private float[] convertFloats(List<Float> floats) {

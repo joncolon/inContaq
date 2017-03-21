@@ -134,11 +134,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private void loadImages() {
         PicassoHelper ph = new PicassoHelper(getActivity());
-        if (contact.getBackgroundImage() != null) {
-            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
+        if (contact.getBackgroundImage() != 0) {
+            ph.loadImageFromResourceId(contact.getBackgroundImage(), backgroundImageIV);
         }
-        if (contact.getContactImage() != null) {
-            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
+        if (contact.getContactImage() != 0) {
+            ph.loadImageFromResourceId(contact.getContactImage(), contactImageIV);
         }
     }
 

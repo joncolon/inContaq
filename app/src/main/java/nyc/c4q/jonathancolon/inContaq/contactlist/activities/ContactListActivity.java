@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
 import android.app.AlertDialog;
-import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,22 +20,21 @@ import com.facebook.stetho.Stetho;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
-import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.SplashScreenFragment;
-import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
-import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PreCachingLayoutManager;
+import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PermissionChecker;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -62,14 +60,19 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         permissionChecker.checkPermissions();
 
         context = getApplicationContext();
+        initViews();
+        setupRecyclerView();
+        refreshRecyclerView();
+        buildEnterContactDialog(this);
+//        checkServiceCreated();
+    }
+
+    private void initViews() {
         importContactsTV = (TextView) findViewById(R.id.import_contacts);
-        importContactsTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImportContacts importContacts = new ImportContacts(context);
-                importContacts.getContactsFromContentProvider();
-                refreshRecyclerView();
-            }
+        importContactsTV.setOnClickListener(v -> {
+            ImportContacts importContacts = new ImportContacts(context);
+            importContacts.getContactsFromContentProvider();
+            refreshRecyclerView();
         });
 
         FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
@@ -79,16 +82,12 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
                 ContactListActivity.this.openEditor();
             }
         });
-        setupRecyclerView();
-        refreshRecyclerView();
-        buildEnterContactDialog(this);
-//        checkServiceCreated();
     }
 
     private void refreshRecyclerView() {
         ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(this);
         db = dbHelper.getWritableDatabase();
-        contactList = SqlHelper.selectAllContacts(db);
+        contactList = contactArrayList();
         ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
         sortContacts();
         adapter.setData(contactList);
@@ -155,10 +154,10 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private void preloadContactListImages() {
         PicassoHelper pHelper = new PicassoHelper(context);
         for (int i = 0; i < contactList.size(); i++) {
-            if (contactList.get(i).getBackgroundImage() != null) {
+            if (contactList.get(i).getBackgroundImage() != 0) {
                 pHelper.preloadImages(contactList.get(i).getBackgroundImage());
             }
-            if (contactList.get(i).getContactImage() != null) {
+            if (contactList.get(i).getContactImage() != 0) {
                 pHelper.preloadImages(contactList.get(i).getContactImage());
             }
         }
@@ -212,6 +211,34 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     public void onResume() {
         super.onResume();
         refreshRecyclerView();
+    }
+
+    public static ArrayList<Contact> contactArrayList() {
+        ArrayList<Contact> contactDemoList = new ArrayList<>();
+        Contact mom = new Contact("Mama", "Colon", R.drawable.flowerbackground, R.drawable.jonsmom);
+        Contact romeo = new Contact("Romeo", "Santos", R.drawable.romeobg, R.drawable.romeoprofile);
+        Contact ramona = new Contact("Ramona", "Harrison", R.drawable.eightbitcity, R.drawable.ramona);
+        Contact rob = new Contact("Robert", "Li", R.drawable.robbackground, R.drawable.robertli);
+        Contact john = new Contact("John", "Gomez", R.drawable.johnbg, R.drawable.johngomezprofile);
+        Contact erick = new Contact("Erick", "Chang", R.drawable.erickbackground, R.drawable.erickprofile);
+        Contact jose = new Contact("Jose", "Garcia", R.drawable.cityblackandwhite, R.drawable.joseprofile);
+        Contact david = new Contact("David", "Morant", R.drawable.davidbackground, R.drawable.davidprofile);
+        Contact jj = new Contact("Jonathan", "Johnson", R.drawable.jjbackground, R.drawable.jonathanjohnson);
+        Contact girlKnewYork = new Contact("Girl", "KnewYork", R.drawable.girlknewbackground, R.drawable.girlknewyork);
+
+
+        contactDemoList.add(mom);
+        contactDemoList.add(romeo);
+        contactDemoList.add(ramona);
+        contactDemoList.add(rob);
+        contactDemoList.add(erick);
+        contactDemoList.add(john);
+        contactDemoList.add(jose);
+        contactDemoList.add(jj);
+        contactDemoList.add(david);
+        contactDemoList.add(girlKnewYork);
+
+        return contactDemoList;
     }
 
 }

@@ -35,7 +35,7 @@ public class TotalSmsBarGraph {
     }
 
     public void showBarGraph() {
-        getBarGraphValues(smsList);
+//        getBarGraphValues(smsList);
         loadGraph();
     }
 
@@ -46,15 +46,15 @@ public class TotalSmsBarGraph {
     }
 
     private void loadGraph() {
-        getYvalue();
+//        getYvalue();
         setGraphData();
         setGraphAttributes();
     }
 
     private void setGraphData() {
         BarSet barSet = new BarSet();
-        Bar barSent = new Bar(mLabels[0], totalWordsSent);
-        Bar barReceived = new Bar(mLabels[1], totalWordsReceived);
+        Bar barSent = new Bar(mLabels[0], 4);
+        Bar barReceived = new Bar(mLabels[1], 9);
         barReceived.setColor(Color.parseColor(RECEIVED_COLOR));
         barSent.setColor(Color.parseColor(SENT_COLOR));
         barSet.addBar(barSent);
@@ -69,7 +69,7 @@ public class TotalSmsBarGraph {
     private void setGraphAttributes() {
         barChartView.setXAxis(false)
                 .setYAxis(false)
-                .setAxisBorderValues(0, increaseByQuarter(highestValue))
+                .setAxisBorderValues(0, increaseByQuarter(12))
                 .setXLabels(NONE)
                 .setYLabels(NONE);
         barChartView.show();

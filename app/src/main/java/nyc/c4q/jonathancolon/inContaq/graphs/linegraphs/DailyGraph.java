@@ -73,7 +73,7 @@ public class DailyGraph {
 
     private void setGraphAttributes(int maxYvalue) {
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, maxYvalue)
+                .setAxisBorderValues(0, 12)
                 .setYLabels(NONE)
                 .setXLabels(OUTSIDE)
                 .setFontSize(24)

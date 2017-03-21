@@ -44,11 +44,11 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
+    private static ContactSmsFragment inst;
     private final String TAG = "SET TEXT REQUEST: ";
     private TextView contactName;
     private ImageView contactImageIV, backgroundImageIV;
     private Contact contact;
-    private static ContactSmsFragment inst;
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> SmsList;
@@ -83,13 +83,84 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
         initViews(view);
         enableClickListeners(view);
-        populateSmsList();
-        setupRecyclerView(contact);
-        refreshRecyclerView();
-        scrollListToBottom();
-        showRecyclerView();
+//        populateSmsList();
+//        setupRecyclerView(contact);
+//        refreshRecyclerView();
+//        scrollListToBottom();
+//        showRecyclerView();
 
         return view;
+    }
+
+    private void initViews(View view) {
+        contactName = (TextView) view.findViewById(R.id.name);
+        contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
+        backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+//        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+
+        int value = getActivity().getResources().getConfiguration().orientation;
+        if (value == Configuration.ORIENTATION_PORTRAIT) {
+
+            Typeface jaapokkiRegular = Typeface.createFromAsset(contactName.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
+            contactName.setTypeface(jaapokkiRegular);
+
+            displayContactInfo(contact);
+
+
+//            contactImageIV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                    ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
+//                }
+//            });
+//            if (backgroundImageIV != null) {
+//                backgroundImageIV.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                        ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
+//                    }
+//                });
+        }
+    }
+
+    private void enableClickListeners(View view) {
+        switch (view.getId()) {
+            case R.id.send_button:
+                sendMessage(view);
+                break;
+            case R.id.contact_image:
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
+                break;
+            case R.id.background_image:
+                Intent bgIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(bgIntent, RESULT_LOAD_BACKGROUND_IMG);
+                break;
+        }
+    }
+
+    synchronized private void displayContactInfo(Contact contact) {
+        String nameValue = contact.getFirstName() + " " + contact.getLastName();
+        PicassoHelper ph = new PicassoHelper(getActivity());
+
+        if (contact.getBackgroundImage() != 0) {
+            ph.loadImageFromResourceId(contact.getBackgroundImage(), backgroundImageIV);
+        }
+        if (contact.getContactImage() != 0) {
+            ph.loadImageFromResourceId(contact.getContactImage(), contactImageIV);
+        }
+        contactName.setText(nameValue);
     }
 
     synchronized public void sendMessage(final View v) {
@@ -125,86 +196,8 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         scrollListToBottom();
     }
 
-    private void initViews(View view) {
-        contactName = (TextView) view.findViewById(R.id.name);
-        contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
-        backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-
-
-        int value = getActivity().getResources().getConfiguration().orientation;
-        if (value == Configuration.ORIENTATION_PORTRAIT) {
-
-            Typeface jaapokkiRegular = Typeface.createFromAsset(contactName.getContext().getApplicationContext().getAssets(), "fonts/jaapokkiregular.ttf");
-            contactName.setTypeface(jaapokkiRegular);
-
-            displayContactInfo(contact);
-
-
-            contactImageIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                    ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
-                }
-            });
-            if (backgroundImageIV != null) {
-                backgroundImageIV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                        ContactSmsFragment.this.startActivityForResult(galleryIntent, RESULT_LOAD_BACKGROUND_IMG);
-                    }
-                });
-            }
-        }
-    }
-
-    private void enableClickListeners(View view) {
-        switch (view.getId()) {
-            case R.id.send_button:
-                sendMessage(view);
-                break;
-            case R.id.contact_image:
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                startActivityForResult(galleryIntent, RESULT_LOAD_CONTACT_IMG);
-                break;
-            case R.id.background_image:
-                Intent bgIntent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                startActivityForResult(bgIntent, RESULT_LOAD_BACKGROUND_IMG);
-                break;
-        }
-    }
-
-    synchronized private void displayContactInfo(Contact contact) {
-        String nameValue = contact.getFirstName() + " " + contact.getLastName();
-        PicassoHelper ph = new PicassoHelper(getActivity());
-
-        if (contact.getBackgroundImage() != null) {
-            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
-        }
-        if (contact.getContactImage() != null) {
-            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
-        }
-        contactName.setText(nameValue);
-    }
-
     public synchronized void populateSmsList() {
         SmsList = SmsHelper.getAllSms(getActivity(), contact);
-    }
-
-    private void setupRecyclerView(Contact contact) {
-        adapter = new SmsAdapter(this, contact);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
     }
 
     public synchronized void refreshRecyclerView() {
@@ -224,6 +217,12 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         });
     }
 
+    private void setupRecyclerView(Contact contact) {
+        adapter = new SmsAdapter(this, contact);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+    }
+
     synchronized private void showRecyclerView() {
         Animations anim = new Animations(getActivity());
         recyclerView.setVisibility(View.VISIBLE);
@@ -240,13 +239,13 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
                     case 1:
                         Uri contactUri = data.getData();
                         ph.loadImageFromUri(contactUri, contactImageIV);
-                        contact.setContactImage(contactUri.toString());
+//                        contact.setContactImage(contactUri.toString());
                         saveToDatabase(contact, getActivity());
                         break;
                     case 2:
                         Uri backgroundUri = data.getData();
                         ph.loadImageFromUri(backgroundUri, backgroundImageIV);
-                        contact.setBackgroundImage(backgroundUri.toString());
+//                        contact.setBackgroundImage(backgroundUri.toString());
                         saveToDatabase(contact, getActivity());
                         break;
                 }

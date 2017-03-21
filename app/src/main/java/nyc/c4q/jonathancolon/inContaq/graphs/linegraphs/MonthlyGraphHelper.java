@@ -8,9 +8,6 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.data.SmsAnalytics;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-/**
- * Created by jonathancolon on 3/17/17.
- */
 
 class MonthlyGraphHelper {
     private SmsAnalytics smsAnalytics;
@@ -43,11 +40,13 @@ class MonthlyGraphHelper {
     }
 
     float[] getSentValues() {
-        return smsAnalytics.getMonthlySentValues();
+            float[] demoFloats = new float[]{40, 12, 40, 50, 20, 60, 50, 20, 45, 50, 80, 12};
+            return demoFloats;
     }
 
     float[] getReceivedValue() {
-        return smsAnalytics.getMonthlyReceivedValues();
+        float[] demoFloats = new float[]{30, 10, 15, 60, 45, 70, 50, 20, 50, 60, 80, 30};
+        return demoFloats;
     }
 
     private int increaseByQuarter(int input) {

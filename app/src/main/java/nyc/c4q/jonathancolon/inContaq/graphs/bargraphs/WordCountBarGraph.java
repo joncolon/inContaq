@@ -35,7 +35,7 @@ public class WordCountBarGraph {
     }
 
     public void showBarGraph() {
-        getBarGraphValues(smsList);
+//        getBarGraphValues(smsList);
         loadGraph();
     }
 
@@ -46,15 +46,15 @@ public class WordCountBarGraph {
     }
 
     private void loadGraph() {
-        getYvalue();
+//        getYvalue();
         setGraphData();
         setGraphAttributes();
     }
 
     private void setGraphData() {
         BarSet barSet = new BarSet();
-        Bar barSent = new Bar(mLabels[0], averageWordCountSent);
-        Bar barReceived = new Bar(mLabels[1], averageWordCountReceived);
+        Bar barSent = new Bar(mLabels[0], 6);
+        Bar barReceived = new Bar(mLabels[1], 8);
         barReceived.setColor(Color.parseColor(RECEIVED_COLOR));
         barSent.setColor(Color.parseColor(SENT_COLOR));
         barSet.addBar(barSent);
@@ -70,7 +70,7 @@ public class WordCountBarGraph {
         // Chart
         barChartView.setXAxis(false)
                 .setYAxis(false)
-                .setAxisBorderValues(0, increaseByQuarter(highestValue))
+                .setAxisBorderValues(0, increaseByQuarter(12))
                 .setXLabels(NONE)
                 .setYLabels(NONE);
         barChartView.show();

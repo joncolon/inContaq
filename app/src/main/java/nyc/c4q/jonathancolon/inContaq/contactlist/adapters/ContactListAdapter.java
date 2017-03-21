@@ -106,14 +106,14 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             PicassoHelper ph = new PicassoHelper(context);
 
             if (hasBackgroundImage(contact)) {
-                ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
+                ph.loadImageFromResourceId(contact.getBackgroundImage(), mBackGroundImage);
             } else {
                 mBackGroundImage.refreshDrawableState();
                 mBackGroundImage.setImageDrawable(null);
             }
 
             if (hasContactImage(contact)) {
-                ph.loadImageFromString(contact.getContactImage(), mContactImage);
+                ph.loadImageFromResourceId(contact.getContactImage(), mContactImage);
             } else {
                 mContactImage.refreshDrawableState();
                 mContactImage.setImageDrawable(null);
@@ -136,10 +136,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     private boolean hasContactImage(Contact contact) {
-        return contact.getContactImage() != null;
+        return contact.getContactImage() != 0;
     }
 
     private boolean hasBackgroundImage(Contact contact) {
-        return contact.getBackgroundImage() != null;
+        return contact.getBackgroundImage() != 0;
     }
 }

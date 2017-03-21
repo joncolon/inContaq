@@ -62,8 +62,10 @@ public class WeeklyGraph {
     }
 
     private void getLineGraphValues(ArrayList<Sms> lstSms) {
-        receivedValues = setValues(getDailyReceived(lstSms));
-        sentValues = setValues(getWeeklySent(lstSms));
+        float[] sent = new float[]{3, 8, 9, 4, 1, 2, 3};
+        float[] received = new float[]{4, 9, 5, 3, 2, 4, 1};
+        receivedValues = received;
+        sentValues = sent;
     }
 
     private float[] setValues(TreeMap<Integer, Integer> numberOfTexts) {
@@ -206,7 +208,7 @@ public class WeeklyGraph {
         setHighestValueTo100();
 
         lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, highestValue)
+                .setAxisBorderValues(0, 12)
                 .setYLabels(NONE)
                 .setXLabels(OUTSIDE)
                 .setFontSize(24)

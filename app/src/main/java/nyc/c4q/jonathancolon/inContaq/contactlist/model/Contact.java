@@ -16,17 +16,10 @@ public class Contact {
     String cellPhoneNumber;
     String address;
     String email;
-    String backgroundImage;
-    String contactImage;
+    int backgroundImage;
+    int contactImage;
     Long timeLastContacted;
 
-    public long getTimeLastContacted() {
-        return timeLastContacted;
-    }
-
-    public void setTimeLastContacted(long timeLastContacted) {
-        this.timeLastContacted = System.currentTimeMillis();
-    }
 
     public Contact() {
     }
@@ -46,19 +39,26 @@ public class Contact {
         this.cellPhoneNumber = cellPhoneNumber;
     }
 
-    public String getContactImage() {
-        return contactImage;
-    }
-
-    public void setContactImage(String contactImage) {
+    public Contact(String firstName, String lastName, int backgroundImage, int contactImage) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.backgroundImage = backgroundImage;
         this.contactImage = contactImage;
     }
 
-    public String getBackgroundImage() {
+    public int getContactImage() {
+        return contactImage;
+    }
+
+    public void setContactImage(int contactImage) {
+        this.contactImage = contactImage;
+    }
+
+    public int getBackgroundImage() {
         return backgroundImage;
     }
 
-    public void setBackgroundImage(String backgroundImage) {
+    public void setBackgroundImage(int backgroundImage) {
         this.backgroundImage = backgroundImage;
     }
 
@@ -134,5 +134,13 @@ public class Contact {
         this.email = email;
     }
 
+
+    public long getTimeLastContacted() {
+        return timeLastContacted;
+    }
+
+    public void setTimeLastContacted(long timeLastContacted) {
+        this.timeLastContacted = System.currentTimeMillis();
+    }
 
 }

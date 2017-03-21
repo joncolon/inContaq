@@ -77,34 +77,42 @@
         </android.support.v7.widget.CardView>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+
+        <include
+            layout="@layout/chat_layout"
             android:layout_width="match_parent"
-            android:layout_height="422dp"
-            android:layout_above="@+id/sms_edit_text"
-            android:scrollbars="vertical"
-            android:visibility="invisible">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="520dp">
+        </include>
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/recycler_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="422dp"-->
+            <!--android:layout_above="@+id/sms_edit_text"-->
+            <!--android:scrollbars="vertical"-->
+            <!--android:visibility="invisible">-->
+        <!--</android.support.v7.widget.RecyclerView>-->
 
 
+        <EditText
+            android:id="@+id/sms_edit_text"
+            android:background="@color/primary_background"
+            android:layout_width="300dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:hint="@string/enter_text"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_above="@id/sms_edit_text"
             android:background="@android:color/darker_gray"/>
 
-        <EditText
-            android:id="@+id/sms_edit_text"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:hint="@string/enter_text"/>
 
         <ImageView
             android:id="@+id/send_button"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:background="@color/primary_background"
             android:layout_alignBottom="@id/sms_edit_text"
             android:layout_alignParentEnd="true"
             android:paddingRight="5dp"
