@@ -6,7 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +33,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PreCachingLayoutManager;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
+import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.SplashScreenFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
@@ -49,6 +53,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     private SQLiteDatabase db;
     private String name = "";
     private Context context;
+    Handler handler;
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +62,43 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         setContentView(R.layout.activity_contact_list);
         Stetho.initializeWithDefaults(this);
 
+
+
         PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
         permissionChecker.checkPermissions();
+
+
+
+        fragment = new SplashScreenFragment();
 
         context = getApplicationContext();
         initViews();
         setupRecyclerView();
         refreshRecyclerView();
         buildEnterContactDialog(this);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.activity_contact_list, fragment)
+                .commit();
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                removeSplash();
+            }
+        }, 4000);
 //        checkServiceCreated();
     }
+
+    private void removeSplash() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .remove(fragment)
+                .commit();
+    }
+
 
     private void initViews() {
         importContactsTV = (TextView) findViewById(R.id.import_contacts);
