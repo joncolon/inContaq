@@ -3,7 +3,6 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,22 +34,13 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 public class ContactStatsFragment extends Fragment implements View.OnClickListener {
 
-
     private Button monthlyBtn, weeklyBtn, dailyBtn;
-    private TextView avgWordSentTV, avgWordsReceivedTV, daysSinceContactedTV, getAvgWordSentInfoTV,
-            getGetAvgWordReceivedInfoTV, getDaysSinceContactedInfoTV, timeOfFeedbackTv,
-            commonWordSentTv, commonWordReceivedTv;
+    private TextView avgWordSentTV, daysSinceContactedTV, timeOfFeedbackTv,
+            commonWordReceivedTV, commonWordSentTV;
     private ArrayList<Sms> smsList;
     private BarChartView wordAverageChart, totalWordCountChart;
     int averageWordCountSent;
     int averageWordCountReceived;
-
-    public static ContactStatsFragment newInstance() {
-        ContactStatsFragment fragment = new ContactStatsFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,20 +64,12 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
             WordFrequency wordFrequency = new WordFrequency(smsList);
             AnalyticsFeedback analyticsFeedback = new AnalyticsFeedback();
 
-            String wordReceivedText = String.valueOf(averageWordCountReceived);
             String wordSentText = String.valueOf(averageWordCountSent);
             daysSinceContactedTV.setText(String.valueOf(differenceDays));
             avgWordSentTV.setText(wordSentText);
-//            avgWordsReceivedTV.setText(wordReceivedText);
-            Log.d("WEIRD ERROR", wordReceivedText);
             timeOfFeedbackTv.setText(analyticsFeedback.timeFeedback(smsAnalytics.maxTimeReceivedText()));
-            commonWordSentTv.setText(wordFrequency.mostCommonWordSent());
-            commonWordReceivedTv.setText(wordFrequency.mostCommonWordReceived());
-
-            Log.d("Common word received: ", wordFrequency.mostCommonWordReceived());
-            Log.e("Common word sent: ", wordFrequency.mostCommonWordSent());
-            Log.d("TIME: ", smsAnalytics.maxTimeReceivedText());
-            Log.d("TIME: ", smsAnalytics.maxTimeSentText());
+            commonWordReceivedTV.setText(wordFrequency.mostCommonWordReceived());
+            commonWordSentTV.setText(wordFrequency.mostCommonWordSent());
         }
 
         WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart, smsList);
@@ -125,12 +107,10 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     private void initViews(View view) {
         avgWordSentTV = (TextView) view.findViewById(R.id.avg_sent_counter_tv);
-        avgWordsReceivedTV = (TextView) view.findViewById(R.id.avg_received_counter_tv);
         daysSinceContactedTV = (TextView) view.findViewById(R.id.day_counter_tv);
-        getAvgWordSentInfoTV = (TextView) view.findViewById(R.id.avg_msg_length_sent_info_tv);
         timeOfFeedbackTv = (TextView) view.findViewById(R.id.time_of_day_feedback_tv);
-        commonWordReceivedTv = (TextView) view.findViewById(R.id.common_word_received);
-        commonWordSentTv = (TextView) view.findViewById(R.id.common_word_sent);
+        commonWordSentTV = (TextView) view.findViewById(R.id.common_sent_word);
+        commonWordReceivedTV = (TextView) view.findViewById(R.id.common_received_word);
         monthlyBtn = (Button) view.findViewById(R.id.monthly_btn);
         weeklyBtn = (Button) view.findViewById(R.id.weekly_btn);
         dailyBtn = (Button) view.findViewById(R.id.daily_btn);
@@ -145,7 +125,6 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     private Contact unwrapParcelledContact() {
         return Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
     }
-
 
     @Override
     public void onClick(View v) {

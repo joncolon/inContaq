@@ -2,7 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.utlities;
 
 public class NameSplitter {
 
-    public String[] splitFirstAndLastName(String name) {
+    public static String[] splitFirstAndLastName(String name) {
         if (name.trim().length() > 0) {
             String lastName = "";
             String firstName;

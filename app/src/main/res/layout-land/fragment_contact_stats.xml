@@ -272,7 +272,7 @@
                 android:textColor="#ffffff"/>
 
             <TextView
-                android:id="@+id/common_word_sent"
+                android:id="@+id/common_received_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/first_word_bold_tv"
@@ -287,8 +287,8 @@
                 android:id="@+id/common_sent_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/common_word_sent"
-                android:layout_toEndOf="@id/common_word_sent"
+                android:layout_alignBaseline="@id/common_received_word"
+                android:layout_toEndOf="@id/common_received_word"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
@@ -296,11 +296,11 @@
                 android:textColor="#ffffff"/>
 
             <TextView
-                android:id="@+id/common_word_received"
+                android:id="@+id/common_sent_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/common_word_sent"
-                android:layout_below="@id/common_word_sent"
+                android:layout_alignStart="@id/common_received_word"
+                android:layout_below="@id/common_received_word"
                 android:layout_marginBottom="25dp"
                 android:text="lol"
                 android:textAlignment="center"
@@ -312,8 +312,8 @@
                 android:id="@+id/common_received_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/common_word_received"
-                android:layout_toEndOf="@id/common_word_received"
+                android:layout_alignBaseline="@id/common_sent_word"
+                android:layout_toEndOf="@id/common_sent_word"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"

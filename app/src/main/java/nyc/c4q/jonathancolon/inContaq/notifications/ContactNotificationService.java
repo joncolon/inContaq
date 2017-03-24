@@ -75,8 +75,9 @@ public class ContactNotificationService extends IntentService {
                     .setSmallIcon(R.drawable.vectorpaint)
                     .setPriority(PRIORITY_HIGH)
                     .setFullScreenIntent(pendingIntent, true)
-                    .setContentTitle("It's been a week since you've texted " + contact.getFirstName())
-                    .setContentText("Why don't you get inContaq?")
+                    .setContentTitle("We're better together..")
+                    .setContentText("Why don't you contact " + contact.getFirstName() + " " +
+                    contact.getLastName())
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.vectorpaint))
                     .setSound(notification);
 

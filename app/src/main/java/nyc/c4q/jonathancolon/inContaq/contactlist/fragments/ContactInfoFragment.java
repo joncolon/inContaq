@@ -27,6 +27,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
@@ -143,18 +144,17 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     synchronized private void showMobile() {
-        if (isEditTextEnabled == true) {
+        if (isEditTextEnabled) {
             mobile.setVisibility(View.VISIBLE);
 
         }
-
         if (contact.getCellPhoneNumber() != null || Objects.equals(contact.getCellPhoneNumber(), "")) {
             mobile.setVisibility(View.VISIBLE);
         }
     }
 
     synchronized private void showEmail() {
-        if (isEditTextEnabled == true) {
+        if (isEditTextEnabled) {
             email.setVisibility(View.VISIBLE);
 
         }
@@ -165,7 +165,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     synchronized private void showAddress() {
-        if (isEditTextEnabled == true) {
+        if (isEditTextEnabled) {
             mobile.setVisibility(View.VISIBLE);
         }
         if (contact.getAddress() != null || Objects.equals(contact.getAddress(), "")) {
@@ -176,17 +176,23 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void alertDialogCallback(Integer ret) {
         ret = selection;
         if (ret == 1) {
-            String email = editEmail.getText().toString();
-            String address = editAddress.getText().toString();
-            String name = editName.getText().toString().trim();
-            splitFirstAndLastName(name);
-
-            contact.setEmail(email);
-            contact.setAddress(address);
-            contact.setCellPhoneNumber(editMobile.getText().toString());
-
-            SqlHelper.saveToDatabase(contact, getActivity());
+            saveChanges();
         }
+    }
+
+    private void saveChanges() {
+        String email = editEmail.getText().toString();
+        String address = editAddress.getText().toString();
+        String name = editName.getText().toString().trim();
+        String[] splitName = NameSplitter.splitFirstAndLastName(name);
+
+        contact.setFirstName(splitName[0]);
+        contact.setLastName(splitName[1]);
+        contact.setEmail(email);
+        contact.setAddress(address);
+        contact.setCellPhoneNumber(editMobile.getText().toString());
+
+        SqlHelper.saveToDatabase(contact, getActivity());
     }
 
     private void enableEditText() {
@@ -212,22 +218,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         anim.enterFab(saveButton);
     }
 
-    private void splitFirstAndLastName(String input) {
-        if (input.trim().length() > 0) {
-            String lastName = "";
-            String firstName;
-            if (input.split("\\w+").length > 1) {
-
-                lastName = input.substring(input.lastIndexOf(" ") + 1);
-                firstName = input.substring(0, input.lastIndexOf(' '));
-            } else {
-                firstName = input;
-            }
-            contact.setFirstName(firstName);
-            contact.setLastName(lastName);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -245,11 +235,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
                 break;
             case "WEEKLY":
-                mContactNotificationService = new ContactNotificationService();
-                mContactNotificationService.startNotification(contact, getContext());
                 break;
             case "2 WEEKS":
-                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
+                mContactNotificationService = new ContactNotificationService();
+                mContactNotificationService.startNotification(contact, getContext());
                 break;
             case "MONTHLY":
                 // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
