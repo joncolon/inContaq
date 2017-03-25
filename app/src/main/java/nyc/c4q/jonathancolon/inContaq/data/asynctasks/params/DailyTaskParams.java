@@ -1,13 +1,10 @@
-package nyc.c4q.jonathancolon.inContaq.data.asynctasks;
+package nyc.c4q.jonathancolon.inContaq.data.asynctasks.params;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-/**
- * Created by Hyun on 3/11/17.
- */
 
 public class DailyTaskParams {
 
@@ -19,11 +16,11 @@ public class DailyTaskParams {
         dailyTexts = dailyTextMsg;
     }
 
-    static ArrayList<Sms> getdailySmsList() {
+    public static ArrayList<Sms> getdailySmsList() {
         return dailyListSms;
     }
 
-    static TreeMap<Integer, Integer> getDailyTexts() {
+    public static TreeMap<Integer, Integer> getDailyTexts() {
         return dailyTexts;
     }
 }

@@ -13,17 +13,17 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 public class WordFrequency {
 
-    private ArrayList<Sms> smsList;
-    private List<String> excludedWords = new ArrayList<>(Arrays.asList("the","of","and","to","a",
+    private static ArrayList<Sms> smsList;
+    private static List<String> excludedWords = new ArrayList<>(Arrays.asList("the","of","and","to","a",
             "in","for","is","on", "that","by","this","with","i","you","it","not","or","be","are",
             "from","at","as","your", "all","have","new","more","an","was", "I'm", "I"));
 
     public WordFrequency(ArrayList<Sms> smsList) {
-        this.smsList = smsList;
+        WordFrequency.smsList = smsList;
     }
 
 
-    public String mostCommonWordReceived() {
+    public static String mostCommonWordReceived() {
         ArrayList<Sms> smsReceived = SmsHelper.parseReceivedSms(smsList);
         ArrayList<String> wordArrayList = new ArrayList<String>();
 
@@ -65,7 +65,7 @@ public class WordFrequency {
         return mostCommonKey;
     }
 
-    public String mostCommonWordSent() {
+    public static String mostCommonWordSent() {
         ArrayList<Sms> smsSent = SmsHelper.parseSentSms(smsList);
         ArrayList<String> wordArrayList = new ArrayList<String>();
 

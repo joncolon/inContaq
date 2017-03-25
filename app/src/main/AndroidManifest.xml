@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".contactlist.activities.ContactListActivity">
+        <activity android:name=".contactlist.activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -28,14 +28,14 @@
 
         <service android:name=".notifications.ContactNotificationService"/>
 
-        <receiver android:name=".utlities.sms.SmsReceiver">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".utlities.sms.SmsReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.provider.Telephony.SMS_RECEIVED"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <activity android:name=".utlities.sms.SmsSender"/>
-        <activity android:name=".contactlist.activities.SplashScreenActivity">
+        <activity android:name=".contactlist.activities.ContactListActivity">
         </activity>
     </application>
 

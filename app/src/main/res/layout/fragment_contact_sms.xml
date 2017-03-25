@@ -1,22 +1,22 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            app:cardCornerRadius="0dp"
             android:layout_above="@id/recycler_view"
+            app:cardCornerRadius="0dp"
             >
 
             <ImageView
@@ -82,6 +82,8 @@
             android:layout_width="match_parent"
             android:layout_height="422dp"
             android:layout_above="@+id/sms_edit_text"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:scrollbars="vertical"
             android:visibility="invisible">
         </android.support.v7.widget.RecyclerView>
@@ -107,7 +109,6 @@
             android:layout_height="45dp"
             android:layout_alignBottom="@id/sms_edit_text"
             android:layout_alignParentEnd="true"
-            android:onClick="sendMessage"
             android:paddingRight="5dp"
             android:paddingTop="5dp"
             android:src="@drawable/send_message_icon"/>

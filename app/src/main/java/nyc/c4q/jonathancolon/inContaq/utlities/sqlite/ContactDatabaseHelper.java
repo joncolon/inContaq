@@ -13,8 +13,6 @@ public class ContactDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "contact.db";
     private static final int DATABASE_VERSION = 1;
     private static ContactDatabaseHelper instance;
-    private Context context;
-    private SQLiteDatabase db;
 
     public static synchronized ContactDatabaseHelper getInstance(Context context) {
         if (instance == null) {

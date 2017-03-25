@@ -20,9 +20,6 @@ import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.WeeklyGraph;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-/**
- * Created by Hyun on 3/17/17.
- */
 
 public class WeeklyGraphFragment extends Fragment {
 

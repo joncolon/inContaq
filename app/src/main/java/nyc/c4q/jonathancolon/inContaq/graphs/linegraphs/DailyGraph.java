@@ -20,7 +20,6 @@ public class DailyGraph {
     private static final String SENT_COLOR = "#EF7674";
     private static final String LABEL_COLOR = "#FDFFFC";
     private static final String RECEIVED_COLOR = "#FDFFFC";
-    private final String TAG = "sms";
     private Context context;
     private LineChartView lineGraph;
     private ArrayList<Sms> lstSms;

@@ -50,7 +50,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<Sms> SmsList;
-    private ImageView smsSendButton;
     private EditText smsEditText;
 
     public ContactSmsFragment() {
@@ -94,7 +93,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        smsSendButton = (ImageView) view.findViewById(R.id.send_button);
+        ImageView smsSendButton = (ImageView) view.findViewById(R.id.send_button);
         smsEditText = (EditText) view.findViewById(R.id.sms_edit_text);
 
         smsSendButton.setOnClickListener(v -> {
@@ -135,7 +134,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     }
 
     synchronized public void sendMessage() {
-
         String messageNumber = contact.getCellPhoneNumber();
         String messageText = smsEditText.getText().toString();
         String sent = "SMS_SENT";

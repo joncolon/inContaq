@@ -8,11 +8,9 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-/**
- * Created by Hyun on 3/11/17.
- */
 
 public class DailyReceivedWorkerTask extends AsyncTask<DailyTaskParams, Void, TreeMap<Integer, Integer>> {
 

@@ -8,13 +8,14 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.MonthlyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
 public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
         TreeMap<Integer, Integer>> {
 
-    private TreeMap<Integer, Integer> monthlyTexts;
+    private static TreeMap<Integer, Integer> monthlyTexts;
 
     public MonthlySentWorkerTask() {
     }

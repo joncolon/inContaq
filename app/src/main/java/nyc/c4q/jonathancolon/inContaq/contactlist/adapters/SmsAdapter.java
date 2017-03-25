@@ -98,19 +98,11 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             setSmsDetails(sms);
             displaySmsByType(sms);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onContactClicked(smsDetail);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onContactClicked(smsDetail));
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    listener.onContactLongClicked(smsDetail);
-                    return true;
-                }
+            itemView.setOnLongClickListener(v -> {
+                listener.onContactLongClicked(smsDetail);
+                return true;
             });
         }
 

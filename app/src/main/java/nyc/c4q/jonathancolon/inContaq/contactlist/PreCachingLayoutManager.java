@@ -4,9 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-/**
- * Created by jonathancolon on 3/13/17.
- */
 
 public class PreCachingLayoutManager extends LinearLayoutManager {
     private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 1000;

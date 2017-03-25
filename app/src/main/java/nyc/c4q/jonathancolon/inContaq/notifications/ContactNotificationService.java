@@ -60,7 +60,7 @@ public class ContactNotificationService extends IntentService {
         checkInspectionTime();
     }
 
-    public void startNotification(Contact contact) {
+    public void startNotification(Contact contact, Context context) {
 
             int NOTIFICATION_ID = 555;
             Intent intent = new Intent(context, ContactListActivity.class);
@@ -72,12 +72,13 @@ public class ContactNotificationService extends IntentService {
 
             mBuilder = new NotificationCompat.Builder(context)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setSmallIcon(R.drawable.heartnotification_icon)
+                    .setSmallIcon(R.drawable.vectorpaint)
                     .setPriority(PRIORITY_HIGH)
                     .setFullScreenIntent(pendingIntent, true)
-                    .setContentTitle("It's been a week since you've texted " + contact.getFirstName())
-                    .setContentText("Why don't you get inContaq?")
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.heartnotification_icon))
+                    .setContentTitle("We're better together..")
+                    .setContentText("Why don't you contact " + contact.getFirstName() + " " +
+                    contact.getLastName())
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.vectorpaint))
                     .setSound(notification);
 
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -90,7 +91,7 @@ public class ContactNotificationService extends IntentService {
         List<Contact> contacts = SqlHelper.selectAllContacts(db);
         for (int i = 0; i < 1; i++) {
             Contact contact = contacts.get(i);
-                startNotification(contact);
+                startNotification(contact, context);
         }
     }
 

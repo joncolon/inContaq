@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.data.asynctasks;
+package nyc.c4q.jonathancolon.inContaq.data.asynctasks.params;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

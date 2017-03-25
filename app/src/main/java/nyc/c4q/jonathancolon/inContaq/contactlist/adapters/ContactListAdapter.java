@@ -23,7 +23,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private final Context context;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private List<Contact> contactList;
-    private CustomFont customFont;
 
     public ContactListAdapter(Listener listener, Context context) {
         this.listener = listener;
@@ -41,7 +40,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemview_contactlist_rv,
                 parent, false);
 
-        customFont = new CustomFont(context);
+        CustomFont customFont = new CustomFont(context);
         ContactViewHolder vh = new ContactViewHolder(itemView, customFont);
         parallaxViewController.imageParallax(vh.mBackGroundImage);
         return vh;
@@ -119,18 +118,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 mContactImage.setImageDrawable(null);
             }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onContactClicked(contact);
-                }
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    listener.onContactLongClicked(contact);
-                    return true;
-                }
+            itemView.setOnClickListener(v -> listener.onContactClicked(contact));
+            itemView.setOnLongClickListener(v -> {
+                listener.onContactLongClicked(contact);
+                return true;
             });
         }
     }

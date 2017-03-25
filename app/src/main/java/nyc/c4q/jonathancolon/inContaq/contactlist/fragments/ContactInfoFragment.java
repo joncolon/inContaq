@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,8 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
@@ -23,20 +25,23 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
-public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer> {
+public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
 
     private Contact contact;
-    private TextView mobile, email, polaroidName, address, editButton;
+    private TextView mobile;
+    private TextView email;
+    private TextView polaroidName;
+    private TextView editButton;
     private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
     private int selection;
     private Animations anim;
     private boolean isEditTextEnabled;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,7 +61,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         polaroidName = (TextView) view.findViewById(R.id.contact_name);
         mobile = (TextView) view.findViewById(R.id.mobile_phone);
         email = (TextView) view.findViewById(R.id.email);
-        address = (TextView) view.findViewById(R.id.address);
 
         editName = (EditText) view.findViewById(R.id.edit_name);
         editMobile = (EditText) view.findViewById(R.id.edit_mobile_phone);
@@ -68,6 +72,16 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+
+        Spinner dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+        ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
+                view.getContext(),
+                R.array.date_spinner_array,
+                R.layout.date_spinner_item);
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+        dateSpinner.setAdapter(spinnerArrayAdapter);
+        dateSpinner.setOnItemSelectedListener(this);
     }
 
     private void setClickListeners() {
@@ -91,23 +105,13 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         alertDialog.setTitle(R.string.save_changes);
         alertDialog.setMessage(R.string.are_you_sure);
 
-        alertDialog.setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                selection = 1;
-                ContactInfoFragment.this.alertDialogCallback(selection);
-                anim.exitFab(saveButton);
-                isEditTextEnabled = false;
+        alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
+            selection = 1;
+            ContactInfoFragment.this.alertDialogCallback(selection);
+            anim.exitFab(saveButton);
+            isEditTextEnabled = false;
 
-            }
-        });
-
-        alertDialog.setNegativeButton(R.string.negative_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        }).setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
         alertDialog.show();
     }
 
@@ -206,6 +210,33 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onResume() {
         super.onResume();
         displayContactInfo(contact);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+//        Contact contact = unwrapParcelledContact();
+
+        switch (String.valueOf(parent.getItemAtPosition(position))) {
+
+            case "DAILY":
+                // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
+                break;
+            case "WEEKLY":
+                break;
+            case "2 WEEKS":
+                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
+                ContactNotificationService mContactNotificationService = new ContactNotificationService();
+                mContactNotificationService.startNotification(contact, getContext());
+                break;
+            case "MONTHLY":
+                // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 }
 
