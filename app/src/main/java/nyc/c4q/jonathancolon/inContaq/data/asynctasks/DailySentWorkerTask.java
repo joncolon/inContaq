@@ -8,11 +8,10 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-/**
- * Created by Hyun on 3/11/17.
- */
+import static nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams.getdailySmsList;
 
 public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap<Integer, Integer>> {
 
@@ -28,7 +27,7 @@ public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap
 
     @Override
     protected TreeMap<Integer, Integer> doInBackground(DailyTaskParams... params) {
-        ArrayList<Sms> listSms = DailyTaskParams.getdailySmsList();
+        ArrayList<Sms> listSms = getdailySmsList();
         dailySentTexts = DailyTaskParams.getDailyTexts();
         return getSmsStats(listSms);
     }

@@ -11,10 +11,10 @@ import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailyReceivedWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.data.asynctasks.DailyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyReceivedWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlySentWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.MonthlyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
@@ -150,7 +150,7 @@ public class SmsAnalytics {
     }
 
     private float[] convertTreeMapToFloats(TreeMap<Integer, Integer> numberOfTexts) {
-        ArrayList<Float> list = new ArrayList<Float>();
+        ArrayList<Float> list = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : numberOfTexts.entrySet()) {
             Float value = entry.getValue().floatValue();
             list.add(value);

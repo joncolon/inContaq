@@ -3,7 +3,6 @@ package nyc.c4q.jonathancolon.inContaq.utlities.sms;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,9 +11,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.ExecutionException;
 
-import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.GetAllSmsTaskParams;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.GetAllSmsWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
@@ -101,7 +102,7 @@ public class SmsHelper {
         return formattedDate;
     }
 
-    public static void getLastContactedDate(Context context) {
+    public void getLastContactedDate(Context context) {
 
         ContentResolver contentResolver = context.getApplicationContext().getContentResolver();
         Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, null, null, null);
@@ -116,95 +117,19 @@ public class SmsHelper {
                 Toast.LENGTH_LONG).show();
     }
 
-
-    //TODO Split into separate methods. 1. getContactSms 2. getAllSms
     synchronized public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
-        StringBuilder smsBuilder = new StringBuilder();
-        final String SMS_URI_ALL = URI_ALL;
-
-        ArrayList<Sms> smsList = new ArrayList<Sms>();
-        Sms objSms;
-
-        if (contact.getCellPhoneNumber() != null){
+        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
+        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
+        ArrayList<Sms> smsList;
 
         try {
-            Uri uri = Uri.parse(SMS_URI_ALL);
-            String[] projection = new String[]{ID, ADDRESS, PERSON, BODY, DATE, TYPE};
-            Cursor cursor = context.getApplicationContext().getContentResolver().query(uri, projection,
-                    ADDRESS + "='" + contact.getCellPhoneNumber() + "'", null, DATE_DESC);
-
-            if (cursor.moveToFirst()) {
-
-                int totalSMS = cursor.getCount();
-
-                for (int i = 0; i < totalSMS; i++) {
-                    objSms = new Sms();
-                    objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
-                    objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
-                    objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
-                    objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
-                    objSms.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
-
-                    if (cursor.getString(cursor.getColumnIndexOrThrow(TYPE)).contains("1")) {
-                        objSms.setFolderName(INBOX);
-                    } else {
-                        objSms.setFolderName(SENT);
-                    }
-                    smsList.add(objSms);
-                    cursor.moveToNext();
-                }
-                if (!cursor.isClosed()) {
-                    cursor.close();
-                }
-            } else {
-                smsBuilder.append(R.string.sms_no_result);
-            }
-        } catch (SQLiteException ex) {
-            Log.d("SQLiteException", ex.getMessage());
+            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
+            return smsList;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
-        } else {
-            try {
-                Uri uri = Uri.parse(SMS_URI_ALL);
 
-                String[] projection = new String[]{ID, ADDRESS, PERSON, BODY,
-                        DATE, TYPE};
-
-                Cursor cursor = context.getApplicationContext().getContentResolver().query(uri,
-                        projection, null, null, DATE_DESC);
-
-                if (cursor.moveToFirst()) {
-
-                    int totalSMS = cursor.getCount();
-
-                    for (int i = 0; i < totalSMS; i++) {
-                        objSms = new Sms();
-                        objSms.setId(cursor.getString(cursor.getColumnIndexOrThrow(ID)));
-                        //todo why does this cause an error?
-                        objSms.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
-                        objSms.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
-                        objSms.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
-                        objSms.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
-
-                        if (cursor.getString(cursor.getColumnIndexOrThrow(TYPE)).contains("1")) {
-                            objSms.setFolderName(INBOX);
-                        } else {
-                            objSms.setFolderName(SENT);
-                        }
-                        smsList.add(objSms);
-                        cursor.moveToNext();
-                    }
-                    if (!cursor.isClosed()) {
-                        cursor.close();
-                    }
-                } else {
-                    smsBuilder.append(R.string.sms_no_result);
-                }
-            } catch (SQLiteException ex) {
-                Log.d("SQLiteException", ex.getMessage());
-            }
-        }
-        smsList.size();
-        return smsList;
+        throw new NullPointerException();
     }
 
     @NonNull

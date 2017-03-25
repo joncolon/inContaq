@@ -7,10 +7,6 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-/**
- * Created by jonathancolon on 3/11/17.
- */
-
 public class PermissionChecker {
     private final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_SMS, Manifest.permission.READ_CONTACTS};

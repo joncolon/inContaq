@@ -14,9 +14,6 @@ import nyc.c4q.jonathancolon.inContaq.data.WordCount;
 
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
-/**
- * Created by jonathancolon on 3/16/17.
- */
 
 public class WordCountBarGraph {
     private static final String FILL_COLOR = "#000000";

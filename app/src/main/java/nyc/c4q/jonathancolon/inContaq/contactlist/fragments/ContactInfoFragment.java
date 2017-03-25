@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -33,16 +32,16 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
 
     private Contact contact;
-    private TextView mobile, email, polaroidName, address, editButton;
+    private TextView mobile;
+    private TextView email;
+    private TextView polaroidName;
+    private TextView editButton;
     private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
     private int selection;
     private Animations anim;
     private boolean isEditTextEnabled;
-    private Spinner dateSpinner;
-    private ArrayAdapter<CharSequence> spinnerArrayAdapter;
-    private ContactNotificationService mContactNotificationService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +61,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         polaroidName = (TextView) view.findViewById(R.id.contact_name);
         mobile = (TextView) view.findViewById(R.id.mobile_phone);
         email = (TextView) view.findViewById(R.id.email);
-        address = (TextView) view.findViewById(R.id.address);
 
         editName = (EditText) view.findViewById(R.id.edit_name);
         editMobile = (EditText) view.findViewById(R.id.edit_mobile_phone);
@@ -75,8 +73,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
 
-        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
-        spinnerArrayAdapter = ArrayAdapter.createFromResource(
+        Spinner dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+        ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.date_spinner_array,
                 R.layout.date_spinner_item);
@@ -107,23 +105,13 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         alertDialog.setTitle(R.string.save_changes);
         alertDialog.setMessage(R.string.are_you_sure);
 
-        alertDialog.setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                selection = 1;
-                ContactInfoFragment.this.alertDialogCallback(selection);
-                anim.exitFab(saveButton);
-                isEditTextEnabled = false;
+        alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
+            selection = 1;
+            ContactInfoFragment.this.alertDialogCallback(selection);
+            anim.exitFab(saveButton);
+            isEditTextEnabled = false;
 
-            }
-        });
-
-        alertDialog.setNegativeButton(R.string.negative_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        }).setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
         alertDialog.show();
     }
 
@@ -237,7 +225,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             case "WEEKLY":
                 break;
             case "2 WEEKS":
-                mContactNotificationService = new ContactNotificationService();
+                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
+                ContactNotificationService mContactNotificationService = new ContactNotificationService();
                 mContactNotificationService.startNotification(contact, getContext());
                 break;
             case "MONTHLY":

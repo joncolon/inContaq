@@ -1,15 +1,14 @@
 package nyc.c4q.jonathancolon.inContaq.data;
 
-import android.util.Log;
-
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.TotalWordCountWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
-import static android.content.ContentValues.TAG;
-
 public class WordCount {
+
 
     public WordCount() {
     }
@@ -26,7 +25,7 @@ public class WordCount {
 
     public static int getTotalReceived(ArrayList<Sms> smsList) {
         smsList = SmsHelper.parseReceivedSms(smsList);
-        ArrayList<Integer> wordCount = new ArrayList<Integer>();
+        ArrayList<Integer> wordCount = new ArrayList<>();
         for (int i = 0; i < smsList.size(); i++) {
             wordCount.add(getWordCountPerMessage(smsList.get(i)));
         }
@@ -42,7 +41,7 @@ public class WordCount {
         return sum;
     }
 
-    private static int getWordCountPerMessage(Sms sms) {
+    public static int getWordCountPerMessage(Sms sms) {
         String input = sms.getMsg();
         if (input == null || input.isEmpty()) {
             return 0;
@@ -51,33 +50,36 @@ public class WordCount {
         return words.length;
     }
 
-    private static ArrayList<Integer> getTotalWordCount(ArrayList<Sms> smsList) {
-        ArrayList<Integer> wordCount = new ArrayList<Integer>();
-        for (int i = 0; i < smsList.size(); i++) {
-            wordCount.add(getWordCountPerMessage(smsList.get(i)));
+    public static int getAverageWordCountSent(ArrayList<Sms> smsList){
+        TotalWordCountWorkerTask wordCountWorkerTask = new TotalWordCountWorkerTask();
+        ArrayList<Sms> sentSms = SmsHelper.parseSentSms(smsList);
+        ArrayList<Integer> totalSmsAmount = null;
+
+        try {
+            totalSmsAmount = wordCountWorkerTask.execute(sentSms).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
-        return wordCount;
+        return calculateAverage(totalSmsAmount);
     }
 
-    public static int getAverageWordCountSent(ArrayList<Sms> smsList) {
-        SmsHelper sHelp = new SmsHelper();
-        ArrayList<Sms> sentSms = sHelp.parseSentSms(smsList);
-        Log.d(TAG, "getAverageWordCountSent: " + getTotalWordCount(sentSms));
-        return calculateAverage(getTotalWordCount(sentSms));
-    }
+    public static int getAverageWordCountReceived(ArrayList<Sms> smsList){
+        TotalWordCountWorkerTask wordCountWorkerTask = new TotalWordCountWorkerTask();
+        ArrayList<Sms> receivedSms = SmsHelper.parseReceivedSms(smsList);
+        ArrayList<Integer> totalSmsAmount = null;
 
-    public static int getAverageWordCountReceived(ArrayList<Sms> smsList) {
-        SmsHelper sHelp = new SmsHelper();
-        ArrayList<Sms> receivedSms = sHelp.parseReceivedSms(smsList);
-        Log.d(TAG, "getAverageWordCountReceived: " + getTotalWordCount(receivedSms));
-        return calculateAverage(getTotalWordCount(receivedSms));
+        try {
+            totalSmsAmount = wordCountWorkerTask.execute(receivedSms).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return calculateAverage(totalSmsAmount);
     }
 
     private static int calculateAverage(ArrayList<Integer> numbers) {
         int sum = calculateTotalWords(numbers);
         if (sum != 0) {
-            int average = sum / numbers.size();
-            return average;
+            return sum / numbers.size();
         }
         return sum;
     }
