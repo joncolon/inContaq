@@ -6,7 +6,6 @@
     android:id="@+id/activity_contact_viewpager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECF0F1"
     android:orientation="vertical"
     tools:context=".contactlist.activities.ContactListActivity">
     <LinearLayout
