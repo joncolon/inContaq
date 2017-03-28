@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.data.AnalyticsFeedback;
 import nyc.c4q.jonathancolon.inContaq.data.SmsAnalytics;
 import nyc.c4q.jonathancolon.inContaq.data.WordCount;
 import nyc.c4q.jonathancolon.inContaq.data.WordFrequency;
@@ -36,7 +35,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     int averageWordCountSent;
     int averageWordCountReceived;
-    private TextView avgWordSentTV, daysSinceContactedTV, timeOfFeedbackTv,
+    private TextView avgWordSentTV, avgWordReceivedTV, daysSinceContactedTV, timeOfFeedbackTv,
             commonWordReceivedTV, commonWordSentTV;
     private BarChartView wordAverageChart, totalWordCountChart;
     private ArrayList<Sms> smsList;
@@ -47,39 +46,44 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
         initViews(view);
         Bundle bundle = this.getArguments();
+
         if (bundle != null) {
             smsList = Parcels.unwrap(bundle.getParcelable("smslist"));
         }
 
-        if (savedInstanceState == null) {
-            showMonthlyGraphFragment();
+        if (smsList != null) {
+
+            if (smsList.size() != 0) {
+
+                if (savedInstanceState == null) {
+                    showMonthlyGraphFragment();
+                }
+
+                getAverageWordCount(smsList);
+                long daysSinceLastContacted = getDifferenceDays();
+                SmsAnalytics smsAnalytics = new SmsAnalytics(smsList);
+                WordFrequency wordFrequency = new WordFrequency(smsList);
+
+                daysSinceContactedTV.setText(String.valueOf(daysSinceLastContacted));
+                avgWordSentTV.setText(String.valueOf(averageWordCountSent));
+                avgWordReceivedTV.setText(String.valueOf(averageWordCountReceived));
+                timeOfFeedbackTv.setText(timeFeedback(smsAnalytics.maxTimeReceivedText()));
+                commonWordReceivedTV.setText(mostCommonWordReceived());
+                commonWordSentTV.setText(mostCommonWordSent());
+
+                WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart, smsList);
+                TotalSmsBarGraph totalSmsBarGraph = new TotalSmsBarGraph(totalWordCountChart, smsList);
+                wordCountBarGraph.showBarGraph();
+                totalSmsBarGraph.showBarGraph();
+            }
         }
-
-        if (smsList.size() != 0) {
-            getAverageWordCount(smsList);
-            long daysSinceLastContacted = getDifferenceDays();
-            SmsAnalytics smsAnalytics = new SmsAnalytics(smsList);
-            WordFrequency wordFrequency = new WordFrequency(smsList);
-            AnalyticsFeedback analyticsFeedback = new AnalyticsFeedback();
-
-            String wordSentText = String.valueOf(averageWordCountSent);
-            daysSinceContactedTV.setText(String.valueOf(daysSinceLastContacted));
-            avgWordSentTV.setText(wordSentText);
-            timeOfFeedbackTv.setText(timeFeedback(smsAnalytics.maxTimeReceivedText()));
-            commonWordReceivedTV.setText(mostCommonWordReceived());
-            commonWordSentTV.setText(mostCommonWordSent());
-        }
-
-        WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart, smsList);
-        TotalSmsBarGraph totalSmsBarGraph = new TotalSmsBarGraph(totalWordCountChart, smsList);
-        wordCountBarGraph.showBarGraph();
-        totalSmsBarGraph.showBarGraph();
 
         return view;
     }
 
     private void initViews(View view) {
         avgWordSentTV = (TextView) view.findViewById(R.id.avg_sent_counter_tv);
+        avgWordReceivedTV = (TextView) view.findViewById(R.id.avg_received_counter_tv);
         daysSinceContactedTV = (TextView) view.findViewById(R.id.day_counter_tv);
         timeOfFeedbackTv = (TextView) view.findViewById(R.id.time_of_day_feedback_tv);
         commonWordSentTV = (TextView) view.findViewById(R.id.common_sent_word);
@@ -158,5 +162,8 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .commit();
     }
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 }

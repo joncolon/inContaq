@@ -20,6 +20,9 @@ class DailyGraphHelper {
         int maxSent = findMaximumValue(getSentValues(smsList));
         int maxReceived = findMaximumValue(getReceivedValue(smsList));
         int highestValue = Math.max(maxSent, maxReceived);
+        if (highestValue == 0){
+            return 10;
+        }
         return increaseByQuarter(highestValue);
     }
 

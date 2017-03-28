@@ -34,6 +34,7 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
@@ -81,6 +82,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
 
+        SmsHelper.getLastContactedDate(getContext(), contact);
         initViews(view);
         setupRecyclerView(contact);
         refreshRecyclerView();

@@ -3,7 +3,6 @@ package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ public class MonthlyGraphFragment extends Fragment {
 
 
     private LineChartView lineGraph;
-    private ArrayList<Sms> lstSms;
+    private ArrayList<Sms> smsList;
 
     public MonthlyGraphFragment() {
         // Required empty public constructor
@@ -38,8 +37,7 @@ public class MonthlyGraphFragment extends Fragment {
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            lstSms = Parcels.unwrap(bundle.getParcelable("smslist"));
-            Log.d("missing bundle", lstSms.get(0).getMsg());
+            smsList = Parcels.unwrap(bundle.getParcelable("smslist"));
             showMonthlyGraph();
         }
 
@@ -47,7 +45,7 @@ public class MonthlyGraphFragment extends Fragment {
     }
 
     private void showMonthlyGraph() {
-        MonthlyGraph monthlyGraph = new MonthlyGraph(getContext(), lineGraph, lstSms);
+        MonthlyGraph monthlyGraph = new MonthlyGraph(getContext(), lineGraph, smsList);
         monthlyGraph.showMonthlyGraph();
     }
 

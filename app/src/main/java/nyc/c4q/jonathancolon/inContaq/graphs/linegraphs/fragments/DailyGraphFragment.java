@@ -21,7 +21,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 public class DailyGraphFragment extends Fragment {
 
     private LineChartView lineGraph;
-    private ArrayList<Sms> lstSms;
+    private ArrayList<Sms> smsList;
 
     public DailyGraphFragment() {
         // Required empty public constructor
@@ -34,14 +34,14 @@ public class DailyGraphFragment extends Fragment {
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            lstSms = Parcels.unwrap(bundle.getParcelable("smslist"));
+            smsList = Parcels.unwrap(bundle.getParcelable("smslist"));
         }
         showDailyGraph();
         return view;
     }
 
     private void showDailyGraph() {
-        DailyGraph dailyGraph = new DailyGraph(getContext(), lineGraph, lstSms);
+        DailyGraph dailyGraph = new DailyGraph(getContext(), lineGraph, smsList);
         dailyGraph.showDailyGraph();
     }
 }

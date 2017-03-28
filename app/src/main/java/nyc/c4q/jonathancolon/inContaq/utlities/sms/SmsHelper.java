@@ -102,19 +102,22 @@ public class SmsHelper {
         return formattedDate;
     }
 
-    public void getLastContactedDate(Context context) {
+    public static void getLastContactedDate(Context context, Contact contact) {
 
         ContentResolver contentResolver = context.getApplicationContext().getContentResolver();
-        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, null, null, null);
-        cursor.moveToFirst();
-        String date = cursor.getString(cursor.getColumnIndex(DATE));
-        Long timestamp = Long.parseLong(date);
-        cursor.close();
+        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, ADDRESS  + "='" + contact.getCellPhoneNumber() + "'", null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                String date = cursor.getString(cursor.getColumnIndex(DATE));
+                Long timestamp = Long.parseLong(date);
+                cursor.close();
 
-        Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
+                Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
 
-        Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
-                Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     synchronized public static ArrayList<Sms> getAllSms(Context context, Contact contact) {

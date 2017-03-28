@@ -83,5 +83,4 @@ public class WordCountBarGraph {
     private int increaseByQuarter(int input) {
         return (int) Math.round(input * 1.25);
     }
-
 }

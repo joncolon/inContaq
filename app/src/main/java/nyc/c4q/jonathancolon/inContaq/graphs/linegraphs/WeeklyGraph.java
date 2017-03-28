@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.animation.BounceInterpolator;
 
 import com.db.chart.Tools;
@@ -31,8 +30,7 @@ public class WeeklyGraph {
     private static final String SENT_COLOR = "#EF7674";
     private static final String LABEL_COLOR = "#FDFFFC";
     private static final String RECEIVED_COLOR = "#FDFFFC";
-    private static final String WEEKLY_SENT = "Monthly Sent: ";
-    private static final String WEEKLY_RECEIVED = "Monthly Received: ";
+
     private static final int SUN = 1;
     private static final int MON = 2;
     private static final int TUE = 3;
@@ -41,7 +39,6 @@ public class WeeklyGraph {
     private static final int FRI = 6;
     private static final int SAT = 7;
     private static final int DEFAULT_VALUE = 0;
-    private final String TAG = "sms";
     private Context context;
     private int highestValue;
     private LineChartView lineGraph;
@@ -84,14 +81,11 @@ public class WeeklyGraph {
         WeeklyReceived weeklyReceivedTask = new WeeklyReceived();
 
         try {
-
             weeklyReceived = weeklyReceivedTask.execute(receivedWeeklyParams).get();
-            Log.e(TAG, WEEKLY_RECEIVED + weeklyReceived);
-
         } catch (InterruptedException | ExecutionException e) {
-
             e.printStackTrace();
         }
+
         return weeklyReceived;
     }
 
@@ -103,8 +97,6 @@ public class WeeklyGraph {
 
         try {
             weeklySent = weeklySentWorkerTask.execute(sentWeeklyParams).get();
-            Log.e(TAG, WEEKLY_SENT + weeklySent);
-
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

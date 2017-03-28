@@ -21,7 +21,7 @@ public class WeeklyGraphFragment extends Fragment {
 
 
     private LineChartView lineGraph;
-    private ArrayList<Sms> lstSms;
+    private ArrayList<Sms> smsList;
 
     public WeeklyGraphFragment() {
         // Required empty public constructor
@@ -36,7 +36,7 @@ public class WeeklyGraphFragment extends Fragment {
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            lstSms = Parcels.unwrap(bundle.getParcelable("smslist"));
+            smsList = Parcels.unwrap(bundle.getParcelable("smslist"));
         }
         showWeeklyGraph();
 
@@ -44,7 +44,7 @@ public class WeeklyGraphFragment extends Fragment {
     }
 
     private void showWeeklyGraph() {
-        WeeklyGraph weeklyGraph = new WeeklyGraph(getContext(), lineGraph, lstSms);
+        WeeklyGraph weeklyGraph = new WeeklyGraph(getContext(), lineGraph, smsList);
         weeklyGraph.showWeeklyGraph();
     }
 
