@@ -15,7 +15,7 @@ import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyReceivedWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlySentWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.MonthlyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 public class SmsAnalytics {

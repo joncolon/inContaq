@@ -65,6 +65,9 @@ dependencies {
             compile 'org.parceler:parceler-api:1.1.6'
             annotationProcessor 'org.parceler:parceler:1.1.6'
 
+            //sms api
+            compile 'com.klinkerapps:android-smsmms:3.5.0'
+
         }
     })
     compile 'com.android.support:support-v4:25.3.0'

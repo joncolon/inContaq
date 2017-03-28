@@ -24,7 +24,7 @@ import nyc.c4q.jonathancolon.inContaq.graphs.bargraphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.DailyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.MonthlyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.WeeklyGraphFragment;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 import static nyc.c4q.jonathancolon.inContaq.data.AnalyticsFeedback.timeFeedback;
 import static nyc.c4q.jonathancolon.inContaq.data.WordFrequency.mostCommonWordReceived;

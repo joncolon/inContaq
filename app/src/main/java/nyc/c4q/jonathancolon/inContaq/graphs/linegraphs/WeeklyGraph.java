@@ -16,10 +16,10 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.weekly.WeeklyReceived;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.weekly.WeeklySent;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.weekly.WeeklyTask;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.WeeklyReceived;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.WeeklySent;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.WeeklyTaskParams;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
@@ -77,7 +77,7 @@ public class WeeklyGraph {
     private TreeMap<Integer, Integer> getDailyReceived(ArrayList<Sms> texts) {
 
         TreeMap<Integer, Integer> weeklyReceived = setUpWeeklyTextMap();
-        WeeklyTask receivedWeeklyParams = new WeeklyTask(texts, weeklyReceived);
+        WeeklyTaskParams receivedWeeklyParams = new WeeklyTaskParams(texts, weeklyReceived);
         WeeklyReceived weeklyReceivedTask = new WeeklyReceived();
 
         try {
@@ -92,7 +92,7 @@ public class WeeklyGraph {
     private TreeMap<Integer, Integer> getWeeklySent(ArrayList<Sms> texts) {
 
         TreeMap<Integer, Integer> weeklySent = setUpWeeklyTextMap();
-        WeeklyTask sentWeeklyParams = new WeeklyTask(texts, weeklySent);
+        WeeklyTaskParams sentWeeklyParams = new WeeklyTaskParams(texts, weeklySent);
         WeeklySent weeklySentWorkerTask = new WeeklySent();
 
         try {

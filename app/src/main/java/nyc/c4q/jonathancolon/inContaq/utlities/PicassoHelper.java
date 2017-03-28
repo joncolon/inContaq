@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.contactlist;
+package nyc.c4q.jonathancolon.inContaq.utlities;
 
 import android.content.Context;
 import android.net.Uri;

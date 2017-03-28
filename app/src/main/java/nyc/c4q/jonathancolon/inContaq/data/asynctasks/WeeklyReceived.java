@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms.weekly;
+package nyc.c4q.jonathancolon.inContaq.data.asynctasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,49 +8,42 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.WeeklyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
-public class WeeklySent extends AsyncTask<WeeklyTask, Void, TreeMap<Integer, Integer>> {
+public class WeeklyReceived extends AsyncTask<WeeklyTaskParams, Void, TreeMap<Integer, Integer>> {
 
     private TreeMap<Integer, Integer> weeklyTexts;
 
-    public WeeklySent() {
+    public WeeklyReceived() {
     }
 
     @Override
     protected void onPreExecute() {
-        Log.i("WeeklySentTask", "Getting Weekly Total Sent...");
+        Log.i("WeeklyReceivedTask", "Getting Weekly Total Received...");
     }
 
     @Override
-    protected TreeMap<Integer, Integer> doInBackground(WeeklyTask... params) {
+    protected TreeMap<Integer, Integer> doInBackground(WeeklyTaskParams... params) {
 
         ArrayList<Sms> listSms = params[0].listSms;
         weeklyTexts = params[0].weeklyTexts;
         return getSmsStats(listSms);
-
-    }
-
-    @Override
-    protected void onPostExecute(TreeMap<Integer, Integer> ret) {
-        super.onPostExecute(ret);
     }
 
     private TreeMap<Integer, Integer> getSmsStats(ArrayList<Sms> list) {
 
-        ArrayList<String> sentSms = new ArrayList<>();
+        ArrayList<String> receivedSms = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
-
-            if (list.get(i).getType().equals("2")) {
-                sentSms.add(list.get(i).getTime());
+            if (list.get(i).getType().equals("1")) {
+                receivedSms.add(list.get(i).getTime());
             }
         }
-        weeklyTexts = getWeeklyTexts(sentSms);
+        weeklyTexts = getWeeklyTexts(receivedSms);
         return weeklyTexts;
     }
-
 
     private TreeMap<Integer, Integer> getWeeklyTexts(ArrayList<String> list) {
 
@@ -78,17 +71,22 @@ public class WeeklySent extends AsyncTask<WeeklyTask, Void, TreeMap<Integer, Int
 //                    smsYear, todayYear,
 //                    smsMonth, todayMonth);
 
-                if (weeklyTexts.containsKey(smsDayOfWeek)) {
-                    weeklyTexts.put(smsDayOfWeek, weeklyTexts.get(smsDayOfWeek) + 1);
-                    weeklyTexts.entrySet();
+            if (weeklyTexts.containsKey(smsDayOfWeek)) {
+                weeklyTexts.put(smsDayOfWeek, weeklyTexts.get(smsDayOfWeek) + 1);
+                weeklyTexts.entrySet();
             }
         }
         return weeklyTexts;
+    }
+
+    @Override
+    protected void onPostExecute(TreeMap<Integer, Integer> ret) {
+        super.onPostExecute(ret);
     }
 
 //    private boolean isWithinTheWeek(int todayDayinWeek, int diffDays,
 //                                    int smsYear, int todayYear,
 //                                    int smsMonth, int todayMonth) {
 //        return diffDays < todayDayinWeek && smsYear == todayYear && smsMonth == todayMonth;
-//    }
 }
+

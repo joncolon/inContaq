@@ -34,7 +34,7 @@
             <!--</intent-filter>-->
         <!--</receiver>-->
 
-        <activity android:name=".utlities.sms.SmsSender"/>
+        <activity android:name=".sms.SmsSender"/>
         <activity android:name=".contactlist.activities.ContactListActivity">
         </activity>
     </application>

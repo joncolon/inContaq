@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 public class WordFrequency {
 

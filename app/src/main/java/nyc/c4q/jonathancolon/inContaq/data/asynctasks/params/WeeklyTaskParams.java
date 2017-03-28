@@ -5,13 +5,13 @@ import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
+public class WeeklyTaskParams {
 
-public class MonthlyTaskParams {
     public final ArrayList<Sms> listSms;
-    public final TreeMap<Integer, Integer> monthlyTexts;
+    public final TreeMap<Integer, Integer> weeklyTexts;
 
-    public MonthlyTaskParams(ArrayList<Sms> listSms, TreeMap<Integer, Integer> monthlyTexts) {
+    public WeeklyTaskParams(ArrayList<Sms> listSms, TreeMap<Integer, Integer> weeklyTexts) {
         this.listSms = listSms;
-        this.monthlyTexts = monthlyTexts;
+        this.weeklyTexts = weeklyTexts;
     }
 }

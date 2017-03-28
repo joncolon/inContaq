@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
-import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.Animations;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
 
@@ -85,7 +85,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         SmsHelper.getLastContactedDate(getContext(), contact);
         initViews(view);
         setupRecyclerView(contact);
-        refreshRecyclerView();
         scrollListToBottom();
         showRecyclerView();
 
@@ -112,10 +111,13 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private void setupRecyclerView(Contact contact) {
         adapter = new SmsAdapter(this, contact);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        Collections.sort(smsList);
+        adapter.setData(smsList);
         recyclerView.setAdapter(adapter);
     }
 
     public synchronized void refreshRecyclerView() {
+        smsList = SmsHelper.getAllSms(getActivity(), contact);
         adapter = (SmsAdapter) recyclerView.getAdapter();
         Collections.sort(smsList);
         adapter.setData(smsList);

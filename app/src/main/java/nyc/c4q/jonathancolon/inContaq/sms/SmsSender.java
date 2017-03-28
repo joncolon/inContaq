@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.sms;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

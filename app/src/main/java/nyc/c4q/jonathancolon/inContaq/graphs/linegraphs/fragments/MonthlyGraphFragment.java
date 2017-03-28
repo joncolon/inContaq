@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.MonthlyGraph;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 public class MonthlyGraphFragment extends Fragment {

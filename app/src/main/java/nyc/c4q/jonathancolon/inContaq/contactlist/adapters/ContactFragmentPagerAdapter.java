@@ -15,8 +15,8 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactInfoFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactStatsFragment;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
