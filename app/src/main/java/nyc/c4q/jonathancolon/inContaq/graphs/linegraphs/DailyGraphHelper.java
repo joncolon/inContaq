@@ -13,12 +13,12 @@ class DailyGraphHelper {
 
 
     DailyGraphHelper(ArrayList<Sms> smsList) {
-        smsAnalytics = new SmsAnalytics(smsList);
+        this.smsAnalytics = new SmsAnalytics(smsList);
     }
 
-    synchronized int getYValue() {
-        int maxSent = findMaximumValue(getSentValues());
-        int maxReceived = findMaximumValue(getReceivedValue());
+    synchronized int getYValue(ArrayList<Sms> smsList) {
+        int maxSent = findMaximumValue(getSentValues(smsList));
+        int maxReceived = findMaximumValue(getReceivedValue(smsList));
         int highestValue = Math.max(maxSent, maxReceived);
         return increaseByQuarter(highestValue);
     }
@@ -33,12 +33,12 @@ class DailyGraphHelper {
         return (int) maxValue;
     }
 
-    float[] getSentValues() {
-        return smsAnalytics.getHourlySentValues();
+    float[] getSentValues(ArrayList<Sms> smsList) {
+        return smsAnalytics.getHourlySentValues(smsList);
     }
 
-    float[] getReceivedValue() {
-        return smsAnalytics.getHourlyReceivedValues();
+    float[] getReceivedValue(ArrayList<Sms> smsList) {
+        return smsAnalytics.getHourlyReceivedValues(smsList);
     }
 
     private int increaseByQuarter(int input) {

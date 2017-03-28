@@ -132,6 +132,36 @@ public class SmsHelper {
         throw new NullPointerException();
     }
 
+    synchronized public static ArrayList<Sms> getSentSms(Context context, Contact contact) {
+        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
+        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
+        ArrayList<Sms> smsList;
+
+        try {
+            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
+            return parseSentSms(smsList);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        throw new NullPointerException();
+    }
+
+    synchronized public static ArrayList<Sms> getReceivedSms(Context context, Contact contact) {
+        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
+        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
+        ArrayList<Sms> smsList;
+
+        try {
+            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
+            return parseReceivedSms(smsList);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        throw new NullPointerException();
+    }
+
     @NonNull
     public static ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
         ArrayList<Sms> sentSms = new ArrayList<Sms>();
@@ -146,8 +176,7 @@ public class SmsHelper {
 
     @NonNull
     public static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
-        ArrayList<Sms> receivedSms = new ArrayList<Sms>();
-
+        ArrayList<Sms> receivedSms = new ArrayList<>();
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals("1")) {
                 receivedSms.add(smsList.get(i));

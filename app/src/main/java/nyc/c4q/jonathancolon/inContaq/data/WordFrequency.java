@@ -16,7 +16,7 @@ public class WordFrequency {
     private static ArrayList<Sms> smsList;
     private static List<String> excludedWords = new ArrayList<>(Arrays.asList("the","of","and","to","a",
             "in","for","is","on", "that","by","this","with","i","you","it","not","or","be","are",
-            "from","at","as","your", "all","have","new","more","an","was", "I'm", "I"));
+            "from","at","as","your","have","new","more","an","was", "I'm", "I"));
 
     public WordFrequency(ArrayList<Sms> smsList) {
         WordFrequency.smsList = smsList;

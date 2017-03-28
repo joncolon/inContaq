@@ -34,7 +34,6 @@ import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.SmsAdapter;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper.saveToDatabase;
@@ -49,7 +48,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private Contact contact;
     private SmsAdapter adapter;
     private RecyclerView recyclerView;
-    private ArrayList<Sms> SmsList;
+    private ArrayList<Sms> smsList;
     private EditText smsEditText;
 
     public ContactSmsFragment() {
@@ -62,6 +61,10 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            smsList = Parcels.unwrap(bundle.getParcelable("smslist"));
+        }
     }
 
     @Override
@@ -79,7 +82,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
 
         initViews(view);
-        populateSmsList();
         setupRecyclerView(contact);
         refreshRecyclerView();
         scrollListToBottom();
@@ -100,14 +102,9 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
             sendMessage();
             refreshRecyclerView();
             scrollListToBottom();
-            populateSmsList();
         });
 
         setClickListenersWhenInPortraitMode();
-    }
-
-    public synchronized void populateSmsList() {
-        SmsList = SmsHelper.getAllSms(getActivity(), contact);
     }
 
     private void setupRecyclerView(Contact contact) {
@@ -118,8 +115,8 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
     public synchronized void refreshRecyclerView() {
         adapter = (SmsAdapter) recyclerView.getAdapter();
-        Collections.sort(SmsList);
-        adapter.setData(SmsList);
+        Collections.sort(smsList);
+        adapter.setData(smsList);
         adapter.notifyDataSetChanged();
     }
 

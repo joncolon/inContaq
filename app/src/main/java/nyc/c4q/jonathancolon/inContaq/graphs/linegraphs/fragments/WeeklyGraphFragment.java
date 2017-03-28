@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.WeeklyGraph;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
 
 
@@ -38,8 +34,10 @@ public class WeeklyGraphFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_graph, container, false);
 
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
-        Contact contact = unwrapParcelledContact();
-        lstSms = SmsHelper.getAllSms(getActivity(), contact);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            lstSms = Parcels.unwrap(bundle.getParcelable("smslist"));
+        }
         showWeeklyGraph();
 
         return view;
@@ -48,11 +46,6 @@ public class WeeklyGraphFragment extends Fragment {
     private void showWeeklyGraph() {
         WeeklyGraph weeklyGraph = new WeeklyGraph(getContext(), lineGraph, lstSms);
         weeklyGraph.showWeeklyGraph();
-    }
-
-    @Nullable
-    private Contact unwrapParcelledContact() {
-        return Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
     }
 
 }

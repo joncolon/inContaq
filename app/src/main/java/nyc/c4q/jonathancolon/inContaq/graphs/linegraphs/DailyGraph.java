@@ -22,13 +22,13 @@ public class DailyGraph {
     private static final String RECEIVED_COLOR = "#FDFFFC";
     private Context context;
     private LineChartView lineGraph;
-    private ArrayList<Sms> lstSms;
+    private ArrayList<Sms> smsList;
     private DailyGraphHelper dailyGraphHelper;
 
-    public DailyGraph(Context context, LineChartView lineGraph, ArrayList<Sms> lstSms) {
+    public DailyGraph(Context context, LineChartView lineGraph, ArrayList<Sms> smsList) {
         this.context = context;
         this.lineGraph = lineGraph;
-        this.lstSms = lstSms;
+        this.smsList = smsList;
     }
 
     public void showDailyGraph() {
@@ -37,15 +37,15 @@ public class DailyGraph {
 
     synchronized private void loadGraph() {
         setGraphData();
-        setGraphAttributes(dailyGraphHelper.getYValue());
+        setGraphAttributes(dailyGraphHelper.getYValue(smsList));
         animateGraph();
     }
 
     private void setGraphData() {
-        dailyGraphHelper = new DailyGraphHelper(lstSms);
+        dailyGraphHelper = new DailyGraphHelper(smsList);
         String[] xAxisLabels = dailyGraphHelper.getXAxisLabels();
-        float[] receivedValues = dailyGraphHelper.getReceivedValue();
-        float[] sentValues = dailyGraphHelper.getSentValues();
+        float[] receivedValues = dailyGraphHelper.getReceivedValue(smsList);
+        float[] sentValues = dailyGraphHelper.getSentValues(smsList);
 
         prepareReceivedLineSet(xAxisLabels, receivedValues);
         prepareSentLineSet(xAxisLabels, sentValues);

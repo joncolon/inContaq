@@ -19,7 +19,6 @@ public class SmsReceiver extends BroadcastReceiver  {
             Object[] sms = (Object[]) intentExtras.get(SMS_BUNDLE);
 
             ContactSmsFragment inst = ContactSmsFragment.instance();
-            inst.populateSmsList();
             inst.refreshRecyclerView();
         }
     }

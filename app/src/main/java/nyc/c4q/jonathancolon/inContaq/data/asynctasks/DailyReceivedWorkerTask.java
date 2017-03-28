@@ -26,8 +26,8 @@ public class DailyReceivedWorkerTask extends AsyncTask<DailyTaskParams, Void, Tr
 
     @Override
     protected TreeMap<Integer, Integer> doInBackground(DailyTaskParams... params) {
-        ArrayList<Sms> listSms = DailyTaskParams.getdailySmsList();
-        dailyReceivedText = DailyTaskParams.getDailyTexts();
+        ArrayList<Sms> listSms = params[0].listSms;
+        dailyReceivedText = params[0].dailyTexts;
         return getSmsStats(listSms);
     }
 

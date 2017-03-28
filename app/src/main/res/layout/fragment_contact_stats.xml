@@ -145,7 +145,6 @@
                 android:layout_marginStart="@dimen/card_text_margin_start"
                 android:layout_marginTop="25dp"
                 android:layout_toEndOf="@id/day_counter_tv"
-                android:text="10"
                 android:textAlignment="center"
                 android:textColor="@color/sent_chat_bubble_color"
                 android:textSize="25sp"
@@ -169,7 +168,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/day_counter_tv"
                 android:layout_below="@id/day_counter_tv"
-                android:text="7"
                 android:textAlignment="center"
                 android:textColor="@color/sent_chat_bubble_color"
                 android:textSize="25sp"
@@ -181,8 +179,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/day_counter_tv"
                 android:layout_below="@id/avg_sent_counter_tv"
-                android:text="5"
                 android:textAlignment="center"
+                android:text="9"
                 android:textColor="@color/sent_chat_bubble_color"
                 android:textSize="25sp"
                 android:textStyle="bold"/>
@@ -243,7 +241,6 @@
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
                 android:layout_marginStart="2dp"
-                android:text="text eachother at this time"
                 android:textColor="#ffffff"/>
 
             <TextView
@@ -252,7 +249,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/first_word_bold_tv"
                 android:layout_below="@id/first_word_bold_tv"
-                android:text="lmao"
                 android:textAlignment="center"
                 android:textColor="@color/light_font"
                 android:textSize="25sp"
@@ -278,7 +274,6 @@
                 android:layout_alignStart="@id/common_received_word"
                 android:layout_below="@id/common_received_word"
                 android:layout_marginBottom="25dp"
-                android:text="lol"
                 android:textAlignment="center"
                 android:textColor="@color/light_font"
                 android:textSize="25sp"
