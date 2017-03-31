@@ -1,36 +1,54 @@
 package nyc.c4q.jonathancolon.inContaq.sms;
 
-import android.app.Notification;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationManagerCompat;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Telephony;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
-import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment;
 
 public class SmsReceiver extends BroadcastReceiver  {
 
     //todo create listener to refresh sms fragment upon receiving text
-    public static final String SMS_BUNDLE = "pdus";
 
     public void onReceive(Context context, Intent intent) {
-        Object[] smsExtra = (Object[]) intent.getExtras().get("pdus");
-        String body = "";
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
 
-        for (int i = 0; i < smsExtra.length; ++i) {
-            SmsMessage sms = SmsMessage.createFromPdu((byte[]) smsExtra[i]);
-            body += sms.getMessageBody();
+            Object[] pdusObj = (Object[]) bundle.get("pdus");
+
+            SmsMessage[] messages = new SmsMessage[pdusObj.length];
+
+            for (int i = 0; i < messages.length; i++) {
+                String format = bundle.getString("format");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdusObj[i], format);
+                } else {
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
+                }
+            }
+            for (SmsMessage msg : messages) {
+                Log.i("log", "display msg body  : " + msg.getDisplayMessageBody() + "originating address : " + msg.getDisplayOriginatingAddress() + " get message body : " + msg.getMessageBody());
+                ContentValues values = new ContentValues();
+                values.put(Telephony.Sms.ADDRESS, msg.getDisplayOriginatingAddress());
+                values.put(Telephony.Sms.BODY, msg.getMessageBody());
+                values.put(Telephony.Sms.DATE, msg.getTimestampMillis());
+                values.put(Telephony.Sms.STATUS, msg.getStatus());
+
+                if (msg.getOriginatingAddress().equals("9175019362")){
+                    values.put(Telephony.Sms.TYPE, 2);
+                } else
+                    values.put(Telephony.Sms.TYPE, 1);
+                context.getApplicationContext().getContentResolver().insert(Telephony.Sms.Sent.CONTENT_URI, values);
+            }
         }
-
-        Notification notification = new Notification.Builder(context)
-                .setContentText(body)
-                .setContentTitle("New Message")
-                .setSmallIcon(R.drawable.ic_alert)
-                .setStyle(new Notification.BigTextStyle().bigText(body))
-                .build();
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(1, notification);
+    ContactSmsFragment inst = ContactSmsFragment.instance();
+        inst.updateSms();
     }
 }
 

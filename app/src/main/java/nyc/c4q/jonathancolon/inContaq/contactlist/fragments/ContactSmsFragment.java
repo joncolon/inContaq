@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +51,7 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
     private RecyclerView recyclerView;
     private ArrayList<Sms> smsList;
     private EditText smsEditText;
+    private Handler handler;
 
     private Settings settings;
 
@@ -82,8 +84,9 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         contact = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
-
+        handler = new Handler();
         SmsHelper.getLastContactedDate(getContext(), contact);
+
         initViews(view);
         initSettings();
         setupRecyclerView(contact);
@@ -103,8 +106,6 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
 
         smsSendButton.setOnClickListener(v -> {
             sendMessage();
-            refreshRecyclerView();
-            scrollListToBottom();
         });
 
         setClickListenersWhenInPortraitMode();
@@ -124,10 +125,11 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         Collections.sort(smsList);
         adapter.setData(smsList);
         adapter.notifyDataSetChanged();
+        scrollListToBottom();
     }
 
     synchronized private void scrollListToBottom() {
-        recyclerView.post(() -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
+        recyclerView.post(() -> recyclerView.scrollToPosition(smsList.size() - 1));
     }
 
     synchronized private void showRecyclerView() {
@@ -140,27 +142,31 @@ public class ContactSmsFragment extends Fragment implements SmsAdapter.Listener 
         settings = Settings.get(getContext());
     }
 
-    public void sendMessage() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String messageNumber = contact.getCellPhoneNumber();
-                String messageText = smsEditText.getText().toString();
-                String sent = "SMS_SENT";
+    synchronized public void sendMessage() {
+        new Thread(() -> {
+            String messageNumber = contact.getCellPhoneNumber();
+            String messageText = smsEditText.getText().toString();
+            com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
+            sendSettings.setMmsc(settings.getMmsc());
+            sendSettings.setProxy(settings.getMmsProxy());
+            sendSettings.setPort(settings.getMmsPort());
+            sendSettings.setUseSystemSending(true);
 
-                com.klinker.android.send_message.Settings sendSettings = new com.klinker.android.send_message.Settings();
-                sendSettings.setMmsc(settings.getMmsc());
-                sendSettings.setProxy(settings.getMmsProxy());
-                sendSettings.setPort(settings.getMmsPort());
-                sendSettings.setUseSystemSending(true);
+            Transaction transaction = new Transaction(getContext(), sendSettings);
 
-                Transaction transaction = new Transaction(getContext(), sendSettings);
+            Message message = new Message(messageText, messageNumber);
 
-                Message message = new Message(messageText, messageNumber);
-
-                transaction.sendNewMessage(message, Transaction.NO_THREAD_ID);
-            }
+            transaction.sendNewMessage(message, Transaction.NO_THREAD_ID);
         }).start();
+
+        updateSms();
+    }
+
+    public void updateSms() {
+        handler.postDelayed(() -> {
+            refreshRecyclerView();
+            scrollListToBottom();
+        }, 2000);
     }
 
 //    synchronized public void sendMessage() {
