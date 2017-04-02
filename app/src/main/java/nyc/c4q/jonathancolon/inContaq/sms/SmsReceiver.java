@@ -40,7 +40,7 @@ public class SmsReceiver extends BroadcastReceiver  {
                 values.put(Telephony.Sms.DATE, msg.getTimestampMillis());
                 values.put(Telephony.Sms.STATUS, msg.getStatus());
 
-                if (msg.getOriginatingAddress().equals("9175019362")){
+                if (msg.getOriginatingAddress().equals("")){
                     values.put(Telephony.Sms.TYPE, 2);
                 } else
                     values.put(Telephony.Sms.TYPE, 1);
