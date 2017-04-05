@@ -28,8 +28,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), ContactListActivity.class);
             startActivity(intent);
 
-//                finish();
         }, 4000);
-//
     }
 }
