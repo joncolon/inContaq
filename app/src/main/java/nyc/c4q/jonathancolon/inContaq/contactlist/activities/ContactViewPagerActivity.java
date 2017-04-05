@@ -1,6 +1,5 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
@@ -9,8 +8,8 @@ import android.support.v4.view.ViewPager;
 import org.parceler.Parcels;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactFragmentPagerAdapter;
+import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 
 public class ContactViewPagerActivity extends FragmentActivity {
 
@@ -20,11 +19,10 @@ public class ContactViewPagerActivity extends FragmentActivity {
         setContentView(R.layout.activity_contact_viewpager);
 
         Contact contact = Parcels.unwrap(getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
-        Intent i = getIntent();
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_contact_tabs);
         viewPager.setAdapter(new ContactFragmentPagerAdapter(getSupportFragmentManager(),
-                ContactViewPagerActivity.this){
+                ContactViewPagerActivity.this, contact){
         });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout_contact_tabs);

@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.data.AnalyticsFeedback;
 import nyc.c4q.jonathancolon.inContaq.data.SmsAnalytics;
 import nyc.c4q.jonathancolon.inContaq.data.WordCount;
 import nyc.c4q.jonathancolon.inContaq.data.WordFrequency;
@@ -28,86 +24,66 @@ import nyc.c4q.jonathancolon.inContaq.graphs.bargraphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.DailyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.MonthlyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments.WeeklyGraphFragment;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.SmsHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 import static nyc.c4q.jonathancolon.inContaq.data.AnalyticsFeedback.timeFeedback;
-import static nyc.c4q.jonathancolon.inContaq.data.WordFrequency.*;
+import static nyc.c4q.jonathancolon.inContaq.data.WordFrequency.mostCommonWordReceived;
+import static nyc.c4q.jonathancolon.inContaq.data.WordFrequency.mostCommonWordSent;
 
 
 public class ContactStatsFragment extends Fragment implements View.OnClickListener {
 
-    private TextView avgWordSentTV, daysSinceContactedTV, timeOfFeedbackTv,
-            commonWordReceivedTV, commonWordSentTV;
-    private BarChartView wordAverageChart, totalWordCountChart;
     int averageWordCountSent;
     int averageWordCountReceived;
+    private TextView avgWordSentTV, avgWordReceivedTV, daysSinceContactedTV, timeOfFeedbackTv,
+            commonWordReceivedTV, commonWordSentTV;
+    private BarChartView wordAverageChart, totalWordCountChart;
+    private ArrayList<Sms> smsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
         initViews(view);
-        if (savedInstanceState == null) {
-            showMonthlyGraphFragment();
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null) {
+            smsList = Parcels.unwrap(bundle.getParcelable("smslist"));
         }
 
-        ArrayList<Sms> smsList = SmsHelper.getAllSms(getContext(), unwrapParcelledContact());
-        getAxisValues(smsList);
+        if (smsList != null) {
 
-        if (smsList.size() != 0){
-            Date date1 = new Date((Long.valueOf(smsList.get(0).getTime())));
-            Date date2 = new Date(System.currentTimeMillis());
-            long difference = date2.getTime() - date1.getTime();
-            long differenceDays = difference / (1000 * 60 * 60 * 24);
+            if (smsList.size() != 0) {
 
-            SmsAnalytics smsAnalytics = new SmsAnalytics(smsList);
-            WordFrequency wordFrequency = new WordFrequency(smsList);
-            AnalyticsFeedback analyticsFeedback = new AnalyticsFeedback();
+                if (savedInstanceState == null) {
+                    showMonthlyGraphFragment();
+                }
 
-            String wordSentText = String.valueOf(averageWordCountSent);
-            daysSinceContactedTV.setText(String.valueOf(differenceDays));
-            avgWordSentTV.setText(wordSentText);
-            timeOfFeedbackTv.setText(timeFeedback(smsAnalytics.maxTimeReceivedText()));
-            commonWordReceivedTV.setText(mostCommonWordReceived());
-            commonWordSentTV.setText(mostCommonWordSent());
+                getAverageWordCount(smsList);
+                long daysSinceLastContacted = getDifferenceDays();
+                SmsAnalytics smsAnalytics = new SmsAnalytics(smsList);
+                WordFrequency wordFrequency = new WordFrequency(smsList);
+
+                daysSinceContactedTV.setText(String.valueOf(daysSinceLastContacted));
+                avgWordSentTV.setText(String.valueOf(averageWordCountSent));
+                avgWordReceivedTV.setText(String.valueOf(averageWordCountReceived));
+                timeOfFeedbackTv.setText(timeFeedback(smsAnalytics.maxTimeReceivedText()));
+                commonWordReceivedTV.setText(mostCommonWordReceived());
+                commonWordSentTV.setText(mostCommonWordSent());
+
+                WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart, smsList);
+                TotalSmsBarGraph totalSmsBarGraph = new TotalSmsBarGraph(totalWordCountChart, smsList);
+                wordCountBarGraph.showBarGraph();
+                totalSmsBarGraph.showBarGraph();
+            }
         }
-
-        WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart, smsList);
-        TotalSmsBarGraph totalSmsBarGraph = new TotalSmsBarGraph(totalWordCountChart, smsList);
-        wordCountBarGraph.showBarGraph();
-        totalSmsBarGraph.showBarGraph();
 
         return view;
-    }
-    private void getAxisValues(ArrayList<Sms> smsList) {
-        averageWordCountSent = WordCount.getAverageWordCountSent(smsList);
-        averageWordCountReceived = WordCount.getAverageWordCountReceived(smsList);
-    }
-
-    private void showMonthlyGraphFragment() {
-        getChildFragmentManager()
-                .beginTransaction()
-                .replace(R.id.graph_frag_container, new MonthlyGraphFragment())
-                .commit();
-    }
-
-    private void showWeeklyGraphFragment() {
-        getChildFragmentManager()
-                .beginTransaction()
-                .replace(R.id.graph_frag_container, new WeeklyGraphFragment())
-                .commit();
-    }
-
-    private void showDailyGraphFragment() {
-        getChildFragmentManager()
-                .beginTransaction()
-                .replace(R.id.graph_frag_container, new DailyGraphFragment())
-                .commit();
     }
 
     private void initViews(View view) {
         avgWordSentTV = (TextView) view.findViewById(R.id.avg_sent_counter_tv);
+        avgWordReceivedTV = (TextView) view.findViewById(R.id.avg_received_counter_tv);
         daysSinceContactedTV = (TextView) view.findViewById(R.id.day_counter_tv);
         timeOfFeedbackTv = (TextView) view.findViewById(R.id.time_of_day_feedback_tv);
         commonWordSentTV = (TextView) view.findViewById(R.id.common_sent_word);
@@ -122,9 +98,28 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         totalWordCountChart = (BarChartView) view.findViewById(R.id.bar_chart_total_sms);
     }
 
-    @Nullable
-    private Contact unwrapParcelledContact() {
-        return Parcels.unwrap(getActivity().getIntent().getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
+    private void showMonthlyGraphFragment() {
+        Fragment monthlyGraphFragment = new MonthlyGraphFragment();
+        Bundle monthlyGraphBundle = new Bundle();
+        monthlyGraphBundle.putParcelable("smslist", Parcels.wrap(smsList));
+        monthlyGraphFragment.setArguments(monthlyGraphBundle);
+
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.graph_frag_container, monthlyGraphFragment)
+                .commit();
+    }
+
+    private void getAverageWordCount(ArrayList<Sms> smsList) {
+        averageWordCountSent = WordCount.getAverageWordCountSent(smsList);
+        averageWordCountReceived = WordCount.getAverageWordCountReceived(smsList);
+    }
+
+    private long getDifferenceDays() {
+        Date date1 = new Date((Long.valueOf(smsList.get(smsList.size() - 1).getTime())));
+        Date date2 = new Date(System.currentTimeMillis());
+        long difference = date2.getTime() - date1.getTime();
+        return difference / (1000 * 60 * 60 * 24);
     }
 
     @Override
@@ -143,5 +138,32 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    private void showWeeklyGraphFragment() {
+        Fragment weeklyGraphFragment = new WeeklyGraphFragment();
+        Bundle weeklyGraphBundle = new Bundle();
+        weeklyGraphBundle.putParcelable("smslist", Parcels.wrap(smsList));
+        weeklyGraphFragment.setArguments(weeklyGraphBundle);
 
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.graph_frag_container, weeklyGraphFragment)
+                .commit();
+    }
+
+    private void showDailyGraphFragment() {
+        Fragment dailyGraphFragment = new DailyGraphFragment();
+        Bundle dailyGraphBundle = new Bundle();
+        dailyGraphBundle.putParcelable("smslist", Parcels.wrap(smsList));
+        dailyGraphFragment.setArguments(dailyGraphBundle);
+
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.graph_frag_container, dailyGraphFragment)
+                .commit();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 }

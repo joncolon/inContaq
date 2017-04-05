@@ -10,6 +10,17 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_MMS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.provider.Telephony.SMS_RECEIVED" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -17,26 +28,34 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".contactlist.activities.SplashScreenActivity">
+        <activity android:name=".contactlist.activities.ContactListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".contactlist.activities.ContactViewPagerActivity"/>
+        <activity android:name=".contactlist.activities.ContactViewPagerActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.SEND" />
+            <action android:name="android.intent.action.SENDTO" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="sms" />
+            <data android:scheme="smsto" />
+            <data android:scheme="mms" />
+            <data android:scheme="mmsto" />
+        </intent-filter>
+        </activity>
 
         <service android:name=".notifications.ContactNotificationService"/>
 
-        <!--<receiver android:name=".utlities.sms.SmsReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.provider.Telephony.SMS_RECEIVED"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <service
+            android:name="com.tuenti.smsradar.SmsRadarService"
+            android:exported="false"
+            android:label="@string/app_name"/>
 
-        <activity android:name=".utlities.sms.SmsSender"/>
-        <activity android:name=".contactlist.activities.ContactListActivity">
-        </activity>
+        <activity android:name=".utlities.PermissionActivity"/>
     </application>
 
 </manifest>

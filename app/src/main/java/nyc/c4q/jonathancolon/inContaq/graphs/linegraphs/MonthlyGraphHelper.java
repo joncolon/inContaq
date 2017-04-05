@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.data.SmsAnalytics;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 class MonthlyGraphHelper {
@@ -15,12 +15,12 @@ class MonthlyGraphHelper {
 
     MonthlyGraphHelper(Context context, ArrayList<Sms> smsList) {
         this.context = context;
-        smsAnalytics = new SmsAnalytics(smsList);
+        this.smsAnalytics = new SmsAnalytics(smsList);
     }
 
-    synchronized int getYValue() {
-        int maxSent = findMaximumValue(getSentValues());
-        int maxReceived = findMaximumValue(getReceivedValue());
+    synchronized int getYValue(ArrayList<Sms> smsList) {
+        int maxSent = findMaximumValue(getSentValues(smsList));
+        int maxReceived = findMaximumValue(getReceivedValue(smsList));
         int highestValue = Math.max(maxSent, maxReceived);
 
         if (highestValue == 0){
@@ -39,12 +39,12 @@ class MonthlyGraphHelper {
         return (int) maxValue;
     }
 
-    float[] getSentValues() {
-        return smsAnalytics.getMonthlySentValues();
+    float[] getSentValues(ArrayList<Sms> smsList) {
+        return smsAnalytics.getMonthlySentValues(smsList);
     }
 
-    float[] getReceivedValue() {
-        return smsAnalytics.getMonthlyReceivedValues();
+    float[] getReceivedValue(ArrayList<Sms> smsList) {
+        return smsAnalytics.getMonthlyReceivedValues(smsList);
     }
 
     private int increaseByQuarter(int input) {

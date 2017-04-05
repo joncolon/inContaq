@@ -19,14 +19,7 @@ public class Contact {
     String backgroundImage;
     String contactImage;
     Long timeLastContacted;
-
-    public long getTimeLastContacted() {
-        return timeLastContacted;
-    }
-
-    public void setTimeLastContacted(long timeLastContacted) {
-        this.timeLastContacted = System.currentTimeMillis();
-    }
+    boolean reminderEnabled;
 
     public Contact() {
     }
@@ -134,5 +127,19 @@ public class Contact {
         this.email = email;
     }
 
+    public Long getTimeLastContacted() {
+        return timeLastContacted;
+    }
 
+    public void setTimeLastContacted(Long timeLastContacted) {
+        this.timeLastContacted = timeLastContacted;
+    }
+
+    public boolean isReminderEnabled() {
+        return reminderEnabled;
+    }
+
+    public void setReminderEnabled(boolean reminderEnabled) {
+        this.reminderEnabled = reminderEnabled;
+    }
 }

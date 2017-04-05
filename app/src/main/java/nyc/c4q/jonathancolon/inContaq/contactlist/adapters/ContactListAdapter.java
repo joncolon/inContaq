@@ -14,7 +14,7 @@ import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.font.CustomFont;
 
 

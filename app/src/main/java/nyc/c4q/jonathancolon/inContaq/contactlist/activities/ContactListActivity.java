@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,13 +26,15 @@ import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
-import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PreCachingLayoutManager;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
+import nyc.c4q.jonathancolon.inContaq.utlities.PermissionActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.PermissionChecker;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
@@ -52,6 +57,14 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         setContentView(R.layout.activity_contact_list);
         Stetho.initializeWithDefaults(this);
 
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("request_permissions", true) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            startActivity(new Intent(this, PermissionActivity.class));
+            finish();
+            return;
+        }
+
         PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
         permissionChecker.checkPermissions();
 
@@ -69,8 +82,15 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
         preloadContactListImages();
         buildEnterContactDialog(this);
-//        checkServiceCreated();
     }
+
+    private void setAsDefaultSms() {
+        Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+                getPackageName());
+        startActivity(intent);
+    }
+
 
     private void refreshRecyclerView() {
         ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(this);
@@ -144,7 +164,6 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
     public void alertDialogCallback(String userInput) {
         name = userInput;
         if (!isEmptyString(name)) {
-            NameSplitter nameSplitter = new NameSplitter();
             String[] splitName = NameSplitter.splitFirstAndLastName(name);
 
             Contact contact = new Contact();
@@ -176,13 +195,13 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         refreshRecyclerView();
     }
 
-//    public void checkServiceCreated() {
-//        if (!ContactNotificationService.hasStarted) {
-//            System.out.println("Starting service...");
-//            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
-//            startService(intent);
-//        }
-//    }
+    public void checkServiceCreated() {
+        if (!ContactNotificationService.hasStarted) {
+            System.out.println("Starting service...");
+            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
+            startService(intent);
+        }
+    }
 
     @Override
     public void onResume() {

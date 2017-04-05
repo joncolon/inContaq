@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.GetAllSmsTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 public class GetAllSmsWorkerTask extends AsyncTask<GetAllSmsTaskParams, Void, ArrayList<Sms>> {
 

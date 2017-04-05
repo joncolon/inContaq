@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.parceler.Parcels;
 
@@ -21,12 +22,11 @@ import java.util.Objects;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
-import nyc.c4q.jonathancolon.inContaq.contactlist.Animations;
-import nyc.c4q.jonathancolon.inContaq.contactlist.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.utlities.Animations;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
@@ -215,8 +215,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-//        Contact contact = unwrapParcelledContact();
-
         switch (String.valueOf(parent.getItemAtPosition(position))) {
 
             case "DAILY":
@@ -226,11 +224,13 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 break;
             case "2 WEEKS":
                 // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
-                ContactNotificationService mContactNotificationService = new ContactNotificationService();
-                mContactNotificationService.startNotification(contact, getContext());
+                contact.setReminderEnabled(true);
+                Toast.makeText(getContext(), String.valueOf(contact.isReminderEnabled()), Toast.LENGTH_SHORT).show();
                 break;
             case "MONTHLY":
                 // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
+                contact.setReminderEnabled(false);
+                Toast.makeText(getContext(), String.valueOf(contact.isReminderEnabled()), Toast.LENGTH_SHORT).show();
                 break;
         }
     }

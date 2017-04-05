@@ -3,24 +3,16 @@ package nyc.c4q.jonathancolon.inContaq.data.asynctasks.params;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 public class DailyTaskParams {
 
-    private static ArrayList<Sms> dailyListSms;
-    private static TreeMap<Integer, Integer> dailyTexts;
+    public final ArrayList<Sms> listSms;
+    public final TreeMap<Integer, Integer> dailyTexts;
 
-    public DailyTaskParams(ArrayList<Sms> dailySms, TreeMap<Integer, Integer> dailyTextMsg) {
-        dailyListSms = dailySms;
-        dailyTexts = dailyTextMsg;
-    }
-
-    public static ArrayList<Sms> getdailySmsList() {
-        return dailyListSms;
-    }
-
-    public static TreeMap<Integer, Integer> getDailyTexts() {
-        return dailyTexts;
+    public DailyTaskParams(ArrayList<Sms> listSms, TreeMap<Integer, Integer> dailyTexts) {
+        this.listSms = listSms;
+        this.dailyTexts = dailyTexts;
     }
 }

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.data.WordCount;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 public class TotalWordCountWorkerTask extends AsyncTask<ArrayList<Sms>, Void, ArrayList<Integer>> {
 

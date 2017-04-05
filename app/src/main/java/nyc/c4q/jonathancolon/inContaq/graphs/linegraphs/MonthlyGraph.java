@@ -10,7 +10,7 @@ import com.db.chart.view.LineChartView;
 
 import java.util.ArrayList;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
@@ -40,14 +40,14 @@ public class MonthlyGraph {
 
     synchronized private void loadGraph() {
         setGraphData();
-        setGraphAttributes(monthlyGraphHelper.getYValue());
+        setGraphAttributes(monthlyGraphHelper.getYValue(smsList));
         animateGraph();
     }
 
     private void setGraphData() {
         monthlyGraphHelper = new MonthlyGraphHelper(context, smsList);
-        float[] receivedValues = monthlyGraphHelper.getReceivedValue();
-        float[] sentValues = monthlyGraphHelper.getSentValues();
+        float[] receivedValues = monthlyGraphHelper.getReceivedValue(smsList);
+        float[] sentValues = monthlyGraphHelper.getSentValues(smsList);
         xAxisLabels = monthlyGraphHelper.getXAxisLabels();
 
         prepareReceivedLineSet(receivedValues);

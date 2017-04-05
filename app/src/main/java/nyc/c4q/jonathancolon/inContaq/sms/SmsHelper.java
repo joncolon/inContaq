@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities.sms;
+package nyc.c4q.jonathancolon.inContaq.sms;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.GetAllSmsTaskParams;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.GetAllSmsWorkerTask;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 public class SmsHelper {
@@ -102,19 +102,22 @@ public class SmsHelper {
         return formattedDate;
     }
 
-    public void getLastContactedDate(Context context) {
+    public static void getLastContactedDate(Context context, Contact contact) {
 
         ContentResolver contentResolver = context.getApplicationContext().getContentResolver();
-        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, null, null, null);
-        cursor.moveToFirst();
-        String date = cursor.getString(cursor.getColumnIndex(DATE));
-        Long timestamp = Long.parseLong(date);
-        cursor.close();
+        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, ADDRESS  + "='" + contact.getCellPhoneNumber() + "'", null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                String date = cursor.getString(cursor.getColumnIndex(DATE));
+                Long timestamp = Long.parseLong(date);
+                cursor.close();
 
-        Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
+                Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
 
-        Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
-                Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     synchronized public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
@@ -125,6 +128,36 @@ public class SmsHelper {
         try {
             smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
             return smsList;
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        throw new NullPointerException();
+    }
+
+    synchronized public static ArrayList<Sms> getSentSms(Context context, Contact contact) {
+        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
+        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
+        ArrayList<Sms> smsList;
+
+        try {
+            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
+            return parseSentSms(smsList);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        throw new NullPointerException();
+    }
+
+    synchronized public static ArrayList<Sms> getReceivedSms(Context context, Contact contact) {
+        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
+        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
+        ArrayList<Sms> smsList;
+
+        try {
+            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
+            return parseReceivedSms(smsList);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -146,8 +179,7 @@ public class SmsHelper {
 
     @NonNull
     public static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
-        ArrayList<Sms> receivedSms = new ArrayList<Sms>();
-
+        ArrayList<Sms> receivedSms = new ArrayList<>();
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals("1")) {
                 receivedSms.add(smsList.get(i));

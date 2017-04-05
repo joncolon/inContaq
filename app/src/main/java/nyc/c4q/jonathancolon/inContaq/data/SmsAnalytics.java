@@ -15,7 +15,7 @@ import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlyReceivedWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.MonthlySentWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.MonthlyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 public class SmsAnalytics {
@@ -39,19 +39,19 @@ public class SmsAnalytics {
         this.smsList = smsList;
     }
 //todo make these methods static
-    public float[] getMonthlySentValues() {
+    public float[] getMonthlySentValues(ArrayList<Sms> smsList) {
         return convertTreeMapToFloats(getMonthlySent(smsList));
     }
 
-    public float[] getMonthlyReceivedValues() {
+    public float[] getMonthlyReceivedValues(ArrayList<Sms> smsList) {
         return convertTreeMapToFloats(getMonthlyReceived(smsList));
     }
 
-    public float[] getHourlySentValues() {
+    public float[] getHourlySentValues(ArrayList<Sms> smsList) {
         return convertTreeMapToFloats(getHourlySent(smsList));
     }
 
-    public float[] getHourlyReceivedValues() {
+    public float[] getHourlyReceivedValues(ArrayList<Sms> smsList) {
         return convertTreeMapToFloats(getHourlyReceived(smsList));
     }
 
@@ -105,6 +105,7 @@ public class SmsAnalytics {
     }
 
     private TreeMap<Integer, Integer> getMonthlyReceived(ArrayList<Sms> texts) {
+
         TreeMap<Integer, Integer> monthlyReceived = setUpMonthlyTextMap();
         MonthlyTaskParams sentParams = new MonthlyTaskParams(texts, monthlyReceived);
         MonthlyReceivedWorkerTask monthlyReceivedWorkerTask = new MonthlyReceivedWorkerTask();

@@ -24,7 +24,6 @@
             android:text="Texts Over Time"
             android:textAlignment="center"
             android:layout_gravity="center_horizontal|top"
-            android:textColor="@color/light_font"
             android:textSize="10sp"
             android:textStyle="bold"
             />

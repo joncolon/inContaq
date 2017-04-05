@@ -89,9 +89,11 @@ public class ContactNotificationService extends IntentService {
         ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(getApplicationContext());
         db = dbHelper.getWritableDatabase();
         List<Contact> contacts = SqlHelper.selectAllContacts(db);
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < contacts.size(); i++) {
             Contact contact = contacts.get(i);
+            if (contact.isReminderEnabled()){
                 startNotification(contact, context);
+            }
         }
     }
 
@@ -103,8 +105,9 @@ public class ContactNotificationService extends IntentService {
     private void scheduleAlarm() {
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         Intent i = new Intent(this, ContactNotificationService.class);
-        PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), TWELVE_HOURS_IN_MILLIS, pi);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, i, 0);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), TWELVE_HOURS_IN_MILLIS,
+                pendingIntent);
     }
 
     public void cancelAlarm() {

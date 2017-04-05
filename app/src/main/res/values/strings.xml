@@ -64,7 +64,7 @@
     <string name="monthly">MONTHLY</string>
 
     <string-array name="date_spinner_array">
-        <item>WEEKLY</item>
+        <item>DAILY</item>
         <item>2 WEEKS</item>
         <item>3 WEEKS</item>
         <item>MONTHLY</item>

@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams;
-import nyc.c4q.jonathancolon.inContaq.utlities.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
-import static nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.DailyTaskParams.getdailySmsList;
 
 public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap<Integer, Integer>> {
 
@@ -27,8 +26,8 @@ public class DailySentWorkerTask extends AsyncTask<DailyTaskParams, Void,TreeMap
 
     @Override
     protected TreeMap<Integer, Integer> doInBackground(DailyTaskParams... params) {
-        ArrayList<Sms> listSms = getdailySmsList();
-        dailySentTexts = DailyTaskParams.getDailyTexts();
+        ArrayList<Sms> listSms = params[0].listSms;
+        dailySentTexts = params[0].dailyTexts;
         return getSmsStats(listSms);
     }
 
