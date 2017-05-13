@@ -1,29 +1,38 @@
 package nyc.c4q.jonathancolon.inContaq.contactlist.model;
 
-import org.parceler.Parcel;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+// Your model just have to extend RealmObject.
+// This will inherit an annotation which produces proxy getters and setters for all fields.
 
-// TODO: 1/13/17 remove Parceler
-@Parcel
-public class Contact {
-    Long _id;
-    long birthDate;
-    String firstName;
-    String lastName;
-    String nickname;
-    String homePhoneNumber;
-    String workPhoneNumber;
-    String cellPhoneNumber;
-    String address;
-    String email;
-    String backgroundImage;
-    String contactImage;
-    Long timeLastContacted;
-    boolean reminderEnabled;
+public class Contact extends RealmObject {
+
+    // All fields are by default persisted.
+    @PrimaryKey
+    private Long realmID;
+
+    private String contactID;
+    private long birthDate;
+    private String firstName;
+    private String lastName;
+    private String nickname;
+    private String homePhoneNumber;
+    private String workPhoneNumber;
+    private String mobileNumber;
+    private String address;
+    private String email;
+    private String backgroundImage;
+    private String contactImage;
+    private Long timeLastContacted;
+    private boolean reminderEnabled;
+    private int reminderDuration;
 
     public Contact() {
     }
 
+    // Let your IDE generate getters and setters for you!
+    // Or if you like you can even have public fields and no accessors!
     public Contact(String firstName) {
         this.firstName = firstName;
     }
@@ -33,10 +42,10 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    public Contact(String firstName, String lastName, String cellPhoneNumber) {
+    public Contact(String firstName, String lastName, String mobileNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.cellPhoneNumber = cellPhoneNumber;
+        this.mobileNumber = mobileNumber;
     }
 
     public String getContactImage() {
@@ -103,12 +112,12 @@ public class Contact {
         this.workPhoneNumber = workPhoneNumber;
     }
 
-    public String getCellPhoneNumber() {
-        return cellPhoneNumber;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
-    public void setCellPhoneNumber(String cellPhoneNumber) {
-        this.cellPhoneNumber = cellPhoneNumber;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public String getAddress() {
@@ -135,11 +144,39 @@ public class Contact {
         this.timeLastContacted = timeLastContacted;
     }
 
+    public int getReminderDuration() {
+        return reminderDuration;
+    }
+
+    public void setReminderDuration(int reminderDuration) {
+        this.reminderDuration = reminderDuration;
+    }
+
     public boolean isReminderEnabled() {
         return reminderEnabled;
     }
 
     public void setReminderEnabled(boolean reminderEnabled) {
         this.reminderEnabled = reminderEnabled;
+    }
+
+    public Long getRealmID() {
+        return realmID;
+    }
+
+    public void realmID(Long realmID) {
+        this.realmID = realmID;
+    }
+
+    public void setRealmID(Long realmID) {
+        this.realmID = realmID;
+    }
+
+    public String getContactID() {
+        return contactID;
+    }
+
+    public void setContactID(String contactID) {
+        this.contactID = contactID;
     }
 }

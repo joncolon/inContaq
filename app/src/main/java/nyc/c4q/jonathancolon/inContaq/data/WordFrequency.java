@@ -8,24 +8,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 public class WordFrequency {
 
-    private static ArrayList<Sms> smsList;
+    private RealmResults<Sms> smsList;
     private static List<String> excludedWords = new ArrayList<>(Arrays.asList("the","of","and","to","a",
             "in","for","is","on", "that","by","this","with","i","you","it","not","or","be","are",
-            "from","at","as","your","have","new","more","an","was", "I'm", "I"));
+            "from","at","as","your","have","new","more","an","was", "I'm", "I", "and", "just"));
 
-    public WordFrequency(ArrayList<Sms> smsList) {
-        WordFrequency.smsList = smsList;
+    public WordFrequency(RealmResults<Sms> smsList) {
+        this.smsList = smsList;
     }
 
 
-    public static String mostCommonWordReceived() {
+    public String mostCommonWordReceived() {
         ArrayList<Sms> smsReceived = SmsHelper.parseReceivedSms(smsList);
-        ArrayList<String> wordArrayList = new ArrayList<String>();
+        ArrayList<String> wordArrayList = new ArrayList<>();
 
         for (int i = 0; i < smsReceived.size(); i++) {
             String message = smsReceived.get(i).getMsg();
@@ -39,9 +40,9 @@ public class WordFrequency {
     }
 
     @Nullable
-    private static String mostCommonElement(List<String> list) {
+    private String mostCommonElement(List<String> list) {
 
-        Map<String, Integer> map = new HashMap<String, Integer>();
+        Map<String, Integer> map = new HashMap<>();
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -65,9 +66,9 @@ public class WordFrequency {
         return mostCommonKey;
     }
 
-    public static String mostCommonWordSent() {
+    public String mostCommonWordSent() {
         ArrayList<Sms> smsSent = SmsHelper.parseSentSms(smsList);
-        ArrayList<String> wordArrayList = new ArrayList<String>();
+        ArrayList<String> wordArrayList = new ArrayList<>();
 
         for (int i = 0; i < smsSent.size(); i++) {
             String message = smsSent.get(i).getMsg();

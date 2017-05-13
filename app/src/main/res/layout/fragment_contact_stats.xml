@@ -4,7 +4,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
     <FrameLayout
         android:id="@+id/graph_frag_container"
         android:name="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment"
@@ -110,14 +109,11 @@
         android:id="@+id/stats_text_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/card_total_sms"
-        android:layout_marginBottom="@dimen/card_margin_btm"
-        android:layout_marginEnd="@dimen/card_margin_end"
-        android:layout_marginStart="@dimen/card_margin_start"
-        android:layout_marginTop="@dimen/card_margin_top"
         android:elevation="@dimen/card_elevation"
         app:cardBackgroundColor="@color/cardview_dark_background"
-        app:cardCornerRadius="@dimen/card_chat_corner_radius">
+        app:cardCornerRadius="@dimen/card_chat_corner_radius"
+        android:layout_below="@+id/card_word_count"
+        android:layout_alignStart="@+id/card_word_count">
 
 
         <ImageView
@@ -125,12 +121,6 @@
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:src="@drawable/carousel_glare"/>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:scrollbarStyle="insideOverlay">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -140,15 +130,14 @@
                 android:id="@+id/day_counter_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="@dimen/card_text_margin_start"
-                android:layout_marginTop="25dp"
-                android:layout_toEndOf="@id/day_counter_tv"
+                android:layout_marginTop="22dp"
+                android:text="@string/default_value"
                 android:textAlignment="center"
                 android:textColor="@color/sent_chat_bubble_color"
-                android:textSize="25sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/view"/>
 
             <TextView
                 android:id="@+id/day_counter_text_tv"
@@ -159,30 +148,32 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
-                android:text="days since you've last been in contact"
+                android:text="days since last contacted"
                 android:textColor="#ffffff"/>
 
             <TextView
                 android:id="@+id/avg_sent_counter_tv"
-                android:layout_width="30dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/day_counter_tv"
-                android:layout_below="@id/day_counter_tv"
+                android:text="@string/default_value"
                 android:textAlignment="center"
                 android:textColor="@color/sent_chat_bubble_color"
-                android:textSize="25sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_below="@+id/day_counter_tv"
+                android:layout_alignStart="@+id/avg_received_counter_tv"/>
 
             <TextView
                 android:id="@+id/avg_received_counter_tv"
-                android:layout_width="30dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/day_counter_tv"
-                android:layout_below="@id/avg_sent_counter_tv"
+                android:layout_below="@+id/avg_sent_counter_tv"
+                android:layout_toEndOf="@+id/day_counter_tv"
+                android:text="@string/default_value"
                 android:textAlignment="center"
-                android:text="9"
                 android:textColor="@color/sent_chat_bubble_color"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -194,20 +185,22 @@
                 android:paddingStart="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
-                android:text="word average per message sent"
+                android:text="@string/word_average_per_message_sent"
                 android:textColor="#ffffff"/>
 
             <TextView
                 android:id="@+id/avg_received_length_received_info_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/avg_received_counter_tv"
-                android:layout_toEndOf="@id/avg_received_counter_tv"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
-                android:text="word average per message received"
-                android:textColor="#ffffff"/>
+                android:text="@string/word_average_per_message_received"
+                android:textColor="#ffffff"
+                android:layout_above="@+id/view"
+                android:layout_alignBaseline="@id/avg_received_counter_tv"
+                android:layout_toEndOf="@id/avg_received_counter_tv"
+                android:layout_alignParentEnd="true"/>
 
             <View
                 android:layout_width="match_parent"
@@ -216,27 +209,30 @@
                 android:layout_marginEnd="@dimen/card_text_margin_start"
                 android:layout_marginStart="@dimen/card_text_margin_start"
                 android:layout_marginTop="15dp"
-                android:background="@color/cardview_shadow_start_color"/>
+                android:background="@color/cardview_shadow_start_color"
+                android:id="@+id/view"/>
 
             <TextView
-                android:id="@+id/first_word_bold_tv"
+                android:id="@+id/you_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/day_counter_tv"
-                android:layout_below="@id/avg_received_counter_tv"
-                android:layout_marginTop="25dp"
-                android:text="You"
+                android:layout_alignStart="@id/avg_received_counter_tv"
+                android:layout_below="@+id/view"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/day_counter_tv"
+                android:text="@string/you"
                 android:textAlignment="center"
                 android:textColor="@color/light_font"
-                android:textSize="25sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/time_of_day_feedback_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/first_word_bold_tv"
-                android:layout_toEndOf="@id/first_word_bold_tv"
+                android:layout_alignBaseline="@id/you_tv"
+                android:layout_toEndOf="@id/you_tv"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
@@ -247,12 +243,13 @@
                 android:id="@+id/common_received_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/first_word_bold_tv"
-                android:layout_below="@id/first_word_bold_tv"
+                android:layout_alignStart="@id/you_tv"
+                android:layout_below="@id/you_tv"
                 android:textAlignment="center"
                 android:textColor="@color/light_font"
-                android:textSize="25sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/common_sent_text"
@@ -264,8 +261,9 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
-                android:text="is their most commonly used word"
-                android:textColor="#ffffff"/>
+                android:text="@string/is_their_most_commonly_used_word"
+                android:textColor="#ffffff"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/common_sent_word"
@@ -273,11 +271,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/common_received_word"
                 android:layout_below="@id/common_received_word"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/light_font"
-                android:textSize="25sp"
-                android:textStyle="bold"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/common_received_text"
@@ -289,12 +288,12 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
-                android:text="is your most commonly used word"
-                android:textColor="#ffffff"/>
+                android:text="@string/is_your_most_commonly_used_word"
+                android:textColor="#ffffff"
+                android:visibility="gone"/>
 
 
         </RelativeLayout>
-        </ScrollView>
     </android.support.v7.widget.CardView>
 
     <RelativeLayout

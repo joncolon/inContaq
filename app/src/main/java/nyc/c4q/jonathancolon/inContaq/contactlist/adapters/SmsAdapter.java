@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
+import io.realm.Realm;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.realm.RealmHelper;
 import nyc.c4q.jonathancolon.inContaq.sms.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 import static android.content.ContentValues.TAG;
 
@@ -28,12 +30,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String ON_BIND_VIEW_HOLDER = "onBindViewHolder: ";
     private Context context;
     private final Listener listener;
-    private List<Sms> smsList;
+    private ArrayList<Sms> smsList;
     private final Contact contact;
 
-
-
-    // ADAPTER CONSTRUCTORS
     public SmsAdapter(Listener listener, Contact contact) {
         this.listener = listener;
         this.contact = contact;
@@ -71,7 +70,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         void onContactLongClicked(Sms smsDetail);
     }
 
-    public void setData(List<Sms> smsDetails) {
+    public void setData(ArrayList<Sms> smsDetails) {
         this.smsList = smsDetails;
         notifyDataSetChanged();
     }
@@ -126,7 +125,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
         void displaySmsByType(Sms sms){
             if (sms.getType().equals("1")){
-                if (contact.getCellPhoneNumber() != null){
+                Realm realm = RealmHelper.getInstance();
+
+                if (contact.getMobileNumber() != null){
                     type.setText(contact.getFirstName() + " " + contact.getLastName());
                     linearLayout.setGravity(Gravity.START);
 

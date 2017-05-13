@@ -1,9 +1,8 @@
 package nyc.c4q.jonathancolon.inContaq.data;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
-import nyc.c4q.jonathancolon.inContaq.data.asynctasks.TotalWordCountWorkerTask;
+import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.sms.SmsHelper;
 import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
@@ -13,23 +12,24 @@ public class WordCount {
     public WordCount() {
     }
 
-    public static int getTotalSent(ArrayList<Sms> smsList) {
-        smsList = SmsHelper.parseSentSms(smsList);
-        ArrayList<Integer> wordCount = new ArrayList<Integer>();
+    public static int wordCountSent(RealmResults<Sms> smsList) {
+        ArrayList<Sms> smsSent = SmsHelper.parseSentSms(smsList);
+        ArrayList<Integer> wordCount = new ArrayList<>();
 
-        for (int i = 0; i < smsList.size(); i++) {
+        for (int i = 0; i < smsSent.size(); i++) {
             wordCount.add(getWordCountPerMessage(smsList.get(i)));
         }
+
         return calculateTotalWords(wordCount);
     }
 
-    public static int getTotalReceived(ArrayList<Sms> smsList) {
-        smsList = SmsHelper.parseReceivedSms(smsList);
-        ArrayList<Integer> wordCount = new ArrayList<>();
-        for (int i = 0; i < smsList.size(); i++) {
-            wordCount.add(getWordCountPerMessage(smsList.get(i)));
+    private static int getWordCountPerMessage(Sms sms) {
+        String input = sms.getMsg();
+        if (input == null || input.isEmpty()) {
+            return 0;
         }
-        return calculateTotalWords(wordCount);
+        String[] words = input.split("\\s+");
+        return words.length;
     }
 
     private static int calculateTotalWords(ArrayList<Integer> numbers) {
@@ -41,39 +41,13 @@ public class WordCount {
         return sum;
     }
 
-    public static int getWordCountPerMessage(Sms sms) {
-        String input = sms.getMsg();
-        if (input == null || input.isEmpty()) {
-            return 0;
-        }
-        String[] words = input.split("\\s+");
-        return words.length;
-    }
-
-    public static int getAverageWordCountSent(ArrayList<Sms> smsList){
-        TotalWordCountWorkerTask wordCountWorkerTask = new TotalWordCountWorkerTask();
-        ArrayList<Sms> sentSms = SmsHelper.parseSentSms(smsList);
-        ArrayList<Integer> totalSmsAmount = null;
-
-        try {
-            totalSmsAmount = wordCountWorkerTask.execute(sentSms).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return calculateAverage(totalSmsAmount);
-    }
-
-    public static int getAverageWordCountReceived(ArrayList<Sms> smsList){
-        TotalWordCountWorkerTask wordCountWorkerTask = new TotalWordCountWorkerTask();
+    public static int wordCountReceived(RealmResults<Sms> smsList) {
         ArrayList<Sms> receivedSms = SmsHelper.parseReceivedSms(smsList);
-        ArrayList<Integer> totalSmsAmount = null;
-
-        try {
-            totalSmsAmount = wordCountWorkerTask.execute(receivedSms).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+        ArrayList<Integer> wordCount = new ArrayList<>();
+        for (int i = 0; i < receivedSms.size(); i++) {
+            wordCount.add(getWordCountPerMessage(smsList.get(i)));
         }
-        return calculateAverage(totalSmsAmount);
+        return calculateTotalWords(wordCount);
     }
 
     private static int calculateAverage(ArrayList<Integer> numbers) {
@@ -82,5 +56,27 @@ public class WordCount {
             return sum / numbers.size();
         }
         return sum;
+    }
+
+    public static int getAverageWordCountReceived(RealmResults<Sms> smsList) {
+        ArrayList<Sms> receivedSms = SmsHelper.parseReceivedSms(smsList);
+        ArrayList<Integer> wordCount = new ArrayList<>();
+
+        for (int i = 0; i < receivedSms.size(); i++) {
+            wordCount.add(WordCount.getWordCountPerMessage(receivedSms.get(i)));
+        }
+
+        return calculateAverage(wordCount);
+    }
+
+    public static int getAverageWordCountSent(RealmResults<Sms> smsList) {
+        ArrayList<Sms> sentSms = SmsHelper.parseSentSms(smsList);
+        ArrayList<Integer> wordCount = new ArrayList<>();
+
+        for (int i = 0; i < sentSms.size(); i++) {
+            wordCount.add(WordCount.getWordCountPerMessage(sentSms.get(i)));
+        }
+
+        return calculateAverage(wordCount);
     }
 }

@@ -7,8 +7,7 @@ import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.BarChartView;
 
-import java.util.ArrayList;
-
+import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.data.WordCount;
 import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
@@ -23,10 +22,10 @@ public class TotalSmsBarGraph {
     private int totalWordsReceived;
     private BarChartView barChartView;
     private String[] mLabels = {"Sent", "Received"};
-    private ArrayList<Sms> smsList;
+    private RealmResults<Sms> smsList;
     private int highestValue;
 
-    public TotalSmsBarGraph(BarChartView barChartView, ArrayList<Sms> smsList) {
+    public TotalSmsBarGraph(BarChartView barChartView, RealmResults<Sms> smsList) {
         this.barChartView = barChartView;
         this.smsList = smsList;
     }
@@ -36,9 +35,9 @@ public class TotalSmsBarGraph {
         loadGraph();
     }
 
-    private void getBarGraphValues(ArrayList<Sms> smsList) {
-        totalWordsSent = WordCount.getTotalSent(smsList);
-        totalWordsReceived = WordCount.getTotalReceived(smsList);
+    private void getBarGraphValues(RealmResults<Sms> smsList) {
+        totalWordsSent = WordCount.wordCountSent(smsList);
+        totalWordsReceived = WordCount.wordCountReceived(smsList);
         this.smsList = smsList;
     }
 

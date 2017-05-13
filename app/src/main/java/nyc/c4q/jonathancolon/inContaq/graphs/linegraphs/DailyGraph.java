@@ -1,6 +1,5 @@
 package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs;
 
-import android.content.Context;
 import android.view.animation.BounceInterpolator;
 
 import com.db.chart.Tools;
@@ -8,45 +7,43 @@ import com.db.chart.animation.Animation;
 import com.db.chart.model.LineSet;
 import com.db.chart.view.LineChartView;
 
-import java.util.ArrayList;
-
-import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
-
 import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
+
+
 
 public class DailyGraph {
     private static final String SENT_COLOR = "#EF7674";
     private static final String LABEL_COLOR = "#FDFFFC";
     private static final String RECEIVED_COLOR = "#FDFFFC";
-    private Context context;
-    private LineChartView lineGraph;
-    private ArrayList<Sms> smsList;
-    private DailyGraphHelper dailyGraphHelper;
+    private final String[] xAxisLabels = {
+            "12AM", "3AM", "6AM", "9AM", "12PM", "3PM", "6PM", "9PM", "12AM"
+    };
 
-    public DailyGraph(Context context, LineChartView lineGraph, ArrayList<Sms> smsList) {
-        this.context = context;
+    private LineChartView lineGraph;
+    private float[] hourlySent;
+    private float[] hourlyReceived;
+
+    public DailyGraph(LineChartView lineGraph, float[] hourlySent, float[] hourlyReceived) {
         this.lineGraph = lineGraph;
-        this.smsList = smsList;
+        this.hourlyReceived = hourlyReceived;
+        this.hourlySent = hourlySent;
     }
 
     public void showDailyGraph() {
         loadGraph();
     }
 
-    synchronized private void loadGraph() {
+    private void loadGraph() {
         setGraphData();
-        setGraphAttributes(dailyGraphHelper.getYValue(smsList));
+        setGraphAttributes(getYValue());
         animateGraph();
     }
 
     private void setGraphData() {
-        dailyGraphHelper = new DailyGraphHelper(smsList);
-        String[] xAxisLabels = dailyGraphHelper.getXAxisLabels();
-        float[] receivedValues = dailyGraphHelper.getReceivedValue(smsList);
-        float[] sentValues = dailyGraphHelper.getSentValues(smsList);
-
+        float[] receivedValues = hourlyReceived;
+        float[] sentValues = hourlySent;
         prepareReceivedLineSet(xAxisLabels, receivedValues);
         prepareSentLineSet(xAxisLabels, sentValues);
     }
@@ -86,4 +83,59 @@ public class DailyGraph {
         Animation anim = new Animation().setEasing(new BounceInterpolator());
         lineGraph.show(anim);
     }
+
+    private synchronized int getYValue() {
+        int maxSent = findMaximumValue(hourlySent);
+        int maxReceived = findMaximumValue(hourlyReceived);
+        int highestValue = Math.max(maxSent, maxReceived);
+        if (highestValue == 0){
+            return 10;
+        }
+        return increaseByQuarter(highestValue);
+    }
+
+    private int findMaximumValue(float[] inputArray) {
+        float maxValue = inputArray[0];
+        for (int i = 1; i < inputArray.length; i++) {
+            if (inputArray[i] > maxValue) {
+                maxValue = Math.round(inputArray[i]);
+            }
+        }
+        return (int) maxValue;
+    }
+
+    private int increaseByQuarter(int input) {
+        return (int) Math.round(input * 1.25);
+    }
+
+// TODO: 5/8/17 delete
+//    @NonNull
+//    synchronized String[] getXAxisLabels() {
+//        final String[] xAxisLabels = new String[9];
+//        int n = 0;
+//        for (int i = 0; i < 4; i++) { // 12am=0, 3am=1, 6am=2 ,9am=3
+//            if (i == 0) {
+//                xAxisLabels[n] = "12AM";
+//                n += 1;
+//            } else {
+//                xAxisLabels[n] = String.valueOf(i * 3) + "AM";
+//                n += 1;
+//            }
+//        }
+//        for (int i = 0; i <= 4; i++) { // 12pm=0, 3pm=1, 6pm=2, 9pm=3, 12am=4
+//            if (i == 0) {
+//                xAxisLabels[n] = "12PM";
+//                n += 1;
+//            } else if (i == 4) {
+//                xAxisLabels[n] = "12AM";
+//                n += 1;
+//            } else {
+//                xAxisLabels[n] = String.valueOf(i * 3) + "PM";
+//                n += 1;
+//            }
+//        }
+//        return xAxisLabels;
+//    }
+
+
 }

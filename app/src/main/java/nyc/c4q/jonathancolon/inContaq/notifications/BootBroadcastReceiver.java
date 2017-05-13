@@ -8,8 +8,6 @@ public class BootBroadcastReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Launch the specified service when this message is received
-        System.out.println("Called WakefulBroadcastReceiver...");
         Intent startServiceIntent = new Intent(context, ContactNotificationService.class);
         startWakefulService(context, startServiceIntent);
     }

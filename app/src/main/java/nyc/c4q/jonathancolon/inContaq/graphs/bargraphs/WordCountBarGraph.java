@@ -7,10 +7,9 @@ import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.BarChartView;
 
-import java.util.ArrayList;
-
-import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
+import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.data.WordCount;
+import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
@@ -23,10 +22,10 @@ public class WordCountBarGraph {
     private int averageWordCountReceived;
     private BarChartView barChartView;
     private String[] mLabels = {"Sent", "Received"};
-    private ArrayList<Sms> smsList;
+    private RealmResults<Sms> smsList;
     private int highestValue;
 
-    public WordCountBarGraph(BarChartView barChartView, ArrayList<Sms> smsList) {
+    public WordCountBarGraph(BarChartView barChartView, RealmResults<Sms> smsList) {
         this.barChartView = barChartView;
         this.smsList = smsList;
     }
@@ -36,7 +35,7 @@ public class WordCountBarGraph {
         loadGraph();
     }
 
-    private void getBarGraphValues(ArrayList<Sms> smsList) {
+    private void getBarGraphValues(RealmResults<Sms> smsList) {
         averageWordCountSent = WordCount.getAverageWordCountSent(smsList);
         averageWordCountReceived = WordCount.getAverageWordCountReceived(smsList);
         this.smsList = smsList;

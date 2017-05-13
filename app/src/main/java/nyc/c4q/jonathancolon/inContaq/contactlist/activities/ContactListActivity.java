@@ -3,59 +3,59 @@ package nyc.c4q.jonathancolon.inContaq.contactlist.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Telephony;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.stetho.Stetho;
-
-import org.parceler.Parcels;
-
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.contactlist.PreCachingLayoutManager;
 import nyc.c4q.jonathancolon.inContaq.contactlist.adapters.ContactListAdapter;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.realm.RealmHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PermissionActivity;
-import nyc.c4q.jonathancolon.inContaq.utlities.PermissionChecker;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.ContactDatabaseHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
-
-import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>,
         ContactListAdapter.Listener {
 
-    public static final String PARCELLED_CONTACT = "Parcelled Contact";
+    public static final String CONTACT_ID = "Contact";
     private RecyclerView recyclerView;
     private AlertDialog InputContactDialogObject;
-    private List<Contact> contactList;
-    private SQLiteDatabase db;
+    private RealmResults<Contact> contactList;
     private String name = "";
     private Context context;
+    private Realm realm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
-        Stetho.initializeWithDefaults(this);
+
+//        checkServiceCreated();
+
+        Realm.init(getApplicationContext());
+        realm = Realm.getDefaultInstance();
+        context = getApplicationContext();
 
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean("request_permissions", true) &&
@@ -65,40 +65,55 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             return;
         }
 
-        PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
-        permissionChecker.checkPermissions();
+//        PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
+//        permissionChecker.checkPermissions();
 
-        context = getApplicationContext();
+        initViews();
+        setupRecyclerView();
+        preloadContactListImages();
+        buildEnterContactDialog(this);
+
+    }
+
+    private void initViews() {
         TextView importContactsTV = (TextView) findViewById(R.id.import_contacts);
+        FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
+
         importContactsTV.setOnClickListener(v -> {
             ImportContacts importContacts = new ImportContacts(context);
             importContacts.getContactsFromContentProvider();
-            refreshRecyclerView();
+            try {
+                ContactListActivity.this.refreshRecyclerView();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
-        FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
         addContactFab.setOnClickListener(v -> ContactListActivity.this.openEditor());
-        setupRecyclerView();
-        refreshRecyclerView();
-        preloadContactListImages();
-        buildEnterContactDialog(this);
     }
 
-    private void setAsDefaultSms() {
-        Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
-                getPackageName());
-        startActivity(intent);
-    }
+//    public void checkServiceCreated() {
+//        if (!ContactNotificationService.hasStarted) {
+//            System.out.println("Starting service...");
+//            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
+//            startService(intent);
+//        }
+//    }
 
-
-    private void refreshRecyclerView() {
-        ContactDatabaseHelper dbHelper = ContactDatabaseHelper.getInstance(this);
-        db = dbHelper.getWritableDatabase();
-        contactList = SqlHelper.selectAllContacts(db);
+    private void refreshRecyclerView() throws ExecutionException, InterruptedException {
+        Log.e("fetching contacts", "Fetching contacts...");
+        fetchAllContacts();
         ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
-        sortByName();
+//        sortByName();
         adapter.setData(contactList);
+
+    }
+
+    private void fetchAllContacts() {
+        if (realm == null){
+            realm = RealmHelper.getInstance();
+        }
+        contactList = realm.where(Contact.class).findAll().sort("firstName", Sort.ASCENDING);
     }
 
     private void openEditor() {
@@ -116,9 +131,22 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         recyclerView.setDrawingCacheEnabled(true);
     }
 
-    // POP UP for Entering a new Contact
-    private void buildEnterContactDialog(final AlertDialogCallback<String> callback) {
+    private void preloadContactListImages() {
+        PicassoHelper pHelper = new PicassoHelper(context);
 
+        if (contactList != null){
+            for (int i = 0; i < contactList.size(); i++) {
+                if (contactList.get(i).getBackgroundImage() != null) {
+                    pHelper.preloadImages(contactList.get(i).getBackgroundImage());
+                }
+                if (contactList.get(i).getContactImage() != null) {
+                    pHelper.preloadImages(contactList.get(i).getContactImage());
+                }
+            }
+        }
+    }
+
+    private void buildEnterContactDialog(final AlertDialogCallback<String> callback) {
         final EditText input = new EditText(ContactListActivity.this);
 
         AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(this);
@@ -134,7 +162,11 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
         confirmBuilder.setPositiveButton(R.string.positive_button, (dialog, which) -> {
             name = input.getText().toString();
-            callback.alertDialogCallback(name);
+            try {
+                callback.alertDialogCallback(name);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
         confirmBuilder.setNegativeButton(R.string.negative_button, (dialog, which) -> {
@@ -148,20 +180,8 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         Collections.sort(contacts, (o1, o2) -> o1.getFirstName().compareToIgnoreCase(o2.getFirstName()));
     }
 
-    private void preloadContactListImages() {
-        PicassoHelper pHelper = new PicassoHelper(context);
-        for (int i = 0; i < contactList.size(); i++) {
-            if (contactList.get(i).getBackgroundImage() != null) {
-                pHelper.preloadImages(contactList.get(i).getBackgroundImage());
-            }
-            if (contactList.get(i).getContactImage() != null) {
-                pHelper.preloadImages(contactList.get(i).getContactImage());
-            }
-        }
-    }
-
     @Override
-    public void alertDialogCallback(String userInput) {
+    public void alertDialogCallback(String userInput) throws ExecutionException, InterruptedException {
         name = userInput;
         if (!isEmptyString(name)) {
             String[] splitName = NameSplitter.splitFirstAndLastName(name);
@@ -169,7 +189,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             Contact contact = new Contact();
             contact.setFirstName(splitName[0]);
             contact.setLastName(splitName[1]);
-            cupboard().withDatabase(db).put(contact);
+            // TODO: 5/6/17 add contact to realm
             refreshRecyclerView();
         } else {
             Toast.makeText(ContactListActivity.this, R.string.enter_name,
@@ -183,32 +203,35 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
     @Override
     public void onContactClicked(Contact contact) {
+
         Intent intent = new Intent(this, ContactViewPagerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(PARCELLED_CONTACT, Parcels.wrap(contact));
+        intent.putExtra(CONTACT_ID, contact.getRealmID());
+
         this.startActivity(intent);
     }
 
     @Override
-    public void onContactLongClicked(Contact contact) {
-        cupboard().withDatabase(db).delete(contact);
-        refreshRecyclerView();
-    }
-
-    public void checkServiceCreated() {
-        if (!ContactNotificationService.hasStarted) {
-            System.out.println("Starting service...");
-            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
-            startService(intent);
-        }
+    public void onContactLongClicked(Contact contact){
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        refreshRecyclerView();
+        try {
+            refreshRecyclerView();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(realm != null) { // guard against weird low-budget phones
+            realm.close();
+        } // Remember to close Realm when done.
+    }
 }
 
 

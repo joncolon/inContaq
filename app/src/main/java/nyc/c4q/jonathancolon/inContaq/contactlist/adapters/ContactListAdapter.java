@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.github.florent37.beautifulparallax.ParallaxViewController;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
@@ -76,7 +77,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public interface Listener {
         void onContactClicked(Contact contact);
 
-        void onContactLongClicked(Contact contact);
+        void onContactLongClicked(Contact contact) throws ExecutionException, InterruptedException;
     }
 
     //_____________________________________VIEWHOLDER___________________________________________________
@@ -120,7 +121,11 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
             itemView.setOnClickListener(v -> listener.onContactClicked(contact));
             itemView.setOnLongClickListener(v -> {
-                listener.onContactLongClicked(contact);
+                try {
+                    listener.onContactLongClicked(contact);
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return true;
             });
         }
@@ -133,4 +138,5 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private boolean hasBackgroundImage(Contact contact) {
         return contact.getBackgroundImage() != null;
     }
+
 }

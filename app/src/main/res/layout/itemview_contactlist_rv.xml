@@ -69,9 +69,6 @@
             android:scaleType="centerCrop" />
 
 
-
-
-
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"

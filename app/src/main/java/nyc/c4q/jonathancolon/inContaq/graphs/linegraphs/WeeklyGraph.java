@@ -16,9 +16,8 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.data.asynctasks.WeeklyReceived;
-import nyc.c4q.jonathancolon.inContaq.data.asynctasks.WeeklySent;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.WeeklyReceivedWorkerTask;
+import nyc.c4q.jonathancolon.inContaq.data.asynctasks.WeeklySentWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.WeeklyTaskParams;
 
 import static android.graphics.Color.parseColor;
@@ -44,28 +43,28 @@ public class WeeklyGraph {
     private LineChartView lineGraph;
     private float[] receivedValues;
     private float[] sentValues;
-    private ArrayList<Sms> lstSms;
+    private String phoneNumber;
 
-    public WeeklyGraph(Context context, LineChartView lineGraph, ArrayList<Sms> lstSms) {
+    public WeeklyGraph(Context context, LineChartView lineGraph, String phoneNumber) {
         this.context = context;
         this.lineGraph = lineGraph;
-        this.lstSms = lstSms;
+        this.phoneNumber = phoneNumber;
     }
 
     public void showWeeklyGraph() {
-        getLineGraphValues(lstSms);
+        getLineGraphValues(phoneNumber);
         getHigehstValueForYaxis();
         loadGraph();
     }
 
-    private void getLineGraphValues(ArrayList<Sms> lstSms) {
-        receivedValues = setValues(getDailyReceived(lstSms));
-        sentValues = setValues(getWeeklySent(lstSms));
+    private void getLineGraphValues(String phoneNumber) {
+        receivedValues = setValues(getWeeklyReceived(phoneNumber));
+        sentValues = setValues(getWeeklySent(phoneNumber));
     }
 
     private float[] setValues(TreeMap<Integer, Integer> numberOfTexts) {
 
-        ArrayList<Float> list = new ArrayList<Float>();
+        ArrayList<Float> list = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : numberOfTexts.entrySet()) {
 
             Float value = entry.getValue().floatValue();
@@ -74,14 +73,14 @@ public class WeeklyGraph {
         return convertFloats(list);
     }
 
-    private TreeMap<Integer, Integer> getDailyReceived(ArrayList<Sms> texts) {
+    private TreeMap<Integer, Integer> getWeeklyReceived(String phoneNumber) {
 
         TreeMap<Integer, Integer> weeklyReceived = setUpWeeklyTextMap();
-        WeeklyTaskParams receivedWeeklyParams = new WeeklyTaskParams(texts, weeklyReceived);
-        WeeklyReceived weeklyReceivedTask = new WeeklyReceived();
+        WeeklyTaskParams receivedWeeklyParams = new WeeklyTaskParams(phoneNumber, weeklyReceived);
+        WeeklyReceivedWorkerTask weeklyReceivedWorkerTaskTask = new WeeklyReceivedWorkerTask();
 
         try {
-            weeklyReceived = weeklyReceivedTask.execute(receivedWeeklyParams).get();
+            weeklyReceived = weeklyReceivedWorkerTaskTask.execute(receivedWeeklyParams).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -89,14 +88,14 @@ public class WeeklyGraph {
         return weeklyReceived;
     }
 
-    private TreeMap<Integer, Integer> getWeeklySent(ArrayList<Sms> texts) {
+    private TreeMap<Integer, Integer> getWeeklySent(String phoneNumber) {
 
         TreeMap<Integer, Integer> weeklySent = setUpWeeklyTextMap();
-        WeeklyTaskParams sentWeeklyParams = new WeeklyTaskParams(texts, weeklySent);
-        WeeklySent weeklySentWorkerTask = new WeeklySent();
+        WeeklyTaskParams sentWeeklyParams = new WeeklyTaskParams(phoneNumber, weeklySent);
+        WeeklySentWorkerTask weeklySentWorkerTaskWorkerTask = new WeeklySentWorkerTask();
 
         try {
-            weeklySent = weeklySentWorkerTask.execute(sentWeeklyParams).get();
+            weeklySent = weeklySentWorkerTaskWorkerTask.execute(sentWeeklyParams).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

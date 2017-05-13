@@ -8,7 +8,10 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.MonthlyTaskParams;
+import nyc.c4q.jonathancolon.inContaq.realm.RealmHelper;
 import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
@@ -16,6 +19,7 @@ public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
         TreeMap<Integer, Integer>> {
 
     private static TreeMap<Integer, Integer> monthlyTexts;
+    private Realm realm;
 
     public MonthlySentWorkerTask() {
     }
@@ -27,17 +31,13 @@ public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
 
     @Override
     protected TreeMap<Integer, Integer> doInBackground(MonthlyTaskParams... params) {
-        ArrayList<Sms> listSms = params[0].listSms;
+        realm = RealmHelper.getInstance();
+        RealmResults<Sms> smsList = RealmHelper.getByMobileNumber(realm, params[0].phoneNumber);
         monthlyTexts = params[0].monthlyTexts;
-        return getSmsStats(listSms);
+        return getSmsStats(smsList);
     }
 
-    @Override
-    protected void onPostExecute(TreeMap<Integer, Integer> ret) {
-        super.onPostExecute(ret);
-    }
-
-    private TreeMap<Integer, Integer> getSmsStats(ArrayList<Sms> list){
+    private TreeMap<Integer, Integer> getSmsStats(RealmResults<Sms> list) {
         ArrayList<String> sentSms = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
@@ -49,7 +49,7 @@ public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
         return monthlyTexts;
     }
 
-    private TreeMap<Integer, Integer> getMonthlyTexts(ArrayList<String> list){
+    private TreeMap<Integer, Integer> getMonthlyTexts(ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
             long lg = Long.parseLong(list.get(i));
             DateTime juSmsYear = new DateTime(lg);
@@ -57,11 +57,17 @@ public class MonthlySentWorkerTask extends AsyncTask<MonthlyTaskParams, Void,
             DateTime juDateYear = new DateTime(currentTime);
             int monthSent = juSmsYear.getMonthOfYear();
 
-            if (monthlyTexts.containsKey(monthSent)){
-                monthlyTexts.put(monthSent, monthlyTexts.get(monthSent) +1);
+            if (monthlyTexts.containsKey(monthSent)) {
+                monthlyTexts.put(monthSent, monthlyTexts.get(monthSent) + 1);
                 monthlyTexts.entrySet();
             }
         }
+        RealmHelper.closeRealm(realm);
         return monthlyTexts;
+    }
+
+    @Override
+    protected void onPostExecute(TreeMap<Integer, Integer> ret) {
+        super.onPostExecute(ret);
     }
 }

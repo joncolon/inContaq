@@ -1,16 +1,20 @@
 package nyc.c4q.jonathancolon.inContaq.sms.model;
 
-import org.parceler.Parcel;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-@Parcel
-public class Sms implements Comparable<Sms>{
-    String _id;
-    public String address;
-    String msg;
-    String readState;
-    public String time;
-    String foldername;
-    public String type;
+
+public class Sms extends RealmObject implements Comparable<Sms> {
+
+    @PrimaryKey
+    private Long realmId;
+    private String id;
+    private String msg;
+    private String readState;
+    private String foldername;
+    private String address;
+    private String time;
+    private String type;
 
     public Sms(String address, String msg, String time, String type) {
         this.address = address;
@@ -23,49 +27,56 @@ public class Sms implements Comparable<Sms>{
 
     }
 
-    public String getId(){
-        return _id;
+    public Long getRealmId() {
+        return realmId;
     }
 
-    public String getAddress(){
+    public void setRealmId(Long realmId) {
+        this.realmId = realmId;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setId(Long id) {
+        realmId = id;
+    }
+
+    public String getAddress() {
         return address;
     }
 
-    public String getMsg(){
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getMsg() {
         return msg;
     }
 
-    public String getReadState(){
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getReadState() {
         return readState;
     }
-    public String getTime(){
-        return time;
+
+    public void setReadState(String readState) {
+        this.readState = readState;
     }
-    public String getFolderName(){
+
+    public String getFolderName() {
         return foldername;
+    }
+
+    public void setFolderName(String folderName) {
+        foldername = folderName;
     }
 
     public String getType() {
         return type;
-    }
-    public void setId(String id){
-        _id = id;
-    }
-    public void setAddress(String address){
-        this.address = address;
-    }
-    public void setMsg(String msg){
-        this.msg = msg;
-    }
-    public void setReadState(String readState){
-        this.readState = readState;
-    }
-    public void setTime(String time){
-        this.time = time;
-    }
-
-    public void setFolderName(String folderName){
-        foldername = folderName;
     }
 
     public void setType(String type) {
@@ -75,5 +86,13 @@ public class Sms implements Comparable<Sms>{
     @Override
     public int compareTo(Sms sms) {
         return getTime().compareTo(sms.getTime());
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

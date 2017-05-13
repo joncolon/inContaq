@@ -2,26 +2,23 @@ package nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.db.chart.view.LineChartView;
 
-import org.parceler.Parcels;
-
-import java.util.ArrayList;
-
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.graphs.linegraphs.WeeklyGraph;
-import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
 public class WeeklyGraphFragment extends Fragment {
 
-
+    final String TAG = WeeklyGraphFragment.class.getSimpleName();
+    final String BUNDLE_KEY = "phoneNumber";
     private LineChartView lineGraph;
-    private ArrayList<Sms> smsList;
+    private String phoneNumber;
 
     public WeeklyGraphFragment() {
         // Required empty public constructor
@@ -36,7 +33,7 @@ public class WeeklyGraphFragment extends Fragment {
         lineGraph = (LineChartView) view.findViewById(R.id.daily_chart);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            smsList = Parcels.unwrap(bundle.getParcelable("smslist"));
+            phoneNumber = bundle.getString(BUNDLE_KEY);
         }
         showWeeklyGraph();
 
@@ -44,7 +41,9 @@ public class WeeklyGraphFragment extends Fragment {
     }
 
     private void showWeeklyGraph() {
-        WeeklyGraph weeklyGraph = new WeeklyGraph(getContext(), lineGraph, smsList);
+        Log.e(TAG, "loading Weekly Graph");
+
+        WeeklyGraph weeklyGraph = new WeeklyGraph(getContext(), lineGraph, phoneNumber);
         weeklyGraph.showWeeklyGraph();
     }
 

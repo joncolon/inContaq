@@ -6,20 +6,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.concurrent.ExecutionException;
 
+import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.data.asynctasks.params.GetAllSmsTaskParams;
-import nyc.c4q.jonathancolon.inContaq.data.asynctasks.GetAllSmsWorkerTask;
 import nyc.c4q.jonathancolon.inContaq.sms.model.Sms;
 
 
-public class SmsHelper {
+public class SmsHelper{
 
     private static final String URI_ALL = "content://sms/";
     private static final String URI_SENT = "content://sms/sent";
@@ -102,10 +99,9 @@ public class SmsHelper {
         return formattedDate;
     }
 
-    public static void getLastContactedDate(Context context, Contact contact) {
-
+    public static long getLastContactedDate(Context context, Contact contact) {
         ContentResolver contentResolver = context.getApplicationContext().getContentResolver();
-        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, ADDRESS  + "='" + contact.getCellPhoneNumber() + "'", null, null);
+        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, ADDRESS  + "='" + contact.getMobileNumber() + "'", null, null);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 String date = cursor.getString(cursor.getColumnIndex(DATE));
@@ -113,61 +109,15 @@ public class SmsHelper {
                 cursor.close();
 
                 Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
-
-                Toast.makeText(context, "Last Contacted: " + smsDateFormat(timestamp),
-                        Toast.LENGTH_LONG).show();
+                return timestamp;
             }
         }
-    }
-
-    synchronized public static ArrayList<Sms> getAllSms(Context context, Contact contact) {
-        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
-        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
-        ArrayList<Sms> smsList;
-
-        try {
-            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
-            return smsList;
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        throw new NullPointerException();
-    }
-
-    synchronized public static ArrayList<Sms> getSentSms(Context context, Contact contact) {
-        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
-        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
-        ArrayList<Sms> smsList;
-
-        try {
-            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
-            return parseSentSms(smsList);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        throw new NullPointerException();
-    }
-
-    synchronized public static ArrayList<Sms> getReceivedSms(Context context, Contact contact) {
-        GetAllSmsTaskParams getAllSmsTaskParams = new GetAllSmsTaskParams(contact, context);
-        GetAllSmsWorkerTask getAllSmsWorkerTask = new GetAllSmsWorkerTask();
-        ArrayList<Sms> smsList;
-
-        try {
-            smsList = getAllSmsWorkerTask.execute(getAllSmsTaskParams).get();
-            return parseReceivedSms(smsList);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        throw new NullPointerException();
+        return 0;
     }
 
     @NonNull
-    public static ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
-        ArrayList<Sms> sentSms = new ArrayList<Sms>();
+    public static ArrayList<Sms> parseSentSms(RealmResults<Sms> smsList) {
+        ArrayList<Sms> sentSms = new ArrayList<>();
 
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals("2")) {
@@ -178,7 +128,7 @@ public class SmsHelper {
     }
 
     @NonNull
-    public static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
+    public static ArrayList<Sms> parseReceivedSms(RealmResults<Sms> smsList) {
         ArrayList<Sms> receivedSms = new ArrayList<>();
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals("1")) {

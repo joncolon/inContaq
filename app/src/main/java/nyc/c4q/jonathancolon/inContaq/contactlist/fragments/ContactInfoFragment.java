@@ -14,20 +14,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.parceler.Parcels;
 
 import java.util.Objects;
 
+import io.realm.Realm;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.contactlist.AlertDialogCallback;
-import nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.contactlist.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.realm.RealmHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.Animations;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.sqlite.SqlHelper;
+
+import static nyc.c4q.jonathancolon.inContaq.contactlist.activities.ContactListActivity.CONTACT_ID;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
 
@@ -42,13 +41,17 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private int selection;
     private Animations anim;
     private boolean isEditTextEnabled;
+    private Realm realm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_info, container, false);
-        contact = Parcels.unwrap(getActivity().getIntent().
-                getParcelableExtra(ContactListActivity.PARCELLED_CONTACT));
+
+        realm = Realm.getDefaultInstance();
+        long contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
+        RealmHelper realmHelper = new RealmHelper();
+        contact = RealmHelper.getByRealmID(realm, contactId);
         anim = new Animations(ContactInfoFragment.this.getActivity());
         isEditTextEnabled = false;
         initViews(view);
@@ -93,7 +96,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
         polaroidName.setText(nameValue);
         editName.setText(nameValue);
-        editMobile.setText(contact.getCellPhoneNumber());
+        editMobile.setText(contact.getMobileNumber());
         loadImages();
         showMobile();
         showEmail();
@@ -136,7 +139,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             mobile.setVisibility(View.VISIBLE);
 
         }
-        if (contact.getCellPhoneNumber() != null || Objects.equals(contact.getCellPhoneNumber(), "")) {
+        if (contact.getMobileNumber() != null || Objects.equals(contact.getMobileNumber(), "")) {
             mobile.setVisibility(View.VISIBLE);
         }
     }
@@ -178,9 +181,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         contact.setLastName(splitName[1]);
         contact.setEmail(email);
         contact.setAddress(address);
-        contact.setCellPhoneNumber(editMobile.getText().toString());
-
-        SqlHelper.saveToDatabase(contact, getActivity());
+        contact.setMobileNumber(editMobile.getText().toString());
     }
 
     private void enableEditText() {
@@ -217,26 +218,32 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         switch (String.valueOf(parent.getItemAtPosition(position))) {
 
-            case "DAILY":
-                // TODO: 3/8/17 if last sent text == to 7 days + last sent text date then, notification
-                break;
-            case "WEEKLY":
-                break;
-            case "2 WEEKS":
-                // TODO: 3/8/17 if last sent text == to 21 days + last sent text date then, notification
+            case "1 WEEK":
+                contact.setReminderDuration(1);
                 contact.setReminderEnabled(true);
-                Toast.makeText(getContext(), String.valueOf(contact.isReminderEnabled()), Toast.LENGTH_SHORT).show();
+
+            case "2 WEEKS":
+                contact.setReminderDuration(2);
+                contact.setReminderEnabled(true);
                 break;
-            case "MONTHLY":
-                // TODO: 3/8/17 if last sent text == to 30 days + last sent text date then, notification
+            case "3 WEEKS":
+                contact.setReminderDuration(3);
+                contact.setReminderEnabled(true);
+                break;
+            case "CANCEL":
+                contact.setReminderDuration(0);
                 contact.setReminderEnabled(false);
-                Toast.makeText(getContext(), String.valueOf(contact.isReminderEnabled()), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
 

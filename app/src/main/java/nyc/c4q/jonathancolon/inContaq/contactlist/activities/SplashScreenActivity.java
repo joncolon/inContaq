@@ -21,13 +21,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler = new Handler();
 
         handler.postDelayed(() -> {
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentManager fragmentManager = SplashScreenActivity.this.getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.splash_screen_layout, new SplashScreenFragment())
                     .commit();
-            Intent intent = new Intent(getApplicationContext(), ContactListActivity.class);
-            startActivity(intent);
-
+            Intent intent = new Intent(SplashScreenActivity.this.getApplicationContext(), ContactListActivity.class);
+            SplashScreenActivity.this.startActivity(intent);
         }, 4000);
     }
 }
