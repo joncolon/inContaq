@@ -3,7 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/primary_background">
+                >
 
 
     <FrameLayout
@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="@dimen/card_margin_top"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/stats_text_card"
+        android:layout_toStartOf="@id/card_text_stats"
         android:layout_below="@id/graph_btn"
         >
 
@@ -69,7 +69,7 @@
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_below="@id/graph_frag_container"
-        android:layout_toStartOf="@id/stats_text_card"
+        android:layout_toStartOf="@id/card_text_stats"
         android:layout_marginBottom="@dimen/card_margin_btm"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:layout_marginStart="@dimen/card_margin_start"
@@ -110,7 +110,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/stats_text_card"
+        android:id="@+id/card_text_stats"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/graph_btn"
@@ -246,7 +246,7 @@
                 android:layout_below="@id/avg_received_counter_tv"/>
 
             <TextView
-                android:id="@+id/first_word_bold_tv"
+                android:id="@+id/you_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
@@ -263,8 +263,8 @@
                 android:id="@+id/time_of_day_feedback_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/first_word_bold_tv"
-                android:layout_toEndOf="@id/first_word_bold_tv"
+                android:layout_alignBaseline="@id/you_tv"
+                android:layout_toEndOf="@id/you_tv"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
@@ -275,8 +275,8 @@
                 android:id="@+id/common_received_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/first_word_bold_tv"
-                android:layout_below="@id/first_word_bold_tv"
+                android:layout_alignStart="@id/you_tv"
+                android:layout_below="@id/you_tv"
                 android:text="lmao"
                 android:textAlignment="center"
                 android:textColor="@color/light_font"
@@ -318,7 +318,8 @@
                 android:paddingRight="5dp"
                 android:scrollbars="vertical"
                 android:text="is your most commonly used word"
-                android:textColor="#ffffff"/>
+                android:textColor="#ffffff"
+                android:visibility="gone"/>
         </RelativeLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

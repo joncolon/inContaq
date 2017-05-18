@@ -4,15 +4,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sms_row"
-    android:paddingBottom="5dp"
-    android:background="@color/primary_background">
+    android:paddingBottom="5dp">
 
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary_background"
             android:id="@+id/chat_view"
             android:orientation="vertical">
 
@@ -35,36 +33,31 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/type_not_found"
                         android:textSize="@dimen/type_text_size"
                         android:textStyle="bold"
                         android:id="@+id/type"
                         android:layout_marginStart="@dimen/sms_rv_margin_start"
                         android:layout_marginEnd="@dimen/sms_rv_margin_end"
-                        android:visibility="gone"
-                        android:textColor="@color/blue_sapphire"/>
+                        android:visibility="gone"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/senderId"
-                        android:text="@string/phone_num_placeholder"
                         android:textSize="@dimen/sender_id_text_size"
                         android:textStyle="bold"
                         android:layout_marginStart="@dimen/sms_rv_margin_start"
                         android:layout_marginEnd="@dimen/sms_rv_margin_end"
-                        android:visibility="gone"
-                        android:textColor="@color/blue_sapphire"/>
+                        android:visibility="gone"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/messageDetails"
                         android:textSize="@dimen/default_text_size"
-                        android:text="@string/placeholder_text"
                         android:gravity="start"
                         android:layout_marginStart="@dimen/card_margin_start"
                         android:layout_marginEnd="@dimen/card_margin_end"
-                        android:textColorLink="#0000ff"
+                        android:textColorLink="#2B98CA"
                         android:linksClickable="true"
                         android:autoLink="all"
                         />
@@ -77,7 +70,6 @@
                         android:textSize="@dimen/time_date_text_size"
                         android:layout_marginStart="@dimen/sms_rv_margin_start"
                         android:layout_marginEnd="@dimen/sms_rv_margin_end"
-                        android:text="@string/placeholder_date"
                         android:layout_marginBottom="@dimen/time_date_margin_btm"/>
                 </LinearLayout>
 

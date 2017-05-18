@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".contactlist.activities.ContactListActivity">
+    tools:context=".ui.contactlist.ContactListActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,6 +64,7 @@
             android:layout_marginEnd="25dp"
             android:layout_marginStart="@dimen/fab_margin"
             android:src="@drawable/ic_person_add_white_24dp"/>
+
     </RelativeLayout>
 
 

@@ -15,7 +15,7 @@
     <string name="negative_button">Cancel</string>
     <string name="contact_sms_fragment">ContactSmsFragment, Instance 4</string>
     <string name="contact_stats_fragment">ContactStatsFragment, Instance 3</string>
-    <string name="contact_info">Contact Info</string>
+    <string name="contact_info">Info</string>
     <string name="messages">Messages</string>
     <string name="stats">Stats</string>
     <string name="jan">Jan</string>
@@ -64,14 +64,22 @@
     <string name="monthly">MONTHLY</string>
 
     <string-array name="date_spinner_array">
-        <item>DAILY</item>
+        <item>SET REMINDER</item>
+        <item>1 WEEK</item>
         <item>2 WEEKS</item>
         <item>3 WEEKS</item>
-        <item>MONTHLY</item>
+        <item>CANCEL</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="contact_list_font">fonts/jaapokkiregular.ttf</string>
+    <string name="is_their_most_commonly_used_word">is their most commonly used word</string>
+    <string name="is_your_most_commonly_used_word">is your most commonly used word</string>
+    <string name="you">You</string>
+    <string name="word_average_per_message_received">word average per message received</string>
+    <string name="word_average_per_message_sent">word average per message sent</string>
+    <string name="default_value">0</string>
+    <string name="nameDisplayFont">fonts/jaapokkiregular.ttf</string>
 
 </resources>
