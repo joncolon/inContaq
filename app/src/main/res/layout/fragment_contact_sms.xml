@@ -1,140 +1,191 @@
-<android.support.design.widget.CoordinatorLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.ContactSmsFragment">
+    android:orientation="vertical"
+    tools:context=".ui.contactdetails.contactviewpager.contactsms.ContactSmsFragment">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/contact_image_cardview"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_contact_details"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/view3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"
+        >
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/card_view_arrangement"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginStart="@dimen/card_margin_start"
-            android:layout_above="@id/recycler_view"
-            app:cardCornerRadius="0dp"
-            >
+            android:layout_height="100dp">
 
             <ImageView
                 android:id="@+id/background_image"
                 android:layout_width="0dp"
-                android:layout_height="84dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
+                android:layout_height="100dp"
                 android:scaleType="centerCrop"
-                tools:layout_editor_absoluteY="8dp"
-                tools:layout_editor_absoluteX="8dp"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/contact_dark_filter"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:alpha="10"
                 android:background="#55000000"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp"/>
+                app:layout_constraintBottom_toBottomOf="@+id/background_image"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"/>
 
             <TextView
                 android:id="@+id/contact_initials"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
                 android:layout_gravity="start|center_vertical|center_horizontal"
                 android:background="@color/cardview_dark_background"
                 android:elevation="20dp"
                 android:gravity="center|fill"
-                android:padding="1dp"
-                android:paddingTop="1dp"
-                android:text=""
                 android:textAlignment="center"
                 android:textColor="#ffffff"
                 android:textSize="55sp"
-                tools:layout_editor_absoluteY="35dp"
-                tools:layout_editor_absoluteX="5dp"/>
+                app:layout_constraintBottom_toBottomOf="@+id/contact_image"
+                app:layout_constraintLeft_toLeftOf="@+id/contact_image"
+                app:layout_constraintRight_toRightOf="@+id/contact_image"
+                app:layout_constraintTop_toTopOf="@+id/contact_image"/>
 
 
             <ImageView
                 android:id="@+id/contact_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
                 android:layout_gravity="start|center_vertical|center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:elevation="20dp"
                 android:scaleType="centerCrop"
-                tools:layout_editor_absoluteY="35dp"
-                tools:layout_editor_absoluteX="5dp"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="368dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text="@string/unknown"
-                android:textColor="#ffffff"
                 android:textAlignment="textStart"
+                android:textColor="#ffffff"
                 android:textSize="@dimen/contact_rv_name_width"
                 android:textStyle="bold"
-                android:typeface="normal"/>
+                android:typeface="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/contact_image"
+                app:layout_constraintLeft_toRightOf="@+id/contact_image"
+                />
+        </android.support.constraint.ConstraintLayout>
 
 
-        </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
+
+    <ImageView
+        android:id="@+id/send_button"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="2dp"
+        android:padding="7dp"
+        android:src="@drawable/send_message_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_conversion_absoluteHeight="45dp"
+        tools:layout_conversion_absoluteWidth="45dp"
+        tools:layout_conversion_absoluteX="339dp"
+        tools:layout_conversion_absoluteY="522dp"
+        tools:layout_editor_absoluteX="339dp"
+        tools:layout_editor_absoluteY="522dp"/>
+
+    <EditText
+        android:id="@+id/sms_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="2dp"
+        android:hint="@string/enter_text"
+        android:nextFocusLeft="@id/sms_edit_text"
+        android:nextFocusUp="@id/sms_edit_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/send_button"
+        app:layout_constraintRight_toLeftOf="@+id/send_button"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_conversion_absoluteHeight="45dp"
+        tools:layout_conversion_absoluteWidth="300dp"
+        tools:layout_conversion_absoluteX="0dp"
+        tools:layout_conversion_absoluteY="522dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="422dp"
+        android:scrollbars="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/sms_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card_view_contact_details"
+        app:layout_constraintVertical_bias="1.0">
+    </android.support.v7.widget.RecyclerView>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="422dp"
-            android:layout_above="@+id/sms_edit_text"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"
-            android:visibility="invisible">
-        </android.support.v7.widget.RecyclerView>
+    <View
+        android:id="@+id/view3"
+        android:layout_width="384dp"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/sms_edit_text"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_conversion_absoluteHeight="1dp"
+        tools:layout_conversion_absoluteWidth="384dp"
+        tools:layout_conversion_absoluteX="0dp"
+        tools:layout_conversion_absoluteY="521dp"
+        tools:layout_editor_absoluteX="0dp"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_absoluteHeight="0dp"
+        tools:layout_conversion_absoluteWidth="0dp"
+        tools:layout_conversion_absoluteX="0dp"
+        tools:layout_conversion_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp"
+        android:visibility="gone"
+        />
 
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@id/sms_edit_text"
-            android:background="@android:color/darker_gray"/>
-
-        <EditText
-            android:id="@+id/sms_edit_text"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:hint="@string/enter_text"
-            android:nextFocusUp="@id/sms_edit_text"
-            android:nextFocusLeft="@id/sms_edit_text"/>
-
-        <ImageView
-            android:id="@+id/send_button"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignBottom="@id/sms_edit_text"
-            android:layout_alignParentEnd="true"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:src="@drawable/send_message_icon"/>
-
-    </RelativeLayout>
-
-
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>
 
 

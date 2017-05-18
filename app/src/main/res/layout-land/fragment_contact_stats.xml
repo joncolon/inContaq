@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="@dimen/card_margin_top"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/stats_text_card"
+        android:layout_toStartOf="@id/card_text_stats"
         android:layout_below="@id/graph_btn"
         >
 
@@ -69,7 +69,7 @@
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_below="@id/graph_frag_container"
-        android:layout_toStartOf="@id/stats_text_card"
+        android:layout_toStartOf="@id/card_text_stats"
         android:layout_marginBottom="@dimen/card_margin_btm"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:layout_marginStart="@dimen/card_margin_start"
@@ -110,7 +110,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/stats_text_card"
+        android:id="@+id/card_text_stats"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/graph_btn"

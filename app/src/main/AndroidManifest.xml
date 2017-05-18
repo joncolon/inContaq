@@ -27,11 +27,12 @@
         android:icon="@drawable/vectorpaint"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
 
         <!--activities-->
-        <activity android:name=".utlities.PermissionActivity"/>
-        <activity android:name=".contactlist.activities.ContactListActivity"
+        <activity android:name=".ui.contactlist.PermissionActivity"/>
+        <activity android:name=".ui.contactlist.ContactListActivity"
                   android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -39,7 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".contactlist.activities.ContactViewPagerActivity"
+        <activity android:name=".ui.contactdetails.contactviewpager.ContactViewPagerActivity"
                   android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
@@ -57,7 +58,7 @@
         </activity>
 
         <!--services-->
-        <service android:name=".notifications.ContactNotificationService"/>
+        <service android:name=".notification.ContactNotificationService"/>
         <service
             android:name="com.tuenti.smsradar.SmsRadarService"
             android:exported="false"

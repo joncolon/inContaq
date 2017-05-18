@@ -15,7 +15,7 @@
     <string name="negative_button">Cancel</string>
     <string name="contact_sms_fragment">ContactSmsFragment, Instance 4</string>
     <string name="contact_stats_fragment">ContactStatsFragment, Instance 3</string>
-    <string name="contact_info">Contact Info</string>
+    <string name="contact_info">Info</string>
     <string name="messages">Messages</string>
     <string name="stats">Stats</string>
     <string name="jan">Jan</string>
