@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactinfo.ContactInfoFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactsms.ContactSmsFragment;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.ContactStatsFragment;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.ContactStatsFragment;
 
 
 public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -30,9 +30,9 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ContactInfoFragment();
             case 1:
-                return new ContactSmsFragment();
-            case 2:
                 return new ContactStatsFragment();
+            case 2:
+                return new ContactSmsFragment();
             default:
                 return new ContactInfoFragment();
         }
@@ -41,7 +41,7 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         String[] tabTitles = new String[]{context.getString(R.string.contact_info),
-                context.getString(R.string.messages), context.getString(R.string.stats)};
+                context.getString(R.string.stats), context.getString(R.string.messages)};
 
         return tabTitles[position];
     }

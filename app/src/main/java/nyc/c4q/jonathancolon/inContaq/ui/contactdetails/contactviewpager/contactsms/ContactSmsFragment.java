@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contac
 
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -35,11 +36,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.di.RxBus;
-import nyc.c4q.jonathancolon.inContaq.di.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.ContactViewPagerActivity;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBus;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
@@ -50,22 +51,24 @@ public class ContactSmsFragment extends Fragment {
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
+    private long contactId;
     private TextView contactName;
-    private ImageView contactImageIV, backgroundImageIV;
-    private Contact contact;
-    private SmsAdapter adapter;
-    private RecyclerView recyclerView;
-    private ArrayList<Sms> smsList;
+    private ImageView contactImageIV, backgroundImageIV, smsSendButton;
     private EditText smsEditText;
-    private ProgressBar progressBar;
 
+    private ProgressBar progressBar;
+    private RecyclerView recyclerView;
+
+    private SmsAdapter adapter;
+    private ArrayList<Sms> smsList;
     private Settings settings;
+    private Context context;
+    private ContentResolver contentResolver;
     private Realm realm;
     private PicassoHelper picasso;
-    private long contactId;
-    private Context context;
     private RxBusComponent rxBusComponent;
     private RxBus rxBus;
+    private Contact contact;
 
     public ContactSmsFragment() {
     }
@@ -102,10 +105,12 @@ public class ContactSmsFragment extends Fragment {
         realm = RealmDbHelper.getInstance();
         contact = RealmDbHelper.getByRealmID(realm, contactId);
         picasso = new PicassoHelper(context);
+        contentResolver = context.getContentResolver();
+
 
         initViews(view);
         initSettings();
-        getAllSms(context, contactId);
+        getAllSms(contentResolver, contactId);
         return view;
     }
 
@@ -114,7 +119,7 @@ public class ContactSmsFragment extends Fragment {
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        ImageView smsSendButton = (ImageView) view.findViewById(R.id.send_button);
+        smsSendButton = (ImageView) view.findViewById(R.id.send_button);
         smsEditText = (EditText) view.findViewById(R.id.sms_edit_text);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
@@ -129,10 +134,10 @@ public class ContactSmsFragment extends Fragment {
         settings = Settings.get(getContext());
     }
 
-    public void getAllSms(Context context, long contactId) {
+    public void getAllSms(ContentResolver contentResolver, long contactId) {
         progressBar.setVisibility(View.VISIBLE);
         Observable.fromCallable(() -> {
-            GetAllSms callable = new GetAllSms(context,
+            GetAllSms callable = new GetAllSms(contentResolver,
                     contactId);
             return callable.getAllSms();
         })
@@ -141,11 +146,11 @@ public class ContactSmsFragment extends Fragment {
                 .subscribe(arrayList -> {
                     smsList = arrayList;
                     progressBar.setVisibility(View.GONE);
-                    ContactSmsFragment.this.setupRecyclerView(contact);
-                    ContactSmsFragment.this.scrollListToBottom();
-                    ContactSmsFragment.this.showRecyclerView();
-                    Log.e("RxBus: ", "sending: waiting to send ");
-                    ContactSmsFragment.this.sendEvent();
+                        ContactSmsFragment.this.setupRecyclerView(contact);
+                        ContactSmsFragment.this.scrollListToBottom();
+                        ContactSmsFragment.this.showRecyclerView();
+                        Log.e("RxBus: ", "sending: waiting to send ");
+                        ContactSmsFragment.this.sendEvent();
                 });
     }
 
@@ -209,7 +214,12 @@ public class ContactSmsFragment extends Fragment {
         Log.e("RxBus: ", "sending: SENT ");
         if (rxBus.hasObservers()) {
             rxBus.send(new ContactViewPagerActivity.SmsLoaded());
-            rxBus.send(smsList);
+            if (smsList.size() != 0 && smsList != null) {
+                rxBus.send(smsList);
+            }
+            else{
+                rxBus.send(new ContactViewPagerActivity.SmsUnavailable());
+            }
         }
     }
 
@@ -294,9 +304,7 @@ public class ContactSmsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         stopSmsRadarService();
-        RealmDbHelper.clearSmsRecords(realm);
         RealmDbHelper.closeRealm(realm);
-
     }
 
     private void stopSmsRadarService() {

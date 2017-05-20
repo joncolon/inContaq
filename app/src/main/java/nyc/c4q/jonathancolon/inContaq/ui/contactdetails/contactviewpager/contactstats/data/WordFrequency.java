@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data;
 
 import android.support.annotation.Nullable;
 

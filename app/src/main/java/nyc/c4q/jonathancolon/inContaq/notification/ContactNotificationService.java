@@ -12,6 +12,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -28,18 +31,24 @@ import static android.media.RingtoneManager.getDefaultUri;
 
 public class ContactNotificationService extends IntentService {
 
+    private final static String GROUP_CONTACTS = "group_contacts";
+
     private static final long ONE_WEEK = 604800000;
     private static final long TWO_WEEKS = 1209600000;
     private static final long THREE_WEEKS = 1814400000;
-    private static final int TWELVE_HOURS = 43200000;
+    private static final long ONE_DAY = 86400000;
     private static final int ONE_MIN = 600000;
-    public static boolean hasStarted = false;
+    private static final String TAG = ContactNotificationService.class.getSimpleName();
+    public static boolean hasStarted;
     private NotificationCompat.Builder mBuilder;
     private NotificationManager notificationManager;
+    NotificationCompat.InboxStyle inboxStyle;
     private SQLiteDatabase db;
     private Context context;
     private Realm realm;
     private ContentResolver contentResolver;
+    private int notificationCount = 0;
+
 
     public ContactNotificationService() {
         super("ContactNotificationService");
@@ -49,7 +58,6 @@ public class ContactNotificationService extends IntentService {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        realm = RealmDbHelper.getInstance();
         contentResolver = context.getContentResolver();
     }
 
@@ -59,6 +67,7 @@ public class ContactNotificationService extends IntentService {
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
 
         System.out.println("Called IntentService...");
+        hasStarted = intent.getBooleanExtra("hasStarted", false);
 
         if (!hasStarted) { // Needed or else it'll keep scheduling new alarms and you'll be swarmed with notifications
             System.out.println("Setting alarm for service...");
@@ -71,42 +80,70 @@ public class ContactNotificationService extends IntentService {
     private void scheduleAlarm() {
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent i = new Intent(this, ContactNotificationService.class);
+        i.getExtras();
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, ONE_MIN, TWELVE_HOURS,
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, 5000, AlarmManager.INTERVAL_HALF_DAY,
                 pendingIntent);
     }
 
     private void checkInspectionTime() {
-        RealmResults<Contact> contactList = RealmDbHelper.findByReminderEnabled(realm);
+        realm = RealmDbHelper.getInstance();
+        RealmResults<Contact> contactList = realm.where(Contact.class)
+                .equalTo("reminderEnabled", true).findAll();
+        ArrayList<Contact> contacts = new ArrayList<>(contactList);
 
-        boolean notificationFired = false;
-        int i = 0;
-        while (i < contactList.size() && !notificationFired) {
-            Contact contact = contactList.get(i);
-                if (contact.isReminderEnabled()) {
+        if (contacts.size() > 0) {
+            int i = 0;
+
+            inboxStyle = new NotificationCompat.InboxStyle();
+
+            while (i < contacts.size()) {
+                Contact contact = contactList.get(i);
+                long daysSince = daysSinceLastMsg(contact);
+
+                if (contact.isReminderEnabled() && daysSince > 0) {
                     switch (contact.getReminderDuration()) {
                         case 1:
-                            if (hasWeekPassed(contact)) {
-                                startNotification(contact, context, 1);
-                                notificationFired = true;
+                            if (hasWeekPassed(contact) && contact.getReminderDuration() == 1) {
+                                inboxStyle.addLine(contact.getFirstName() + ": " + " It's been " +
+                                        daysSince + " days");
+                                notificationCount++;
                                 break;
                             }
                         case 2:
-                            if (hasTwoWeeksPassed(contact)) {
-                                startNotification(contact, context, 2);
-                                notificationFired = true;
+                            if (hasTwoWeeksPassed(contact) && contact.getReminderDuration() == 2) {
+                                inboxStyle.addLine(contact.getFirstName() + ": " + " It's been " +
+                                        daysSince + " days");
+                                notificationCount++;
+                                break;
                             }
-                            break;
                         case 3:
-                            if (hasThreeWeeksPassed(contact)) {
-                                startNotification(contact, context, 3);
-                                notificationFired = true;
+                            if (hasThreeWeeksPassed(contact) && contact.getReminderDuration() == 3) {
+                                inboxStyle.addLine(contact.getFirstName() + ": " + " It's been " +
+                                        daysSince + " days");
+                                notificationCount++;
+                                break;
                             }
-                            break;
                     }
-                    i++;
+                }
+                i++;
+            }
+            if (notificationCount > 0){
+                startNotification(context);
             }
         }
+        RealmDbHelper.closeRealm(realm);
+    }
+
+    private long daysSinceLastMsg(Contact contact) {
+        long currentTime = System.currentTimeMillis();
+        long lastMsg = SmsHelper.getLastContactedDate(contentResolver, contact);
+        if (lastMsg > 0){
+            long timeElapsed = currentTime - lastMsg;
+            long daysSince = timeElapsed / ONE_DAY;
+            return daysSince;
+        }
+        return 0;
     }
 
     private boolean hasWeekPassed(Contact c) {
@@ -114,7 +151,9 @@ public class ContactNotificationService extends IntentService {
                 SmsHelper.getLastContactedDate(contentResolver, c) > ONE_WEEK;
     }
 
-    public void startNotification(Contact contact, Context context, int numberOfWeeks) {
+
+    public void startNotification(Context context) {
+        Log.e(TAG, "Starting notification... ");
 
         int NOTIFICATION_ID = (int) System.currentTimeMillis();
         Intent intent = new Intent(context, ContactListActivity.class);
@@ -126,13 +165,15 @@ public class ContactNotificationService extends IntentService {
 
         mBuilder = new NotificationCompat.Builder(context)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setStyle(inboxStyle)
                 .setSmallIcon(R.drawable.vectorpaint)
                 .setPriority(PRIORITY_HIGH)
                 .setFullScreenIntent(pendingIntent, true)
                 .setContentTitle("Forgetting someone?")
-                .setContentText("Check out inContaq")
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.vectorpaint))
-                .setSound(notification);
+                .setSound(notification)
+                .setGroup(GROUP_CONTACTS);
+
 
         notificationManager =
                 (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
@@ -158,9 +199,10 @@ public class ContactNotificationService extends IntentService {
         alarm.cancel(pIntent);
     }
 
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RealmDbHelper.closeRealm(realm);
     }
 }

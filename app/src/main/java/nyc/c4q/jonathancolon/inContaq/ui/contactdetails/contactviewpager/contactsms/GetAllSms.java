@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactsms;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -22,13 +21,12 @@ public class GetAllSms {
     private static final String DATE = "date";
     private static final String TYPE = "type";
     private static final String DATE_DESC = "date desc";
-    private final Context context;
     private long realmID;
     private ArrayList<Sms> smsList;
     private ContentResolver contentResolver;
 
-    public GetAllSms(Context context, long realmID) {
-        this.context = context;
+    public GetAllSms(ContentResolver contentResolver, long realmID) {
+        this.contentResolver = contentResolver;
         this.realmID = realmID;
     }
 
@@ -41,10 +39,9 @@ public class GetAllSms {
         if (contact.getMobileNumber() != null) {
             smsList = new ArrayList<>();
 
-            if (context != null) {
+            if (contentResolver != null) {
                 Log.e("RXJAVA", "getAllSms: ATTEMPTING TO GET SMS");
 
-                contentResolver = context.getApplicationContext().getContentResolver();
                 Uri uri = Uri.parse(URI_ALL);
                 String[] projection = new String[]{ADDRESS, BODY, DATE, TYPE};
                 Cursor cursor = contentResolver.query(uri,
@@ -59,7 +56,7 @@ public class GetAllSms {
                             smsObject.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
                             smsObject.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
                             smsObject.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
-//                            addSmsToRealmDB(realm, smsObject);
+
                             smsList.add(smsObject);
                             cursor.moveToNext();
                         }
@@ -73,17 +70,4 @@ public class GetAllSms {
         }
         return smsList;
     }
-
-//    private static void addSmsToRealmDB(Realm realm, final Sms smsObject) {
-//        realm.executeTransaction(realm1 -> {
-//            long realmId = 1;
-//            // TODO: 5/8/17 CHECK TO SEE IF SMS ID EXISTS IN DATABASE
-//            if (realm1.where(Sms.class).count() > 0) {
-//                realmId = realm1.where(Sms.class).max("realmId").longValue() + 1; // auto-increment id
-//            }
-//            Log.e("RXJAVA", "getAllSms: " + smsObject.getMsg());
-//            smsObject.setRealmId(realmId);
-//            realm1.copyToRealmOrUpdate(smsObject);
-//        });
-//    }
 }

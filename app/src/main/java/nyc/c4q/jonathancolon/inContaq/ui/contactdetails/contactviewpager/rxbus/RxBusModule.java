@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.di;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus;
 
 import javax.inject.Singleton;
 

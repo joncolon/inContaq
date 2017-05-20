@@ -7,9 +7,9 @@ import android.support.v4.view.ViewPager;
 
 import io.realm.Realm;
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.di.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.refactorcode.DaggerRxBusComponent;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.DaggerRxBusComponent;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
@@ -62,5 +62,9 @@ public class ContactViewPagerActivity extends FragmentActivity {
     }
 
     public static class SmsLoaded {
+    }
+
+    public static class SmsUnavailable {
+
     }
 }
