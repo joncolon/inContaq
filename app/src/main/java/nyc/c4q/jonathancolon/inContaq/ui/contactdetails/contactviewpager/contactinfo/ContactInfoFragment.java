@@ -31,10 +31,7 @@ import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
 
     private Contact contact;
-    private TextView mobile;
-    private TextView email;
-    private TextView polaroidName;
-    private TextView editButton;
+    private TextView mobile, editButton, polaroidName, email;
     private ImageView contactImageIV, backgroundImageIV;
     private EditText editName, editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
@@ -43,6 +40,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private boolean isEditTextEnabled;
     private Realm realm;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,7 +48,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         realm = Realm.getDefaultInstance();
         long contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
-        RealmDbHelper realmDbHelper = new RealmDbHelper();
         contact = RealmDbHelper.getByRealmID(realm, contactId);
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
         isEditTextEnabled = false;
@@ -76,13 +73,12 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
 
-        Spinner dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.date_spinner_array,
                 R.layout.date_spinner_item);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
-        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+        Spinner dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         dateSpinner.setAdapter(spinnerArrayAdapter);
         dateSpinner.setOnItemSelectedListener(this);
     }
@@ -200,11 +196,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         String name = editName.getText().toString().trim();
         String[] splitName = NameSplitter.splitFirstAndLastName(name);
 
-        contact.setFirstName(splitName[0]);
-        contact.setLastName(splitName[1]);
-        contact.setEmail(email);
-        contact.setAddress(address);
-        contact.setMobileNumber(editMobile.getText().toString());
+
+        realm.executeTransaction(realm1 -> {
+            contact.setFirstName(splitName[0]);
+            contact.setLastName(splitName[1]);
+            contact.setEmail(email);
+            contact.setAddress(address);
+            contact.setMobileNumber(editMobile.getText().toString());
+        });
     }
 
     @Override
@@ -217,22 +216,30 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         switch (String.valueOf(parent.getItemAtPosition(position))) {
-
             case "1 WEEK":
-                contact.setReminderDuration(1);
-                contact.setReminderEnabled(true);
+                realm.executeTransaction(realm1 -> {
+                    contact.setReminderDuration(1);
+                    contact.setReminderEnabled(true);
+                });
+
 
             case "2 WEEKS":
-                contact.setReminderDuration(2);
-                contact.setReminderEnabled(true);
+                realm.executeTransaction(realm1 -> {
+                    contact.setReminderDuration(2);
+                    contact.setReminderEnabled(true);
+                });
                 break;
             case "3 WEEKS":
-                contact.setReminderDuration(3);
-                contact.setReminderEnabled(true);
+                realm.executeTransaction(realm1 -> {
+                    contact.setReminderDuration(3);
+                    contact.setReminderEnabled(true);
+                });
                 break;
             case "CANCEL":
-                contact.setReminderDuration(0);
-                contact.setReminderEnabled(false);
+                realm.executeTransaction(realm1 -> {
+                    contact.setReminderDuration(0);
+                    contact.setReminderEnabled(false);
+                });
                 break;
         }
     }
@@ -244,6 +251,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public void onDestroy() {
         super.onDestroy();
+        RealmDbHelper.closeRealm(realm);
     }
 }
 

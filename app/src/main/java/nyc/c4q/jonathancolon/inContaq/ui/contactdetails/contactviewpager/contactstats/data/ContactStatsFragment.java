@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,8 +24,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.di.RxBus;
-import nyc.c4q.jonathancolon.inContaq.di.RxBusComponent;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBus;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.ContactViewPagerActivity;
@@ -35,6 +35,8 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contact
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.MonthlyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.WeeklyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.util.AnalyticsFeedback;
+
+import static android.view.View.GONE;
 
 
 public class ContactStatsFragment extends Fragment implements View.OnClickListener {
@@ -118,15 +120,18 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         disposables.add(eventEmitter
                 .subscribe(event -> {
                     if (event instanceof ContactViewPagerActivity.SmsLoaded) {
-                        Log.e("RxBus: ", "accept: event received ");
+                        Log.e("RxBus: ", "accept: SMS Loaded ");
+                    }
+                    if (event instanceof ContactViewPagerActivity.SmsUnavailable){
+                        Log.e("RxBus: ", "accept: SMS Unavailable ");
+                        progressBar.setVisibility(GONE);
                     }
                 }));
 
         disposables.add(eventEmitter
                 .subscribe(event -> {
                     if (event instanceof ArrayList) {
-                        String string = ((ArrayList) event).get(1).getClass().toString();
-                        Log.e("RxBus: ", "received: " + string);
+                        Log.e("RxBus: ", "received: " + ((ArrayList) event).size());
                         smsList = ((ArrayList<Sms>) event);
                         displayStats();
                     }
@@ -230,7 +235,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                     hourlySent = convertToFloats(hourlySentTreeMap);
                     Log.e("FloatConvert", "getHourlySentTreeMap: COMPLETE");
 
-                    progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(GONE);
                     textCard.setVisibility(View.VISIBLE);
                     totalCard.setVisibility(View.VISIBLE);
                     wordCard.setVisibility(View.VISIBLE);

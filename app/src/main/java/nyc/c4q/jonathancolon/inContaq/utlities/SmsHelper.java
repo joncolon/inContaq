@@ -27,6 +27,7 @@ public class SmsHelper {
         Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, ADDRESS + "='" + contact.getMobileNumber() + "'", null, null);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
+                cursor.getCount();
                 String date = cursor.getString(cursor.getColumnIndex(DATE));
                 Long timestamp = Long.parseLong(date);
                 cursor.close();
@@ -35,11 +36,10 @@ public class SmsHelper {
                 return timestamp;
             }
         }
-        return 0;
+        return -1;
     }
 
     public static StringBuilder smsDateFormat(long timeInMilli) {
-
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTimeInMillis(timeInMilli);
         int month = (calendar.get(Calendar.MONTH)) + 1;

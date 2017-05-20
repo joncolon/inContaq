@@ -25,6 +25,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.notification.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.ContactViewPagerActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
@@ -48,7 +49,7 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
 
-//        checkServiceCreated();
+        checkServiceCreated();
 
         Realm.init(getApplicationContext());
         realm = Realm.getDefaultInstance();
@@ -85,13 +86,14 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         addContactFab.setOnClickListener(v -> ContactListActivity.this.openEditor());
     }
 
-//    public void checkServiceCreated() {
-//        if (!ContactNotificationService.hasStarted) {
-//            System.out.println("Starting service...");
-//            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
-//            startService(intent);
-//        }
-//    }
+    public void checkServiceCreated() {
+        if (!ContactNotificationService.hasStarted) {
+            System.out.println("Starting service...");
+            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
+            intent.putExtra("hasStarted", true);
+            startService(intent);
+        }
+    }
 
     private void setupRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);

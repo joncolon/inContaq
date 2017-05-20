@@ -10,7 +10,7 @@ import com.db.chart.view.BarChartView;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.WordCount;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.WordCount;
 
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
