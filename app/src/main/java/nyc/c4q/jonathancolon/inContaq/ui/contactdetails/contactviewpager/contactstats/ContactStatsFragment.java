@@ -2,7 +2,6 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contac
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.db.chart.view.BarChartView;
@@ -61,7 +61,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     private AnalyticsFeedback analyticsFeedback;
     private TimeMostContacted timeMostContacted;
 
-    private ConstraintLayout buttonDisplay;
+    private RelativeLayout buttonDisplay;
     private ProgressBar progressBar;
 
     private Contact contact;
@@ -115,7 +115,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         monthlyCard = (CardView) view.findViewById(R.id.monthly_card);
         weeklyCard = (CardView) view.findViewById(R.id.weekly_card);
 
-        buttonDisplay = (ConstraintLayout) view.findViewById(R.id.graph_btn);
+        buttonDisplay = (RelativeLayout) view.findViewById(R.id.graph_btn);
 
         monthlyCard.setOnClickListener(this);
         weeklyCard.setOnClickListener(this);
