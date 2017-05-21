@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +91,8 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         timeMostContacted = new TimeMostContacted();
         analyticsFeedback = new AnalyticsFeedback();
         contact = ((ContactViewPagerActivity) getActivity()).contact;
+        Toolbar myToolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
+        myToolbar.setTitle(contact.getFirstName() + " " + contact.getLastName());
 
         return view;
     }

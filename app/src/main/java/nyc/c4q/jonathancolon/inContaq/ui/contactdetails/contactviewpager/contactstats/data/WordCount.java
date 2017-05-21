@@ -12,9 +12,6 @@ import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
 public class WordCount {
 
-    public WordCount() {
-    }
-
     public static int wordCountSent(ArrayList<Sms> smsList) {
         ArrayList<Sms> smsSent = SmsHelper.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
