@@ -58,7 +58,7 @@
         </activity>
 
         <!--services-->
-        <service android:name=".notification.ContactNotificationService"
+        <service android:name=".smsreminder.ContactNotificationService"
             android:enabled="true"/>
         <service
             android:name="com.tuenti.smsradar.SmsRadarService"

@@ -58,7 +58,7 @@ class ImportContacts {
                         contact.setMobileNumber(mobileNumber);
                         contact.setEmail(email);
 
-                        addContactToRealmDB(realm, contact);
+                        RealmDbHelper.addContactToRealmDB(realm, contact);
 
 
                     }
@@ -120,23 +120,7 @@ class ImportContacts {
         return null;
     }
 
-    private void addContactToRealmDB(Realm realm, final Contact newContact) {
-        Log.i("Realm: ",
-                "Adding to Contact database...");
 
-
-        // All writes must be wrapped in a transaction to facilitate safe multi threading
-        realm.executeTransaction(realm1 -> {
-            long realmID = 1;
-            if (realm1.where(Contact.class).count() > 0) {
-                realmID = realm1.where(Contact.class).max("realmID").longValue() + 1; // auto-increment id
-            }
-            newContact.setRealmID(realmID);
-            Log.d("ADDING ID: ", newContact.getFirstName() + " " + newContact.getRealmID());
-            Contact contact = realm1.copyToRealmOrUpdate(newContact);
-
-        });
-    }
 
     private String simplifyPhoneNumber(String phoneNumber) {
         return phoneNumber.replaceAll("[()\\s-]+", "");

@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.notification;
+package nyc.c4q.jonathancolon.inContaq.smsreminder;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -40,9 +40,9 @@ public class ContactNotificationService extends IntentService {
     private static final int ONE_MIN = 600000;
     private static final String TAG = ContactNotificationService.class.getSimpleName();
     public static boolean hasStarted;
+    NotificationCompat.InboxStyle inboxStyle;
     private NotificationCompat.Builder mBuilder;
     private NotificationManager notificationManager;
-    NotificationCompat.InboxStyle inboxStyle;
     private SQLiteDatabase db;
     private Context context;
     private Realm realm;
@@ -128,7 +128,7 @@ public class ContactNotificationService extends IntentService {
                 }
                 i++;
             }
-            if (notificationCount > 0){
+            if (notificationCount > 0) {
                 startNotification(context);
             }
         }
@@ -138,7 +138,7 @@ public class ContactNotificationService extends IntentService {
     private long daysSinceLastMsg(Contact contact) {
         long currentTime = System.currentTimeMillis();
         long lastMsg = SmsHelper.getLastContactedDate(contentResolver, contact);
-        if (lastMsg > 0){
+        if (lastMsg > 0) {
             long timeElapsed = currentTime - lastMsg;
             long daysSince = timeElapsed / ONE_DAY;
             return daysSince;
@@ -151,6 +151,15 @@ public class ContactNotificationService extends IntentService {
                 SmsHelper.getLastContactedDate(contentResolver, c) > ONE_WEEK;
     }
 
+    private boolean hasTwoWeeksPassed(Contact c) {
+        return System.currentTimeMillis() -
+                SmsHelper.getLastContactedDate(contentResolver, c) > TWO_WEEKS;
+    }
+
+    private boolean hasThreeWeeksPassed(Contact c) {
+        return System.currentTimeMillis() -
+                SmsHelper.getLastContactedDate(contentResolver, c) > THREE_WEEKS;
+    }
 
     public void startNotification(Context context) {
         Log.e(TAG, "Starting notification... ");
@@ -181,16 +190,6 @@ public class ContactNotificationService extends IntentService {
         notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
-    private boolean hasTwoWeeksPassed(Contact c) {
-        return System.currentTimeMillis() -
-                SmsHelper.getLastContactedDate(contentResolver, c) > TWO_WEEKS;
-    }
-
-    private boolean hasThreeWeeksPassed(Contact c) {
-        return System.currentTimeMillis() -
-                SmsHelper.getLastContactedDate(contentResolver, c) > THREE_WEEKS;
-    }
-
     public void cancelAlarm() {
         Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
         final PendingIntent pIntent = PendingIntent.getBroadcast(this, MyAlarmReceiver.REQUEST_CODE,
@@ -198,7 +197,6 @@ public class ContactNotificationService extends IntentService {
         AlarmManager alarm = (AlarmManager) this.getSystemService(ALARM_SERVICE);
         alarm.cancel(pIntent);
     }
-
 
 
     @Override

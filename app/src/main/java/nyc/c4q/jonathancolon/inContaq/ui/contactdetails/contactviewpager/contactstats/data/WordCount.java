@@ -1,7 +1,12 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
@@ -48,12 +53,19 @@ public class WordCount {
         return calculateTotalWords(wordCount);
     }
 
-    public static int getAverageWordCountReceived(ArrayList<Sms> smsList) {
-        ArrayList<Sms> receivedSms = SmsHelper.parseReceivedSms(smsList);
+    public static void setAvgWordCountSentText(ArrayList<Sms> list, TextView tv) {
+        Observable.fromCallable(() -> WordCount.averageWordCountSent(list))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(wordCount -> tv.setText(String.valueOf(wordCount)));
+    }
+
+    public static int averageWordCountSent(ArrayList<Sms> smsList) {
+        ArrayList<Sms> sentSms = SmsHelper.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
-        for (int i = 0; i < receivedSms.size(); i++) {
-            wordCount.add(WordCount.getWordCountPerMessage(receivedSms.get(i)));
+        for (int i = 0; i < sentSms.size(); i++) {
+            wordCount.add(WordCount.getWordCountPerMessage(sentSms.get(i)));
         }
 
         return calculateAverage(wordCount);
@@ -67,12 +79,19 @@ public class WordCount {
         return sum;
     }
 
-    public static int getAverageWordCountSent(ArrayList<Sms> smsList) {
-        ArrayList<Sms> sentSms = SmsHelper.parseSentSms(smsList);
+    public static void setAvgWordCountReceivedText(ArrayList<Sms> list, TextView tv) {
+        Observable.fromCallable(() -> WordCount.averageWordCountReceived(list))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(wordCount -> tv.setText(String.valueOf(wordCount)));
+    }
+
+    public static int averageWordCountReceived(ArrayList<Sms> smsList) {
+        ArrayList<Sms> receivedSms = SmsHelper.parseReceivedSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
-        for (int i = 0; i < sentSms.size(); i++) {
-            wordCount.add(WordCount.getWordCountPerMessage(sentSms.get(i)));
+        for (int i = 0; i < receivedSms.size(); i++) {
+            wordCount.add(WordCount.getWordCountPerMessage(receivedSms.get(i)));
         }
 
         return calculateAverage(wordCount);

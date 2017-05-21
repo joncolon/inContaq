@@ -11,8 +11,8 @@
     <color name="selected_tab_text_color">#E71D36</color>
 
     <!--greyscale-->
-    <color name="received_chat_bubble_color">#FF424242</color>
-    <color name="text_color">#021620</color>
+    <color name="charcoal">#FF424242</color>
+    <color name="black">#021620</color>
     <color name="primary_background">#ecf0f1</color>
     <color name="cardBackgroundColor">#ffffff</color>
 

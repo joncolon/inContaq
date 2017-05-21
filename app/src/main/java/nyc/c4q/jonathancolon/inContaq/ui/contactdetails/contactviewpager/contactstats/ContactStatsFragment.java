@@ -1,15 +1,15 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.db.chart.view.BarChartView;
@@ -24,56 +24,80 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBus;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.ContactViewPagerActivity;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.GetHourlyReceived;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.GetHourlySent;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.GetMonthlyReceived;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.GetMonthlySent;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.GetWeeklyReceived;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.GetWeeklySent;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.TimeMostContacted;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.TreeMapToFloatArray;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.WordCount;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.WordFrequency;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.graphs.bargraphs.TotalSmsBarGraph;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.graphs.bargraphs.WordCountBarGraph;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.DailyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.MonthlyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.WeeklyGraphFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.util.AnalyticsFeedback;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBus;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBusComponent;
+import nyc.c4q.jonathancolon.inContaq.utlities.PixelToDp;
 
 import static android.view.View.GONE;
 
 
 public class ContactStatsFragment extends Fragment implements View.OnClickListener {
 
-    int averageWordCountSent;
-    int averageWordCountReceived;
-    private ContactViewPagerActivity parentActivity;
-    private TextView avgWordSentTV, avgWordReceivedTV, daysSinceContactedTV, timeOfFeedbackTv,
-            commonWordReceivedTV, commonWordSentTV, getCommonWordSentTextTV,
-            getCommonWordReceivedTextTV, youTV;
+    private static final String TAG = ContactStatsFragment.class.getSimpleName();
+    private static final float UNSELECTED_ELEVATION = 100f;
+    private static final float SELECTED_ELEVATION = 10f;
     private BarChartView wordAverageChart, totalWordCountChart;
     private ArrayList<Sms> smsList;
-    private TreeMap<Integer, Integer> hourlyReceivedTreeMap, hourlySentTreeMap,
-            monthlyReceivedTreeMap, monthlySentTreeMap, weeklyReceivedTreeMap, weeklySentTreeMap;
-    private Contact contact;
-    private float[] hourlySent, hourlyReceived, monthlySent, monthlyReceived, weeklySent,
-            weeklyReceived;
-    private RxBusComponent rxBusComponent;
-    private RxBus rxBus;
     private CompositeDisposable disposables;
-    private CardView totalCard, textCard, wordCard;
-    private RelativeLayout buttonDisplay;
+    private AnalyticsFeedback analyticsFeedback;
+    private TimeMostContacted timeMostContacted;
+
+    private ConstraintLayout buttonDisplay;
     private ProgressBar progressBar;
+
+    private Contact contact;
+    private Context context;
+
+    private CardView totalCard, textCard, wordCard, weeklyCard, monthlyCard, dailyCard;
+
+    private TextView avgWordSentTV, avgWordReceivedTV, daysSinceContactedTV,
+            timeOfFeedbackTv, commonWordReceivedTV, commonWordSentTV,
+            getCommonWordSentTextTV, getCommonWordReceivedTextTV, youTV;
+
+    private TreeMap<Integer, Integer>
+            hourlyReceivedTreeMap, hourlySentTreeMap,
+            monthlyReceivedTreeMap, monthlySentTreeMap,
+            weeklyReceivedTreeMap, weeklySentTreeMap;
+
+    private float[] hourlySent, hourlyReceived, monthlySent,
+            monthlyReceived, weeklySent, weeklyReceived;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_contact_stats, container, false);
-        initViews(view);
 
-        parentActivity = (ContactViewPagerActivity) getActivity();
-        contact = parentActivity.contact;
+        initViews(view);
+        context = getContext();
+        timeMostContacted = new TimeMostContacted();
+        analyticsFeedback = new AnalyticsFeedback();
+        contact = ((ContactViewPagerActivity) getActivity()).contact;
 
         return view;
     }
 
     private void initViews(View view) {
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_stats);
+        progressBar.setVisibility(View.VISIBLE);
+
         avgWordSentTV = (TextView) view.findViewById(R.id.avg_sent_counter_tv);
         avgWordReceivedTV = (TextView) view.findViewById(R.id.avg_received_counter_tv);
         daysSinceContactedTV = (TextView) view.findViewById(R.id.day_counter_tv);
@@ -83,21 +107,19 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         getCommonWordReceivedTextTV = (TextView) view.findViewById(R.id.common_received_text);
         getCommonWordSentTextTV = (TextView) view.findViewById(R.id.common_sent_text);
         youTV = (TextView) view.findViewById(R.id.you_tv);
+
         textCard = (CardView) view.findViewById(R.id.card_text_stats);
         totalCard = (CardView) view.findViewById(R.id.card_total_sms);
         wordCard = (CardView) view.findViewById(R.id.card_word_count);
-        buttonDisplay = (RelativeLayout) view.findViewById(R.id.graph_btn);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_stats);
-        progressBar.setVisibility(View.VISIBLE);
+        dailyCard = (CardView) view.findViewById(R.id.daily_card);
+        monthlyCard = (CardView) view.findViewById(R.id.monthly_card);
+        weeklyCard = (CardView) view.findViewById(R.id.weekly_card);
 
+        buttonDisplay = (ConstraintLayout) view.findViewById(R.id.graph_btn);
 
-        Button monthlyBtn = (Button) view.findViewById(R.id.monthly_btn);
-        Button weeklyBtn = (Button) view.findViewById(R.id.weekly_btn);
-        Button dailyBtn = (Button) view.findViewById(R.id.daily_btn);
-
-        monthlyBtn.setOnClickListener(this);
-        weeklyBtn.setOnClickListener(this);
-        dailyBtn.setOnClickListener(this);
+        monthlyCard.setOnClickListener(this);
+        weeklyCard.setOnClickListener(this);
+        dailyCard.setOnClickListener(this);
 
         wordAverageChart = (BarChartView) view.findViewById(R.id.bar_chart_word_average);
         totalWordCountChart = (BarChartView) view.findViewById(R.id.bar_chart_total_sms);
@@ -106,24 +128,25 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-        Log.e("ON START", "onStart: VISIBLE TO USER");
-        rxBusComponent = ((ContactViewPagerActivity) getActivity()).getRxBusComponent();
+        Log.e(TAG, "onStart: VISIBLE TO USER");
+        RxBusComponent rxBusComponent = ((ContactViewPagerActivity)
+                getActivity()).getRxBusComponent();
         rxBusComponent.inject(this);
 
-        rxBus = rxBusComponent.getRxBus();
-        Log.i("Dagger: ", "StatsFrag rxBus: " + rxBus);
+        RxBus rxBus = rxBusComponent.getRxBus();
+        Log.i(TAG, "RxBus memory address: " + rxBus);
 
         disposables = new CompositeDisposable();
 
         ConnectableFlowable<Object> eventEmitter = rxBus.asFlowable().publish();
-        Log.e("RxBus: ", "accept: waiting to receive ");
+        Log.e(TAG, "RxBus: accept: waiting to receive ");
         disposables.add(eventEmitter
                 .subscribe(event -> {
                     if (event instanceof ContactViewPagerActivity.SmsLoaded) {
-                        Log.e("RxBus: ", "accept: SMS Loaded ");
+                        Log.e(TAG, "accept: SMS Loaded ");
                     }
-                    if (event instanceof ContactViewPagerActivity.SmsUnavailable){
-                        Log.e("RxBus: ", "accept: SMS Unavailable ");
+                    if (event instanceof ContactViewPagerActivity.SmsUnavailable) {
+                        Log.e(TAG, "accept: SMS Unavailable ");
                         progressBar.setVisibility(GONE);
                     }
                 }));
@@ -131,11 +154,12 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         disposables.add(eventEmitter
                 .subscribe(event -> {
                     if (event instanceof ArrayList) {
-                        Log.e("RxBus: ", "received: " + ((ArrayList) event).size());
+                        Log.e(TAG, "received: " + ((ArrayList) event).size());
                         smsList = ((ArrayList<Sms>) event);
                         displayStats();
                     }
                 }));
+
         disposables.add(eventEmitter.connect());
     }
 
@@ -146,9 +170,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
             if (smsList != null) {
                 if (smsList.size() != 0) {
                     long daysSinceLastContacted = getDifferenceDays();
-
                     enableTextViewVisibility();
-                    getAverageWordCount(smsList);
                     populateDataTextViews(daysSinceLastContacted);
                     loadBarGraphs();
                 }
@@ -172,11 +194,6 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         commonWordSentTV.setVisibility(View.VISIBLE);
     }
 
-    private void getAverageWordCount(ArrayList<Sms> smsList) {
-        averageWordCountSent = WordCount.getAverageWordCountSent(smsList);
-        averageWordCountReceived = WordCount.getAverageWordCountReceived(smsList);
-    }
-
     private void populateDataTextViews(long daysSinceLastContacted) {
         WordFrequency wordFrequency = new WordFrequency(smsList);
 
@@ -189,8 +206,8 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
 
         daysSinceContactedTV.setText(String.valueOf(daysSinceLastContacted));
-        avgWordSentTV.setText(String.valueOf(averageWordCountSent));
-        avgWordReceivedTV.setText(String.valueOf(averageWordCountReceived));
+        WordCount.setAvgWordCountSentText(smsList, avgWordSentTV);
+        WordCount.setAvgWordCountReceivedText(smsList, avgWordReceivedTV);
         commonWordReceivedTV.setText(wordFrequency.mostCommonWordReceived());
         commonWordSentTV.setText(wordFrequency.mostCommonWordSent());
 
@@ -213,12 +230,14 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .subscribe(treeMap -> {
                     hourlyReceivedTreeMap = treeMap;
                     hourlyReceived = convertToFloats(hourlyReceivedTreeMap);
-                    Log.e("FloatConvert", "getHourlyReceivedTreeMap: COMPLETE");
+                    Log.e(TAG, "getHourlyReceivedTreeMap: COMPLETE");
 
-                    AnalyticsFeedback analyticsFeedback = new AnalyticsFeedback();
-                    TimeMostContacted timeMostContacted = new TimeMostContacted();
                     timeOfFeedbackTv.setText(analyticsFeedback
-                            .timeFeedback(timeMostContacted
+                            .timeOfDayFeedback(timeMostContacted
+                                    .maxValue(hourlyReceivedTreeMap)));
+
+                    timeOfFeedbackTv.setText(analyticsFeedback
+                            .timeOfDayFeedback(timeMostContacted
                                     .maxValue(hourlyReceivedTreeMap)));
                 });
     }
@@ -233,7 +252,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .subscribe(treeMap -> {
                     hourlySentTreeMap = treeMap;
                     hourlySent = convertToFloats(hourlySentTreeMap);
-                    Log.e("FloatConvert", "getHourlySentTreeMap: COMPLETE");
+                    Log.e(TAG, "getHourlySentTreeMap: COMPLETE");
 
                     progressBar.setVisibility(GONE);
                     textCard.setVisibility(View.VISIBLE);
@@ -253,7 +272,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .subscribe(treeMap -> {
                     weeklyReceivedTreeMap = treeMap;
                     weeklyReceived = convertToFloats(weeklyReceivedTreeMap);
-                    Log.e("FloatConvert", "getWeeklyReceivedTreeMap: COMPLETE");
+                    Log.e(TAG, "getWeeklyReceivedTreeMap: COMPLETE");
                 });
     }
 
@@ -267,7 +286,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .subscribe(treeMap -> {
                     weeklySentTreeMap = treeMap;
                     weeklySent = convertToFloats(weeklySentTreeMap);
-                    Log.e("FloatConvert", "getWeeklySentTreeMap: COMPLETE");
+                    Log.e(TAG, "getWeeklySentTreeMap: COMPLETE");
                 });
     }
 
@@ -281,11 +300,9 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .subscribe(treeMap -> {
                     monthlyReceivedTreeMap = treeMap;
                     monthlyReceived = convertToFloats(monthlyReceivedTreeMap);
-                    Log.e("FloatConvert", "getMonthlyReceived: COMPLETE");
+                    Log.e(TAG, "getMonthlyReceived: COMPLETE");
 
-                    if (monthlyReceived != null && monthlySent != null) {
-                        showMonthlyGraphFragment();
-                    }
+                    showMonthlyGraphFragment();
                 });
     }
 
@@ -299,11 +316,8 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .subscribe(treeMap -> {
                     monthlySentTreeMap = treeMap;
                     monthlySent = convertToFloats(monthlySentTreeMap);
-                    Log.e("FloatConvert", "getMonthlySentTreeMap: COMPLETE");
-
-                    if (monthlyReceived != null && monthlySent != null) {
-                        showMonthlyGraphFragment();
-                    }
+                    Log.e(TAG, "getMonthlySentTreeMap: COMPLETE");
+                    showMonthlyGraphFragment();
                 });
     }
 
@@ -313,35 +327,82 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     }
 
     private void showMonthlyGraphFragment() {
-        Fragment monthlyGraphFragment = new MonthlyGraphFragment();
-        Bundle monthlyGraphBundle = new Bundle();
-        monthlyGraphBundle.putFloatArray("monthlyReceived", monthlyReceived);
-        monthlyGraphBundle.putFloatArray("monthlySent", monthlySent);
-        monthlyGraphFragment.setArguments(monthlyGraphBundle);
+        if (monthlyReceived != null && monthlySent != null) {
+            Fragment monthlyGraphFragment = new MonthlyGraphFragment();
+            Bundle monthlyGraphBundle = new Bundle();
+            monthlyGraphBundle.putFloatArray("monthlyReceived", monthlyReceived);
+            monthlyGraphBundle.putFloatArray("monthlySent", monthlySent);
+            monthlyGraphFragment.setArguments(monthlyGraphBundle);
 
-        getChildFragmentManager()
-                .beginTransaction()
-                .replace(R.id.graph_frag_container, monthlyGraphFragment)
-                .commit();
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.graph_frag_container, monthlyGraphFragment)
+                    .commit();
+        }
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
-            case R.id.monthly_btn:
+            case R.id.monthly_card:
                 if (monthlySent != null && monthlyReceived != null) {
                     showMonthlyGraphFragment();
+
+                    monthlyCard.setCardBackgroundColor(context.getColor(R.color.accent_color));
+                    weeklyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+                    dailyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+
+                    monthlyCard.setCardElevation(PixelToDp.convertPixelsToDp(SELECTED_ELEVATION, getContext()));
+                    weeklyCard.setCardElevation(PixelToDp.convertPixelsToDp(UNSELECTED_ELEVATION, getContext()));
+                    dailyCard.setCardElevation(PixelToDp.convertPixelsToDp(UNSELECTED_ELEVATION, getContext()));
+
+                    timeOfFeedbackTv.setText(analyticsFeedback
+                            .monthOfYearFeedback(timeMostContacted
+                                    .maxValue(monthlyReceivedTreeMap)));
+
+                    timeOfFeedbackTv.setText(analyticsFeedback
+                            .monthOfYearFeedback(timeMostContacted
+                                    .maxValue(monthlyReceivedTreeMap)));
+
                 }
                 break;
-            case R.id.weekly_btn:
+            case R.id.weekly_card:
                 if (weeklySent != null && weeklyReceived != null) {
                     showWeeklyGraphFragment();
+
+                    weeklyCard.setCardBackgroundColor(context.getColor(R.color.accent_color));
+                    monthlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+                    dailyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+
+                    weeklyCard.setCardElevation(PixelToDp.convertPixelsToDp(SELECTED_ELEVATION, getContext()));
+                    monthlyCard.setCardElevation(PixelToDp.convertPixelsToDp(UNSELECTED_ELEVATION, getContext()));
+                    dailyCard.setCardElevation(PixelToDp.convertPixelsToDp(UNSELECTED_ELEVATION, getContext()));
+
+
+                    timeOfFeedbackTv.setText(analyticsFeedback
+                            .dayOfWeekFeedback(timeMostContacted
+                                    .maxValue(weeklyReceivedTreeMap)));
                 }
                 break;
-            case R.id.daily_btn:
+            case R.id.daily_card:
                 if (hourlySent != null && hourlyReceived != null) {
                     showHourlyGraphFragment();
+
+                    dailyCard.setCardBackgroundColor(context.getColor(R.color.accent_color));
+                    weeklyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+                    monthlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+
+                    dailyCard.setCardElevation(PixelToDp.convertPixelsToDp(SELECTED_ELEVATION, getContext()));
+                    weeklyCard.setCardElevation(PixelToDp.convertPixelsToDp(UNSELECTED_ELEVATION, getContext()));
+                    monthlyCard.setCardElevation(PixelToDp.convertPixelsToDp(UNSELECTED_ELEVATION, getContext()));
+
+                    timeOfFeedbackTv.setText(analyticsFeedback
+                            .timeOfDayFeedback(timeMostContacted
+                                    .maxValue(hourlyReceivedTreeMap)));
+
+                    timeOfFeedbackTv.setText(analyticsFeedback
+                            .timeOfDayFeedback(timeMostContacted
+                                    .maxValue(hourlyReceivedTreeMap)));
                 }
                 break;
         }
@@ -376,13 +437,14 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onStop: STOPPED");
     }
 
     @Override
     public void onStop() {
         super.onStop();
         disposables.clear();
-        Log.d("STATS FRAG: ", "onStop: STOPPED");
+        Log.d(TAG, "onStop: STOPPED");
     }
 }
 

@@ -13,4 +13,5 @@
     <dimen name="card_chart_margin_top">24dp</dimen>
     <dimen name="default_text_size">16sp</dimen>
     <dimen name="card_margin_btm">2dp</dimen>
+    <dimen name="card_elevation_stats">5dp</dimen>
 </resources>

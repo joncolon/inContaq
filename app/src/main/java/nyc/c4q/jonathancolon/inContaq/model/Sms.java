@@ -1,5 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.model;
 
+import android.support.annotation.NonNull;
+
 import io.realm.annotations.PrimaryKey;
 
 
@@ -46,7 +48,7 @@ public class Sms implements Comparable<Sms> {
     }
 
     @Override
-    public int compareTo(Sms sms) {
+    public int compareTo(@NonNull Sms sms) {
         return getTime().compareTo(sms.getTime());
     }
 

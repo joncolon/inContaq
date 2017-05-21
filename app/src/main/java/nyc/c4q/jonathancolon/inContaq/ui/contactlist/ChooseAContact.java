@@ -2,7 +2,6 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
 import android.app.Activity;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,18 +19,13 @@ import java.io.InputStream;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 
-/**
- * Created by jonathancolon on 5/6/17.
- */
 
 public class ChooseAContact extends Activity {
 
     private static final String TAG = ChooseAContact.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
-    String DATA = Email.DATA;
     private Uri uriContact;
     private String contactID;     // contacts unique ID
-    private Context context;
 
     /**
      * Called when the activity is first created.
@@ -44,8 +38,6 @@ public class ChooseAContact extends Activity {
 
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (phones.moveToNext()) {
-
-
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             System.out.println("name: " + name + " " + "phoneNumber: " + phoneNumber);
@@ -56,7 +48,6 @@ public class ChooseAContact extends Activity {
 
 
     public void onClickSelectContact(View btnSelectContact) {
-
         // using native contacts selection
         // Intent.ACTION_PICK = Pick an item from the data, returning what was selected.
         startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
