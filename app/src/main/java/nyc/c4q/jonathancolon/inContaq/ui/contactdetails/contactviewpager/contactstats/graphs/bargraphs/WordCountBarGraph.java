@@ -37,8 +37,8 @@ public class WordCountBarGraph {
     }
 
     private void getBarGraphValues(ArrayList<Sms> smsList) {
-        averageWordCountSent = WordCount.getAverageWordCountSent(smsList);
-        averageWordCountReceived = WordCount.getAverageWordCountReceived(smsList);
+        averageWordCountSent = WordCount.averageWordCountSent(smsList);
+        averageWordCountReceived = WordCount.averageWordCountReceived(smsList);
         this.smsList = smsList;
     }
 

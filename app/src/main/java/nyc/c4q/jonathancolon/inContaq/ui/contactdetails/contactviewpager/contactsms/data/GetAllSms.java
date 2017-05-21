@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactsms;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactsms.data;
 
 import android.content.ContentResolver;
 import android.database.Cursor;

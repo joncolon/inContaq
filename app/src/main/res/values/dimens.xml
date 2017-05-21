@@ -35,5 +35,6 @@
     <dimen name="card_margin_btm">6dp</dimen>
     <dimen name="button_elevation">100dp</dimen>
     <dimen name="button_width">100dp</dimen>
+    <dimen name="card_elevation_stats">5dp</dimen>
 
 </resources>

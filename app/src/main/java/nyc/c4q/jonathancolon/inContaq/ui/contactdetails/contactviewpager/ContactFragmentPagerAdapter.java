@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactinfo.ContactInfoFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactsms.ContactSmsFragment;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data.ContactStatsFragment;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.ContactStatsFragment;
 
 
 public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {

@@ -43,7 +43,6 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     public SmsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemview_sms_rv,
                 parent, false);
-
         SmsViewHolder vh = new SmsViewHolder(itemView);
         context = parent.getContext();
         return vh;
@@ -64,12 +63,6 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     public void setData(ArrayList<Sms> smsDetails) {
         this.smsList = smsDetails;
         notifyDataSetChanged();
-    }
-
-    public interface Listener {
-        void onContactClicked(Sms smsDetail);
-
-        void onContactLongClicked(Sms smsDetail);
     }
 
     //_____________________________________VIEWHOLDER___________________________________________________
@@ -98,28 +91,18 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         }
 
         void bind(Sms sms) {
-            populateTextViews(sms);
             displaySmsByType(sms);
-        }
-
-        void populateTextViews(Sms sms) {
-            StringBuilder time = SmsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
-            senderId.setText(sms.getAddress());
-            timeDate.setText(time);
-            messageRecieved.setText(sms.getMsg());
-            messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
-            type.setText(sms.getType());
+            populateTextViews(sms);
         }
 
         void displaySmsByType(Sms sms) {
             if (sms.getType().equals("1")) {
-
                 if (contact.getMobileNumber() != null) {
                     type.setText(contact.getFirstName() + " " + contact.getLastName());
                     linearLayout.setGravity(Gravity.START);
 
                     if (Build.VERSION.SDK_INT >= 23) {
-                        cardBubble.setCardBackgroundColor(context.getColor(R.color.received_chat_bubble_color));
+                        cardBubble.setCardBackgroundColor(context.getColor(R.color.charcoal));
                         messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
                         timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
                     } else {
@@ -140,6 +123,15 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                     timeDate.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
                 }
             }
+        }
+
+        void populateTextViews(Sms sms) {
+            StringBuilder time = SmsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
+            senderId.setText(sms.getAddress());
+            timeDate.setText(time);
+            messageRecieved.setText(sms.getMsg());
+            messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
+            type.setText(sms.getType());
         }
     }
 }

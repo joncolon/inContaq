@@ -1,38 +1,34 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.MonthlyGraphFragment">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="#00000000"
+             tools:context=".ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.MonthlyGraphFragment">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_text_pattern"
+        android:id="@+id/cardview_graph_container"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_marginEnd="@dimen/card_margin_end"
         android:layout_marginStart="@dimen/card_margin_start"
-        android:elevation="0dp"
+        app:cardElevation="@dimen/card_elevation_stats"
         app:cardBackgroundColor="@color/cardview_dark_background"
-        app:cardCornerRadius="@dimen/card_chat_corner_radius">
+        app:cardCornerRadius="@dimen/card_chat_corner_radius"
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:id="@+id/texts_over_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="3dp"
             android:text="Texts Over Time"
             android:textAlignment="center"
-            android:layout_gravity="center_horizontal|top"
             android:textSize="10sp"
             android:textStyle="bold"
             />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/carousel_glare"
-            android:scaleType="fitXY"/>
 
         <com.db.chart.view.LineChartView
             android:id="@+id/sms_over_time_graph"

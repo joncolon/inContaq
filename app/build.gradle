@@ -5,7 +5,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "nyc.c4q.jonathancolon.studentcouncilapp"
 
@@ -42,9 +42,6 @@ android {
                 compile 'com.android.support:design:25.3.1'
                 compile 'com.android.support:recyclerview-v7:25.3.1'
                 compile 'com.android.support:cardview-v7:25.3.1'
-
-                //RecyclerView FastScroll
-                compile 'xyz.danoz:recyclerviewfastscroller:0.1.3'
 
                 //Willaim Chart
                 compile 'com.diogobernardino:williamchart:2.4.0'

@@ -3,14 +3,18 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,17 +29,29 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.notification.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.smsreminder.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.ContactViewPagerActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
 
+import static android.provider.ContactsContract.CommonDataKinds.Phone;
+import static android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER;
+import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE;
+import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
+import static android.provider.ContactsContract.Contacts.CONTENT_URI;
+import static android.provider.ContactsContract.Contacts.DISPLAY_NAME;
+import static android.provider.ContactsContract.Contacts._ID;
+
 public class ContactListActivity extends AppCompatActivity implements AlertDialogCallback<String>,
         ContactListAdapter.Listener {
 
     public static final String CONTACT_ID = "Contact";
+    private static final String TAG = ContactListActivity.class.getSimpleName();
+    private static final int REQUEST_CODE_PICK_CONTACTS = 1;
+    private Uri uriContact;
+    private String contactID;
     private RecyclerView recyclerView;
     private AlertDialog InputContactDialogObject;
     private RealmResults<Contact> contactList;
@@ -69,6 +85,15 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
         buildEnterContactDialog(this);
     }
 
+    public void checkServiceCreated() {
+        if (!ContactNotificationService.hasStarted) {
+            System.out.println("Starting service...");
+            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
+            intent.putExtra("hasStarted", true);
+            startService(intent);
+        }
+    }
+
     private void initViews() {
         TextView importContactsTV = (TextView) findViewById(R.id.import_contacts);
         FloatingActionButton addContactFab = (FloatingActionButton) findViewById(R.id.fab_add_contact);
@@ -83,16 +108,13 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
             }
         });
 
-        addContactFab.setOnClickListener(v -> ContactListActivity.this.openEditor());
-    }
-
-    public void checkServiceCreated() {
-        if (!ContactNotificationService.hasStarted) {
-            System.out.println("Starting service...");
-            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
-            intent.putExtra("hasStarted", true);
-            startService(intent);
-        }
+        addContactFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(Intent.ACTION_PICK,
+                        CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
+            }
+        });
     }
 
     private void setupRecyclerView() {
@@ -159,15 +181,108 @@ public class ContactListActivity extends AppCompatActivity implements AlertDialo
 
     }
 
-    private void openEditor() {
-        InputContactDialogObject.show();
-    }
-
     private void fetchAllContacts() {
         if (realm == null) {
             realm = RealmDbHelper.getInstance();
         }
         contactList = realm.where(Contact.class).findAll().sort("firstName", Sort.ASCENDING);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_PICK_CONTACTS && resultCode == RESULT_OK) {
+            Log.d(TAG, "Response: " + data.toString());
+            uriContact = data.getData();
+
+            Contact contact = new Contact();
+            retrieveContactName(contact);
+            retrieveContactNumber(contact);
+            retrieveContactEmail(contact);
+
+            RealmDbHelper.addContactToRealmDB(realm, contact);
+        }
+    }
+
+    private void retrieveContactName(Contact contact) {
+        String contactName = null;
+
+        // querying contact data store
+        Cursor cursor = getContentResolver().query(uriContact, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            contactName = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+            cursor.close();
+        }
+        Log.d(TAG, "Contact Name: " + contactName);
+        contact.setFirstName(NameSplitter.splitFirstAndLastName(contactName)[0]);
+        contact.setLastName(NameSplitter.splitFirstAndLastName(contactName)[1]);
+    }
+
+    private void retrieveContactNumber(Contact contact) {
+
+        String contactNumber = null;
+
+        retrieveContactID();
+
+        Log.d(TAG, "Contact ID: " + contactID);
+        // Using the contact ID now we will get contact phone number
+        Cursor cursorPhone = getContentResolver().query(Phone.CONTENT_URI,
+                new String[]{NUMBER},
+                Phone.CONTACT_ID + " = ? AND " + TYPE + " = " + TYPE_MOBILE,
+                new String[]{contactID},
+                null);
+
+        if (cursorPhone != null && cursorPhone.moveToFirst()) {
+            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(NUMBER));
+            cursorPhone.close();
+            Log.d(TAG, "Contact Phone Number: " + contactNumber);
+            contact.setMobileNumber(contactNumber);
+        }
+    }
+
+    private void retrieveContactEmail(Contact contact) {
+        Uri EmailCONTENT_URI = Email.CONTENT_URI;
+        String EmailCONTACT_ID = Email.CONTACT_ID;
+        String DATA = Email.DATA;
+        String email = null;
+
+        Cursor emailCursor = getContentResolver().query(EmailCONTENT_URI, null,
+                EmailCONTACT_ID + " = ?", new String[]{contactID}, null);
+        if (emailCursor != null) {
+            while (emailCursor.moveToNext()) {
+                email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
+                Log.d(TAG, "Contact Email: " + email);
+                contact.setEmail(email);
+            }
+        }
+
+        if (emailCursor != null) {
+            emailCursor.close();
+        }
+    }
+
+    private String retrieveContactID() {
+        Cursor cursorID = getContentResolver().query(uriContact,
+                new String[]{_ID},
+                null, null, null);
+
+        if (cursorID != null && cursorID.moveToFirst()) {
+
+
+            contactID = cursorID.getString(cursorID.getColumnIndex(_ID));
+        }
+
+        if (cursorID != null) {
+            cursorID.close();
+        }
+
+        return contactID;
+    }
+
+    private void openEditor() {
+        InputContactDialogObject.show();
     }
 
     private void sortByName() {

@@ -1,93 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content">
 
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="@dimen/card_margin_end"
-        android:layout_marginStart="@dimen/card_margin_start"
-        android:layout_marginBottom="4dp"
-        >
+        android:id="@+id/card_view_contact_details"
+        android:layout_width="0dp"
+        android:layout_height="85dp"
+        android:layout_margin="2dp"
+        app:cardElevation="5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="155dp"
-            android:id="@+id/background_image"
-            android:scaleType="centerCrop"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:id="@+id/contact_dark_filter"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/card_view_arrangement"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="10"
-            android:background="#55000000" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/contact_initials"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:text=""
-            android:textSize="55sp"
-            android:textAlignment="center"
-            android:textColor="#ffffff"
-            android:background="@color/cardview_dark_background"
-            android:layout_gravity="start|center_vertical|center_horizontal"
-            android:layout_marginLeft="5dp"
-            android:padding="1dp"
-            android:paddingTop="1dp"
-            android:gravity="center|fill"
-            android:elevation="20dp"
-            android:shadowColor="@color/text_shadow"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"/>
+            <ImageView
+                android:id="@+id/background_image"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="@+id/contact_dark_filter"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintVertical_bias="0.493"/>
 
+            <TextView
+                android:id="@+id/contact_dark_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="10"
+                android:background="#55000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="start|center_vertical|center_horizontal"
-            android:src="@drawable/carousel_glare"
-            android:layout_marginStart="5dp"
-            android:elevation="20dp"
-            android:scaleType="fitXY"/>
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/contact_image"
-            android:layout_gravity="start|center_vertical|center_horizontal"
-            android:layout_marginStart="5dp"
-            android:elevation="20dp"
-            android:scaleType="centerCrop" />
-
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:layout_marginTop="63dp"
-            android:layout_marginStart="90dp"
-            android:text="@string/unknown"
-            android:textAlignment="textStart"
-            android:textColor="#ffffff"
-            android:textSize="@dimen/contact_rv_name_width"
-            android:textStyle="bold"
-            android:typeface="normal"
-            android:shadowColor="@color/text_shadow"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"/>
+            <TextView
+                android:id="@+id/contact_initials"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="start|center_vertical|center_horizontal"
+                android:background="@color/cardview_dark_background"
+                android:elevation="20dp"
+                android:gravity="center|fill"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="55sp"
+                app:layout_constraintBottom_toBottomOf="@+id/contact_image"
+                app:layout_constraintLeft_toLeftOf="@+id/contact_image"
+                app:layout_constraintTop_toTopOf="@+id/contact_image"
+                />
 
 
+            <ImageView
+                android:id="@+id/contact_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="start|center_vertical|center_horizontal"
+                android:layout_marginStart="8dp"
+                android:elevation="20dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/unknown"
+                android:textAlignment="textStart"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/contact_rv_name_width"
+                android:textStyle="bold"
+                android:typeface="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/contact_image"
+                app:layout_constraintLeft_toRightOf="@+id/contact_image"
+                />
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
-</RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

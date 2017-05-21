@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.notification;
+package nyc.c4q.jonathancolon.inContaq.smsreminder;
 
 import android.content.Context;
 import android.content.Intent;

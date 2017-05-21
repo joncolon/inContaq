@@ -23,9 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.klinker.android.send_message.Message;
-import com.klinker.android.send_message.Transaction;
-import com.tuenti.smsradar.SmsListener;
 import com.tuenti.smsradar.SmsRadar;
 
 import java.util.ArrayList;
@@ -39,6 +36,7 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.ContactViewPagerActivity;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactsms.data.GetAllSms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBus;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
@@ -61,7 +59,6 @@ public class ContactSmsFragment extends Fragment {
 
     private SmsAdapter adapter;
     private ArrayList<Sms> smsList;
-    private Settings settings;
     private Context context;
     private ContentResolver contentResolver;
     private Realm realm;
@@ -109,7 +106,6 @@ public class ContactSmsFragment extends Fragment {
 
 
         initViews(view);
-        initSettings();
         getAllSms(contentResolver, contactId);
         return view;
     }
@@ -123,15 +119,7 @@ public class ContactSmsFragment extends Fragment {
         smsEditText = (EditText) view.findViewById(R.id.sms_edit_text);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        if (smsSendButton != null) {
-            smsSendButton.setOnClickListener(v -> ContactSmsFragment.this.sendMessage());
-        }
-
         setClickListenersWhenInPortraitMode();
-    }
-
-    private void initSettings() {
-        settings = Settings.get(getContext());
     }
 
     public void getAllSms(ContentResolver contentResolver, long contactId) {
@@ -146,28 +134,12 @@ public class ContactSmsFragment extends Fragment {
                 .subscribe(arrayList -> {
                     smsList = arrayList;
                     progressBar.setVisibility(View.GONE);
-                        ContactSmsFragment.this.setupRecyclerView(contact);
-                        ContactSmsFragment.this.scrollListToBottom();
-                        ContactSmsFragment.this.showRecyclerView();
-                        Log.e("RxBus: ", "sending: waiting to send ");
-                        ContactSmsFragment.this.sendEvent();
+                    ContactSmsFragment.this.setupRecyclerView(contact);
+                    ContactSmsFragment.this.showRecyclerView();
+                    Log.e("RxBus: ", "sending: waiting to send ");
+                    ContactSmsFragment.this.sendEvent();
+                    ContactSmsFragment.this.scrollListToBottom();
                 });
-    }
-
-    synchronized public void sendMessage() {
-        new Thread(() -> {
-            com.klinker.android.send_message.Settings sendSettings =
-                    new com.klinker.android.send_message.Settings();
-            String messageNumber = contact.getMobileNumber();
-            String messageText = smsEditText.getText().toString();
-            sendSettings.setMmsc(settings.getMmsc());
-            sendSettings.setProxy(settings.getMmsProxy());
-            sendSettings.setPort(settings.getMmsPort());
-            sendSettings.setUseSystemSending(true);
-            Transaction transaction = new Transaction(ContactSmsFragment.this.getContext(), sendSettings);
-            Message message = new Message(messageText, messageNumber);
-            transaction.sendNewMessage(message, Transaction.NO_THREAD_ID);
-        }).start();
     }
 
     private void setClickListenersWhenInPortraitMode() {
@@ -202,10 +174,6 @@ public class ContactSmsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    synchronized private void scrollListToBottom() {
-        recyclerView.post(() -> recyclerView.scrollToPosition(smsList.size() - 1));
-    }
-
     synchronized private void showRecyclerView() {
         recyclerView.setVisibility(View.VISIBLE);
     }
@@ -216,11 +184,14 @@ public class ContactSmsFragment extends Fragment {
             rxBus.send(new ContactViewPagerActivity.SmsLoaded());
             if (smsList.size() != 0 && smsList != null) {
                 rxBus.send(smsList);
-            }
-            else{
+            } else {
                 rxBus.send(new ContactViewPagerActivity.SmsUnavailable());
             }
         }
+    }
+
+    synchronized private void scrollListToBottom() {
+        recyclerView.post(() -> recyclerView.scrollToPosition(smsList.size() - 1));
     }
 
     synchronized private void displayContactInfo(Contact contact) {
@@ -233,20 +204,6 @@ public class ContactSmsFragment extends Fragment {
             picasso.loadImageFromString(contact.getContactImage(), contactImageIV);
         }
         contactName.setText(nameValue);
-    }
-
-    private void initializeSmsRadarService() {
-        SmsRadar.initializeSmsRadarService(getContext(), new SmsListener() {
-            @Override
-            public void onSmsSent(com.tuenti.smsradar.Sms sms) {
-                updateSms();
-            }
-
-            @Override
-            public void onSmsReceived(com.tuenti.smsradar.Sms sms) {
-                updateSms();
-            }
-        });
     }
 
     public void updateSms() {
