@@ -11,10 +11,10 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contact
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.ContactStatsFragment;
 
 
-public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
+class ContactPagerAdapter extends FragmentPagerAdapter {
     private final Context context;
 
-    public ContactFragmentPagerAdapter(FragmentManager fm, Context context) {
+    ContactPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }
@@ -28,9 +28,9 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int pos) {
         switch (pos) {
             case 0:
-                return new ContactInfoFragment();
-            case 1:
                 return new ContactStatsFragment();
+            case 1:
+                return new ContactInfoFragment();
             case 2:
                 return new ContactSmsFragment();
             default:
@@ -40,9 +40,8 @@ public class ContactFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        String[] tabTitles = new String[]{context.getString(R.string.contact_info),
-                context.getString(R.string.stats), context.getString(R.string.messages)};
-
+        String[] tabTitles = new String[]{context.getString(R.string.stats),
+                context.getString(R.string.contact_info), context.getString(R.string.messages)};
         return tabTitles[position];
     }
 }

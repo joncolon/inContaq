@@ -6,7 +6,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/cardview_dark_background</item>
         <item name="colorPrimaryDark">@color/cardview_dark_background</item>
-        <item name="colorAccent">@color/accent_color</item>
+        <item name="colorAccent">@color/red_madder</item>
         <item name="android:windowBackground">@color/primary_background</item>
         <item name="android:textColorPrimary">@color/light_font</item>
         <item name="android:colorBackground">@color/cardview_dark_background</item>

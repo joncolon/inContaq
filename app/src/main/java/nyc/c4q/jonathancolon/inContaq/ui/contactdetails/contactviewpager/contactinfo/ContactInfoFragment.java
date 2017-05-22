@@ -1,9 +1,14 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactinfo;
 
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -22,7 +28,7 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
+import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
 
@@ -30,10 +36,16 @@ import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
 
+    private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
+    private static final int RESULT_LOAD_CONTACT_IMG = 1;
+
     private Contact contact;
-    private TextView mobile, editButton, polaroidName, email;
+    private TextView address, mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV;
-    private EditText editName, editMobile, editEmail, editAddress;
+
+    private PicassoHelper picasso;
+
+    private EditText editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
     private int selection;
     private AnimationHelper anim;
@@ -50,6 +62,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         long contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
         contact = RealmDbHelper.getByRealmID(realm, contactId);
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
+        FragmentActivity context = getActivity();
+        picasso = new PicassoHelper(context);
+
         isEditTextEnabled = false;
         initViews(view);
         setClickListeners();
@@ -58,17 +73,17 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void initViews(View view) {
-        polaroidName = (TextView) view.findViewById(R.id.contact_name);
         mobile = (TextView) view.findViewById(R.id.mobile_phone);
         email = (TextView) view.findViewById(R.id.email);
+        address = (TextView) view.findViewById(R.id.address);
+        displayName = (TextView) view.findViewById(R.id.display_name);
 
-        editName = (EditText) view.findViewById(R.id.edit_name);
         editMobile = (EditText) view.findViewById(R.id.edit_mobile_phone);
         editEmail = (EditText) view.findViewById(R.id.edit_email);
         editAddress = (EditText) view.findViewById(R.id.edit_address);
 
         saveButton = (FloatingActionButton) view.findViewById(R.id.save_button);
-        editButton = (TextView) view.findViewById(R.id.edit_option);
+        editOption = (TextView) view.findViewById(R.id.edit_option);
 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
@@ -85,13 +100,15 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private void setClickListeners() {
         saveButton.setOnClickListener(view1 -> ContactInfoFragment.this.buildSaveEditDialog());
-        editButton.setOnClickListener(view12 -> ContactInfoFragment.this.enableEditContactMode());
+        editOption.setOnClickListener(view12 -> ContactInfoFragment.this.enableEditContactMode());
+        setClickListenersWhenInPortraitMode();
+
     }
 
     private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
-        polaroidName.setText(nameValue);
-        editName.setText(nameValue);
+        displayName.setText(nameValue);
+        displayName.setText(nameValue);
         editMobile.setText(contact.getMobileNumber());
         loadImages();
         showMobile();
@@ -143,19 +160,12 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     synchronized private void showEmail() {
         if (isEditTextEnabled) {
             email.setVisibility(View.VISIBLE);
-
-        }
-        if (contact.getEmail() != null || Objects.equals(contact.getEmail(), "")) {
-            email.setVisibility(View.VISIBLE);
-
         }
     }
 
     synchronized private void showAddress() {
         if (isEditTextEnabled) {
             mobile.setVisibility(View.VISIBLE);
-        }
-        if (contact.getAddress() != null || Objects.equals(contact.getAddress(), "")) {
         }
     }
 
@@ -169,8 +179,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private void enableEditText() {
         isEditTextEnabled = true;
-        editName.setEnabled(true);
-        editName.setVisibility(View.VISIBLE);
         editMobile.setEnabled(true);
         editMobile.setVisibility(View.VISIBLE);
         editEmail.setEnabled(true);
@@ -193,13 +201,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private void saveChanges() {
         String email = editEmail.getText().toString();
         String address = editAddress.getText().toString();
-        String name = editName.getText().toString().trim();
-        String[] splitName = NameSplitter.splitFirstAndLastName(name);
 
 
         realm.executeTransaction(realm1 -> {
-            contact.setFirstName(splitName[0]);
-            contact.setLastName(splitName[1]);
             contact.setEmail(email);
             contact.setAddress(address);
             contact.setMobileNumber(editMobile.getText().toString());
@@ -242,6 +246,65 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 });
                 break;
         }
+    }
+
+    private void setClickListenersWhenInPortraitMode() {
+        int value = getActivity().getResources().getConfiguration().orientation;
+
+        if (value == Configuration.ORIENTATION_PORTRAIT) {
+            FontHelper fontHelper = new FontHelper(getContext());
+            fontHelper.applyFont(displayName);
+            displayContactInfo(contact);
+
+            contactImageIV.setOnClickListener(v -> {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                ContactInfoFragment.this.startActivityForResult(galleryIntent,
+                        RESULT_LOAD_CONTACT_IMG);
+            });
+
+            backgroundImageIV.setOnClickListener(v -> {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                ContactInfoFragment.this.startActivityForResult(galleryIntent,
+                        RESULT_LOAD_BACKGROUND_IMG);
+            });
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == Activity.RESULT_OK) {
+
+                switch (requestCode) {
+                    case 1:
+                        updateContactImage(data, picasso);
+                        break;
+                    case 2:
+                        setBackgroundImage(data, picasso);
+                        break;
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.error_message_photo_not_selected,
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), R.string.error_message_general, Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+    private void updateContactImage(Intent data, PicassoHelper picasso) {
+        Uri contactImgUri = data.getData();
+        picasso.loadImageFromUri(contactImgUri, contactImageIV);
+        realm.executeTransaction(realm1 -> contact.setContactImage(contactImgUri.toString()));
+    }
+
+    public void setBackgroundImage(Intent data, PicassoHelper ph) {
+        Uri bgImgUri = data.getData();
+        ph.loadImageFromUri(bgImgUri, backgroundImageIV);
+        realm.executeTransaction(realm1 -> contact.setBackgroundImage(bgImgUri.toString()));
     }
 
     @Override

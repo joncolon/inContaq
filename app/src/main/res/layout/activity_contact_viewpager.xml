@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="20dp"
-        app:tabSelectedTextColor="@color/accent_color"
+        app:tabSelectedTextColor="@color/red_madder"
         app:tabTextColor="@color/black"/>
 
 

@@ -12,12 +12,13 @@
 
     <!--greyscale-->
     <color name="charcoal">#FF424242</color>
+    <color name="dark_charcoal">#303030</color>
     <color name="black">#021620</color>
     <color name="primary_background">#ecf0f1</color>
     <color name="cardBackgroundColor">#ffffff</color>
 
     <!--yellow-->
-    <color name="accent_color">#EF7674</color>
+    <color name="red_madder">#EF7674</color>
 
 
     <color name="light_font">#FBFBFB</color>

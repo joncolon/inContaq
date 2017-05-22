@@ -39,7 +39,7 @@ public class ContactViewPagerActivity extends FragmentActivity {
 
     private void showViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager_contact_tabs);
-        viewPager.setAdapter(new ContactFragmentPagerAdapter(getSupportFragmentManager(),
+        viewPager.setAdapter(new ContactPagerAdapter(getSupportFragmentManager(),
                 ContactViewPagerActivity.this) {
         });
 

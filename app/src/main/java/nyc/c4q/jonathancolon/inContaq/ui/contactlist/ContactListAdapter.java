@@ -19,13 +19,13 @@ import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 
 
-public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
+class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
     private final Listener listener;
     private final Context context;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private List<Contact> contactList;
 
-    public ContactListAdapter(Listener listener, Context context) {
+    ContactListAdapter(Listener listener, Context context) {
         this.listener = listener;
         this.context = context;
     }
@@ -38,8 +38,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     @Override
     public ContactListAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemview_contactlist_rv,
-                parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.itemview_contactlist_rv, parent, false);
 
         FontHelper fontHelper = new FontHelper(context);
         ContactViewHolder vh = new ContactViewHolder(itemView, fontHelper);
@@ -82,13 +82,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return contact.getBackgroundImage() != null;
     }
 
-    public interface Listener {
+    interface Listener {
         void onContactClicked(Contact contact);
 
         void onContactLongClicked(Contact contact) throws ExecutionException, InterruptedException;
     }
 
-    //_____________________________________VIEWHOLDER___________________________________________________
+    //_____________________________________VIEWHOLDER_______________________________________________
     class ContactViewHolder extends RecyclerView.ViewHolder {
         private final ImageView mBackGroundImage;
         private final ImageView mContactImage;

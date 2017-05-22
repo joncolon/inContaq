@@ -59,7 +59,7 @@
     <string name="placeholder_date">17 jul</string>
     <string name="reply_label">REPLY</string>
     <string name="type_mobile">2</string>
-    <string name="daily">DAILY</string>
+    <string name="hourly">HOURLY</string>
     <string name="weekly">WEEKLY</string>
     <string name="monthly">MONTHLY</string>
 

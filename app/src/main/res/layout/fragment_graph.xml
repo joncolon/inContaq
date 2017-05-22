@@ -24,9 +24,10 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="3dp"
-            android:text="Texts Over Time"
+            android:text="SMS Trends"
+            android:textColor="@color/light_font"
             android:textAlignment="center"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             />
 

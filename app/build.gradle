@@ -57,21 +57,11 @@ android {
                 //RxJava 2.0
                 compile "com.github.akarnokd:rxjava2-extensions:0.16.0"
 
-                //butterknife
-                compile 'com.jakewharton:butterknife:8.5.1'
-                annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-
                 //beautiful parallax
                 compile 'com.github.florent37:beautifulparallax:1.0.0'
 
                 //joda-time
                 compile 'joda-time:joda-time:2.9.7'
-
-                //sms/mms sending library
-                compile 'com.klinkerapps:android-smsmms:3.5.0'
-
-                //sms radar
-                compile 'com.tuenti.smsradar:library:1.0.4'
 
                 //constraint layout
                 compile 'com.android.support.constraint:constraint-layout:1.0.2'
