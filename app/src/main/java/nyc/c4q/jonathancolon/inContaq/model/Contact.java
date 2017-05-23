@@ -25,7 +25,7 @@ public class Contact extends RealmObject {
     private String backgroundImage;
     private String contactImage;
     private Long timeLastContacted;
-    private boolean reminderEnabled;
+    private boolean reminderEnabled = false;
     private int reminderDuration;
 
     public Contact() {

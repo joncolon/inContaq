@@ -53,15 +53,15 @@ import static android.view.View.GONE;
 public class ContactStatsFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = ContactStatsFragment.class.getSimpleName();
-    private static final float UNSELECTED_ELEVATION = 100f;
-    private static final float SELECTED_ELEVATION = 10f;
+    private static final float UNSELECTED_ELEVATION = 70f;
+    private static final float SELECTED_ELEVATION = 0f;
     private BarChartView wordAverageChart, totalWordCountChart;
     private ArrayList<Sms> smsList;
     private CompositeDisposable disposables;
     private AnalyticsFeedback analyticsFeedback;
     private TimeMostContacted timeMostContacted;
 
-    private CardView buttonDisplay;
+    private CardView toolbar;
     private ProgressBar progressBar;
 
     private Contact contact;
@@ -121,7 +121,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         monthlyCard = (CardView) view.findViewById(R.id.monthly_card);
         weeklyCard = (CardView) view.findViewById(R.id.weekly_card);
 
-        buttonDisplay = (CardView) view.findViewById(R.id.graph_btn);
+        toolbar = (CardView) view.findViewById(R.id.button_bar);
 
         monthlyCard.setOnClickListener(this);
         weeklyCard.setOnClickListener(this);
@@ -264,7 +264,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                     textCard.setVisibility(View.VISIBLE);
                     totalCard.setVisibility(View.VISIBLE);
                     wordCard.setVisibility(View.VISIBLE);
-                    buttonDisplay.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
                 });
     }
 
@@ -354,7 +354,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 if (monthlySent != null && monthlyReceived != null) {
                     showMonthlyGraphFragment();
 
-                    monthlyCard.setCardBackgroundColor(context.getColor(R.color.red_madder));
+                    monthlyCard.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     weeklyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
                     dailyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
 
@@ -376,7 +376,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 if (weeklySent != null && weeklyReceived != null) {
                     showWeeklyGraphFragment();
 
-                    weeklyCard.setCardBackgroundColor(context.getColor(R.color.red_madder));
+                    weeklyCard.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     monthlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
                     dailyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
 
@@ -394,7 +394,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 if (hourlySent != null && hourlyReceived != null) {
                     showHourlyGraphFragment();
 
-                    dailyCard.setCardBackgroundColor(context.getColor(R.color.red_madder));
+                    dailyCard.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     weeklyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
                     monthlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
 

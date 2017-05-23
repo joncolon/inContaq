@@ -36,8 +36,6 @@ public class RealmDbHelper implements io.realm.RealmModel {
         Log.i("Realm: ",
                 "Adding to Contact database...");
 
-
-        // All writes must be wrapped in a transaction to facilitate safe multi threading
         realm.executeTransaction(realm1 -> {
             long realmID = 1;
             if (realm1.where(Contact.class).count() > 0) {
@@ -48,5 +46,13 @@ public class RealmDbHelper implements io.realm.RealmModel {
             Contact contact = realm1.copyToRealmOrUpdate(newContact);
 
         });
+    }
+
+    public static void enableReminder(Realm realm, Contact contact) {
+        realm.executeTransaction(realm1 -> contact.setReminderEnabled(true));
+    }
+
+    public static void disableReminder(Realm realm, Contact contact) {
+        realm.executeTransaction(realm1 -> contact.setReminderEnabled(false));
     }
 }

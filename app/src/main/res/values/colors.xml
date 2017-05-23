@@ -7,13 +7,12 @@
     <color name="blue_sapphire">#0E587A</color>
 
     <!--red-->
-    <color name="sent_chat_bubble_color">#EF7674</color>
-    <color name="selected_tab_text_color">#E71D36</color>
+    <color name="carmine_pink_lite">#DB6B71</color>
 
     <!--greyscale-->
     <color name="charcoal">#FF424242</color>
     <color name="dark_charcoal">#303030</color>
-    <color name="black">#021620</color>
+    <color name="black">#252525</color>
     <color name="primary_background">#ecf0f1</color>
     <color name="cardBackgroundColor">#ffffff</color>
 

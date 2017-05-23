@@ -114,7 +114,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             } else {
                 linearLayout.setGravity(Gravity.END);
                 if (Build.VERSION.SDK_INT >= 23) {
-                    cardBubble.setCardBackgroundColor(context.getColor(R.color.sent_chat_bubble_color));
+                    cardBubble.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
                     timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
                 } else {

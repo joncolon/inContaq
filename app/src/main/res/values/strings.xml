@@ -64,11 +64,10 @@
     <string name="monthly">MONTHLY</string>
 
     <string-array name="date_spinner_array">
-        <item>SET REMINDER</item>
-        <item>1 WEEK</item>
-        <item>2 WEEKS</item>
-        <item>3 WEEKS</item>
-        <item>CANCEL</item>
+        <item>Notify after...</item>
+        <item>1 week has passed</item>
+        <item>2 weeks have passed</item>
+        <item>3 weeks have passed</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -81,5 +80,6 @@
     <string name="word_average_per_message_sent">word average per message sent</string>
     <string name="default_value">0</string>
     <string name="nameDisplayFont">fonts/jaapokkiregular.ttf</string>
+    <string name="sms_trends">SMS Trends</string>
 
 </resources>

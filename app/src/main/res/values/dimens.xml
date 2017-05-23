@@ -36,5 +36,7 @@
     <dimen name="button_elevation">100dp</dimen>
     <dimen name="button_width">100dp</dimen>
     <dimen name="card_elevation_stats">5dp</dimen>
+    <dimen name="contact_info_card_height">170dp</dimen>
+    <dimen name="info_title_text_size">18sp</dimen>
 
 </resources>

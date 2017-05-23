@@ -9,13 +9,25 @@
     android:orientation="vertical"
     tools:context=".ui.contactdetails.contactviewpager.contactsms.ContactSmsFragment">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/sms_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/dark_charcoal"
+        tools:layout_editor_absoluteX="8dp">
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
         android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sms_toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

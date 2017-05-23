@@ -7,13 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,14 +29,13 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contact
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBus;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.rxbus.RxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
 
 public class ContactSmsFragment extends Fragment {
 
     private long contactId;
-    private TextView contactName;
-    private ImageView contactImageIV, backgroundImageIV, smsSendButton;
 
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
@@ -48,6 +46,7 @@ public class ContactSmsFragment extends Fragment {
     private RxBusComponent rxBusComponent;
     private RxBus rxBus;
     private Contact contact;
+    private Toolbar toolbar;
 
     public ContactSmsFragment() {
     }
@@ -82,6 +81,11 @@ public class ContactSmsFragment extends Fragment {
         contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         ContentResolver contentResolver = getActivity().getContentResolver();
+        toolbar = (Toolbar)view.findViewById(R.id.sms_toolbar);
+        toolbar.setTitle(contact.getFirstName() + " " + contact.getLastName());
+        toolbar.setTitleTextColor(getActivity().getColor(R.color.light_font));
+        toolbar.setSubtitleTextColor(getActivity().getColor(R.color.grey_font));
+
         getAllSms(contentResolver, contactId);
         initViews(view);
         return view;
@@ -104,6 +108,10 @@ public class ContactSmsFragment extends Fragment {
                     Log.e("RxBus: ", "sending: waiting to send ");
                     ContactSmsFragment.this.sendEvent();
                     ContactSmsFragment.this.scrollListToBottom();
+                    long time = SmsHelper.getLastContactedDate(contentResolver, contact);
+                    StringBuilder lastContacted = SmsHelper.smsDateFormat(time);
+
+                    toolbar.setSubtitle("Last Contacted: " + lastContacted);
                 });
     }
 

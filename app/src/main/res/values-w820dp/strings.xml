@@ -18,4 +18,5 @@
     <string name="word_average_per_message_sent">word average per message sent</string>
     <string name="default_value">0</string>
     <string name="nameDisplayFont">fonts/jaapokkiregular.ttf</string>
+    <string name="sms_trends">SMS Trends</string>
 </resources>

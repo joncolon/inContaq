@@ -13,7 +13,7 @@
         android:layout_marginEnd="@dimen/card_margin_end"
         android:layout_marginStart="@dimen/card_margin_start"
         app:cardElevation="@dimen/card_elevation_stats"
-        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardBackgroundColor="@color/dark_charcoal"
         app:cardCornerRadius="@dimen/card_chat_corner_radius"
         android:layout_marginBottom="5dp">
 
@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="3dp"
-            android:text="SMS Trends"
+            android:text="@string/sms_trends"
             android:textColor="@color/light_font"
             android:textAlignment="center"
             android:textSize="12sp"

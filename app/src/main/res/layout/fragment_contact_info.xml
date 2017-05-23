@@ -11,7 +11,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view_contact_details"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/contact_info_card_height"
         app:cardCornerRadius="0dp"
         app:cardElevation="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -26,12 +26,12 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/card_view_arrangement"
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="@dimen/contact_info_card_height">
 
             <ImageView
                 android:id="@+id/background_image"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/contact_info_card_height"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -41,7 +41,7 @@
             <TextView
                 android:id="@+id/contact_dark_filter"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/contact_info_card_height"
                 android:alpha="10"
                 android:background="#55000000"
                 app:layout_constraintBottom_toBottomOf="@+id/background_image"
@@ -73,14 +73,14 @@
                 android:layout_height="84dp"
                 android:layout_gravity="start|center_vertical|center_horizontal"
                 android:layout_marginBottom="0dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:elevation="20dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginLeft="16dp"
                 app:layout_constraintVertical_bias="0.879"/>
 
             <TextView
@@ -103,29 +103,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/card_margin_end"
-                android:layout_marginRight="0dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginTop="6dp"
                 android:clickable="true"
                 android:text="@string/edit"
-                android:textColor="@color/charcoal"
+                android:textColor="@color/light_font"
                 android:textStyle="bold"
                 app:layout_constraintRight_toRightOf="@id/card_view_arrangement"
                 app:layout_constraintTop_toTopOf="@id/card_view_arrangement"
                 app:layout_goneMarginEnd="8dp"/>
         </android.support.constraint.ConstraintLayout>
-
     </android.support.v7.widget.CardView>
 
     <LinearLayout
         android:id="@+id/contact_info_linlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/card_view_contact_details"
         android:layout_marginBottom="@dimen/card_linlayout_margin_bottom"
-        android:animateLayoutChanges="true"
         android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:layout_below="@id/card_view_contact_details">
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -141,7 +139,7 @@
                 android:enabled="false"
                 android:text="@string/mobile"
                 android:textColor="@color/charcoal"
-                android:textSize="@dimen/card_info_text_size"
+                android:textSize="@dimen/info_title_text_size"
                 android:textStyle="bold"/>
 
             <EditText
@@ -154,7 +152,8 @@
                 android:inputType="number"
                 android:textColor="@color/charcoal"
                 android:textColorHint="@color/grey_font"
-                android:textSize="@dimen/card_info_text_size"/>
+                android:textSize="@dimen/card_info_text_size"
+                tools:ignore="TextFields"/>
 
         </LinearLayout>
 
@@ -172,7 +171,7 @@
                 android:enabled="false"
                 android:text="@string/email"
                 android:textColor="@color/charcoal"
-                android:textSize="@dimen/card_info_text_size"
+                android:textSize="@dimen/info_title_text_size"
                 android:textStyle="bold"/>
 
             <EditText
@@ -203,7 +202,7 @@
                 android:enabled="false"
                 android:text="@string/address"
                 android:textColor="@color/charcoal"
-                android:textSize="@dimen/card_info_text_size"
+                android:textSize="@dimen/info_title_text_size"
                 android:textStyle="bold"/>
 
             <EditText
@@ -222,14 +221,35 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/sms_reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_info_margin_bottom"
+        android:layout_marginStart="@dimen/card_margin_start"
+        android:layout_below="@id/contact_info_linlayout"
+        android:enabled="false"
+        android:text="Sms Reminder: "
+        android:textColor="@color/charcoal"
+        android:textSize="@dimen/info_title_text_size"
+        android:textStyle="bold"/>
+
+    <Switch
+        android:id="@+id/reminder_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_margin_start"
+        android:layout_toEndOf="@id/sms_reminder"
+        android:layout_below="@id/contact_info_linlayout"/>
+
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/date_spinner"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/contact_info_linlayout"
-        android:layout_gravity="center"
-        android:spinnerMode="dropdown">
+        android:spinnerMode="dialog"
+        android:layout_alignBaseline="@id/reminder_switch"
+        android:layout_toEndOf="@id/reminder_switch"
+        >
     </android.support.v7.widget.AppCompatSpinner>
 
     <RelativeLayout
@@ -249,6 +269,15 @@
             android:layout_marginStart="@dimen/fab_margin"
             android:src="@drawable/ic_save_white_24dp"
             android:visibility="gone"
-            app:rippleColor="@color/selected_tab_text_color"/>
+            app:rippleColor="@color/carmine_pink_lite"/>
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:text="Button"/>
 </RelativeLayout>

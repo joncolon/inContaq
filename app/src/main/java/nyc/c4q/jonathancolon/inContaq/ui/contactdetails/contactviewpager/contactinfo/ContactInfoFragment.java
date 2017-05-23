@@ -15,9 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +37,8 @@ import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
 
-public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>, AdapterView.OnItemSelectedListener {
+public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>,
+        AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
@@ -42,6 +46,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private Contact contact;
     private TextView address, mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV;
+    private Button button;
 
     private PicassoHelper picasso;
 
@@ -51,6 +56,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private AnimationHelper anim;
     private boolean isEditTextEnabled;
     private Realm realm;
+    private MessengerAppLauncher appLauncher;
+    private Spinner dateSpinner;
+    private Switch reminderSwitch;
 
 
     @Override
@@ -64,6 +72,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
         FragmentActivity context = getActivity();
         picasso = new PicassoHelper(context);
+        appLauncher = new MessengerAppLauncher(getActivity());
 
         isEditTextEnabled = false;
         initViews(view);
@@ -78,6 +87,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         address = (TextView) view.findViewById(R.id.address);
         displayName = (TextView) view.findViewById(R.id.display_name);
 
+        button = (Button) view.findViewById(R.id.button);
+
         editMobile = (EditText) view.findViewById(R.id.edit_mobile_phone);
         editEmail = (EditText) view.findViewById(R.id.edit_email);
         editAddress = (EditText) view.findViewById(R.id.edit_address);
@@ -88,12 +99,37 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
 
+        initSwitch(view);
+        initSpinner(view);
+
+        button.setOnClickListener(v -> {
+            MessengerAppLauncher appCheck = new MessengerAppLauncher(getContext());
+            boolean isFBInstalled = appCheck.isPackageExisted("com.facebook.orca");
+
+            Toast.makeText(getActivity(), String.valueOf(isFBInstalled), Toast.LENGTH_SHORT)
+                    .show();
+
+
+            appLauncher.openSkype();
+        });
+    }
+
+    private void initSwitch(View view) {
+        reminderSwitch = (Switch) view.findViewById(R.id.reminder_switch);
+        if (reminderSwitch != null) {
+            reminderSwitch.setChecked(contact.isReminderEnabled());
+            reminderSwitch.setOnCheckedChangeListener(this);
+        }
+    }
+
+    private void initSpinner(View view) {
         ArrayAdapter<CharSequence> spinnerArrayAdapter = ArrayAdapter.createFromResource(
                 view.getContext(),
                 R.array.date_spinner_array,
                 R.layout.date_spinner_item);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
-        Spinner dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
+
+        dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         dateSpinner.setAdapter(spinnerArrayAdapter);
         dateSpinner.setOnItemSelectedListener(this);
     }
@@ -102,18 +138,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         saveButton.setOnClickListener(view1 -> ContactInfoFragment.this.buildSaveEditDialog());
         editOption.setOnClickListener(view12 -> ContactInfoFragment.this.enableEditContactMode());
         setClickListenersWhenInPortraitMode();
-
-    }
-
-    private void displayContactInfo(Contact contact) {
-        String nameValue = contact.getFirstName() + " " + contact.getLastName();
-        displayName.setText(nameValue);
-        displayName.setText(nameValue);
-        editMobile.setText(contact.getMobileNumber());
-        loadImages();
-        showMobile();
-        showEmail();
-        showAddress();
     }
 
     private void buildSaveEditDialog() {
@@ -135,38 +159,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         enableEditText();
         fadeInContactInfo();
         showFab();
-    }
-
-    private void loadImages() {
-        PicassoHelper ph = new PicassoHelper(getActivity());
-        if (contact.getBackgroundImage() != null) {
-            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
-        }
-        if (contact.getContactImage() != null) {
-            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
-        }
-    }
-
-    synchronized private void showMobile() {
-        if (isEditTextEnabled) {
-            mobile.setVisibility(View.VISIBLE);
-
-        }
-        if (contact.getMobileNumber() != null || Objects.equals(contact.getMobileNumber(), "")) {
-            mobile.setVisibility(View.VISIBLE);
-        }
-    }
-
-    synchronized private void showEmail() {
-        if (isEditTextEnabled) {
-            email.setVisibility(View.VISIBLE);
-        }
-    }
-
-    synchronized private void showAddress() {
-        if (isEditTextEnabled) {
-            mobile.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -216,24 +208,64 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         displayContactInfo(contact);
     }
 
+    private void displayContactInfo(Contact contact) {
+        String nameValue = contact.getFirstName() + " " + contact.getLastName();
+        displayName.setText(nameValue);
+        displayName.setText(nameValue);
+        editMobile.setText(contact.getMobileNumber());
+        loadImages();
+        showMobile();
+        showEmail();
+        showAddress();
+    }
+
+    private void loadImages() {
+        PicassoHelper ph = new PicassoHelper(getActivity());
+        if (contact.getBackgroundImage() != null) {
+            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
+        }
+        if (contact.getContactImage() != null) {
+            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
+        }
+    }
+
+    synchronized private void showMobile() {
+        if (isEditTextEnabled) {
+            mobile.setVisibility(View.VISIBLE);
+
+        }
+        if (contact.getMobileNumber() != null || Objects.equals(contact.getMobileNumber(), "")) {
+            mobile.setVisibility(View.VISIBLE);
+        }
+    }
+
+    synchronized private void showEmail() {
+        if (isEditTextEnabled) {
+            email.setVisibility(View.VISIBLE);
+        }
+    }
+
+    synchronized private void showAddress() {
+        if (isEditTextEnabled) {
+            mobile.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
         switch (String.valueOf(parent.getItemAtPosition(position))) {
-            case "1 WEEK":
+            case "1 week has passed":
                 realm.executeTransaction(realm1 -> {
                     contact.setReminderDuration(1);
                     contact.setReminderEnabled(true);
                 });
-
-
-            case "2 WEEKS":
+            case "2 weeks have passed":
                 realm.executeTransaction(realm1 -> {
                     contact.setReminderDuration(2);
                     contact.setReminderEnabled(true);
                 });
                 break;
-            case "3 WEEKS":
+            case "3 weeks have passed":
                 realm.executeTransaction(realm1 -> {
                     contact.setReminderDuration(3);
                     contact.setReminderEnabled(true);
@@ -241,8 +273,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 break;
             case "CANCEL":
                 realm.executeTransaction(realm1 -> {
-                    contact.setReminderDuration(0);
-                    contact.setReminderEnabled(false);
                 });
                 break;
         }
@@ -315,6 +345,18 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     public void onDestroy() {
         super.onDestroy();
         RealmDbHelper.closeRealm(realm);
+    }
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Toast.makeText(getActivity(), "The Switch is " + (isChecked ? "on" : "off"),
+                Toast.LENGTH_SHORT).show();
+        if (isChecked) {
+            RealmDbHelper.enableReminder(realm, contact);
+            dateSpinner.setVisibility(View.VISIBLE);
+        } else {
+            RealmDbHelper.disableReminder(realm, contact);
+            dateSpinner.setVisibility(View.INVISIBLE);
+        }
     }
 }
 

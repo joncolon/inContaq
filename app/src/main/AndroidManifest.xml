@@ -41,7 +41,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.contactdetails.contactviewpager.ContactViewPagerActivity"
-                  android:screenOrientation="portrait">
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan">>
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <action android:name="android.intent.action.SENDTO"/>

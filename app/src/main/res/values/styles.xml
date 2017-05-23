@@ -4,13 +4,10 @@
     <style name="AppTheme"
            parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/cardview_dark_background</item>
-        <item name="colorPrimaryDark">@color/cardview_dark_background</item>
+        <item name="colorPrimary">@color/charcoal</item>
+        <item name="colorPrimaryDark">@color/dark_charcoal</item>
         <item name="colorAccent">@color/red_madder</item>
         <item name="android:windowBackground">@color/primary_background</item>
-        <item name="android:textColorPrimary">@color/light_font</item>
-        <item name="android:colorBackground">@color/cardview_dark_background</item>
-        <item name="android:textColorSecondary">@color/cardview_dark_background</item>
     </style>
 
 </resources>
