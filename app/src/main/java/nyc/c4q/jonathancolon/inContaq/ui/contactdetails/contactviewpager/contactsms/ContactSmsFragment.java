@@ -108,10 +108,14 @@ public class ContactSmsFragment extends Fragment {
                     Log.e("RxBus: ", "sending: waiting to send ");
                     ContactSmsFragment.this.sendEvent();
                     ContactSmsFragment.this.scrollListToBottom();
-                    long time = SmsHelper.getLastContactedDate(contentResolver, contact);
-                    StringBuilder lastContacted = SmsHelper.smsDateFormat(time);
 
-                    toolbar.setSubtitle("Last Contacted: " + lastContacted);
+                    if (smsList.size() != 0){
+                        long time = SmsHelper.getLastContactedDate(contentResolver, contact);
+                        StringBuilder lastContacted = SmsHelper.smsDateFormat(time);
+                        toolbar.setSubtitle("Last Contacted: " + lastContacted);
+                    } else {
+                        toolbar.setSubtitle("No SMS data available");
+                    }
                 });
     }
 

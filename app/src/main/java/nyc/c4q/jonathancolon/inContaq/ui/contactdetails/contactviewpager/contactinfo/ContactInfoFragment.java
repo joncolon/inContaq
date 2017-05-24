@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,8 +49,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private Contact contact;
     private TextView mobile, email, displayName, editOption;
-    private ImageView contactImageIV, backgroundImageIV;
-    private Button button;
+    private ImageView contactImageIV, backgroundImageIV, sendMessageIV;
 
     private PicassoHelper picasso;
 
@@ -130,7 +128,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         email = (TextView) view.findViewById(R.id.email);
         displayName = (TextView) view.findViewById(R.id.display_name);
 
-        button = (Button) view.findViewById(R.id.button);
 
         editMobile = (EditText) view.findViewById(R.id.edit_mobile_phone);
         editEmail = (EditText) view.findViewById(R.id.edit_email);
@@ -141,6 +138,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
+        sendMessageIV = (ImageView) view.findViewById(R.id.send_message);
 
         bottomSheetMenu = R.menu.menu_bottom_sheet_all;
 
@@ -149,7 +147,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         initSpinner(view);
         initSwitch(view);
 
-        button.setOnClickListener(v -> {
+        sendMessageIV.setOnClickListener(v -> {
             dialog.show();
         });
     }

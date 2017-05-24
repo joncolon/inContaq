@@ -31,7 +31,7 @@
             <ImageView
                 android:id="@+id/background_image"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/contact_info_card_height"
+                android:layout_height="170dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -41,7 +41,7 @@
             <TextView
                 android:id="@+id/contact_dark_filter"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/contact_info_card_height"
+                android:layout_height="170dp"
                 android:alpha="10"
                 android:background="#55000000"
                 app:layout_constraintBottom_toBottomOf="@+id/background_image"
@@ -65,23 +65,22 @@
                 app:layout_constraintBottom_toBottomOf="@+id/contact_image"
                 app:layout_constraintLeft_toLeftOf="@+id/contact_image"
                 app:layout_constraintRight_toRightOf="@+id/contact_image"
-                app:layout_constraintTop_toTopOf="@+id/contact_image"/>
+                app:layout_constraintTop_toTopOf="@+id/contact_image"
+                />
 
             <ImageView
                 android:id="@+id/contact_image"
                 android:layout_width="84dp"
                 android:layout_height="84dp"
                 android:layout_gravity="start|center_vertical|center_horizontal"
-                android:layout_marginBottom="0dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:elevation="20dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.879"/>
+                app:layout_constraintVertical_bias="0.879"
+                tools:layout_editor_absoluteX="0dp"/>
 
             <TextView
                 android:id="@+id/display_name"
@@ -109,9 +108,10 @@
                 android:text="@string/edit"
                 android:textColor="@color/light_font"
                 android:textStyle="bold"
-                app:layout_constraintRight_toRightOf="@id/card_view_arrangement"
-                app:layout_constraintTop_toTopOf="@id/card_view_arrangement"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginEnd="8dp"/>
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
@@ -134,19 +134,6 @@
             android:visibility="gone"
             app:rippleColor="@color/carmine_pink_lite"/>
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="36dp"
-            android:background="@color/dark_charcoal"
-            android:text="Get in contact"
-            android:padding="4dp"
-            android:elevation="2dp"
-            android:textColor="@color/light_font"/>
-
         <LinearLayout
             android:id="@+id/contact_info_linlayout"
             android:layout_width="match_parent"
@@ -156,27 +143,35 @@
             android:animateLayoutChanges="true"
             android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="43dp"
+                android:orientation="horizontal"
+                >
 
                 <TextView
                     android:id="@+id/mobile_phone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/text_info_margin_bottom"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+
                     android:enabled="false"
                     android:text="@string/mobile"
                     android:textColor="@color/charcoal"
                     android:textSize="@dimen/info_title_text_size"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.523"/>
 
                 <EditText
                     android:id="@+id/edit_mobile_phone"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:ems="10"
                     android:enabled="false"
                     android:hint="@string/enter_mobile_number"
@@ -184,9 +179,25 @@
                     android:textColor="@color/charcoal"
                     android:textColorHint="@color/grey_font"
                     android:textSize="@dimen/card_info_text_size"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/mobile_phone"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TextFields"/>
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/send_message"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="8dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:src="@drawable/ic_default_sms"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -258,6 +269,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/contact_info_linlayout"
+            android:layout_marginStart="6dp"
             android:enabled="false"
             android:text="Sms Reminder: "
             android:textColor="@color/charcoal"
@@ -268,8 +280,8 @@
             android:id="@+id/reminder_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/button"
-            android:layout_below="@+id/contact_info_linlayout"/>
+            android:layout_below="@+id/contact_info_linlayout"
+            android:layout_toEndOf="@id/sms_reminder"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/date_spinner"
@@ -281,6 +293,8 @@
             android:spinnerMode="dialog"
             android:visibility="invisible">
         </android.support.v7.widget.AppCompatSpinner>
+
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
