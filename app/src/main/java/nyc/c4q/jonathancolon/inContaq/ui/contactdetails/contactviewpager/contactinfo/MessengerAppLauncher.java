@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ class MessengerAppLauncher {
 
 
 
-    boolean isPackageExisted(String targetPackage) {
+    private boolean isPackageExisted(String targetPackage) {
         List<ApplicationInfo> packages;
         PackageManager pm;
 
@@ -40,6 +41,7 @@ class MessengerAppLauncher {
             if (packageInfo.packageName.equals(targetPackage))
                 return true;
         }
+        notInstalledToast();
         return false;
     }
 
@@ -54,6 +56,10 @@ class MessengerAppLauncher {
                 Log.e("error", ex.toString());
             }
         }
+    }
+
+    private void notInstalledToast() {
+        Toast.makeText(context, "This app is not installed", Toast.LENGTH_SHORT).show();
     }
 
     void openSlack() {
@@ -107,6 +113,14 @@ class MessengerAppLauncher {
             }
         }
     }
+
+    void openDefaultSms() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setType("vnd.android-dir/mms-sms");
+        context.startActivity(intent);
+    }
+
 
     void openWhatsApp() {
         if (isPackageExisted(WHATSAPP)){

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/ic_default_sms"
+        android:title="Default SMS"
+        android:id="@+id/sms_icon"/>
+
+    <item
+        android:icon="@drawable/ic_hangouts"
+        android:title="Hangouts"
+        android:id="@+id/hangouts_icon"/>
+
+    <item
+        android:icon="@drawable/ic_skype"
+        android:title="Skype"
+        android:id="@+id/skype_icon"/>
+
+    <item
+        android:icon="@drawable/ic_facebook_messenger"
+        android:title="Messenger"
+        android:id="@+id/fb_icon"/>
+
+    <item
+        android:icon="@drawable/ic_linkedin"
+        android:title="LinkedIn"
+        android:id="@+id/linked_in"/>
+
+    <item
+        android:icon="@drawable/ic_snapchat"
+        android:title="SnapChat"
+        android:id="@+id/snapchat_icon"/>
+
+    <item
+        android:icon="@drawable/ic_slack"
+        android:title="Slack"
+        android:id="@+id/slack_icon"/>
+
+    <item
+        android:icon="@drawable/ic_whatsapp"
+        android:title="WhatsApp"
+        android:id="@+id/whatsapp_icon"/>
+</menu>

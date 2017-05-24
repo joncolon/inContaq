@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/ic_default_sms"
+        android:title="Default SMS"
+        android:id="@+id/sms_icon"/>
+
+    <item
+        android:icon="@drawable/ic_facebook_messenger"
+        android:title="Messenger" />
+
+    <item
+        android:icon="@drawable/ic_linkedin"
+        android:title="LinkedIn" />
+
+    <item
+        android:icon="@drawable/ic_snapchat"
+        android:title="SnapChat" />
+
+    <item
+        android:icon="@drawable/ic_slack"
+        android:title="Slack" />
+
+    <item
+        android:icon="@drawable/ic_whatsapp"
+        android:title="WhatsApp" />
+
+</menu>

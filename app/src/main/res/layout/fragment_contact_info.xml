@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -115,143 +115,6 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
-    <LinearLayout
-        android:id="@+id/contact_info_linlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/card_view_contact_details"
-        android:layout_marginBottom="@dimen/card_linlayout_margin_bottom"
-        android:layout_marginTop="20dp"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/mobile_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/text_info_margin_bottom"
-                android:layout_marginStart="10dp"
-                android:enabled="false"
-                android:text="@string/mobile"
-                android:textColor="@color/charcoal"
-                android:textSize="@dimen/info_title_text_size"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/edit_mobile_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:enabled="false"
-                android:hint="@string/enter_mobile_number"
-                android:inputType="number"
-                android:textColor="@color/charcoal"
-                android:textColorHint="@color/grey_font"
-                android:textSize="@dimen/card_info_text_size"
-                tools:ignore="TextFields"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_text_margin_start"
-                android:layout_marginStart="@dimen/card_margin_start"
-                android:enabled="false"
-                android:text="@string/email"
-                android:textColor="@color/charcoal"
-                android:textSize="@dimen/info_title_text_size"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/edit_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/card_margin_start"
-                android:ems="10"
-                android:enabled="false"
-                android:hint="@string/enter_valid_email_address"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/charcoal"
-                android:textColorHint="@color/grey_font"
-                android:textSize="@dimen/card_info_text_size"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/text_info_margin_bottom"
-                android:layout_marginStart="@dimen/card_margin_start"
-                android:enabled="false"
-                android:text="@string/address"
-                android:textColor="@color/charcoal"
-                android:textSize="@dimen/info_title_text_size"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/edit_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/card_margin_start"
-                android:ems="10"
-                android:enabled="false"
-                android:hint="@string/enter_address"
-                android:inputType="textPostalAddress"
-                android:textColor="@color/charcoal"
-                android:textColorHint="@color/grey_font"
-                android:textSize="@dimen/card_info_text_size"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/sms_reminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/text_info_margin_bottom"
-        android:layout_marginStart="@dimen/card_margin_start"
-        android:layout_below="@id/contact_info_linlayout"
-        android:enabled="false"
-        android:text="Sms Reminder: "
-        android:textColor="@color/charcoal"
-        android:textSize="@dimen/info_title_text_size"
-        android:textStyle="bold"/>
-
-    <Switch
-        android:id="@+id/reminder_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/card_margin_start"
-        android:layout_toEndOf="@id/sms_reminder"
-        android:layout_below="@id/contact_info_linlayout"/>
-
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/date_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        android:layout_alignBaseline="@id/reminder_switch"
-        android:layout_toEndOf="@id/reminder_switch"
-        >
-    </android.support.v7.widget.AppCompatSpinner>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -270,14 +133,154 @@
             android:src="@drawable/ic_save_white_24dp"
             android:visibility="gone"
             app:rippleColor="@color/carmine_pink_lite"/>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="36dp"
+            android:background="@color/dark_charcoal"
+            android:text="Get in contact"
+            android:padding="4dp"
+            android:elevation="2dp"
+            android:textColor="@color/light_font"/>
+
+        <LinearLayout
+            android:id="@+id/contact_info_linlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/mobile_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_info_margin_bottom"
+                    android:layout_marginStart="10dp"
+                    android:enabled="false"
+                    android:text="@string/mobile"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/info_title_text_size"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/edit_mobile_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="@string/enter_mobile_number"
+                    android:inputType="number"
+                    android:textColor="@color/charcoal"
+                    android:textColorHint="@color/grey_font"
+                    android:textSize="@dimen/card_info_text_size"
+                    tools:ignore="TextFields"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/card_text_margin_start"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:enabled="false"
+                    android:text="@string/email"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/info_title_text_size"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/edit_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="@string/enter_valid_email_address"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/charcoal"
+                    android:textColorHint="@color/grey_font"
+                    android:textSize="@dimen/card_info_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_info_margin_bottom"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:enabled="false"
+                    android:text="@string/address"
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/info_title_text_size"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/edit_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="@string/enter_address"
+                    android:inputType="textPostalAddress"
+                    android:textColor="@color/charcoal"
+                    android:textColorHint="@color/grey_font"
+                    android:textSize="@dimen/card_info_text_size"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/sms_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/contact_info_linlayout"
+            android:enabled="false"
+            android:text="Sms Reminder: "
+            android:textColor="@color/charcoal"
+            android:textSize="@dimen/info_title_text_size"
+            android:textStyle="bold"/>
+
+        <Switch
+            android:id="@+id/reminder_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/button"
+            android:layout_below="@+id/contact_info_linlayout"/>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/date_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contact_info_linlayout"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@+id/reminder_switch"
+            android:spinnerMode="dialog"
+            android:visibility="invisible">
+        </android.support.v7.widget.AppCompatSpinner>
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:text="Button"/>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

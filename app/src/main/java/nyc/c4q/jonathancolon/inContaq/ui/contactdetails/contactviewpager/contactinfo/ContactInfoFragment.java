@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contac
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -24,6 +25,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
+
 import java.util.Objects;
 
 import io.realm.Realm;
@@ -38,13 +42,14 @@ import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>,
-        AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
+        AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener,
+        DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
 
     private Contact contact;
-    private TextView address, mobile, email, displayName, editOption;
+    private TextView mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV;
     private Button button;
 
@@ -59,6 +64,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private MessengerAppLauncher appLauncher;
     private Spinner dateSpinner;
     private Switch reminderSwitch;
+    private int bottomSheetMenu;
+    private BottomSheetMenuDialog dialog;
 
 
     @Override
@@ -81,10 +88,46 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         return view;
     }
 
+    private BottomSheetMenuDialog initBottomSheetDialog(int menuId) {
+        BottomSheetMenuDialog dialog = new BottomSheetBuilder(getActivity(),
+                R.style.AppTheme_BottomSheetDialog)
+                .setMode(BottomSheetBuilder.MODE_GRID)
+                .setMenu(menuId)
+                .setItemClickListener(item -> {
+                    int i = item.getItemId();
+                    if (i == R.id.sms_icon) {
+                        appLauncher.openDefaultSms();
+                    } else if (i == R.id.whatsapp_icon) {
+                        appLauncher.openWhatsApp();
+
+                    } else if (i == R.id.fb_icon) {
+                        appLauncher.openFacebookMessenger();
+
+                    } else if (i == R.id.slack_icon) {
+                        appLauncher.openSlack();
+
+                    } else if (i == R.id.linked_in) {
+                        appLauncher.openLinkedIn();
+
+                    } else if (i == R.id.hangouts_icon) {
+                        appLauncher.openHangouts();
+
+                    } else if (i == R.id.snapchat_icon) {
+                        appLauncher.openSnapChat();
+
+                    } else if (i == R.id.skype_icon) {
+                        appLauncher.openSkype();
+                    }
+                })
+                .createDialog();
+        dialog.setOnCancelListener(this);
+        dialog.setOnDismissListener(this);
+        return dialog;
+    }
+
     private void initViews(View view) {
         mobile = (TextView) view.findViewById(R.id.mobile_phone);
         email = (TextView) view.findViewById(R.id.email);
-        address = (TextView) view.findViewById(R.id.address);
         displayName = (TextView) view.findViewById(R.id.display_name);
 
         button = (Button) view.findViewById(R.id.button);
@@ -99,24 +142,24 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         contactImageIV = (ImageView) view.findViewById(R.id.contact_image);
         backgroundImageIV = (ImageView) view.findViewById(R.id.background_image);
 
-        initSwitch(view);
+        bottomSheetMenu = R.menu.menu_bottom_sheet_all;
+
+
+        dialog = initBottomSheetDialog(bottomSheetMenu);
         initSpinner(view);
+        initSwitch(view);
 
         button.setOnClickListener(v -> {
-            MessengerAppLauncher appCheck = new MessengerAppLauncher(getContext());
-            boolean isFBInstalled = appCheck.isPackageExisted("com.facebook.orca");
-
-            Toast.makeText(getActivity(), String.valueOf(isFBInstalled), Toast.LENGTH_SHORT)
-                    .show();
-
-
-            appLauncher.openSkype();
+            dialog.show();
         });
     }
 
     private void initSwitch(View view) {
         reminderSwitch = (Switch) view.findViewById(R.id.reminder_switch);
         if (reminderSwitch != null) {
+            if (contact.isReminderEnabled()) {
+                dateSpinner.setVisibility(View.VISIBLE);
+            }
             reminderSwitch.setChecked(contact.isReminderEnabled());
             reminderSwitch.setOnCheckedChangeListener(this);
         }
@@ -169,14 +212,18 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         }
     }
 
+    private void disableEditText() {
+        isEditTextEnabled = false;
+        editMobile.setEnabled(false);
+        editEmail.setEnabled(false);
+        editAddress.setEnabled(false);
+    }
+
     private void enableEditText() {
         isEditTextEnabled = true;
         editMobile.setEnabled(true);
-        editMobile.setVisibility(View.VISIBLE);
         editEmail.setEnabled(true);
-        editEmail.setVisibility(View.VISIBLE);
         editAddress.setEnabled(true);
-        editAddress.setVisibility(View.VISIBLE);
     }
 
     private void fadeInContactInfo() {
@@ -194,12 +241,13 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         String email = editEmail.getText().toString();
         String address = editAddress.getText().toString();
 
-
         realm.executeTransaction(realm1 -> {
             contact.setEmail(email);
             contact.setAddress(address);
             contact.setMobileNumber(editMobile.getText().toString());
         });
+
+        disableEditText();
     }
 
     @Override
@@ -211,8 +259,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private void displayContactInfo(Contact contact) {
         String nameValue = contact.getFirstName() + " " + contact.getLastName();
         displayName.setText(nameValue);
-        displayName.setText(nameValue);
+        editEmail.setText(contact.getEmail());
+        editAddress.setText(contact.getAddress());
         editMobile.setText(contact.getMobileNumber());
+
         loadImages();
         showMobile();
         showEmail();
@@ -357,6 +407,16 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             RealmDbHelper.disableReminder(realm, contact);
             dateSpinner.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        this.dialog = initBottomSheetDialog(bottomSheetMenu);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        this.dialog = initBottomSheetDialog(bottomSheetMenu);
     }
 }
 
