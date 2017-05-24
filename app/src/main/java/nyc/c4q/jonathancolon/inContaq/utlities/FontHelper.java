@@ -8,7 +8,7 @@ import nyc.c4q.jonathancolon.inContaq.R;
 
 
 public class FontHelper {
-    private final Context context;
+    Context context;
 
     public FontHelper(Context context) {
         this.context = context;

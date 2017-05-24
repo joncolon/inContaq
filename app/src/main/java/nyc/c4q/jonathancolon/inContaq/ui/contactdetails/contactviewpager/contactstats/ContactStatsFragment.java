@@ -169,7 +169,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         disposables.add(eventEmitter.connect());
     }
 
-    private void displayStats() {
+    public void displayStats() {
         String phoneNumber = contact.getMobileNumber();
         if (phoneNumber != null) {
 
@@ -226,7 +226,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         totalSmsBarGraph.showBarGraph();
     }
 
-    private void getHourlyReceivedTreeMap() {
+    public void getHourlyReceivedTreeMap() {
         Observable.fromCallable(() -> {
             GetHourlyReceived callable = new GetHourlyReceived(smsList);
             return callable.getHourlyReceived();
@@ -248,7 +248,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 });
     }
 
-    private void getHourlySentTreeMap() {
+    public void getHourlySentTreeMap() {
         Observable.fromCallable(() -> {
             GetHourlySent callable = new GetHourlySent(smsList);
             return callable.getHourlySent();
@@ -268,7 +268,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 });
     }
 
-    private void getWeeklyReceivedTreeMap() {
+    public void getWeeklyReceivedTreeMap() {
         Observable.fromCallable(() -> {
             GetWeeklyReceived callable = new GetWeeklyReceived(smsList);
             return callable.getWeeklyReceived();
@@ -282,7 +282,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 });
     }
 
-    private void getWeeklySentTreeMap() {
+    public void getWeeklySentTreeMap() {
         Observable.fromCallable(() -> {
             GetWeeklySent callable = new GetWeeklySent(smsList);
             return callable.getWeeklySent();
@@ -296,7 +296,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 });
     }
 
-    private void getMonthlyReceivedTreeMap() {
+    public void getMonthlyReceivedTreeMap() {
         Observable.fromCallable(() -> {
             GetMonthlyReceived callable = new GetMonthlyReceived(smsList);
             return callable.getMonthlyReceived();
@@ -312,7 +312,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 });
     }
 
-    private void getMonthlySentTreeMap() {
+    public void getMonthlySentTreeMap() {
         Observable.fromCallable(() -> {
             GetMonthlySent callable = new GetMonthlySent(smsList);
             return callable.getMonthlySent();
@@ -327,7 +327,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 });
     }
 
-    private float[] convertToFloats(TreeMap<Integer, Integer> treeMap) {
+    public float[] convertToFloats(TreeMap<Integer, Integer> treeMap) {
         TreeMapToFloatArray FloatConverter = new TreeMapToFloatArray();
         return FloatConverter.convertTreeMapToFloats(treeMap);
     }

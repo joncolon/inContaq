@@ -17,8 +17,8 @@ import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.
 public class ContactViewPagerActivity extends FragmentActivity {
 
     public Contact contact;
-    private ViewPager viewPager;
-    private RxBusComponent rxBusComponent;
+    ViewPager viewPager;
+    RxBusComponent rxBusComponent;
     private Realm realm;
     private long contactId;
 

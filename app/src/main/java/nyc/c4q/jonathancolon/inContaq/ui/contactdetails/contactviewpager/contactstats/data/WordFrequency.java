@@ -13,7 +13,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
 public class WordFrequency {
 
-    private static final List<String> excludedWords = new ArrayList<>(Arrays.asList("the", "of", "and",
+    private static List<String> excludedWords = new ArrayList<>(Arrays.asList("the", "of", "and",
             "to", "a", "in", "for", "is", "on", "that", "by", "this", "with", "i", "you", "it",
             "not", "or", "be", "are", "from", "at", "as", "your", "have", "new", "more", "an",
             "was", "I'm", "I", "and", "just", "about", "about", "above", "after", "again",
@@ -36,7 +36,7 @@ public class WordFrequency {
             "you've", "your", "yours", "yourself", "yourselves", "further", "had", "hadn't",
             "gonna"));
 
-    private final ArrayList<Sms> smsList;
+    private ArrayList<Sms> smsList;
 
     public WordFrequency(ArrayList<Sms> smsList) {
         this.smsList = smsList;

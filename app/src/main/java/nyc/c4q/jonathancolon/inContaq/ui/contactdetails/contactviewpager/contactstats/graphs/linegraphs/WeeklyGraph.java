@@ -17,9 +17,9 @@ public class WeeklyGraph {
     private static final String LABEL_COLOR = "#FDFFFC";
     private static final String RECEIVED_COLOR = "#FDFFFC";
     private final String[] xAxisLabels = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-    private final LineChartView lineGraph;
-    private final float[] weeklyReceived;
-    private final float[] weeklySent;
+    private LineChartView lineGraph;
+    private float[] weeklyReceived;
+    private float[] weeklySent;
 
     public WeeklyGraph(LineChartView lineGraph, float[] weeklyReceived, float[] weeklySent) {
         this.lineGraph = lineGraph;

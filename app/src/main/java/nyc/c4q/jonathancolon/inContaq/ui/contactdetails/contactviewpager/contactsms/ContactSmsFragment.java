@@ -3,6 +3,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contac
 
 import android.content.ContentResolver;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +51,16 @@ public class ContactSmsFragment extends Fragment {
     public ContactSmsFragment() {
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,7 +91,7 @@ public class ContactSmsFragment extends Fragment {
         return view;
     }
 
-    private void getAllSms(ContentResolver contentResolver, long contactId) {
+    public void getAllSms(ContentResolver contentResolver, long contactId) {
         progressBar.setVisibility(View.VISIBLE);
         Observable.fromCallable(() -> {
             GetAllSms callable = new GetAllSms(contentResolver,
@@ -150,6 +160,10 @@ public class ContactSmsFragment extends Fragment {
         RealmDbHelper.closeRealm(realm);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }
 
 

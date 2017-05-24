@@ -21,8 +21,8 @@ public class TotalSmsBarGraph {
     private static final String RECEIVED_COLOR = "#FDFFFC";
     private int totalWordsSent;
     private int totalWordsReceived;
-    private final BarChartView barChartView;
-    private final String[] mLabels = {"Sent", "Received"};
+    private BarChartView barChartView;
+    private String[] mLabels = {"Sent", "Received"};
     private ArrayList<Sms> smsList;
     private int highestValue;
 

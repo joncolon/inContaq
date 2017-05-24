@@ -40,7 +40,7 @@
             android:text="Average Text Length"
             android:textAlignment="center"
             android:textColor="@color/light_font"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textStyle="bold"
             />
 
@@ -80,7 +80,7 @@
             android:text="Total Message Count"
             android:textAlignment="center"
             android:textColor="@color/light_font"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textStyle="bold"
             />
 

@@ -2,6 +2,9 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contac
 
 import java.util.TreeMap;
 
+/**
+ * Created by jonathancolon on 5/9/17.
+ */
 
 public class PrepareHourlyTreeMap {
 

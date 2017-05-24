@@ -64,7 +64,7 @@
     <string name="monthly">MONTHLY</string>
 
     <string-array name="date_spinner_array">
-        <item>Notify after…</item>
+        <item>Notify after...</item>
         <item>1 week has passed</item>
         <item>2 weeks have passed</item>
         <item>3 weeks have passed</item>

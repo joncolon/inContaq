@@ -21,9 +21,9 @@ public class GetAllSms {
     private static final String DATE = "date";
     private static final String TYPE = "type";
     private static final String DATE_DESC = "date desc";
-    private final long realmID;
+    private long realmID;
     private ArrayList<Sms> smsList;
-    private final ContentResolver contentResolver;
+    private ContentResolver contentResolver;
 
     public GetAllSms(ContentResolver contentResolver, long realmID) {
         this.contentResolver = contentResolver;

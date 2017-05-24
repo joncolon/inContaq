@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 
+/**
+ * Created by jonathancolon on 3/28/17.
+ */
 
 public class PermissionActivity extends Activity {
 
@@ -25,8 +27,7 @@ public class PermissionActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         PreferenceManager.getDefaultSharedPreferences(this).edit()
                 .putBoolean("request_permissions", false)
                 .apply();

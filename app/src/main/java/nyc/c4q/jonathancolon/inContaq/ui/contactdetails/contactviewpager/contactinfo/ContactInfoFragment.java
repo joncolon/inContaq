@@ -32,6 +32,7 @@ import java.util.Objects;
 import io.realm.Realm;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.ui.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
@@ -39,7 +40,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
 
-public class ContactInfoFragment extends Fragment implements
+public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>,
         AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener,
         DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
 
@@ -201,7 +202,8 @@ public class ContactInfoFragment extends Fragment implements
         showFab();
     }
 
-    private void alertDialogCallback(Integer ret) {
+    @Override
+    public void alertDialogCallback(Integer ret) {
         ret = selection;
         if (ret == 1) {
             saveChanges();
@@ -377,7 +379,7 @@ public class ContactInfoFragment extends Fragment implements
         realm.executeTransaction(realm1 -> contact.setContactImage(contactImgUri.toString()));
     }
 
-    private void setBackgroundImage(Intent data, PicassoHelper ph) {
+    public void setBackgroundImage(Intent data, PicassoHelper ph) {
         Uri bgImgUri = data.getData();
         ph.loadImageFromUri(bgImgUri, backgroundImageIV);
         realm.executeTransaction(realm1 -> contact.setBackgroundImage(bgImgUri.toString()));

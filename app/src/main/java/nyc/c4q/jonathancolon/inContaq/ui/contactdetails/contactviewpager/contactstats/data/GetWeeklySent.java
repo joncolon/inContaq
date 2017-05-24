@@ -12,7 +12,7 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contact
 public class GetWeeklySent {
 
     private TreeMap<Integer, Integer> weeklyReceivedTreeMap;
-    private final ArrayList<Sms> smsList;
+    private ArrayList<Sms> smsList;
 
     public GetWeeklySent(ArrayList<Sms> smsList) {
         this.smsList = smsList;

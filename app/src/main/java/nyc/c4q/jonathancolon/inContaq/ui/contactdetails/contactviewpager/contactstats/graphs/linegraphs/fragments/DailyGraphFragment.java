@@ -16,9 +16,9 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contact
 
 public class DailyGraphFragment extends Fragment {
 
-    private final String SENT_KEY = "hourlySent";
-    private final String RECEIVED_KEY = "hourlyReceived";
-    private final String TAG = DailyGraphFragment.class.getSimpleName();
+    final String SENT_KEY = "hourlySent";
+    final String RECEIVED_KEY = "hourlyReceived";
+    final String TAG = DailyGraphFragment.class.getSimpleName();
 
     private LineChartView lineGraph;
     private float[] hourlySent, hourlyReceived;

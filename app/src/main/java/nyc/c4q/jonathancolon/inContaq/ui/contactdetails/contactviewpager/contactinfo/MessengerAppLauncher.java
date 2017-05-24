@@ -10,10 +10,13 @@ import android.widget.Toast;
 
 import java.util.List;
 
+/**
+ * Created by jonathancolon on 5/22/17.
+ */
 
 class MessengerAppLauncher {
 
-    private final Context context;
+    private Context context;
     private final String FACEBOOK_MESSENGER = "com.facebook.orca";
     private final String SLACK = "com.Slack";
     private final String WHATSAPP = "com.whatsapp";
