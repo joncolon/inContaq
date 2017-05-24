@@ -73,6 +73,10 @@ android {
                 //Picasso
                 compile 'com.squareup.picasso:picasso:2.5.2'
 
+                //BottomSheet Builder
+                compile 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
+
+
                 testCompile 'junit:junit:4.12'
             }
         })
