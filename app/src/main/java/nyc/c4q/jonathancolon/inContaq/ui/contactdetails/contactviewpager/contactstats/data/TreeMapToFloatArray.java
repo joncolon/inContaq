@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by jonathancolon on 5/9/17.
- */
 
 public class TreeMapToFloatArray {
 

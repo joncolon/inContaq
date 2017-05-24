@@ -5,12 +5,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * Created by jonathancolon on 5/13/17.
- */
 
 @Module
-public class RxBusModule {
+class RxBusModule {
 
     @Provides
     @Singleton

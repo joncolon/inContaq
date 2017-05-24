@@ -2,10 +2,6 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contac
 
 import java.util.TreeMap;
 
-/**
- * Created by jonathancolon on 5/14/17.
- */
-
 public class PrepareWeeklyTreeMap {
 
     private static final int SUN = 1;

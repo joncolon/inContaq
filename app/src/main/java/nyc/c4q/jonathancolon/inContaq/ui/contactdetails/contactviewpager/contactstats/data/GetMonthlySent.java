@@ -8,14 +8,11 @@ import java.util.TreeMap;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.util.PrepareMonthlyTreeMap;
 
-/**
- * Created by jonathancolon on 5/14/17.
- */
 
 public class GetMonthlySent {
 
     private TreeMap<Integer, Integer> monthlySentTreeMap;
-    private ArrayList<Sms> smsList;
+    private final ArrayList<Sms> smsList;
 
     public GetMonthlySent(ArrayList<Sms> smsList) {
         this.smsList = smsList;

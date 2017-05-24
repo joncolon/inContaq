@@ -40,7 +40,7 @@ public class ContactNotificationService extends IntentService {
     private static final int ONE_MIN = 600000;
     private static final String TAG = ContactNotificationService.class.getSimpleName();
     public static boolean hasStarted;
-    NotificationCompat.InboxStyle inboxStyle;
+    private NotificationCompat.InboxStyle inboxStyle;
     private NotificationCompat.Builder mBuilder;
     private NotificationManager notificationManager;
     private SQLiteDatabase db;
@@ -161,7 +161,7 @@ public class ContactNotificationService extends IntentService {
                 SmsHelper.getLastContactedDate(contentResolver, c) > THREE_WEEKS;
     }
 
-    public void startNotification(Context context) {
+    private void startNotification(Context context) {
         Log.e(TAG, "Starting notification... ");
 
         int NOTIFICATION_ID = (int) System.currentTimeMillis();
@@ -198,9 +198,4 @@ public class ContactNotificationService extends IntentService {
         alarm.cancel(pIntent);
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

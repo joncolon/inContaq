@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.github.florent37.beautifulparallax.ParallaxViewController;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
@@ -84,8 +83,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
 
     interface Listener {
         void onContactClicked(Contact contact);
-
-        void onContactLongClicked(Contact contact) throws ExecutionException, InterruptedException;
     }
 
     //_____________________________________VIEWHOLDER_______________________________________________
@@ -126,15 +123,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
                 mContactImage.setImageDrawable(null);
             }
 
-            itemView.setOnClickListener(v -> listener.onContactClicked(contact));
-            itemView.setOnLongClickListener(v -> {
-                try {
-                    listener.onContactLongClicked(contact);
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            });
         }
     }
 

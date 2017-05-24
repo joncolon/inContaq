@@ -8,13 +8,10 @@ import java.util.TreeMap;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.util.PrepareHourlyTreeMap;
 
-/**
- * Created by jonathancolon on 5/14/17.
- */
 
 public class GetHourlySent {
-    TreeMap<Integer, Integer> hourlySentTreeMap;
-    ArrayList<Sms> smsList;
+    private TreeMap<Integer, Integer> hourlySentTreeMap;
+    private final ArrayList<Sms> smsList;
 
     public GetHourlySent(ArrayList<Sms> smsList) {
         this.smsList = smsList;

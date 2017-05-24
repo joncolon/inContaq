@@ -16,12 +16,12 @@ public class MonthlyGraph {
     private static final String SENT_COLOR = "#EF7674";
     private static final String LABEL_COLOR = "#FDFFFC";
     private static final String RECEIVED_COLOR = "#FDFFFC";
-    private LineChartView lineGraph;
-    private String[] xAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+    private final LineChartView lineGraph;
+    private final String[] xAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
             "Oct", "Nov", "Dec"};
 
-    private float[] monthlySent;
-    private float[] monthlyReceived;
+    private final float[] monthlySent;
+    private final float[] monthlyReceived;
 
     public MonthlyGraph(LineChartView lineGraph, float[] monthlyReceived, float[] monthlySent) {
         this.lineGraph = lineGraph;

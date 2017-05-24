@@ -20,9 +20,9 @@ public class HourlyGraph {
             "12AM", "3AM", "6AM", "9AM", "12PM", "3PM", "6PM", "9PM", "12AM"
     };
 
-    private LineChartView lineGraph;
-    private float[] hourlySent;
-    private float[] hourlyReceived;
+    private final LineChartView lineGraph;
+    private final float[] hourlySent;
+    private final float[] hourlyReceived;
 
     public HourlyGraph(LineChartView lineGraph, float[] hourlySent, float[] hourlyReceived) {
         this.lineGraph = lineGraph;

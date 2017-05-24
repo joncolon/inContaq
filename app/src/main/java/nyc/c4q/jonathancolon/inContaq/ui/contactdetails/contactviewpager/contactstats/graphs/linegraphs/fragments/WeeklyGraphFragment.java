@@ -15,9 +15,9 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contact
 
 public class WeeklyGraphFragment extends Fragment {
 
-    final String TAG = MonthlyGraphFragment.class.getSimpleName();
-    final String SENT_KEY = "weeklySent";
-    final String RECEIVED_KEY = "weeklyReceived";
+    private final String TAG = MonthlyGraphFragment.class.getSimpleName();
+    private final String SENT_KEY = "weeklySent";
+    private final String RECEIVED_KEY = "weeklyReceived";
 
     private LineChartView lineGraph;
     private float[] weeklyReceived, weeklySent;

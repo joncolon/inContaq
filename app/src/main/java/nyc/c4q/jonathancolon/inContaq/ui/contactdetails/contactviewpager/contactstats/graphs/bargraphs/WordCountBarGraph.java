@@ -21,8 +21,8 @@ public class WordCountBarGraph {
     private static final String RECEIVED_COLOR = "#FDFFFC";
     private int averageWordCountSent;
     private int averageWordCountReceived;
-    private BarChartView barChartView;
-    private String[] mLabels = {"Sent", "Received"};
+    private final BarChartView barChartView;
+    private final String[] mLabels = {"Sent", "Received"};
     private ArrayList<Sms> smsList;
     private int highestValue;
 

@@ -1,6 +1,5 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.contactstats.data;
 
-import android.util.Log;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,11 +29,6 @@ public class WordCount {
             return 0;
         }
         String[] words = input.split("\\s+");
-        for (String word : words) {
-            if (word.toLowerCase() == "smiling") {
-                Log.e("EMOJI", "checkForSmiling: " + word);
-            }
-        }
         return words.length;
     }
 

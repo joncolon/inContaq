@@ -34,7 +34,6 @@ import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE;
 import static android.provider.ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
 import static android.provider.ContactsContract.Contacts.CONTENT_URI;
 import static android.provider.ContactsContract.Contacts.DISPLAY_NAME;
-import static android.provider.ContactsContract.Contacts._ID;
 
 public class ContactListActivity extends AppCompatActivity implements
         ContactListAdapter.Listener {
@@ -74,7 +73,7 @@ public class ContactListActivity extends AppCompatActivity implements
         preloadContactListImages();
     }
 
-    public void checkServiceCreated() {
+    private void checkServiceCreated() {
         if (!ContactNotificationService.hasStarted) {
             System.out.println("Starting service...");
             Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
@@ -147,7 +146,6 @@ public class ContactListActivity extends AppCompatActivity implements
 
     private void retrieveContactNumber(Contact contact) {
         String contactNumber = null;
-        retrieveContactID();
 
         Log.d(TAG, "Contact ID: " + contactID);
         Cursor cursorPhone = getContentResolver().query(Phone.CONTENT_URI,
@@ -169,7 +167,7 @@ public class ContactListActivity extends AppCompatActivity implements
         Uri EmailCONTENT_URI = Email.CONTENT_URI;
         String EmailCONTACT_ID = Email.CONTACT_ID;
         String DATA = Email.DATA;
-        String email = null;
+        String email;
 
         Cursor emailCursor = getContentResolver().query(EmailCONTENT_URI, null,
                 EmailCONTACT_ID + " = ?", new String[]{contactID}, null);
@@ -183,18 +181,6 @@ public class ContactListActivity extends AppCompatActivity implements
         }
     }
 
-    private String retrieveContactID() {
-        Cursor cursorID = getContentResolver().query(uriContact,
-                new String[]{_ID},
-                null, null, null);
-
-        if (cursorID != null && cursorID.moveToFirst()) {
-            contactID = cursorID.getString(cursorID.getColumnIndex(_ID));
-            cursorID.close();
-        }
-        return contactID;
-    }
-
     private String simplifyPhoneNumber(String phoneNumber) {
         return phoneNumber.replaceAll("[()\\s-]+", "");
     }
@@ -205,11 +191,6 @@ public class ContactListActivity extends AppCompatActivity implements
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(CONTACT_ID, contact.getRealmID());
         this.startActivity(intent);
-    }
-
-    @Override
-    public void onContactLongClicked(Contact contact) {
-        //// TODO: 5/22/17 add functionality
     }
 
     @Override

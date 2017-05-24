@@ -34,10 +34,6 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         this.contact = contact;
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
 
     @Override
     public SmsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
