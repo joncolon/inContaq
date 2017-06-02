@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import java.util.concurrent.ExecutionException;
 
@@ -27,6 +29,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 import static android.provider.ContactsContract.CommonDataKinds.Phone;
 import static android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER;
@@ -48,6 +51,7 @@ public class ContactListActivity extends AppCompatActivity implements
     private RealmResults<Contact> contactList;
     private Context context;
     private Realm realm;
+    private SharedPreferences prefs;
 
 
     @Override
@@ -72,7 +76,29 @@ public class ContactListActivity extends AppCompatActivity implements
         initViews();
         setupRecyclerView();
         preloadContactListImages();
-    }
+        prefs = getSharedPreferences("inContaq", MODE_PRIVATE);
+        if (prefs.getBoolean("intro", true)) {
+            if (contactList == null) {
+                new MaterialTapTargetPrompt.Builder(ContactListActivity.this)
+                        .setTarget(findViewById(R.id.fab_add_contact))
+                        .setPrimaryText("Add your first contact")
+                        .setSecondaryText("Tap here to import your first contact")
+                        .setBackgroundColour(context.getColor(R.color.charcoal))
+                        .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener() {
+                            @Override
+                            public void onHidePrompt(MotionEvent event, boolean tappedTarget) {
+                                prefs.edit().putBoolean("intro", false).apply();
+                            }
+
+                            @Override
+                            public void onHidePromptComplete() {
+                            }
+                        })
+                        .show();
+            }
+
+            }
+        }
 
     public void checkServiceCreated() {
         if (!ContactNotificationService.hasStarted) {
@@ -146,7 +172,7 @@ public class ContactListActivity extends AppCompatActivity implements
     }
 
     private void retrieveContactNumber(Contact contact) {
-        String contactNumber = null;
+        String contactNumber;
         retrieveContactID();
 
         Log.d(TAG, "Contact ID: " + contactID);
@@ -155,13 +181,18 @@ public class ContactListActivity extends AppCompatActivity implements
                 Phone.CONTACT_ID + " = ? AND " + TYPE + " = " + TYPE_MOBILE,
                 new String[]{contactID},
                 null);
-
-        if (cursorPhone != null && cursorPhone.moveToFirst()) {
-            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(NUMBER));
-            cursorPhone.close();
-            Log.d(TAG, "Contact Phone Number: " + contactNumber);
-            String mobileNumber = simplifyPhoneNumber(contactNumber);
-            contact.setMobileNumber(mobileNumber);
+        try {
+            if (cursorPhone != null && cursorPhone.moveToFirst()) {
+                contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(NUMBER));
+                cursorPhone.close();
+                Log.d(TAG, "Contact Phone Number: " + contactNumber);
+                String mobileNumber = simplifyPhoneNumber(contactNumber);
+                contact.setMobileNumber(mobileNumber);
+            }
+        } finally {
+            if (cursorPhone != null) {
+                cursorPhone.close();
+            }
         }
     }
 
@@ -184,13 +215,14 @@ public class ContactListActivity extends AppCompatActivity implements
     }
 
     private String retrieveContactID() {
-        Cursor cursorID = getContentResolver().query(uriContact,
+        try (Cursor cursorID = getContentResolver().query(uriContact,
                 new String[]{_ID},
-                null, null, null);
+                null, null, null)) {
 
-        if (cursorID != null && cursorID.moveToFirst()) {
-            contactID = cursorID.getString(cursorID.getColumnIndex(_ID));
-            cursorID.close();
+            if (cursorID != null && cursorID.moveToFirst()) {
+                contactID = cursorID.getString(cursorID.getColumnIndex(_ID));
+                cursorID.close();
+            }
         }
         return contactID;
     }
@@ -227,7 +259,6 @@ public class ContactListActivity extends AppCompatActivity implements
         fetchAllContacts();
         ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
         adapter.setData(contactList);
-
     }
 
     private void fetchAllContacts() {
@@ -241,7 +272,6 @@ public class ContactListActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         RealmDbHelper.closeRealm(realm);
-
     }
 }
 

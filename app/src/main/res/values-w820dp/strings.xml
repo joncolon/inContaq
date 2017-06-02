@@ -19,4 +19,7 @@
     <string name="default_value">0</string>
     <string name="nameDisplayFont">fonts/jaapokkiregular.ttf</string>
     <string name="sms_trends">SMS Trends</string>
+    <string name="days_since_last_contacted">days since last contacted</string>
+    <string name="total_message_count">Total Message Count</string>
+    <string name="average_text_length">Average Text Length</string>
 </resources>

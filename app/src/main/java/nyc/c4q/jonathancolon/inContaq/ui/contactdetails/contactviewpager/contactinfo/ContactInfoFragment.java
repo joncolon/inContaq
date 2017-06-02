@@ -77,7 +77,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
         FragmentActivity context = getActivity();
         picasso = new PicassoHelper(context);
-        appLauncher = new MessengerAppLauncher(getActivity());
+        appLauncher = new MessengerAppLauncher(getActivity(), contact.getMobileNumber());
 
         isEditTextEnabled = false;
         initViews(view);
@@ -190,6 +190,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             selection = 1;
             ContactInfoFragment.this.alertDialogCallback(selection);
             anim.exitFab(saveButton);
+            saveButton.setVisibility(View.GONE);
             isEditTextEnabled = false;
 
         }).setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
@@ -396,7 +397,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Toast.makeText(getActivity(), "The Switch is " + (isChecked ? "on" : "off"),
+        Toast.makeText(getActivity(), "Reminders " + (isChecked ? "enabled" : "disabled"),
                 Toast.LENGTH_SHORT).show();
         if (isChecked) {
             RealmDbHelper.enableReminder(realm, contact);

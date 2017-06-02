@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,9 +25,11 @@ class MessengerAppLauncher {
     private final String SKYPE = "com.skype.raider";
     private final String GOOGLE_HANGOUTS = "com.google.android.talk";
     private final String LINKEDIN = "com.linkedin.android";
+    private String phoneNumber;
 
-    MessengerAppLauncher(Context context) {
+    MessengerAppLauncher(Context context, String phoneNumber) {
         this.context = context;
+        this.phoneNumber = phoneNumber;
     }
 
 
@@ -115,10 +118,16 @@ class MessengerAppLauncher {
     }
 
     void openDefaultSms() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.setType("vnd.android-dir/mms-sms");
-        context.startActivity(intent);
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("smsto:" + Uri.encode(phoneNumber)));
+
+        if (phoneNumber != null){
+            try{
+                context.startActivity(intent);
+            } catch (Exception e){
+                Log.e("DEFAULT SMS: ", "Unable to launch sms app" + e.getMessage() );
+            }
+        }
     }
 
 

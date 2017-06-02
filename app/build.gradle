@@ -9,10 +9,14 @@ android {
     defaultConfig {
         applicationId "nyc.c4q.jonathancolon.studentcouncilapp"
 
+        lintOptions {
+            checkReleaseBuilds false
+        }
+
         minSdkVersion 23
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.3"
         aaptOptions {
             cruncherEnabled = false
         }
@@ -76,6 +80,11 @@ android {
                 //BottomSheet Builder
                 compile 'com.github.rubensousa:bottomsheetbuilder:1.6.0'
 
+                //Material Tap Target Prompt
+                compile 'uk.co.samuelwall:material-tap-target-prompt:1.10.0'
+
+                //Lib Phone Number
+                compile 'io.michaelrocks:libphonenumber-android:8.4.1'
 
                 testCompile 'junit:junit:4.12'
             }

@@ -95,7 +95,7 @@ public class ContactSmsFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         Observable.fromCallable(() -> {
             GetAllSms callable = new GetAllSms(contentResolver,
-                    contactId);
+                    contactId, getContext());
             return callable.getAllSms();
         })
                 .subscribeOn(Schedulers.io())

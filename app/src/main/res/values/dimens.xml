@@ -38,5 +38,6 @@
     <dimen name="card_elevation_stats">5dp</dimen>
     <dimen name="contact_info_card_height">170dp</dimen>
     <dimen name="info_title_text_size">18sp</dimen>
+    <dimen name="min_text_size">12sp</dimen>
 
 </resources>

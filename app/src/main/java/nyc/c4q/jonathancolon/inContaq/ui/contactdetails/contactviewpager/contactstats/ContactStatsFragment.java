@@ -68,7 +68,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     private Context context;
 
     private CardView totalCard;
-    private RelativeLayout textCard;
+    private RelativeLayout statSummary;
     private CardView wordCard;
     private CardView weeklyCard;
     private CardView monthlyCard;
@@ -76,7 +76,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     private TextView avgWordSentTV, avgWordReceivedTV, daysSinceContactedTV,
             timeOfFeedbackTv, commonWordReceivedTV, commonWordSentTV,
-            getCommonWordSentTextTV, getCommonWordReceivedTextTV, youTV;
+            getCommonWordSentTextTV, getCommonWordReceivedTextTV, youTV, noDataTV;
 
     private TreeMap<Integer, Integer>
             hourlyReceivedTreeMap, hourlySentTreeMap,
@@ -113,8 +113,10 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         getCommonWordReceivedTextTV = (TextView) view.findViewById(R.id.common_received_text);
         getCommonWordSentTextTV = (TextView) view.findViewById(R.id.common_sent_text);
         youTV = (TextView) view.findViewById(R.id.you_tv);
+        noDataTV = (TextView) view.findViewById(R.id.no_data_tv);
 
-        textCard = (RelativeLayout) view.findViewById(R.id.stat_summary);
+        statSummary = (RelativeLayout) view.findViewById(R.id.stat_summary);
+
         totalCard = (CardView) view.findViewById(R.id.card_total_sms);
         wordCard = (CardView) view.findViewById(R.id.card_word_count);
         dailyCard = (CardView) view.findViewById(R.id.daily_card);
@@ -154,6 +156,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                     if (event instanceof ContactViewPagerActivity.SmsUnavailable) {
                         Log.e(TAG, "accept: SMS Unavailable ");
                         progressBar.setVisibility(GONE);
+                        noDataTV.setVisibility(View.VISIBLE);
                     }
                 }));
 
@@ -171,17 +174,21 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     public void displayStats() {
         String phoneNumber = contact.getMobileNumber();
-        if (phoneNumber != null) {
-
-            if (smsList != null) {
-                if (smsList.size() != 0) {
-                    long daysSinceLastContacted = getDifferenceDays();
-                    enableTextViewVisibility();
-                    populateDataTextViews(daysSinceLastContacted);
-                    loadBarGraphs();
-                }
+        if (phoneNumber != null && smsList != null) {
+            if (smsList.size() > 0) {
+                long daysSinceLastContacted = getDifferenceDays();
+                showGraphButtons();
+                enableTextViewVisibility();
+                populateDataTextViews(daysSinceLastContacted);
+                loadBarGraphs();
             }
         }
+    }
+
+    private void showGraphButtons() {
+        monthlyCard.setVisibility(View.VISIBLE);
+        weeklyCard.setVisibility(View.VISIBLE);
+        dailyCard.setVisibility(View.VISIBLE);
     }
 
     private long getDifferenceDays() {
@@ -261,7 +268,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                     Log.e(TAG, "getHourlySentTreeMap: COMPLETE");
 
                     progressBar.setVisibility(GONE);
-                    textCard.setVisibility(View.VISIBLE);
+                    statSummary.setVisibility(View.VISIBLE);
                     totalCard.setVisibility(View.VISIBLE);
                     wordCard.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);

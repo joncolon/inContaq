@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--TODO: Organize and Rename by usage-->
-
-    <!--blue-->
-    <color name="blue_sapphire">#0E587A</color>
-
     <!--red-->
     <color name="carmine_pink_lite">#DB6B71</color>
 

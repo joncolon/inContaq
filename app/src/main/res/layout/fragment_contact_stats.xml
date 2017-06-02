@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/no_data_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="237dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="This contact has no messages to analyze.\nTry starting a conversation and come back later!"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:id="@+id/graph_frag_container"
         android:name="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment"
@@ -37,7 +48,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="3dp"
-            android:text="Average Text Length"
+            android:text="@string/average_text_length"
             android:textAlignment="center"
             android:textColor="@color/light_font"
             android:textSize="10sp"
@@ -51,8 +62,6 @@
             android:layout_height="75dp"
             android:layout_gravity="center">
         </com.db.chart.view.BarChartView>
-
-
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
@@ -77,22 +86,20 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="3dp"
-            android:text="Total Message Count"
+            android:text="@string/total_message_count"
             android:textAlignment="center"
             android:textColor="@color/light_font"
             android:textSize="10sp"
             android:textStyle="bold"
             />
 
-
         <com.db.chart.view.BarChartView
             android:id="@+id/bar_chart_total_sms"
             android:layout_width="90dp"
             android:layout_height="75dp"
             android:layout_gravity="center">
+
         </com.db.chart.view.BarChartView>
-
-
     </android.support.v7.widget.CardView>
 
 
@@ -127,7 +134,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:scrollbars="vertical"
-            android:text="days since last contacted"
+            android:text="@string/days_since_last_contacted"
             android:textColor="@color/dark_charcoal"/>
 
         <TextView
@@ -270,96 +277,96 @@
             android:text="@string/is_your_most_commonly_used_word"
             android:textColor="@color/dark_charcoal"
             android:visibility="invisible"/>
-
-
     </RelativeLayout>
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
         android:id="@id/button_bar"
-        android:visibility="invisible"
-        >
-
-    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/dark_charcoal"
-        >
+        android:layout_height="56dp"
+        android:visibility="visible"
+        app:cardBackgroundColor="@color/dark_charcoal"
+        app:cardCornerRadius="0dp">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/weekly_card"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="35dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="@dimen/card_margin_end"
-            android:layout_marginStart="@dimen/card_margin_start"
-            android:layout_marginTop="6dp"
-            android:elevation="@dimen/button_elevation"
+            android:background="@color/dark_charcoal"
+            >
 
-            app:cardBackgroundColor="@color/cardview_dark_background"
-            app:cardCornerRadius="@dimen/card_chat_corner_radius">
+            <android.support.v7.widget.CardView
+                android:id="@+id/weekly_card"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="35dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="6dp"
+                android:layout_marginEnd="@dimen/card_margin_end"
+                android:layout_marginStart="@dimen/card_margin_start"
+                android:layout_marginTop="6dp"
+                android:elevation="@dimen/button_elevation"
+                android:visibility="invisible"
+                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardCornerRadius="@dimen/card_chat_corner_radius">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/weekly"
-                android:textStyle="bold"
-                android:textColor="@color/light_font"
-                />
-        </android.support.v7.widget.CardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/weekly"
+                    android:textColor="@color/light_font"
+                    android:textStyle="bold"
+                    />
+            </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/monthly_card"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="35dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="@dimen/card_margin_end"
-            android:layout_marginTop="6dp"
-            android:layout_toStartOf="@id/weekly_card"
-            android:elevation="@dimen/button_elevation"
-            app:cardBackgroundColor="@color/cardview_dark_background"
-            app:cardCornerRadius="@dimen/card_chat_corner_radius">
+            <android.support.v7.widget.CardView
+                android:id="@+id/monthly_card"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="35dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="6dp"
+                android:layout_marginEnd="@dimen/card_margin_end"
+                android:layout_marginTop="6dp"
+                android:layout_toStartOf="@id/weekly_card"
+                android:elevation="@dimen/button_elevation"
+                android:visibility="invisible"
+                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardCornerRadius="@dimen/card_chat_corner_radius">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/monthly"
-                android:textStyle="bold"
-                android:textColor="@color/light_font"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/monthly"
+                    android:textColor="@color/light_font"
+                    android:textStyle="bold"/>
 
-        </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/daily_card"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="35dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="@dimen/card_margin_end"
-            android:layout_marginStart="@dimen/card_margin_start"
-            android:layout_marginTop="6dp"
-            android:layout_toEndOf="@id/weekly_card"
-            android:elevation="@dimen/button_elevation"
-            app:cardBackgroundColor="@color/cardview_dark_background"
-            app:cardCornerRadius="@dimen/card_chat_corner_radius">
+            <android.support.v7.widget.CardView
+                android:id="@+id/daily_card"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="35dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginEnd="@dimen/card_margin_end"
+                android:layout_marginStart="@dimen/card_margin_start"
+                android:layout_marginTop="6dp"
+                android:layout_toEndOf="@id/weekly_card"
+                android:elevation="@dimen/button_elevation"
+                android:visibility="invisible"
+                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:cardCornerRadius="@dimen/card_chat_corner_radius">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/hourly"
-                android:textStyle="bold"
-                android:textColor="@color/light_font"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/hourly"
+                    android:textColor="@color/light_font"
+                    android:textStyle="bold"/>
 
-        </android.support.v7.widget.CardView>
-    </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 
     <ProgressBar

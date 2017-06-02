@@ -175,11 +175,11 @@ public class ContactNotificationService extends IntentService {
         mBuilder = new NotificationCompat.Builder(context)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setStyle(inboxStyle)
-                .setSmallIcon(R.drawable.vectorpaint)
+                .setSmallIcon(R.drawable.ic_app_logo)
                 .setPriority(PRIORITY_HIGH)
                 .setFullScreenIntent(pendingIntent, true)
                 .setContentTitle("Forgetting someone?")
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.vectorpaint))
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_logo))
                 .setSound(notification)
                 .setGroup(GROUP_CONTACTS);
 
