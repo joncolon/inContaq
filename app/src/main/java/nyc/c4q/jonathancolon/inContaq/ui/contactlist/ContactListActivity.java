@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import io.realm.Sort;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.smsreminder.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.smsreminder.MyAlarmReceiver;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactviewpager.ContactViewPagerActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
@@ -52,6 +54,8 @@ public class ContactListActivity extends AppCompatActivity implements
     private Context context;
     private Realm realm;
     private SharedPreferences prefs;
+    private MyAlarmReceiver receiver;
+
 
 
     @Override
@@ -100,13 +104,30 @@ public class ContactListActivity extends AppCompatActivity implements
             }
         }
 
+//    public void checkServiceCreated() {
+//        if (!ContactNotificationService.hasStarted) {
+//            System.out.println("Starting service...");
+//            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
+//            intent.putExtra("hasStarted", true);
+//            startService(intent);
+//        }
+//    }
+
     public void checkServiceCreated() {
         if (!ContactNotificationService.hasStarted) {
             System.out.println("Starting service...");
-            Intent intent = new Intent(getApplicationContext(), ContactNotificationService.class);
-            intent.putExtra("hasStarted", true);
-            startService(intent);
+            startService();
         }
+    }
+
+    public void startService() {
+        // Sends a broadcast to MyAlarmReceiver that will start MyService
+        IntentFilter filter = new IntentFilter(MyAlarmReceiver.ACTION);
+        receiver = new MyAlarmReceiver();
+        this.registerReceiver(receiver, filter);
+
+        Intent intent = new Intent(MyAlarmReceiver.ACTION);
+        sendBroadcast(intent);
     }
 
     private void initViews() {
@@ -272,6 +293,10 @@ public class ContactListActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         RealmDbHelper.closeRealm(realm);
+        if (receiver != null){
+            unregisterReceiver(receiver);
+            Log.d(TAG, "onDestroy: unregisted receiver");
+        }
     }
 }
 

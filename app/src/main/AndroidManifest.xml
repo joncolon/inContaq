@@ -56,4 +56,7 @@
             android:enabled="true"/>
     </application>
 
+    <receiver
+        android:name=".smsreminder.MyAlarmReceiver"></receiver>
+
 </manifest>
