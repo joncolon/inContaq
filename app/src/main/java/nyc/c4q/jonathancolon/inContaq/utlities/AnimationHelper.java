@@ -15,11 +15,6 @@ public class AnimationHelper {
         this.context = context;
     }
 
-    public void fadeIn(View view) {
-        Animation fadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
-        view.startAnimation(fadeIn);
-    }
-
     public void enterFab(View view) {
         Animation slideIn = AnimationUtils.loadAnimation(context, R.anim.enter_fab);
         view.startAnimation(slideIn);

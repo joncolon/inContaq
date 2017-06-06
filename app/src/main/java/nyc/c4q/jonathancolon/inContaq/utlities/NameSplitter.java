@@ -6,6 +6,7 @@ public class NameSplitter {
         if (name.trim().length() > 0) {
             String lastName = "";
             String firstName;
+
             if (name.split("\\s+").length > 1) {
                 lastName = name.substring(name.lastIndexOf(" ") + 1);
                 firstName = name.substring(0, name.lastIndexOf(' '));
