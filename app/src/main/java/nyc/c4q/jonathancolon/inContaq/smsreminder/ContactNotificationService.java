@@ -20,7 +20,6 @@ import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmDbHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
 import static android.app.Notification.PRIORITY_HIGH;
@@ -63,12 +62,12 @@ public class ContactNotificationService extends IntentService {
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
 
         System.out.println("Called IntentService...");
-        if (!hasStarted) { // Needed or else it'll keep scheduling new alarms and you'll be swarmed with notifications
+        if (!hasStarted) {
             System.out.println("Setting alarm for service...");
             scheduleAlarm();
             hasStarted = true;
         }
-        checkInspectionTime();
+//        checkInspectionTime();
     }
 
     private void scheduleAlarm() {
@@ -83,7 +82,7 @@ public class ContactNotificationService extends IntentService {
 
     private void checkInspectionTime() {
         Realm.init(context);
-        realm = RealmDbHelper.getInstance();
+//        realm = RealmService.getInstance();
         RealmResults<Contact> contactList = realm.where(Contact.class)
                 .equalTo("reminderEnabled", true).findAll();
         ArrayList<Contact> contacts = new ArrayList<>(contactList);
@@ -131,7 +130,7 @@ public class ContactNotificationService extends IntentService {
                     startNotification(context);
                 }
             }
-            RealmDbHelper.closeRealm(realm);
+//            RealmService.closeRealm(realm);
         }
     }
 
@@ -166,7 +165,6 @@ public class ContactNotificationService extends IntentService {
         int NOTIFICATION_ID = 555;
         Intent intent = new Intent(context, ContactListActivity.class);
 
-        // Unique requestID to differentiate between various notification with same notification ID
         int requestID = (int) System.currentTimeMillis();
         int flags = PendingIntent.FLAG_CANCEL_CURRENT; // Cancel old intent and create new one
         PendingIntent pendingIntent = PendingIntent.getActivity(context, requestID, intent, flags);
@@ -185,21 +183,11 @@ public class ContactNotificationService extends IntentService {
                 .setSound(notification)
                 .setGroup(GROUP_CONTACTS);
 
-
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(NOTIFICATION_SERVICE);
 
         notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
-
-    public void cancelAlarm() {
-        Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, MyAlarmReceiver.REQUEST_CODE,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarm = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-        alarm.cancel(pIntent);
-    }
-
 
     @Override
     public void onDestroy() {
