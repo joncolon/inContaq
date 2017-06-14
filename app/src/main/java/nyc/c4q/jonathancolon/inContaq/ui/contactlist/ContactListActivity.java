@@ -30,6 +30,7 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static android.provider.ContactsContract.Contacts.CONTENT_URI;
 import static nyc.c4q.jonathancolon.inContaq.di.Injector.getApplicationComponent;
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isEmptyList;
+import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 
 public class ContactListActivity extends BaseActivity implements
         ContactListAdapter.Listener, ContactListContract.View {
@@ -76,8 +77,6 @@ public class ContactListActivity extends BaseActivity implements
         });
     }
 
-
-
     @Override
     public void initializeMaterialTapPrompt(RealmResults<Contact> contactList) {
         MaterialTapHelper tapHelper = new MaterialTapHelper(context, ContactListActivity.this,
@@ -87,7 +86,7 @@ public class ContactListActivity extends BaseActivity implements
 
     @Override
     public void checkService() {
-        ServiceLauncher serviceLauncher = new ServiceLauncher(context);
+        ServiceLauncher serviceLauncher = new ServiceLauncher();
         serviceLauncher.checkServiceCreated();
     }
 
@@ -106,14 +105,14 @@ public class ContactListActivity extends BaseActivity implements
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(context));
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ContactListAdapter(this, this));
+        recyclerView.setAdapter(new ContactListAdapter(this));
         recyclerView.setItemViewCacheSize(30);
         recyclerView.setDrawingCacheEnabled(true);
     }
 
     @Override
     public void preLoadContactListImages() {
-        PicassoHelper pHelper = new PicassoHelper(context);
+        PicassoHelper pHelper = new PicassoHelper();
         if (!isEmptyList(contactList)) {
             for (int i = 0; i < contactList.size(); i++) {
                 if (contactList.get(i).getBackgroundImage() != null) {
@@ -139,8 +138,8 @@ public class ContactListActivity extends BaseActivity implements
             Log.d(TAG, "Response: " + data.toString());
             Uri contactUri = data.getData();
 
-            RetrieveSingleContact retrieveSingleContact = new RetrieveSingleContact(context,
-                    contactUri, getContentResolver());
+            RetrieveSingleContact retrieveSingleContact = new RetrieveSingleContact(contactUri,
+                    getContentResolver());
             Contact contact = retrieveSingleContact.createContact();
             realmService.addContactToRealmDB(contact);
         }
@@ -171,7 +170,7 @@ public class ContactListActivity extends BaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         realmService.closeRealm();
-        if (receiver != null) {
+        if (isNull(receiver)) {
             unregisterReceiver(receiver);
             Log.d(TAG, "onDestroy: unregisted receiver");
         }

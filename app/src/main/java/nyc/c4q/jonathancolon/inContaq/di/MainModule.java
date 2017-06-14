@@ -12,7 +12,6 @@ public class MainModule {
 
     @Provides
     public CompositeDisposable provideCompositeSubscription() {
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
-        return compositeDisposable;
+        return new CompositeDisposable();
     }
 }

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import javax.inject.Inject;
+
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.smsreminder.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.smsreminder.MyAlarmReceiver;
 
@@ -13,10 +16,11 @@ import nyc.c4q.jonathancolon.inContaq.smsreminder.MyAlarmReceiver;
 
 public class ServiceLauncher {
 
-    private Context context;
+    @Inject
+    Context context;
 
-    ServiceLauncher(Context context) {
-        this.context = context;
+    ServiceLauncher() {
+        Injector.getApplicationComponent().inject(this);
     }
 
     void checkServiceCreated() {

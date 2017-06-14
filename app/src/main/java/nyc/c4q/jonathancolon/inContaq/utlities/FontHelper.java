@@ -4,14 +4,18 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
 
 
 public class FontHelper {
-    private Context context;
+    @Inject
+    Context context;
 
-    public FontHelper(Context context) {
-        this.context = context;
+    public FontHelper() {
+        Injector.getApplicationComponent().inject(this);
     }
 
     public void applyFont(TextView textView) {

@@ -6,11 +6,16 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-public class PicassoHelper {
-    private final Context context;
+import javax.inject.Inject;
 
-    public PicassoHelper(Context context) {
-        this.context = context;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
+
+public class PicassoHelper {
+    @Inject
+    Context context;
+
+    public PicassoHelper() {
+        Injector.getApplicationComponent().inject(this);
     }
 
     public void preloadImages(String string) {

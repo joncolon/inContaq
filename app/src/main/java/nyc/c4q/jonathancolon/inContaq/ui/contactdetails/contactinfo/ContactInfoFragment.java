@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +31,12 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
-import nyc.c4q.jonathancolon.inContaq.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
-import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
 
@@ -79,8 +78,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         long contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
         contact = realmService.getByRealmID(contactId);
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
-        FragmentActivity context = getActivity();
-        picasso = new PicassoHelper(context);
+        picasso = new PicassoHelper();
         appLauncher = new MessengerAppLauncher(getActivity(), contact.getMobileNumber());
 
         isEditTextEnabled = false;
@@ -272,7 +270,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void loadImages() {
-        PicassoHelper ph = new PicassoHelper(getActivity());
+        PicassoHelper ph = new PicassoHelper();
         if (contact.getBackgroundImage() != null) {
             ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
         }
@@ -334,7 +332,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         int value = getActivity().getResources().getConfiguration().orientation;
 
         if (value == Configuration.ORIENTATION_PORTRAIT) {
-            FontHelper fontHelper = new FontHelper(getContext());
+            FontHelper fontHelper = new FontHelper();
             fontHelper.applyFont(displayName);
             displayContactInfo(contact);
 

@@ -8,9 +8,6 @@ import dagger.Module;
 import dagger.Provides;
 import nyc.c4q.jonathancolon.inContaq.application.AppController;
 
-/**
- * Created by jonathancolon on 6/9/17.
- */
 
 @Module
 public class ApplicationContextModule {

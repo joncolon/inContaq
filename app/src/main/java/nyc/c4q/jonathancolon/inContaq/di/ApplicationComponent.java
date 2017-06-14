@@ -12,10 +12,11 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.ContactStat
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListPresenter;
+import nyc.c4q.jonathancolon.inContaq.ui.contactlist.RetrieveSingleContact;
+import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ServiceLauncher;
+import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 
-/**
- * Created by jonathancolon on 6/9/17.
- */
 
 @Singleton
 @Component(modules = {ApplicationContextModule.class, RealmModule.class, MainModule.class})
@@ -38,4 +39,12 @@ public interface ApplicationComponent {
     void inject(ContactDetailsActivity viewPagerActivity);
 
     void inject(GetAllSms getAllSms);
+
+    void inject(FontHelper fontHelper);
+
+    void inject(PicassoHelper picassoHelper);
+
+    void inject(ServiceLauncher serviceLauncher);
+
+    void inject(RetrieveSingleContact retrieveSingleContact);
 }
