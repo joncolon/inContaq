@@ -1,17 +1,13 @@
-package nyc.c4q.jonathancolon.inContaq;
+package nyc.c4q.jonathancolon.inContaq.application;
 
 import android.app.Application;
 
 import javax.inject.Inject;
 
-import nyc.c4q.jonathancolon.inContaq.utlities.Injector;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 
-/**
- * Created by jonathancolon on 6/9/17.
- */
-
-public class MyApplication extends Application {
+public class AppController extends Application {
 
     @Inject
     RealmService realmService;
@@ -28,7 +24,6 @@ public class MyApplication extends Application {
         Injector.initializeApplicationComponent(this);
         Injector.getApplicationComponent().inject(this);
     }
-
 
     private void initRealmConfiguration() {
         realmService.setup();

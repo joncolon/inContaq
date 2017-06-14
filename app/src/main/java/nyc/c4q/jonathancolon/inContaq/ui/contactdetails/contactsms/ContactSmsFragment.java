@@ -26,11 +26,11 @@ import io.realm.Realm;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactViewPagerActivity;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.data.GetAllSms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.RxBus;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.RxBusComponent;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
@@ -68,7 +68,7 @@ public class ContactSmsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         RxBusComponent rxBusComponent =
-                ((ContactViewPagerActivity) getActivity()).getRxBusComponent();
+                ((ContactDetailsActivity) getActivity()).getRxBusComponent();
         rxBusComponent.inject(this);
         super.onCreate(savedInstanceState);
         rxBus = rxBusComponent.getRxBus();
@@ -81,7 +81,7 @@ public class ContactSmsFragment extends Fragment {
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
         realm = realmService.getInstance();
-        contact = ((ContactViewPagerActivity) getActivity()).contact;
+        contact = ((ContactDetailsActivity) getActivity()).contact;
         contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         ContentResolver contentResolver = getActivity().getContentResolver();
@@ -144,11 +144,11 @@ public class ContactSmsFragment extends Fragment {
     private void sendEvent() {
         Log.e("RxBus: ", "sending: SENT ");
         if (rxBus.hasObservers()) {
-            rxBus.send(new ContactViewPagerActivity.SmsLoaded());
+            rxBus.send(new ContactDetailsActivity.SmsLoaded());
             if (smsList.size() != 0 && smsList != null) {
                 rxBus.send(smsList);
             } else {
-                rxBus.send(new ContactViewPagerActivity.SmsUnavailable());
+                rxBus.send(new ContactDetailsActivity.SmsUnavailable());
             }
         }
     }

@@ -33,12 +33,11 @@ import javax.inject.Inject;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.ui.contactlist.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.Injector;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
 

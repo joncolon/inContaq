@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq;
+package nyc.c4q.jonathancolon.inContaq.di;
 
 import android.content.Context;
 
@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import nyc.c4q.jonathancolon.inContaq.application.AppController;
 
 /**
  * Created by jonathancolon on 6/9/17.
@@ -14,21 +15,21 @@ import dagger.Provides;
 @Module
 public class ApplicationContextModule {
 
-    private final MyApplication application;
+    private final AppController application;
 
-    public ApplicationContextModule(MyApplication application) {
+    ApplicationContextModule(AppController application) {
         this.application = application;
     }
 
     @Provides
     @Singleton
-    public MyApplication application() {
+    public AppController application() {
         return application;
     }
 
     @Provides
     @Singleton
-    public Context applicationContext() {
+    Context applicationContext() {
         return application.getApplicationContext();
     }
 

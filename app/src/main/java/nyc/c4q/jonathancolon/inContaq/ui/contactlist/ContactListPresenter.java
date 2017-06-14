@@ -1,53 +1,37 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
-import java.util.concurrent.ExecutionException;
+import android.os.Bundle;
 
 import javax.inject.Inject;
 
 import io.realm.RealmResults;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
+import nyc.c4q.jonathancolon.inContaq.ui.base.Presenter;
 
 
-class ContactListPresenter implements IContactListPresenter,
-        OnContactInteractorFinishedListener {
+public class ContactListPresenter extends Presenter<ContactListContract.View> implements
+        ContactListContract.Presenter {
 
     @Inject
-    RealmService realmService;
+    public RealmService realmService;
 
-    private IContactListView view;
-    private ContactListInteractor interactor;
-
-    ContactListPresenter(IContactListView view) {
-        this.interactor = new ContactListInteractor(this);
-        this.view = view;
+    @Inject
+    ContactListPresenter() {
     }
 
     @Override
-    public void retrieveContacts() throws ExecutionException, InterruptedException {
-        interactor.retrieveContactList();
+    public void initialize(Bundle extras) {
+        super.initialize(extras);
+        getView().checkPermissions();
+        getView().initializeContactList();
+        getView().preLoadContactListImages();
+        getView().checkService();
+        getView().initializeMaterialTapPrompt(retrieveContacts());
     }
 
     @Override
-    public void onContactClicked(int id) {
+    public RealmResults<Contact> retrieveContacts() {
+        return realmService.fetchAllContacts();
     }
-
-    @Override
-    public void onQuerySuccess(RealmResults<Contact> contactList) throws ExecutionException,
-            InterruptedException {
-        view.onContactsLoadedSuccess(contactList);
-    }
-
-    @Override
-    public void onQueryFailure(String error) {
-    }
-
-    @Override
-    public void setView(Object view) {
-    }
-
-    @Override
-    public void clearView() {
-    }
-
 }

@@ -14,9 +14,9 @@ import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.utlities.Injector;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberFormatter;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 
 
 public class GetAllSms {

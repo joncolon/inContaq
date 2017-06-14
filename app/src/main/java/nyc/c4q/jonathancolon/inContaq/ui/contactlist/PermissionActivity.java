@@ -5,17 +5,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-/**
- * Created by jonathancolon on 3/28/17.
- */
+import android.support.annotation.NonNull;
 
 public class PermissionActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         requestPermissions(new String[]{
                 Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
@@ -27,7 +23,8 @@ public class PermissionActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         PreferenceManager.getDefaultSharedPreferences(this).edit()
                 .putBoolean("request_permissions", false)
                 .apply();

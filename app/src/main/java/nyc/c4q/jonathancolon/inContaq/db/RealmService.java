@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.utlities;
+package nyc.c4q.jonathancolon.inContaq.db;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 
 
@@ -19,7 +20,7 @@ public class RealmService {
 
     private static final String TAG = RealmService.class.getSimpleName();
 
-    RealmConfiguration realmConfiguration;
+    private RealmConfiguration realmConfiguration;
 
     public RealmService() {
         Injector.getApplicationComponent().inject(this);
@@ -45,7 +46,7 @@ public class RealmService {
         return getInstance().where(Contact.class).equalTo("realmID", realmID).findFirst();
     }
 
-    public Realm getRealmInstance() {
+    private Realm getRealmInstance() {
         return Realm.getDefaultInstance();
     }
 

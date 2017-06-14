@@ -11,12 +11,12 @@ import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.DaggerRxBusComponent;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.RxBusComponent;
-import nyc.c4q.jonathancolon.inContaq.utlities.Injector;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
+import nyc.c4q.jonathancolon.inContaq.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
 
-public class ContactViewPagerActivity extends FragmentActivity {
+public class ContactDetailsActivity extends FragmentActivity {
 
     public Contact contact;
     ViewPager viewPager;
@@ -45,7 +45,7 @@ public class ContactViewPagerActivity extends FragmentActivity {
     private void showViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager_contact_tabs);
         viewPager.setAdapter(new ContactPagerAdapter(getSupportFragmentManager(),
-                ContactViewPagerActivity.this) {
+                ContactDetailsActivity.this) {
         });
 
         viewPager.setOffscreenPageLimit(3);

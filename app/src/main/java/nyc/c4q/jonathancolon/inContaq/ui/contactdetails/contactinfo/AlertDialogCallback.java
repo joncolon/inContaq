@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactinfo;
 
 
 import java.util.concurrent.ExecutionException;

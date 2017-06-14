@@ -15,11 +15,11 @@ public class ServiceLauncher {
 
     private Context context;
 
-    public ServiceLauncher(Context context) {
+    ServiceLauncher(Context context) {
         this.context = context;
     }
 
-    public void checkServiceCreated() {
+    void checkServiceCreated() {
         if (!ContactNotificationService.hasStarted) {
             System.out.println("Starting service...");
             startService();

@@ -1,95 +1,107 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.OnClick;
 import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.smsreminder.MyAlarmReceiver;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactViewPagerActivity;
+import nyc.c4q.jonathancolon.inContaq.ui.base.BaseActivity;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
-import nyc.c4q.jonathancolon.inContaq.utlities.Injector;
 import nyc.c4q.jonathancolon.inContaq.utlities.MaterialTapHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
 
+import static android.content.Intent.ACTION_PICK;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static android.provider.ContactsContract.Contacts.CONTENT_URI;
+import static nyc.c4q.jonathancolon.inContaq.di.Injector.getApplicationComponent;
+import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isEmptyList;
 
-public class ContactListActivity extends AppCompatActivity implements
-        ContactListAdapter.Listener, IContactListView {
+public class ContactListActivity extends BaseActivity implements
+        ContactListAdapter.Listener, ContactListContract.View {
 
     public static final String CONTACT_ID = "Contact";
     private static final String TAG = ContactListActivity.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
-    ServiceLauncher serviceLauncher;
-    private RecyclerView recyclerView;
-    private RealmResults<Contact> contactList;
-    private MyAlarmReceiver receiver;
-    private ContactListPresenter presenter;
 
     @Inject
     RealmService realmService;
-    
     @Inject
     Context context;
+    @Inject
+    ContactListPresenter presenter;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.fab_add_contact)
+    FloatingActionButton addContactFab;
+
+    private RealmResults<Contact> contactList;
+    private MyAlarmReceiver receiver;
+
+    @Override
+    protected void initializeDagger() {
+        getApplicationComponent().inject(ContactListActivity.this);
+    }
+
+    @Override
+    protected void initializePresenter() {
+        super.presenter = presenter;
+        presenter.setView(this);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_contact_list;
+    }
+
+    @OnClick(R.id.fab_add_contact)
+    public void onClick() {
+        addContactFab.setOnClickListener(v -> {
+            startActivityForResult(new Intent(ACTION_PICK,
+                    CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
+        });
+    }
 
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_list);
-
-        Activity activity = this;
-        presenter = new ContactListPresenter(this);
-
-        Injector.getApplicationComponent().inject(this);
-
-        if (PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean("request_permissions", true) &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            startActivity(new Intent(this, PermissionActivity.class));
-            finish();
-            return;
-        }
-
-        MaterialTapHelper tapHelper = new MaterialTapHelper(context, activity,
+    public void initializeMaterialTapPrompt(RealmResults<Contact> contactList) {
+        MaterialTapHelper tapHelper = new MaterialTapHelper(context, ContactListActivity.this,
                 getPreferences(MODE_PRIVATE), contactList);
-
-        serviceLauncher = new ServiceLauncher(context);
-        serviceLauncher.checkServiceCreated();
-        initViews();
-        setupRecyclerView();
-        preloadContactListImages();
         tapHelper.addFirstContactPrompt();
     }
 
-    private void initViews() {
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        FloatingActionButton addContactFab = (FloatingActionButton)
-                findViewById(R.id.fab_add_contact);
-
-        addContactFab.setOnClickListener(v -> startActivityForResult(new Intent(Intent.ACTION_PICK,
-                CONTENT_URI), REQUEST_CODE_PICK_CONTACTS));
+    @Override
+    public void checkService() {
+        ServiceLauncher serviceLauncher = new ServiceLauncher(context);
+        serviceLauncher.checkServiceCreated();
     }
 
-    private void setupRecyclerView() {
+    @Override
+    public void checkPermissions() {
+        if (getDefaultSharedPreferences(this)
+                .getBoolean("request_permissions", true) &&
+                (SDK_INT >= Build.VERSION_CODES.M)) {
+            requestPermissions();
+        }
+    }
+
+    @Override
+    public void initializeContactList() {
         PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(context));
@@ -99,10 +111,10 @@ public class ContactListActivity extends AppCompatActivity implements
         recyclerView.setDrawingCacheEnabled(true);
     }
 
-    private void preloadContactListImages() {
+    @Override
+    public void preLoadContactListImages() {
         PicassoHelper pHelper = new PicassoHelper(context);
-
-        if (contactList != null) {
+        if (!isEmptyList(contactList)) {
             for (int i = 0; i < contactList.size(); i++) {
                 if (contactList.get(i).getBackgroundImage() != null) {
                     pHelper.preloadImages(contactList.get(i).getBackgroundImage());
@@ -115,6 +127,12 @@ public class ContactListActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void requestPermissions() {
+        startActivity(new Intent(this, PermissionActivity.class));
+        finish();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_PICK_CONTACTS && resultCode == RESULT_OK) {
@@ -124,32 +142,29 @@ public class ContactListActivity extends AppCompatActivity implements
             RetrieveSingleContact retrieveSingleContact = new RetrieveSingleContact(context,
                     contactUri, getContentResolver());
             Contact contact = retrieveSingleContact.createContact();
-            // TODO: 6/9/17 make not null
             realmService.addContactToRealmDB(contact);
         }
     }
 
     @Override
     public void onContactClicked(Contact contact) {
-        Intent intent = new Intent(this, ContactViewPagerActivity.class);
+        Intent intent = new Intent(this, ContactDetailsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(CONTACT_ID, contact.getRealmID());
         this.startActivity(intent);
     }
 
     @Override
-    public void onContactLongClicked(Contact contact) {
-        //// TODO: 5/22/17 add functionality
+    public void onResume() {
+        super.onResume();
+        contactList = presenter.retrieveContacts();
+        refreshContactList(contactList);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        try {
-            presenter.retrieveContacts();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void refreshContactList(RealmResults<Contact> list) {
+        ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
+        adapter.setData(list);
     }
 
     @Override
@@ -161,28 +176,4 @@ public class ContactListActivity extends AppCompatActivity implements
             Log.d(TAG, "onDestroy: unregisted receiver");
         }
     }
-
-    @Override
-    public void onContactsLoadedSuccess(RealmResults<Contact> list) throws ExecutionException,
-            InterruptedException {
-        refreshRecyclerView(list);
-    }
-
-    private void refreshRecyclerView(RealmResults<Contact> list) throws ExecutionException,
-            InterruptedException {
-        ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
-        adapter.setData(list);
-    }
-
-    @Override
-    public void onContactsLoadedFailure(String string) {
-        Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
-    }
-
-    //todo migrate intent to this method
-    @Override
-    public void launchActivity(Contact contact) {
-    }
-
-
 }

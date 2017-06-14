@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactViewPagerActivity;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.GetHourlyReceived;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.GetHourlySent;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.GetMonthlyReceived;
@@ -95,7 +95,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         context = getContext();
         timeMostContacted = new TimeMostContacted();
         analyticsFeedback = new AnalyticsFeedback();
-        contact = ((ContactViewPagerActivity) getActivity()).contact;
+        contact = ((ContactDetailsActivity) getActivity()).contact;
 
         return view;
     }
@@ -137,7 +137,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     public void onStart() {
         super.onStart();
         Log.e(TAG, "onStart: VISIBLE TO USER");
-        RxBusComponent rxBusComponent = ((ContactViewPagerActivity)
+        RxBusComponent rxBusComponent = ((ContactDetailsActivity)
                 getActivity()).getRxBusComponent();
         rxBusComponent.inject(this);
 
@@ -150,10 +150,10 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         Log.e(TAG, "RxBus: accept: waiting to receive ");
         disposables.add(eventEmitter
                 .subscribe(event -> {
-                    if (event instanceof ContactViewPagerActivity.SmsLoaded) {
+                    if (event instanceof ContactDetailsActivity.SmsLoaded) {
                         Log.e(TAG, "accept: SMS Loaded ");
                     }
-                    if (event instanceof ContactViewPagerActivity.SmsUnavailable) {
+                    if (event instanceof ContactDetailsActivity.SmsUnavailable) {
                         Log.e(TAG, "accept: SMS Unavailable ");
                         progressBar.setVisibility(GONE);
                         noDataTV.setVisibility(View.VISIBLE);

@@ -1,21 +1,21 @@
-package nyc.c4q.jonathancolon.inContaq;
+package nyc.c4q.jonathancolon.inContaq.di;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import nyc.c4q.jonathancolon.inContaq.utlities.RealmService;
+import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 
 /**
  * Created by jonathancolon on 6/9/17.
  */
 
 @Module
-public class RepositoryModule {
+public class RealmModule {
 
     @Provides
     @Singleton
-    public RealmService provideDatabaseRealm() {
+    public RealmService provideRealmService() {
         return new RealmService();
     }
 }

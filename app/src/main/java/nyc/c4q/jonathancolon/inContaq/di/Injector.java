@@ -1,13 +1,8 @@
-package nyc.c4q.jonathancolon.inContaq.utlities;
+package nyc.c4q.jonathancolon.inContaq.di;
 
 import java.util.Objects;
 
-import nyc.c4q.jonathancolon.inContaq.ApplicationComponent;
-import nyc.c4q.jonathancolon.inContaq.ApplicationContextModule;
-import nyc.c4q.jonathancolon.inContaq.DaggerApplicationComponent;
-import nyc.c4q.jonathancolon.inContaq.MyApplication;
-import nyc.c4q.jonathancolon.inContaq.RepositoryModule;
-
+import nyc.c4q.jonathancolon.inContaq.application.AppController;
 
 public class Injector {
 
@@ -15,10 +10,10 @@ public class Injector {
 
     private Injector() {}
 
-    public static void initializeApplicationComponent(MyApplication app) {
+    public static void initializeApplicationComponent(AppController app) {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationContextModule(new ApplicationContextModule(app))
-                .repositoryModule(new RepositoryModule())
+                .realmModule(new RealmModule())
                 .build();
     }
 

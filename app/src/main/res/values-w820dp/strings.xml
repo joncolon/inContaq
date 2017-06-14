@@ -22,4 +22,6 @@
     <string name="days_since_last_contacted">days since last contacted</string>
     <string name="total_message_count">Total Message Count</string>
     <string name="average_text_length">Average Text Length</string>
+    <string name="add_first_contact">Add your first contact</string>
+    <string name="tap_here">Tap here to import your first contact</string>
 </resources>

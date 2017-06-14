@@ -33,8 +33,8 @@ public class MaterialTapHelper {
             if (contactList == null) {
                 new MaterialTapTargetPrompt.Builder(activity)
                         .setTarget(activity.findViewById(R.id.fab_add_contact))
-                        .setPrimaryText("Add your first contact")
-                        .setSecondaryText("Tap here to import your first contact")
+                        .setPrimaryText(R.string.add_first_contact)
+                        .setSecondaryText(R.string.tap_here)
                         .setBackgroundColour(context.getColor(R.color.charcoal))
                         .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener() {
                             @Override
