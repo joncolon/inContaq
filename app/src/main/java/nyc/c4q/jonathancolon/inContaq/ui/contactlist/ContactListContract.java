@@ -2,7 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
 import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.ui.base.listeners.BaseView;
+import nyc.c4q.jonathancolon.inContaq.common.base.BaseView;
 
 /**
  * Created by jonathancolon on 6/10/17.
@@ -18,7 +18,7 @@ public class ContactListContract {
 
         void checkPermissions();
 
-        void initializeContactList();
+        void initializeRecyclerView();
 
         void requestPermissions();
 

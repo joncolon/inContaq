@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.util.PrepareMonthlyTreeMap;
 
 /**
  * Created by jonathancolon on 5/14/17.
@@ -15,19 +14,18 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.util.Prepar
 public class GetMonthlySent {
 
     private TreeMap<Integer, Integer> monthlySentTreeMap;
-    private ArrayList<Sms> smsList;
+    private static final String SENT = "2";
 
-    public GetMonthlySent(ArrayList<Sms> smsList) {
-        this.smsList = smsList;
+    public GetMonthlySent() {
     }
 
-    public TreeMap<Integer, Integer> getMonthlySent() {
+    public TreeMap<Integer, Integer> getMonthlySent(ArrayList<Sms> smsList) {
         ArrayList<String> sentSms = new ArrayList<>();
         PrepareMonthlyTreeMap treeMap = new PrepareMonthlyTreeMap();
         monthlySentTreeMap = treeMap.setUpMonthlyTreeMap();
 
         for (int i = 0; i < smsList.size(); i++) {
-            if (smsList.get(i).getType().equals("2")) {
+            if (smsList.get(i).getType().equals(SENT)) {
                 sentSms.add(smsList.get(i).getTime());
             }
         }

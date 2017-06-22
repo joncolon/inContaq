@@ -2,6 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactinfo;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -31,14 +32,14 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.db.RealmService;
-import nyc.c4q.jonathancolon.inContaq.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.database.RealmService;
+import nyc.c4q.jonathancolon.inContaq.common.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 
-import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
+import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>,
         AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener,
@@ -46,13 +47,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
-
+    @Inject RealmService realmService;
+    @Inject Context context;
+    @Inject PicassoHelper pUtils;
+    @Inject FontUtils fontUtils;
     private Contact contact;
     private TextView mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV, sendMessageIV;
-
     private PicassoHelper picasso;
-
     private EditText editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
     private int selection;
@@ -64,10 +66,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private int bottomSheetMenu;
     private BottomSheetMenuDialog dialog;
 
-    @Inject
-    RealmService realmService;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,10 +73,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
 
         Injector.getApplicationComponent().inject(this);
-        long contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
+        long contactId = getActivity().getIntent().getLongExtra(CONTACT_KEY, -1);
         contact = realmService.getByRealmID(contactId);
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
-        picasso = new PicassoHelper();
+        picasso = new PicassoHelper(context);
         appLauncher = new MessengerAppLauncher(getActivity(), contact.getMobileNumber());
 
         isEditTextEnabled = false;
@@ -86,43 +84,6 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         setClickListeners();
         displayContactInfo(contact);
         return view;
-    }
-
-    private BottomSheetMenuDialog initBottomSheetDialog(int menuId) {
-        BottomSheetMenuDialog dialog = new BottomSheetBuilder(getActivity(),
-                R.style.AppTheme_BottomSheetDialog)
-                .setMode(BottomSheetBuilder.MODE_GRID)
-                .setMenu(menuId)
-                .setItemClickListener(item -> {
-                    int i = item.getItemId();
-                    if (i == R.id.sms_icon) {
-                        appLauncher.openDefaultSms();
-                    } else if (i == R.id.whatsapp_icon) {
-                        appLauncher.openWhatsApp();
-
-                    } else if (i == R.id.fb_icon) {
-                        appLauncher.openFacebookMessenger();
-
-                    } else if (i == R.id.slack_icon) {
-                        appLauncher.openSlack();
-
-                    } else if (i == R.id.linked_in) {
-                        appLauncher.openLinkedIn();
-
-                    } else if (i == R.id.hangouts_icon) {
-                        appLauncher.openHangouts();
-
-                    } else if (i == R.id.snapchat_icon) {
-                        appLauncher.openSnapChat();
-
-                    } else if (i == R.id.skype_icon) {
-                        appLauncher.openSkype();
-                    }
-                })
-                .createDialog();
-        dialog.setOnCancelListener(this);
-        dialog.setOnDismissListener(this);
-        return dialog;
     }
 
     private void initViews(View view) {
@@ -270,12 +231,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void loadImages() {
-        PicassoHelper ph = new PicassoHelper();
         if (contact.getBackgroundImage() != null) {
-            ph.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
+            pUtils.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
         }
         if (contact.getContactImage() != null) {
-            ph.loadImageFromString(contact.getContactImage(), contactImageIV);
+            pUtils.loadImageFromString(contact.getContactImage(), contactImageIV);
         }
     }
 
@@ -332,8 +292,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         int value = getActivity().getResources().getConfiguration().orientation;
 
         if (value == Configuration.ORIENTATION_PORTRAIT) {
-            FontHelper fontHelper = new FontHelper();
-            fontHelper.applyFont(displayName);
+            fontUtils.applyFont(displayName);
             displayContactInfo(contact);
 
             contactImageIV.setOnClickListener(v -> {
@@ -414,6 +373,43 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public void onCancel(DialogInterface dialog) {
         this.dialog = initBottomSheetDialog(bottomSheetMenu);
+    }
+
+    private BottomSheetMenuDialog initBottomSheetDialog(int menuId) {
+        BottomSheetMenuDialog dialog = new BottomSheetBuilder(getActivity(),
+                R.style.AppTheme_BottomSheetDialog)
+                .setMode(BottomSheetBuilder.MODE_GRID)
+                .setMenu(menuId)
+                .setItemClickListener(item -> {
+                    int i = item.getItemId();
+                    if (i == R.id.sms_icon) {
+                        appLauncher.openDefaultSms();
+                    } else if (i == R.id.whatsapp_icon) {
+                        appLauncher.openWhatsApp();
+
+                    } else if (i == R.id.fb_icon) {
+                        appLauncher.openFacebookMessenger();
+
+                    } else if (i == R.id.slack_icon) {
+                        appLauncher.openSlack();
+
+                    } else if (i == R.id.linked_in) {
+                        appLauncher.openLinkedIn();
+
+                    } else if (i == R.id.hangouts_icon) {
+                        appLauncher.openHangouts();
+
+                    } else if (i == R.id.snapchat_icon) {
+                        appLauncher.openSnapChat();
+
+                    } else if (i == R.id.skype_icon) {
+                        appLauncher.openSkype();
+                    }
+                })
+                .createDialog();
+        dialog.setOnCancelListener(this);
+        dialog.setOnDismissListener(this);
+        return dialog;
     }
 
     @Override

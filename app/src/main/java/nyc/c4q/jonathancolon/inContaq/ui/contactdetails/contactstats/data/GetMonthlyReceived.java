@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.util.PrepareMonthlyTreeMap;
 
 /**
  * Created by jonathancolon on 5/14/17.

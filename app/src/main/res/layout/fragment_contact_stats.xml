@@ -21,7 +21,7 @@
         android:name="nyc.c4q.jonathancolon.inContaq.contactlist.fragments.GraphFragment"
         android:layout_width="match_parent"
         android:layout_height="110dp"
-        android:layout_below="@+id/button_bar"
+        android:layout_below="@+id/button_bar_card"
         android:layout_marginTop="@dimen/card_margin_top">
 
     </FrameLayout>
@@ -280,7 +280,7 @@
     </RelativeLayout>
 
     <android.support.v7.widget.CardView
-        android:id="@id/button_bar"
+        android:id="@id/button_bar_card"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:visibility="visible"

@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms;
 
 
-import android.content.ContentResolver;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,37 +18,41 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.data.GetAllSms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.RxBus;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.RxBusComponent;
-import nyc.c4q.jonathancolon.inContaq.db.RealmService;
+import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
-import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
+import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getApplicationComponent;
+import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getRxBus;
+import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
+import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isEmptyList;
 
 public class ContactSmsFragment extends Fragment {
 
-    private long contactId;
+    private static final String TAG = ContactSmsFragment.class.getSimpleName();
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.sms_toolbar) Toolbar toolbar;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
 
-    private ProgressBar progressBar;
-    private RecyclerView recyclerView;
-
+    @Inject RealmService realmService;
+    @Inject GetAllSms getAllSms;
+    @Inject SmsHelper smsHelper;
+    private long realmID;
     private ArrayList<Sms> smsList;
-    private Realm realm;
     private RxBus rxBus;
     private Contact contact;
-    private Toolbar toolbar;
-
-    @Inject
-    RealmService realmService;
+    private Unbinder unbinder;
 
     public ContactSmsFragment() {
     }
@@ -57,7 +60,6 @@ public class ContactSmsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -67,12 +69,10 @@ public class ContactSmsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        RxBusComponent rxBusComponent =
-                ((ContactDetailsActivity) getActivity()).getRxBusComponent();
-        rxBusComponent.inject(this);
         super.onCreate(savedInstanceState);
-        rxBus = rxBusComponent.getRxBus();
-        Log.i("Dagger: ", "SmsFrag rxBus: " + rxBus);
+        getApplicationComponent().inject(this);
+        rxBus = getRxBus();
+        Log.i(TAG, "RxBus memory address: " + rxBus);
     }
 
     @Override
@@ -80,27 +80,22 @@ public class ContactSmsFragment extends Fragment {
                              Bundle savedInstanceState) {
         inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
-        realm = realmService.getInstance();
+
+        unbinder = ButterKnife.bind(this, view);
         contact = ((ContactDetailsActivity) getActivity()).contact;
-        contactId = getActivity().getIntent().getLongExtra(CONTACT_ID, -1);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        toolbar = (Toolbar)view.findViewById(R.id.sms_toolbar);
+        realmID = getActivity().getIntent().getLongExtra(CONTACT_KEY, -1);
+
         toolbar.setTitle(contact.getFirstName() + " " + contact.getLastName());
         toolbar.setTitleTextColor(getActivity().getColor(R.color.light_font));
         toolbar.setSubtitleTextColor(getActivity().getColor(R.color.grey_font));
 
-        getAllSms(contentResolver, contactId);
-        initViews(view);
+        retrieveSmsListInBackground(realmID);
         return view;
     }
 
-    public void getAllSms(ContentResolver contentResolver, long contactId) {
+    public void retrieveSmsListInBackground(long contactId) {
         progressBar.setVisibility(View.VISIBLE);
-        Observable.fromCallable(() -> {
-            GetAllSms callable = new GetAllSms(contentResolver, contactId, getContext());
-            return callable.getAllSms();
-        })
+        Observable.fromCallable(() -> getAllSms.retrieveSmsList(contactId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(arrayList -> {
@@ -112,29 +107,23 @@ public class ContactSmsFragment extends Fragment {
                     ContactSmsFragment.this.sendEvent();
                     ContactSmsFragment.this.scrollListToBottom();
 
-                    if (smsList.size() != 0){
-                        long time = SmsHelper.getLastContactedDate(contentResolver, contact);
-                        StringBuilder lastContacted = SmsHelper.smsDateFormat(time);
-                        toolbar.setSubtitle("Last Contacted: " + lastContacted);
+                    if (smsList.size() != 0) {
+                        long time = smsHelper.getLastContactedDate(contact);
+                        StringBuilder lastContacted = smsHelper.smsDateFormat(time);
+                        toolbar.setSubtitle(getString(R.string.last_contacted) + lastContacted);
                     } else {
-                        toolbar.setSubtitle("No SMS data available");
+                        toolbar.setSubtitle(R.string.no_sms_available);
                     }
                 });
     }
 
-    private void initViews(View view) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-    }
-
     private void setupRecyclerView(Contact contact) {
-        SmsAdapter adapter = new SmsAdapter(contact);
+        SmsAdapter adapter = new SmsAdapter(contact, smsHelper);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         Collections.sort(smsList);
         adapter.setData(smsList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
     }
 
     synchronized private void showRecyclerView() {
@@ -145,7 +134,7 @@ public class ContactSmsFragment extends Fragment {
         Log.e("RxBus: ", "sending: SENT ");
         if (rxBus.hasObservers()) {
             rxBus.send(new ContactDetailsActivity.SmsLoaded());
-            if (smsList.size() != 0 && smsList != null) {
+            if (!isEmptyList(smsList)) {
                 rxBus.send(smsList);
             } else {
                 rxBus.send(new ContactDetailsActivity.SmsUnavailable());
@@ -161,6 +150,7 @@ public class ContactSmsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         realmService.closeRealm();
+        unbinder.unbind();
     }
 
     @Override

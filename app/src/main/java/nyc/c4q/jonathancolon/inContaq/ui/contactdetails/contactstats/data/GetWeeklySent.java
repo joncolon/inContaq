@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.util.PrepareWeeklyTreeMap;
 
 
 public class GetWeeklySent {

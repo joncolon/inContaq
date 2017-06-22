@@ -6,9 +6,8 @@ import android.content.IntentFilter;
 
 import javax.inject.Inject;
 
-import nyc.c4q.jonathancolon.inContaq.di.Injector;
-import nyc.c4q.jonathancolon.inContaq.smsreminder.ContactNotificationService;
-import nyc.c4q.jonathancolon.inContaq.smsreminder.MyAlarmReceiver;
+import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.notifications.MyAlarmReceiver;
 
 /**
  * Created by jonathancolon on 6/9/17.
@@ -16,11 +15,11 @@ import nyc.c4q.jonathancolon.inContaq.smsreminder.MyAlarmReceiver;
 
 public class ServiceLauncher {
 
-    @Inject
-    Context context;
+    private Context context;
 
-    ServiceLauncher() {
-        Injector.getApplicationComponent().inject(this);
+    @Inject
+    public ServiceLauncher(Context context) {
+        this.context = context;
     }
 
     void checkServiceCreated() {
@@ -34,7 +33,6 @@ public class ServiceLauncher {
         IntentFilter filter = new IntentFilter(MyAlarmReceiver.ACTION);
         MyAlarmReceiver receiver = new MyAlarmReceiver();
         context.registerReceiver(receiver, filter);
-
         Intent intent = new Intent(MyAlarmReceiver.ACTION);
         context.sendBroadcast(intent);
     }

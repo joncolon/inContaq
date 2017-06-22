@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:background="#00000000"
-             tools:context=".ui.contactdetails.contactviewpager.contactstats.graphs.linegraphs.fragments.MonthlyGraphFragment">
+             tools:context=".ui.contactdetails.ContactDetailsActivity">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardview_graph_container"

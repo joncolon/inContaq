@@ -2,47 +2,62 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.common.base.BaseActivity;
+import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.DaggerRxBusComponent;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.rxbus.RxBusComponent;
-import nyc.c4q.jonathancolon.inContaq.di.Injector;
-import nyc.c4q.jonathancolon.inContaq.db.RealmService;
 
-import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_ID;
+import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getApplicationComponent;
+import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
 
-public class ContactDetailsActivity extends FragmentActivity {
+public class ContactDetailsActivity extends BaseActivity implements ContactDetailsContract.View {
 
+    @BindView(R.id.tablayout_contact_tabs)TabLayout tabLayout;
+    @BindView(R.id.viewpager_contact_tabs)ViewPager viewPager;
+
+    @Inject ContactDetailsPresenter presenter;
     public Contact contact;
-    ViewPager viewPager;
-    RxBusComponent rxBusComponent;
-    private long contactId;
 
     @Inject
     RealmService realmService;
 
     @Override
+    protected void initializeDagger() {
+        getApplicationComponent().inject(this);
+    }
+
+    @Override
+    protected void initializePresenter() {
+        super.presenter = presenter;
+        presenter.setView(this);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_contact_viewpager;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        rxBusComponent = DaggerRxBusComponent.builder()
-                .build();
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_viewpager);
-
-        Injector.getApplicationComponent().inject(this);
-
-        contactId = getIntent().getLongExtra(CONTACT_ID, -1);
-        contact = realmService.getByRealmID(contactId);
-
+        getApplicationComponent().inject(this);
+        loadSelectedContact();
         showViewPager();
     }
 
-    private void showViewPager() {
+    @Override
+    public void loadSelectedContact() {
+        long realmID = getIntent().getLongExtra(CONTACT_KEY, -1);
+        contact = realmService.getByRealmID(realmID);
+    }
+
+    @Override
+    public void showViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager_contact_tabs);
         viewPager.setAdapter(new ContactPagerAdapter(getSupportFragmentManager(),
                 ContactDetailsActivity.this) {
@@ -58,10 +73,6 @@ public class ContactDetailsActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         realmService.closeRealm();
-    }
-
-    public RxBusComponent getRxBusComponent() {
-        return rxBusComponent;
     }
 
     public static class SmsLoaded {

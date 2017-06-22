@@ -15,7 +15,7 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.WordCo
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
 
-public class WordCountBarGraph {
+public class WordCountBarGraph extends BarGraph {
     private static final String FILL_COLOR = "#000000";
     private static final String SENT_COLOR = "#EF7674";
     private static final String RECEIVED_COLOR = "#FDFFFC";
@@ -23,39 +23,38 @@ public class WordCountBarGraph {
     private int averageWordCountReceived;
     private BarChartView barChartView;
     private String[] mLabels = {"Sent", "Received"};
-    private ArrayList<Sms> smsList;
     private int highestValue;
 
-    public WordCountBarGraph(BarChartView barChartView, ArrayList<Sms> smsList) {
+    public WordCountBarGraph(BarChartView barChartView) {
         this.barChartView = barChartView;
-        this.smsList = smsList;
     }
 
-    public void showBarGraph() {
-        getBarGraphValues(smsList);
-        loadGraph();
+    public void showBarGraph(ArrayList<Sms> smsList, WordCount wordCount) {
+        getValues(smsList, wordCount);
+        buildGraph();
+        barChartView.show();
+
     }
 
-    private void getBarGraphValues(ArrayList<Sms> smsList) {
-        averageWordCountSent = WordCount.averageWordCountSent(smsList);
-        averageWordCountReceived = WordCount.averageWordCountReceived(smsList);
-        this.smsList = smsList;
+    void getValues(ArrayList<Sms> smsList, WordCount wordCount) {
+        averageWordCountSent = wordCount.averageWordCountSent(smsList);
+        averageWordCountReceived = wordCount.averageWordCountReceived(smsList);
     }
 
-    private void loadGraph() {
-        getYvalue();
-        setGraphData();
-        setGraphAttributes();
+    void buildGraph() {
+        findHighestYValue();
+        configureGraphData();
+        configureGraphAttributes();
     }
 
-    private void getYvalue() {
+    void findHighestYValue() {
         highestValue = Math.max(averageWordCountReceived, averageWordCountSent);
         if (highestValue == 0) {
             highestValue = 10;
         }
     }
 
-    private void setGraphData() {
+    void configureGraphData() {
         BarSet barSet = new BarSet();
         Bar barSent = new Bar(mLabels[0], averageWordCountSent);
         Bar barReceived = new Bar(mLabels[1], averageWordCountReceived);
@@ -70,17 +69,20 @@ public class WordCountBarGraph {
         barChartView.setBarBackgroundColor(Color.parseColor(FILL_COLOR));
     }
 
-    private void setGraphAttributes() {
-        // Chart
+    void configureGraphAttributes() {
+        barChartView.setBarSpacing(Tools.fromDpToPx(15));
+        barChartView.setRoundCorners(Tools.fromDpToPx(2));
+        barChartView.setBarBackgroundColor(Color.parseColor(FILL_COLOR));
+
         barChartView.setXAxis(false)
                 .setYAxis(false)
-                .setAxisBorderValues(0, increaseByQuarter(highestValue))
+                .setAxisBorderValues(0, addSpaceAboveHighestYValue(highestValue))
                 .setXLabels(NONE)
                 .setYLabels(NONE);
-        barChartView.show();
     }
 
-    private int increaseByQuarter(int input) {
-        return (int) Math.round(input * 1.25);
+    @Override
+    int addSpaceAboveHighestYValue(int YAxis) {
+        return super.addSpaceAboveHighestYValue(YAxis);
     }
 }

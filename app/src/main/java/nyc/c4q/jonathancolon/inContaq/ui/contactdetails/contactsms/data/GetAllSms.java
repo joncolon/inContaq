@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.data;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -11,12 +10,12 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import io.michaelrocks.libphonenumber.android.NumberParseException;
-import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
+import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.di.Injector;
-import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberFormatter;
-import nyc.c4q.jonathancolon.inContaq.db.RealmService;
+import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberHelper;
+
+import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 
 
 public class GetAllSms {
@@ -27,43 +26,40 @@ public class GetAllSms {
     private static final String DATE = "date";
     private static final String TYPE = "type";
     private static final String DATE_DESC = "date desc";
-    private long realmID;
-    private Context context;
+    private final RealmService realmService;
+    private PhoneNumberHelper phoneNumberHelper;
     private ArrayList<Sms> smsList;
     private ContentResolver contentResolver;
 
-    @Inject
-    RealmService realmService;
 
-    public GetAllSms(ContentResolver contentResolver, long realmID, Context context) {
+
+    @Inject
+    public GetAllSms(ContentResolver contentResolver,
+                     RealmService realmService, PhoneNumberHelper phoneNumberHelper) {
         this.contentResolver = contentResolver;
-        this.realmID = realmID;
-        this.context = context;
+        this.realmService = realmService;
+        this.phoneNumberHelper = phoneNumberHelper;
     }
 
-    public ArrayList<Sms> getAllSms() throws NumberParseException {
+    public ArrayList<Sms> retrieveSmsList(long realmID) throws NumberParseException {
         Sms smsObject;
 
-        Injector.getApplicationComponent().inject(this);
         Contact contact = realmService.getByRealmID(realmID);
 
         if (contact.getMobileNumber() != null) {
             smsList = new ArrayList<>();
 
-            if (contentResolver != null) {
-                Log.e("RXJAVA", "getAllSms: ATTEMPTING TO GET SMS");
+            if (!isNull(contentResolver)) {
+                Log.e("RXJAVA", "retrieveSmsListInBackground: ATTEMPTING TO GET SMS");
 
-                PhoneNumberFormatter formatter = new PhoneNumberFormatter(context,
-                        PhoneNumberUtil.createInstance(context));
-
-                String formattedNumber = formatter.formatPhoneNumber(contact.getMobileNumber());
+                String formattedNumber = phoneNumberHelper.formatPhoneNumber(contact.getMobileNumber());
 
                 Uri uri = Uri.parse(URI_ALL);
                 String[] projection = new String[]{ADDRESS, BODY, DATE, TYPE};
                 Cursor cursor = contentResolver.query(uri,
                         projection, ADDRESS + "='" + formattedNumber + "'", null, DATE_DESC);
 
-                if (cursor != null) {
+                if (!isNull(cursor)) {
                     if (cursor.moveToFirst()) {
                         int totalSMS = cursor.getCount();
                         for (int i = 0; i < totalSMS; i++) {
@@ -85,11 +81,9 @@ public class GetAllSms {
             realmService.closeRealm();
         }
 
-        if (smsList != null) {
+        if (!isNull(smsList)) {
             return smsList;
         }
         return smsList = new ArrayList<>(0);
     }
-
-
 }

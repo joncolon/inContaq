@@ -13,8 +13,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
-        android:name=".application.AppController"
-        android:allowBackup="true"
+        android:name=".common.application.App"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_incontaq_xxxhdpi"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -53,7 +53,7 @@
 
         <!--services-->
         <service
-            android:name=".smsreminder.ContactNotificationService"
+            android:name=".notifications.ContactNotificationService"
             android:enabled="true"/>
     </application>
 

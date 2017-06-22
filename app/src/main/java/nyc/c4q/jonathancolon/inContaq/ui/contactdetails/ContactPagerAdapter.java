@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import nyc.c4q.jonathancolon.inContaq.R;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactinfo.ContactInfoFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.ContactSmsFragment;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.ContactStatsFragment;
 
 
 class ContactPagerAdapter extends FragmentPagerAdapter {
@@ -26,20 +28,23 @@ class ContactPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int pos) {
         switch (pos) {
             case 0:
-                return new nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.ContactStatsFragment();
+                return new ContactStatsFragment();
             case 1:
-                return new nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactinfo.ContactInfoFragment();
+                return new ContactInfoFragment();
             case 2:
                 return new ContactSmsFragment();
             default:
-                return new nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactinfo.ContactInfoFragment();
+                return new ContactInfoFragment();
         }
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        String[] tabTitles = new String[]{context.getString(R.string.stats),
-                context.getString(R.string.contact_info), context.getString(R.string.messages)};
+        String[] tabTitles = new String[]{
+                context.getString(R.string.stats),
+                context.getString(R.string.contact_info),
+                context.getString(R.string.messages)};
+
         return tabTitles[position];
     }
 }

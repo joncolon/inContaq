@@ -1,5 +1,7 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +15,23 @@ import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.utlities.FontHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
     private final Listener listener;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
+    private final Context context;
+    private final PicassoHelper picassoHelper;
     private List<Contact> contactList;
 
-    public ContactListAdapter(Listener listener) {
+
+    public ContactListAdapter(Listener listener, @NonNull Context context,
+                              @NonNull PicassoHelper picassoHelper) {
+        this.context = context;
         this.listener = listener;
+        this.picassoHelper = picassoHelper;
     }
 
     @Override
@@ -37,8 +45,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         View itemView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.itemview_contactlist_rv, parent, false);
 
-        FontHelper fontHelper = new FontHelper();
-        ContactViewHolder vh = new ContactViewHolder(itemView, fontHelper);
+        FontUtils fontUtils = new FontUtils(context);
+        ContactViewHolder vh = new ContactViewHolder(itemView, fontUtils);
         parallaxViewController.imageParallax(vh.mBackGroundImage);
         return vh;
     }
@@ -90,39 +98,39 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         private final TextView mContactInitials;
 
 
-        ContactViewHolder(View itemView, FontHelper fontHelper) {
+        ContactViewHolder(View itemView, FontUtils fontUtils) {
             super(itemView);
             mBackGroundImage = (ImageView) itemView.findViewById(R.id.background_image);
             mContactName = (TextView) itemView.findViewById(R.id.name);
             mContactImage = (ImageView) itemView.findViewById(R.id.contact_image);
             mContactInitials = (TextView) itemView.findViewById(R.id.contact_initials);
-            fontHelper.applyFont(mContactName);
-            fontHelper.applyFont(mContactInitials);
+            fontUtils.applyFont(mContactName);
+            fontUtils.applyFont(mContactInitials);
         }
 
         void bind(Contact c) {
             final Contact contact = c;
             mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
             mContactInitials.setText((contact.getFirstName().substring(0, 1).toUpperCase()));
-            PicassoHelper ph = new PicassoHelper();
-            displayBackgroundImage(contact, ph);
-            displayContactImage(contact, ph);
+
+            displayBackgroundImage(contact);
+            displayContactImage(contact);
 
             itemView.setOnClickListener(v -> listener.onContactClicked(contact));
         }
 
-        private void displayContactImage(Contact contact, PicassoHelper ph) {
+        private void displayContactImage(Contact contact) {
             if (hasContactImage(contact)) {
-                ph.loadImageFromString(contact.getContactImage(), mContactImage);
+                picassoHelper.loadImageFromString(contact.getContactImage(), mContactImage);
             } else {
                 mContactImage.refreshDrawableState();
                 mContactImage.setImageDrawable(null);
             }
         }
 
-        private void displayBackgroundImage(Contact contact, PicassoHelper ph) {
+        private void displayBackgroundImage(Contact contact) {
             if (hasBackgroundImage(contact)) {
-                ph.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
+                picassoHelper.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
             } else {
                 mBackGroundImage.refreshDrawableState();
                 mBackGroundImage.setImageDrawable(null);

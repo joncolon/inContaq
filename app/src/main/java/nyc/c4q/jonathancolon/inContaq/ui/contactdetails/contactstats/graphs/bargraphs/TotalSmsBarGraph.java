@@ -2,7 +2,6 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.bar
 
 import android.graphics.Color;
 
-import com.db.chart.Tools;
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.BarChartView;
@@ -12,10 +11,11 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.WordCount;
 
+import static com.db.chart.Tools.fromDpToPx;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 
 
-public class TotalSmsBarGraph {
+public class TotalSmsBarGraph extends BarGraph {
     private static final String FILL_COLOR = "#000000";
     private static final String SENT_COLOR = "#EF7674";
     private static final String RECEIVED_COLOR = "#FDFFFC";
@@ -23,39 +23,38 @@ public class TotalSmsBarGraph {
     private int totalWordsReceived;
     private BarChartView barChartView;
     private String[] mLabels = {"Sent", "Received"};
-    private ArrayList<Sms> smsList;
     private int highestValue;
 
-    public TotalSmsBarGraph(BarChartView barChartView, ArrayList<Sms> smsList) {
+    public TotalSmsBarGraph(BarChartView barChartView) {
         this.barChartView = barChartView;
-        this.smsList = smsList;
     }
 
-    public void showBarGraph() {
-        getBarGraphValues(smsList);
-        loadGraph();
+
+    public void showBarGraph(ArrayList<Sms> smsList, WordCount wordCount) {
+        getValues(smsList, wordCount);
+        buildGraph();
+        barChartView.show();
     }
 
-    private void getBarGraphValues(ArrayList<Sms> smsList) {
-        totalWordsSent = WordCount.wordCountSent(smsList);
-        totalWordsReceived = WordCount.wordCountReceived(smsList);
-        this.smsList = smsList;
+    void getValues(ArrayList<Sms> smsList, WordCount wordCount) {
+        totalWordsSent = wordCount.wordCountSent(smsList);
+        totalWordsReceived = wordCount.wordCountReceived(smsList);
     }
 
-    private void loadGraph() {
-        getYvalue();
-        setGraphData();
-        setGraphAttributes();
+    void buildGraph() {
+        findHighestYValue();
+        configureGraphData();
+        configureGraphAttributes();
     }
 
-    private void getYvalue() {
+    void findHighestYValue() {
         highestValue = Math.max(totalWordsReceived, totalWordsSent);
         if (highestValue == 0) {
             highestValue = 10;
         }
     }
 
-    private void setGraphData() {
+    void configureGraphData() {
         BarSet barSet = new BarSet();
         Bar barSent = new Bar(mLabels[0], totalWordsSent);
         Bar barReceived = new Bar(mLabels[1], totalWordsReceived);
@@ -65,21 +64,22 @@ public class TotalSmsBarGraph {
         barSet.addBar(barReceived);
 
         barChartView.addData(barSet);
-        barChartView.setBarSpacing(Tools.fromDpToPx(15));
-        barChartView.setRoundCorners(Tools.fromDpToPx(2));
-        barChartView.setBarBackgroundColor(Color.parseColor(FILL_COLOR));
     }
 
-    private void setGraphAttributes() {
+    void configureGraphAttributes() {
+        barChartView.setBarSpacing(fromDpToPx(15));
+        barChartView.setRoundCorners(fromDpToPx(2));
+        barChartView.setBarBackgroundColor(Color.parseColor(FILL_COLOR));
+
         barChartView.setXAxis(false)
                 .setYAxis(false)
-                .setAxisBorderValues(0, increaseByQuarter(highestValue))
+                .setAxisBorderValues(0, addSpaceAboveHighestYValue(highestValue))
                 .setXLabels(NONE)
                 .setYLabels(NONE);
-        barChartView.show();
     }
 
-    private int increaseByQuarter(int input) {
-        return (int) Math.round(input * 1.25);
+    @Override
+    int addSpaceAboveHighestYValue(int YAxis) {
+        return super.addSpaceAboveHighestYValue(YAxis);
     }
 }

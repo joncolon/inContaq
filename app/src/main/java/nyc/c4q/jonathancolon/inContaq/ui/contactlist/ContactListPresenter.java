@@ -5,26 +5,26 @@ import android.os.Bundle;
 import javax.inject.Inject;
 
 import io.realm.RealmResults;
-import nyc.c4q.jonathancolon.inContaq.db.RealmService;
+import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.ui.base.Presenter;
+import nyc.c4q.jonathancolon.inContaq.common.base.Presenter;
 
 
 public class ContactListPresenter extends Presenter<ContactListContract.View> implements
         ContactListContract.Presenter {
 
-    @Inject
-    public RealmService realmService;
+    private RealmService realmService;
 
     @Inject
-    ContactListPresenter() {
+    ContactListPresenter(RealmService realmService) {
+        this.realmService = realmService;
     }
 
     @Override
     public void initialize(Bundle extras) {
         super.initialize(extras);
         getView().checkPermissions();
-        getView().initializeContactList();
+        getView().initializeRecyclerView();
         getView().preLoadContactListImages();
         getView().checkService();
         getView().initializeMaterialTapPrompt(retrieveContacts());

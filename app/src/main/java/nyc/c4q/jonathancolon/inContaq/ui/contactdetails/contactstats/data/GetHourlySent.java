@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.util.PrepareHourlyTreeMap;
 
 /**
  * Created by jonathancolon on 5/14/17.
@@ -14,13 +13,22 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.util.Prepar
 
 public class GetHourlySent {
     TreeMap<Integer, Integer> hourlySentTreeMap;
-    ArrayList<Sms> smsList;
 
-    public GetHourlySent(ArrayList<Sms> smsList) {
-        this.smsList = smsList;
+    private static final int TWELVE_AM = 0;
+    private static final int THREE_AM = 3;
+    private static final int SIX_AM = 6;
+    private static final int NINE_AM = 9;
+    private static final int TWELVE_PM = 12;
+    private static final int THREE_PM = 15;
+    private static final int SIX_PM = 18;
+    private static final int NINE_PM = 21;
+    private static final int MIDNIGHT = 24;
+    private static final int ELEVEN_PM = 23;
+
+    public GetHourlySent() {
     }
 
-    public TreeMap<Integer, Integer> getHourlySent() {
+    public TreeMap<Integer, Integer> getHourlySent(ArrayList<Sms> smsList) {
         PrepareHourlyTreeMap prepareHourlyTreeMap = new PrepareHourlyTreeMap();
         hourlySentTreeMap = prepareHourlyTreeMap.setUpHourlyTreeMap();
         ArrayList<String> sentSms = new ArrayList<>();
@@ -43,75 +51,35 @@ public class GetHourlySent {
             DateTime mDateTime = new DateTime(lg);
             int hourOfDay = mDateTime.getHourOfDay();
 
-
-            if (hourOfDay == 0) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(0);
-                } else {
-                    intoGetDailyTexts(0);
-                }
-            } else if (hourOfDay < 3) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(3);
-                } else {
-                    intoGetDailyTexts(3);
-                }
-            } else if (hourOfDay < 6) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(6);
-                } else {
-                    intoGetDailyTexts(6);
-                }
-            } else if (hourOfDay < 9) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(9);
-                } else {
-                    intoGetDailyTexts(9);
-                }
-            } else if (hourOfDay < 12) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(12);
-                } else {
-                    intoGetDailyTexts(12);
-                }
-            } else if (hourOfDay < 15) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(15);
-                } else {
-                    intoGetDailyTexts(15);
-                }
-            } else if (hourOfDay < 18) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(18);
-                } else {
-                    intoGetDailyTexts(18);
-                }
-            } else if (hourOfDay < 21) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(21);
-                } else {
-                    intoGetDailyTexts(21);
-                }
-            } else if (hourOfDay < 24) {
-                if (hourlySentTreeMap.containsKey(hourOfDay)) {
-                    findGetDailyTexts(24);
-                } else {
-                    intoGetDailyTexts(24);
-                }
+            if (hourOfDay == TWELVE_AM || hourOfDay == MIDNIGHT) {
+                hourlySentTreeMap.put(0, hourlySentTreeMap.get(0) + 1);
+                hourlySentTreeMap.put(8, hourlySentTreeMap.get(8) + 1);
             }
-
+            if (hourOfDay <= THREE_AM && hourOfDay > TWELVE_AM) {
+                hourlySentTreeMap.put(1, hourlySentTreeMap.get(1) + 1);
+            }
+            if (hourOfDay <= SIX_AM && hourOfDay > THREE_AM) {
+                hourlySentTreeMap.put(2, hourlySentTreeMap.get(2) + 1);
+            }
+            if (hourOfDay <= NINE_AM && hourOfDay > SIX_AM) {
+                hourlySentTreeMap.put(3, hourlySentTreeMap.get(3) + 1);
+            }
+            if (hourOfDay <= TWELVE_PM && hourOfDay > NINE_AM) {
+                hourlySentTreeMap.put(4, hourlySentTreeMap.get(4) + 1);
+            }
+            if (hourOfDay <= THREE_PM && hourOfDay > TWELVE_AM) {
+                hourlySentTreeMap.put(5, hourlySentTreeMap.get(5) + 1);
+            }
+            if (hourOfDay <= SIX_PM && hourOfDay > THREE_PM) {
+                hourlySentTreeMap.put(6, hourlySentTreeMap.get(6) + 1);
+            }
+            if (hourOfDay <= NINE_PM && hourOfDay > SIX_PM) {
+                hourlySentTreeMap.put(7, hourlySentTreeMap.get(7) + 1);
+            }
+            if (hourOfDay <= ELEVEN_PM && hourOfDay > NINE_PM) {
+                hourlySentTreeMap.put(7, hourlySentTreeMap.get(7) + 1);
+            }
         }
         return hourlySentTreeMap;
-
-    }
-
-    private void findGetDailyTexts(int hourOfDay) {
-        hourlySentTreeMap.put(hourOfDay, hourlySentTreeMap.get(hourOfDay) + 1);
-        hourlySentTreeMap.entrySet();
-    }
-
-    private void intoGetDailyTexts(int hourOfDay) {
-        hourlySentTreeMap.put(hourOfDay, 1);
-        hourlySentTreeMap.entrySet();
     }
 }

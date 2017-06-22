@@ -10,10 +10,9 @@ import javax.inject.Inject;
 
 import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
-import nyc.c4q.jonathancolon.inContaq.di.Injector;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
-import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberFormatter;
+import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberHelper;
 
 import static android.provider.ContactsContract.CommonDataKinds.Email;
 import static android.provider.ContactsContract.CommonDataKinds.Email.CONTACT_ID;
@@ -29,29 +28,27 @@ import static android.provider.ContactsContract.Contacts._ID;
 public class RetrieveSingleContact {
 
     private static final String TAG = RetrieveSingleContact.class.getSimpleName();
-    @Inject
-    Context context;
-    private Uri contactUri;
     private ContentResolver contentResolver;
+    private Context context;
     private String contactID;
 
-    RetrieveSingleContact(Uri uri, ContentResolver contentResolver) {
-        Injector.getApplicationComponent().inject(this);
-        this.contactUri = uri;
+    @Inject
+    RetrieveSingleContact(ContentResolver contentResolver, Context context) {
         this.contentResolver = contentResolver;
+        this.context = context;
     }
 
-    Contact createContact() {
+    Contact createContact(Uri uri) {
         Contact contact = new Contact();
-        retrieveContactName(contact);
-        retrieveContactNumber(contact);
+        retrieveContactName(contact, uri);
+        retrieveContactNumber(contact, uri);
         retrieveContactEmail(contact);
         return contact;
     }
 
-    private void retrieveContactName(Contact contact) {
+    private void retrieveContactName(Contact contact, Uri uri) {
         String contactName = null;
-        Cursor cursor = contentResolver.query(contactUri, null, null, null, null);
+        Cursor cursor = contentResolver.query(uri, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             contactName = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
@@ -64,9 +61,9 @@ public class RetrieveSingleContact {
         contact.setLastName(NameSplitter.splitFirstAndLastName(contactName)[1]);
     }
 
-    private void retrieveContactNumber(Contact contact) {
+    private void retrieveContactNumber(Contact contact, Uri uri) {
         String contactNumber;
-        retrieveContactID();
+        retrieveContactID(uri);
 
         Log.d(TAG, "Contact ID: " + contactID);
         Cursor cursorPhone = contentResolver.query(Phone.CONTENT_URI,
@@ -81,7 +78,7 @@ public class RetrieveSingleContact {
                 cursorPhone.close();
 
                 Log.d(TAG, "Contact Phone Number: " + contactNumber);
-                PhoneNumberFormatter formatter = new PhoneNumberFormatter(context,
+                PhoneNumberHelper formatter = new PhoneNumberHelper(
                         PhoneNumberUtil.createInstance(context));
                 String mobileNumber = formatter.formatPhoneNumber(contactNumber);
                 contact.setMobileNumber(mobileNumber);
@@ -111,8 +108,8 @@ public class RetrieveSingleContact {
         }
     }
 
-    private String retrieveContactID() {
-        try (Cursor cursorID = contentResolver.query(contactUri,
+    private String retrieveContactID(Uri uri) {
+        try (Cursor cursorID = contentResolver.query(uri,
                 new String[]{_ID},
                 null, null, null)) {
 

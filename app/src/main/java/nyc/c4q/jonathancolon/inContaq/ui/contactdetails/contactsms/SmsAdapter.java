@@ -1,7 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -27,11 +26,13 @@ import static android.content.ContentValues.TAG;
 public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String ON_BIND_VIEW_HOLDER = "onBindViewHolder: ";
     private final Contact contact;
+    private SmsHelper smsHelper;
     private Context context;
     private ArrayList<Sms> smsList;
 
-    public SmsAdapter(Contact contact) {
+    public SmsAdapter(Contact contact, SmsHelper smsHelper) {
         this.contact = contact;
+        this.smsHelper = smsHelper;
     }
 
     @Override
@@ -68,10 +69,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     //_____________________________________VIEWHOLDER___________________________________________________
     class SmsViewHolder extends RecyclerView.ViewHolder {
 
-        private static final String WHITE_BABY_POWDER = "#FDFFFC";
-        private static final String BLUE_CADET = "#5B9CAC";
-        private static final String BLUE_SAPPHIRE = "#0E587A";
-
+        private static final String RECEIVED = "1";
         private TextView senderId, messageRecieved, timeDate, type;
         private CardView cardBubble;
         private LinearLayout linearLayout;
@@ -96,7 +94,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         }
 
         void displaySmsByType(Sms sms) {
-            if (sms.getType().equals("1")) {
+            if (sms.getType().equals(RECEIVED)) {
                 if (contact.getMobileNumber() != null) {
                     type.setText(contact.getFirstName() + " " + contact.getLastName());
                     linearLayout.setGravity(Gravity.START);
@@ -105,10 +103,6 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                         cardBubble.setCardBackgroundColor(context.getColor(R.color.charcoal));
                         messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
                         timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
-                    } else {
-                        cardBubble.setCardBackgroundColor(Color.parseColor(BLUE_CADET));
-                        messageRecieved.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
-                        timeDate.setTextColor(Color.parseColor(WHITE_BABY_POWDER));
                     }
                 }
             } else {
@@ -117,16 +111,12 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                     cardBubble.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
                     timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
-                } else {
-                    cardBubble.setCardBackgroundColor(Color.parseColor(WHITE_BABY_POWDER));
-                    messageRecieved.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
-                    timeDate.setTextColor(Color.parseColor(BLUE_SAPPHIRE));
                 }
             }
         }
 
         void populateTextViews(Sms sms) {
-            StringBuilder time = SmsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
+            StringBuilder time = smsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
             senderId.setText(sms.getAddress());
             timeDate.setText(time);
             messageRecieved.setText(sms.getMsg());
