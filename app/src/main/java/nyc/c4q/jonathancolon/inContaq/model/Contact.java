@@ -165,16 +165,4 @@ public class Contact extends RealmObject {
     public void setRealmID(Long realmID) {
         this.realmID = realmID;
     }
-
-    public void realmID(Long realmID) {
-        this.realmID = realmID;
-    }
-
-    public String getContactID() {
-        return contactID;
-    }
-
-    public void setContactID(String contactID) {
-        this.contactID = contactID;
-    }
 }

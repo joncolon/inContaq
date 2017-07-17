@@ -84,5 +84,36 @@
     <string name="days_since_last_contacted">days since last contacted</string>
     <string name="total_message_count">Total Message Count</string>
     <string name="average_text_length">Average Text Length</string>
+    <string name="add_first_contact">Add your first contact</string>
+    <string name="tap_here">Tap here to import your first contact</string>
+    <string name="select_a_contact">Select a Contact</string>
+    <string name="last_contacted">Last Contacted:</string>
+    <string name="no_sms_available">No SMS data available</string>
+    <string name="morning_text">text each other mostly in the morning</string>
+    <string name="noon_text">text each other mostly at noon</string>
+    <string name="afternoon_text">text each other mostly in the afternoon</string>
+    <string name="evening_text">each other mostly in the evening</string>
+    <string name="night_text">text each other mostly at night</string>
+    <string name="midnight_text">text each other mostly at midnight</string>
+    <string name="sunday_text">text each other the most on Sundays</string>
+    <string name="monday_text">text each other the most on Mondays</string>
+    <string name="tuesday_text">text each other the most on Tuesdays</string>
+    <string name="wednesday_text">text each other the most on Wednesdays</string>
+    <string name="thursday_text">text each other the most on Thursdays</string>
+    <string name="friday_text">text each other the most on Fridays</string>
+    <string name="saturday_text">text each other the most on Saturdays</string>
+    <string name="jan_text">text each other the most in January</string>
+    <string name="feb_text">text each other the most in February</string>
+    <string name="mar_text">text each other the most in March</string>
+    <string name="apr_text">text each other the most in April</string>
+    <string name="may_text">text each other the most in May</string>
+    <string name="jun_text">text each other the most in June</string>
+    <string name="jul_text">text each other the most in July</string>
+    <string name="aug_text">text each other the most in August</string>
+    <string name="sept_text">text each other the most in September</string>
+    <string name="oct_text">text each other the most in October</string>
+    <string name="nov_text">text each other the most in November</string>
+    <string name="dec_text">text each other the most in December</string>
+    <string name="no_sms_to_analyze">This contact has no messages to analyze. Try starting a conversation and come back later!</string>
 
 </resources>

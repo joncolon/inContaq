@@ -15,8 +15,8 @@ android {
 
         minSdkVersion 23
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.3"
+        versionCode 5
+        versionName "1.4"
         aaptOptions {
             cruncherEnabled = false
         }
@@ -61,6 +61,10 @@ android {
                 //RxJava 2.0
                 compile "com.github.akarnokd:rxjava2-extensions:0.16.0"
 
+                //butterknife
+                compile 'com.jakewharton:butterknife:8.6.0'
+                annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+
                 //beautiful parallax
                 compile 'com.github.florent37:beautifulparallax:1.0.0'
 
@@ -71,8 +75,8 @@ android {
                 compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
                 //Dagger 2
-                compile 'com.google.dagger:dagger:2.0'
-                annotationProcessor 'com.google.dagger:dagger-compiler:2.0'
+                compile 'com.google.dagger:dagger:2.9'
+                annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
 
                 //Picasso
                 compile 'com.squareup.picasso:picasso:2.5.2'

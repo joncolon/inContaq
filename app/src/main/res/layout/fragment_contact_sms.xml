@@ -7,7 +7,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".ui.contactdetails.contactviewpager.contactsms.ContactSmsFragment">
+    tools:context=".ui.contactdetails.contactsms.ContactSmsFragment">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/sms_toolbar"

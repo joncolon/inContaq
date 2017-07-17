@@ -10,8 +10,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.inject.Inject;
+
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
+
+import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.*;
 
 
 public class SmsHelper {
@@ -19,13 +23,16 @@ public class SmsHelper {
     private static final String URI_SENT = "content://sms/sent";
     private static final String ADDRESS = "address";
     private static final String DATE = "date";
+    private ContentResolver contentResolver;
 
-    public SmsHelper() {
+    @Inject
+    public SmsHelper(ContentResolver contentResolver) {
+        this.contentResolver = contentResolver;
     }
 
-    public static long getLastContactedDate(ContentResolver contentResolver, Contact contact) {
+    public long getLastContactedDate(Contact contact) {
         Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, ADDRESS + "='" + contact.getMobileNumber() + "'", null, null);
-        if (cursor != null) {
+        if (!isNull(cursor)) {
             if (cursor.moveToFirst()) {
                 cursor.getCount();
                 String date = cursor.getString(cursor.getColumnIndex(DATE));
@@ -39,7 +46,7 @@ public class SmsHelper {
         return -1;
     }
 
-    public static StringBuilder smsDateFormat(long timeInMilli) {
+    public StringBuilder smsDateFormat(long timeInMilli) {
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTimeInMillis(timeInMilli);
         int month = (calendar.get(Calendar.MONTH)) + 1;
@@ -105,7 +112,7 @@ public class SmsHelper {
     }
 
     @NonNull
-    public static ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
+    public ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
         ArrayList<Sms> sentSms = new ArrayList<>();
 
         for (int i = 0; i < smsList.size(); i++) {
@@ -117,7 +124,7 @@ public class SmsHelper {
     }
 
     @NonNull
-    public static ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
+    public ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
         ArrayList<Sms> receivedSms = new ArrayList<>();
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals("1")) {

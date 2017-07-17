@@ -2,14 +2,19 @@ package nyc.c4q.jonathancolon.inContaq.utlities;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-public class PicassoHelper {
-    private final Context context;
+import javax.inject.Inject;
 
-    public PicassoHelper(Context context) {
+public class PicassoHelper {
+
+    private Context context;
+
+    @Inject
+    public PicassoHelper(@NonNull Context context) {
         this.context = context;
     }
 
