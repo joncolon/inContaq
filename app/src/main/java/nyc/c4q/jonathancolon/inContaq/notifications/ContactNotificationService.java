@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -19,13 +18,13 @@ import javax.inject.Inject;
 
 import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.common.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
-import static android.app.Notification.PRIORITY_HIGH;
+import static android.app.Notification.PRIORITY_DEFAULT;
 import static android.media.RingtoneManager.TYPE_NOTIFICATION;
 import static android.media.RingtoneManager.getDefaultUri;
 
@@ -40,15 +39,14 @@ public class ContactNotificationService extends IntentService {
     private static final long ONE_DAY = 86400000;
     private static final int ONE_MIN = 60000;
     private static final String TAG = ContactNotificationService.class.getSimpleName();
-    public static boolean hasStarted = false;
+    public static boolean hasStarted;
     NotificationCompat.InboxStyle inboxStyle;
-    private Context context;
-    private ContentResolver contentResolver;
     private int notificationCount = 0;
     private long lastNotified;
 
     @Inject RealmService realmService;
     @Inject SmsHelper smsHelper;
+    @Inject Context context;
 
 
     public ContactNotificationService() {
@@ -59,8 +57,6 @@ public class ContactNotificationService extends IntentService {
     public void onCreate() {
         super.onCreate();
         Injector.getApplicationComponent().inject(this);
-        context = getApplicationContext();
-        contentResolver = context.getContentResolver();
     }
 
     @Override
@@ -180,7 +176,7 @@ public class ContactNotificationService extends IntentService {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setStyle(inboxStyle)
                 .setSmallIcon(R.drawable.ic_app_logo)
-                .setPriority(PRIORITY_HIGH)
+                .setPriority(PRIORITY_DEFAULT)
                 .setFullScreenIntent(pendingIntent, true)
                 .setContentTitle("Forgetting someone?")
                 .setAutoCancel(true)

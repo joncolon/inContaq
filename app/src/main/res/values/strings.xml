@@ -114,5 +114,6 @@
     <string name="oct_text">text each other the most in October</string>
     <string name="nov_text">text each other the most in November</string>
     <string name="dec_text">text each other the most in December</string>
+    <string name="no_sms_to_analyze">This contact has no messages to analyze. Try starting a conversation and come back later!</string>
 
 </resources>

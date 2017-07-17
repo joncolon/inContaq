@@ -109,8 +109,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         initSpinner(view);
         initSwitch(view);
 
-        sendMessageIV.setOnClickListener(v -> {
-            dialog.show();
+        sendMessageIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
         });
     }
 

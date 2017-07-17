@@ -94,7 +94,7 @@ public class RetrieveSingleContact {
 
     private void retrieveContactEmail(Contact contact) {
         String DATA = Email.DATA;
-        String email = null;
+        String email;
 
         Cursor emailCursor = contentResolver.query(CONTENT_URI, null,
                 CONTACT_ID + " = ?", new String[]{contactID}, null);

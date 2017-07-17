@@ -13,7 +13,7 @@
         android:layout_marginTop="237dp"
         android:textStyle="bold"
         android:gravity="center"
-        android:text="This contact has no messages to analyze.\nTry starting a conversation and come back later!"
+        android:text="@string/no_sms_to_analyze"
         android:visibility="gone"/>
 
     <FrameLayout
@@ -51,9 +51,8 @@
             android:text="@string/average_text_length"
             android:textAlignment="center"
             android:textColor="@color/light_font"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            />
+            android:textSize="@dimen/graph_label_text_size"
+            android:textStyle="bold"/>
 
 
         <com.db.chart.view.BarChartView

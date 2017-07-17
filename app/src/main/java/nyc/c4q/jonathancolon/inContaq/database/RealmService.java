@@ -57,7 +57,8 @@ public class RealmService {
 
     public RealmResults<Contact> findByReminderEnabled() {
         Log.e(TAG, "getByRealmID");
-        return getInstance().where(Contact.class).equalTo("reminderEnabled", true).findAll();
+        return getInstance().where(Contact.class).equalTo("reminderEnabled", true).findAll()
+                .sort("firstName", Sort.ASCENDING);
     }
 
     public void closeRealm() {
