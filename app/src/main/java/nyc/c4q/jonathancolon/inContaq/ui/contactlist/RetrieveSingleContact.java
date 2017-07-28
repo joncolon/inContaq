@@ -28,6 +28,8 @@ import static android.provider.ContactsContract.Contacts._ID;
 public class RetrieveSingleContact {
 
     private static final String TAG = RetrieveSingleContact.class.getSimpleName();
+    private static final int FIRST_NAME = 0;
+    private static final int LAST_NAME = 1;
     private ContentResolver contentResolver;
     private Context context;
     private String contactID;
@@ -57,8 +59,8 @@ public class RetrieveSingleContact {
 
         Log.d(TAG, "Contact Name: " + contactName);
 
-        contact.setFirstName(NameSplitter.splitFirstAndLastName(contactName)[0]);
-        contact.setLastName(NameSplitter.splitFirstAndLastName(contactName)[1]);
+        contact.setFirstName(NameSplitter.splitFirstAndLastName(contactName)[FIRST_NAME]);
+        contact.setLastName(NameSplitter.splitFirstAndLastName(contactName)[LAST_NAME]);
     }
 
     private void retrieveContactNumber(Contact contact, Uri uri) {

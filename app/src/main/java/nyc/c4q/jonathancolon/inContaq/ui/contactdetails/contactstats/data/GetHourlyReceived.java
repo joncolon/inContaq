@@ -85,14 +85,4 @@ public class GetHourlyReceived {
         }
         return hourlyReceivedTreeMap;
     }
-
-    private void findGetDailyTexts(int hourOfDay) {
-        hourlyReceivedTreeMap.put(hourOfDay, hourlyReceivedTreeMap.get(hourOfDay) + 1);
-        hourlyReceivedTreeMap.entrySet();
-    }
-
-    private void intoGetDailyTexts(int hourOfDay) {
-        hourlyReceivedTreeMap.put(hourOfDay, 1);
-        hourlyReceivedTreeMap.entrySet();
-    }
 }

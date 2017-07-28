@@ -16,16 +16,17 @@ import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 
 public class RealmService {
 
+    private static final String TAG = RealmService.class.getSimpleName();
+    private static final String REALM_ID = "realmID";
+    private static final String REMINDER_ENABLED = "reminderEnabled";
+    private static final String FIRST_NAME = "firstName";
     private Context context;
+    private RealmConfiguration realmConfiguration;
 
     @Inject
     public RealmService(Context context) {
         this.context = context;
     }
-
-    private static final String TAG = RealmService.class.getSimpleName();
-
-    private RealmConfiguration realmConfiguration;
 
     public void setup() {
         Realm.init(context);
@@ -37,54 +38,79 @@ public class RealmService {
         }
     }
 
+    public synchronized Contact getByRealmID(long realmID) {
+        Log.e(TAG, "getByRealmID");
+        Contact contact = getInstance()
+                .where(Contact.class)
+                .equalTo(REALM_ID, realmID).findFirst();
+        closeRealm();
+        return contact;
+    }
+
     public Realm getInstance() {
-        Log.e(TAG, "opening realm");
         return Realm.getDefaultInstance();
-    }
-
-    public Contact getByRealmID(long realmID) {
-        Log.e(TAG, "getByRealmID");
-        return getInstance().where(Contact.class).equalTo("realmID", realmID).findFirst();
-    }
-
-    private Realm getRealmInstance() {
-        return Realm.getDefaultInstance();
-    }
-
-    public RealmResults<Contact> fetchAllContacts() {
-        return getRealmInstance().where(Contact.class).findAll().sort("firstName", Sort.ASCENDING);
-    }
-
-    public RealmResults<Contact> findByReminderEnabled() {
-        Log.e(TAG, "getByRealmID");
-        return getInstance().where(Contact.class).equalTo("reminderEnabled", true).findAll()
-                .sort("firstName", Sort.ASCENDING);
     }
 
     public void closeRealm() {
-        if (isNull(getRealmInstance())) {
-            Log.e("RealmService: ", "closing realm");
+        if (!isNull(getInstance())) {
             getInstance().close();
         }
     }
 
-    public void addContactToRealmDB(final Contact newContact) {
+    public RealmResults<Contact> fetchAllContacts() {
+        RealmResults<Contact> contactList = getInstance()
+                .where(Contact.class)
+                .findAll()
+                .sort(FIRST_NAME, Sort.ASCENDING);
+        closeRealm();
+        return contactList;
+    }
+
+    public RealmResults<Contact> findByReminderEnabled() {
+        Log.e(TAG, "findByReminderEnabled");
+        RealmResults<Contact> reminderEnabledList = getInstance()
+                .where(Contact.class)
+                .equalTo(REMINDER_ENABLED, true)
+                .findAll()
+                .sort(FIRST_NAME, Sort.ASCENDING);
+        closeRealm();
+        return reminderEnabledList;
+    }
+
+    public synchronized void deleteContactFromRealmDB(final Contact contact) {
+        Log.i("Realm: ",
+                "deleting " + contact.getFullName()+ " from database...");
+
+        getInstance().executeTransaction(realm -> {
+            getInstance().where(Contact.class)
+                    .equalTo(REALM_ID, contact.getRealmID())
+                    .findFirst()
+                    .deleteFromRealm();
+        });
+        closeRealm();
+    }
+
+    public synchronized void addContactToRealmDB(final Contact newContact) {
         Log.i("Realm: ",
                 "Adding to Contact database...");
 
-        getInstance().executeTransaction(realm1 -> {
+        getInstance().executeTransaction(realm -> {
             long realmID = 1;
-            if (realm1.where(Contact.class).count() > 0) {
-                realmID = realm1.where(Contact.class).max("realmID").longValue() + 1; // auto-increment id
+
+            if (realm.where(Contact.class).count() > 0) {
+                // auto-increment id
+                realmID = realm.where(Contact.class).max(REALM_ID).longValue() + 1;
             }
             newContact.setRealmID(realmID);
             Log.d("ADDING ID: ", newContact.getFirstName() + " " + newContact.getRealmID());
-            Contact contact = realm1.copyToRealmOrUpdate(newContact);
-
+            Log.d("MOBILE NUMBER: ", newContact.getMobileNumber());
+            Contact contact = realm.copyToRealmOrUpdate(newContact);
         });
+        closeRealm();
     }
 
     public void toggleReminder(Contact contact, boolean isEnabled) {
         getInstance().executeTransaction(realm1 -> contact.setReminderEnabled(isEnabled));
+        closeRealm();
     }
 }

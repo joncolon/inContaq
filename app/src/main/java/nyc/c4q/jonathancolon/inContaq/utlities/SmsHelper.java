@@ -20,7 +20,7 @@ import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.*;
 
 public class SmsHelper {
 
-    private static final String URI_SENT = "content://sms/sent";
+    private static final String URI_ALL = "content://sms/";
     private static final String ADDRESS = "address";
     private static final String DATE = "date";
     private ContentResolver contentResolver;
@@ -31,7 +31,7 @@ public class SmsHelper {
     }
 
     public long getLastContactedDate(Contact contact) {
-        Cursor cursor = contentResolver.query(Uri.parse(URI_SENT), null, ADDRESS + "='" + contact.getMobileNumber() + "'", null, null);
+        Cursor cursor = contentResolver.query(Uri.parse(URI_ALL), null, ADDRESS + "='" + contact.getMobileNumber() + "'", null, null);
         if (!isNull(cursor)) {
             if (cursor.moveToFirst()) {
                 cursor.getCount();

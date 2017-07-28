@@ -13,17 +13,11 @@ public class ContactListContract {
     interface View extends BaseView {
 
         void initializeMaterialTapPrompt(RealmResults<Contact> contactList);
-
         void checkService();
-
         void checkPermissions();
-
         void initializeRecyclerView();
-
         void requestPermissions();
-
         void refreshContactList(RealmResults<Contact> list);
-
         void preLoadContactListImages();
 ;    }
 
