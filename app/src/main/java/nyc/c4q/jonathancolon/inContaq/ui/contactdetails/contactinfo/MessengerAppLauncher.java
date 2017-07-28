@@ -11,12 +11,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
-/**
- * Created by jonathancolon on 5/22/17.
- */
 
 public class MessengerAppLauncher {
 
+    //this is to do stuff
     private Context context;
     private final String FACEBOOK_MESSENGER = "com.facebook.orca";
     private final String SLACK = "com.Slack";
@@ -34,7 +32,7 @@ public class MessengerAppLauncher {
 
 
 
-    private boolean isPackageExisted(String targetPackage) {
+    private boolean isPackageInstalled(String targetPackage) {
         List<ApplicationInfo> packages;
         PackageManager pm;
 
@@ -49,7 +47,7 @@ public class MessengerAppLauncher {
     }
 
     void openFacebookMessenger() {
-        if (isPackageExisted(FACEBOOK_MESSENGER)){
+        if (isPackageInstalled(FACEBOOK_MESSENGER)){
             Intent intent = context
                     .getPackageManager()
                     .getLaunchIntentForPackage(FACEBOOK_MESSENGER);
@@ -66,7 +64,7 @@ public class MessengerAppLauncher {
     }
 
     void openSlack() {
-        if (isPackageExisted(SLACK)){
+        if (isPackageInstalled(SLACK)){
             Intent intent = context
                     .getPackageManager()
                     .getLaunchIntentForPackage(SLACK);
@@ -79,7 +77,7 @@ public class MessengerAppLauncher {
     }
 
     void openSkype() {
-        if (isPackageExisted(SKYPE)){
+        if (isPackageInstalled(SKYPE)){
             Intent intent = context
                     .getPackageManager()
                     .getLaunchIntentForPackage(SKYPE);
@@ -92,7 +90,7 @@ public class MessengerAppLauncher {
     }
 
     void openHangouts() {
-        if (isPackageExisted(GOOGLE_HANGOUTS)){
+        if (isPackageInstalled(GOOGLE_HANGOUTS)){
             Intent intent = context
                     .getPackageManager()
                     .getLaunchIntentForPackage(GOOGLE_HANGOUTS);
@@ -105,7 +103,7 @@ public class MessengerAppLauncher {
     }
 
     void openSnapChat() {
-        if (isPackageExisted(SNAPCHAT)){
+        if (isPackageInstalled(SNAPCHAT)){
             Intent intent = context
                     .getPackageManager()
                     .getLaunchIntentForPackage(SNAPCHAT);
@@ -132,7 +130,7 @@ public class MessengerAppLauncher {
 
 
     void openWhatsApp() {
-        if (isPackageExisted(WHATSAPP)){
+        if (isPackageInstalled(WHATSAPP)){
             Intent intent = context
                     .getPackageManager()
                     .getLaunchIntentForPackage(WHATSAPP);
@@ -145,7 +143,7 @@ public class MessengerAppLauncher {
     }
 
     void openLinkedIn() {
-        if (isPackageExisted(LINKEDIN)){
+        if (isPackageInstalled(LINKEDIN)){
             Intent intent = context
                     .getPackageManager()
                     .getLaunchIntentForPackage(LINKEDIN);

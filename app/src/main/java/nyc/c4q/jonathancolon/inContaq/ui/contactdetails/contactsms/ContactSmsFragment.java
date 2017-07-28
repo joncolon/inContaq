@@ -85,9 +85,10 @@ public class ContactSmsFragment extends Fragment {
         contact = ((ContactDetailsActivity) getActivity()).contact;
         realmID = getActivity().getIntent().getLongExtra(CONTACT_KEY, -1);
 
-        toolbar.setTitle(contact.getFirstName() + " " + contact.getLastName());
+        toolbar.setTitle(contact.getFullName());
         toolbar.setTitleTextColor(getActivity().getColor(R.color.light_font));
         toolbar.setSubtitleTextColor(getActivity().getColor(R.color.grey_font));
+
 
         retrieveSmsListInBackground(realmID);
         return view;
@@ -107,7 +108,7 @@ public class ContactSmsFragment extends Fragment {
                     ContactSmsFragment.this.sendEvent();
                     ContactSmsFragment.this.scrollListToBottom();
 
-                    if (smsList.size() != 0) {
+                    if (!isEmptyList(smsList)) {
                         long time = smsHelper.getLastContactedDate(contact);
                         StringBuilder lastContacted = smsHelper.smsDateFormat(time);
                         toolbar.setSubtitle(getString(R.string.last_contacted) + lastContacted);

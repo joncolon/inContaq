@@ -23,6 +23,5 @@ public class AnimationHelper {
     public void exitFab(View view) {
         Animation slideOut = AnimationUtils.loadAnimation(context, R.anim.enter_fab);
         view.startAnimation(slideOut);
-
     }
 }

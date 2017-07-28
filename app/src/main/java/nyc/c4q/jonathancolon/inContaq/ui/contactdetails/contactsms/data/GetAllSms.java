@@ -32,7 +32,6 @@ public class GetAllSms {
     private ContentResolver contentResolver;
 
 
-
     @Inject
     public GetAllSms(ContentResolver contentResolver,
                      RealmService realmService, PhoneNumberHelper phoneNumberHelper) {
@@ -46,44 +45,48 @@ public class GetAllSms {
 
         Contact contact = realmService.getByRealmID(realmID);
 
-        if (contact.getMobileNumber() != null) {
-            smsList = new ArrayList<>();
+        if (!isNull(contact)) {
+            if (!isNull(contact.getMobileNumber())) {
 
-            if (!isNull(contentResolver)) {
-                Log.e("RXJAVA", "retrieveSmsListInBackground: ATTEMPTING TO GET SMS");
+                smsList = new ArrayList<>();
 
-                String formattedNumber = phoneNumberHelper.formatPhoneNumber(contact.getMobileNumber());
+                if (!isNull(contentResolver)) {
+                    Log.e("RXJAVA", "retrieveSmsListInBackground: ATTEMPTING TO GET SMS");
 
-                Uri uri = Uri.parse(URI_ALL);
-                String[] projection = new String[]{ADDRESS, BODY, DATE, TYPE};
-                Cursor cursor = contentResolver.query(uri,
-                        projection, ADDRESS + "='" + formattedNumber + "'", null, DATE_DESC);
+                    String formattedNumber = phoneNumberHelper.formatPhoneNumber(contact.getMobileNumber());
 
-                if (!isNull(cursor)) {
-                    if (cursor.moveToFirst()) {
-                        int totalSMS = cursor.getCount();
-                        for (int i = 0; i < totalSMS; i++) {
-                            smsObject = new Sms();
-                            smsObject.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
-                            smsObject.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
-                            smsObject.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
-                            smsObject.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
+                    Uri uri = Uri.parse(URI_ALL);
+                    String[] projection = new String[]{ADDRESS, BODY, DATE, TYPE};
+                    Cursor cursor = contentResolver.query(uri,
+                            projection, ADDRESS + "='" + formattedNumber + "'", null, DATE_DESC);
 
-                            smsList.add(smsObject);
-                            cursor.moveToNext();
-                        }
-                        if (!cursor.isClosed()) {
-                            cursor.close();
+                    if (!isNull(cursor)) {
+                        if (cursor.moveToFirst()) {
+
+                            int totalSMS = cursor.getCount();
+                            for (int i = 0; i < totalSMS; i++) {
+                                smsObject = new Sms();
+                                smsObject.setAddress(cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)).replaceAll("\\s+", ""));
+                                smsObject.setMsg(cursor.getString(cursor.getColumnIndexOrThrow(BODY)));
+                                smsObject.setTime(cursor.getString(cursor.getColumnIndexOrThrow(DATE)));
+                                smsObject.setType(cursor.getString(cursor.getColumnIndexOrThrow(TYPE)));
+
+                                smsList.add(smsObject);
+                                cursor.moveToNext();
+                            }
+                            if (!cursor.isClosed()) {
+                                cursor.close();
+                            }
                         }
                     }
                 }
             }
-            realmService.closeRealm();
         }
 
         if (!isNull(smsList)) {
             return smsList;
         }
+        realmService.closeRealm();
         return smsList = new ArrayList<>(0);
     }
 }

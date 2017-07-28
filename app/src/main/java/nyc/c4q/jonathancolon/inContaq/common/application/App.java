@@ -28,4 +28,6 @@ public class App extends Application {
     private void initRealmConfiguration() {
         realmService.setup();
     }
+
+
 }

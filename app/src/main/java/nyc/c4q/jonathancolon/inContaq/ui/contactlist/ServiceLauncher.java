@@ -3,6 +3,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -16,6 +17,7 @@ import nyc.c4q.jonathancolon.inContaq.notifications.MyAlarmReceiver;
 public class ServiceLauncher {
 
     private Context context;
+    private final static String TAG = ServiceLauncher.class.getSimpleName();
 
     @Inject
     public ServiceLauncher(Context context) {
@@ -23,8 +25,11 @@ public class ServiceLauncher {
     }
 
     void checkServiceCreated() {
+
         if (!ContactNotificationService.hasStarted) {
             System.out.println("Starting service...");
+            ContactNotificationService.hasStarted = true;
+            Log.e(TAG, String.valueOf(ContactNotificationService.hasStarted ));
             startService();
         }
     }

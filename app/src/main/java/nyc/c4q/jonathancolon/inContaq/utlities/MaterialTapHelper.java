@@ -30,7 +30,7 @@ public class MaterialTapHelper {
     public void addFirstContactPrompt() {
         prefs = context.getSharedPreferences("inContaq", MODE_PRIVATE);
         if (prefs.getBoolean("intro", true)) {
-            if (contactList == null) {
+            if (ObjectUtils.isEmptyList(contactList)) {
                 new MaterialTapTargetPrompt.Builder(activity)
                         .setTarget(activity.findViewById(R.id.fab_add_contact))
                         .setPrimaryText(R.string.add_first_contact)
