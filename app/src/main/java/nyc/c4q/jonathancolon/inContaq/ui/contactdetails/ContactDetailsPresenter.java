@@ -6,9 +6,6 @@ import javax.inject.Inject;
 
 import nyc.c4q.jonathancolon.inContaq.common.base.Presenter;
 
-/**
- * Created by jonathancolon on 6/20/17.
- */
 
 public class ContactDetailsPresenter extends Presenter<ContactDetailsContract.View> implements
         ContactDetailsContract.Presenter {

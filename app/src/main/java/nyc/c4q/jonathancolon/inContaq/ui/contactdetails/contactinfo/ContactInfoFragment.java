@@ -41,21 +41,14 @@ import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 
-import static android.content.DialogInterface.OnCancelListener;
-import static android.content.DialogInterface.OnDismissListener;
-import static android.view.View.*;
-import static android.widget.AdapterView.OnItemSelectedListener;
-import static android.widget.CompoundButton.OnCheckedChangeListener;
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>,
-<<<<<<< HEAD
         AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener,
         DialogInterface.OnCancelListener, DialogInterface.OnDismissListener, DatePickerDialog.OnDateSetListener {
-=======
-        OnItemSelectedListener, OnCheckedChangeListener,
-        OnCancelListener, OnDismissListener {
->>>>>>> firebase
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
@@ -63,23 +56,12 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private static final String TWO_WEEKS = "2 weeks have passed";
     private static final String THREE_WEEKS = "3 weeks have passed";
     private static final String CANCEL = "CANCEL";
-<<<<<<< HEAD
+
     @Inject RealmService realmService;
     @Inject Context context;
     @Inject PicassoHelper pUtils;
     @Inject FontUtils fontUtils;
-=======
 
-    @Inject
-    Context context;
-    @Inject
-    FontUtils fontUtils;
-    @Inject
-    PicassoHelper pUtils;
-    @Inject
-    RealmService realmService;
-
->>>>>>> firebase
     private Contact contact;
     private TextView mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV, sendMessageIV;
@@ -138,16 +120,8 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         initSpinner(view);
         initSwitch(view);
 
-<<<<<<< HEAD
         sendMessageIV.setOnClickListener(v -> dialog.show());
-=======
-        sendMessageIV.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-            }
-        });
->>>>>>> firebase
+
     }
 
     private void initSwitch(View view) {
@@ -315,10 +289,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                     contact.setReminderDuration(1);
                     contact.setReminderEnabled(true);
                 });
-<<<<<<< HEAD
-=======
                 break;
->>>>>>> firebase
             case TWO_WEEKS:
                 realmService.getInstance().executeTransaction(realm1 -> {
                     contact.setReminderDuration(2);
