@@ -14,3 +14,5 @@ src/main/java/nyc/c4q/jonathancolon/inContaq/common/di/WeeksPassedModule.java
 src/main/java/nyc/c4q/jonathancolon/inContaq/notifications/DaysPassed.java
 src/main/java/nyc/c4q/jonathancolon/inContaq/notifications/WeeksPassed.java
 src/test/java/nyc/c4q/jonathancolon/inContaq/ContactClassTest.java
+
+.idea/codeStyleSettings.xml
