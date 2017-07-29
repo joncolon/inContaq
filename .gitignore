@@ -8,3 +8,7 @@
 .externalNativeBuild
 src/main/assets/
 build/
+
+.idea/codeStyleSettings.xml
+
+app/google-services.json

@@ -155,7 +155,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
-
                     android:enabled="false"
                     android:text="@string/mobile"
                     android:textColor="@color/charcoal"
@@ -229,24 +228,26 @@
                     android:textColorHint="@color/grey_font"
                     android:textSize="@dimen/card_info_text_size"/>
             </LinearLayout>
-
+    
+    
+    
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-
+    
                 <TextView
                     android:id="@+id/address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/text_info_margin_bottom"
+                    android:layout_marginBottom="@dimen/card_text_margin_start"
                     android:layout_marginStart="@dimen/card_margin_start"
                     android:enabled="false"
                     android:text="@string/address"
                     android:textColor="@color/charcoal"
                     android:textSize="@dimen/info_title_text_size"
                     android:textStyle="bold"/>
-
+    
                 <EditText
                     android:id="@+id/edit_address"
                     android:layout_width="match_parent"
@@ -259,6 +260,36 @@
                     android:textColor="@color/charcoal"
                     android:textColorHint="@color/grey_font"
                     android:textSize="@dimen/card_info_text_size"/>
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+        
+                <TextView
+                    android:id="@+id/birthDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:layout_marginBottom="@dimen/card_text_margin_start"
+                    android:enabled="false"
+                    android:text="Birthday: "
+                    android:textColor="@color/charcoal"
+                    android:textSize="@dimen/info_title_text_size"
+                    android:textStyle="bold"/>
+        
+                <TextView
+                    android:id="@+id/birthDateDisplay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/card_margin_start"
+                    android:hint="@string/enter_address"
+                    android:textColor="@color/charcoal"
+                    android:textColorHint="@color/grey_font"
+                    android:text="sodfi"
+                    android:textSize="@dimen/card_info_text_size"
+                    style="@style/Widget.AppCompat.Spinner"/>
             </LinearLayout>
 
         </LinearLayout>

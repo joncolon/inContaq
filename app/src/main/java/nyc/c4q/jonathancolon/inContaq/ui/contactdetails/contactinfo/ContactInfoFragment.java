@@ -26,14 +26,16 @@ import android.widget.Toast;
 
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.common.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
@@ -43,10 +45,14 @@ import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>,
         AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener,
-        DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
+        DialogInterface.OnCancelListener, DialogInterface.OnDismissListener, DatePickerDialog.OnDateSetListener {
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
+    private static final String ONE_WEEK = "1 week has passed";
+    private static final String TWO_WEEKS = "2 weeks have passed";
+    private static final String THREE_WEEKS = "3 weeks have passed";
+    private static final String CANCEL = "CANCEL";
     @Inject RealmService realmService;
     @Inject Context context;
     @Inject PicassoHelper pUtils;
@@ -109,12 +115,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         initSpinner(view);
         initSwitch(view);
 
-        sendMessageIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-            }
-        });
+        sendMessageIV.setOnClickListener(v -> dialog.show());
     }
 
     private void initSwitch(View view) {
@@ -144,6 +145,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         saveButton.setOnClickListener(view1 -> ContactInfoFragment.this.buildSaveEditDialog());
         editOption.setOnClickListener(view12 -> ContactInfoFragment.this.enableEditContactMode());
         setClickListenersWhenInPortraitMode();
+
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                ContactInfoFragment.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
     }
 
     private void buildSaveEditDialog() {
@@ -267,24 +276,24 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (String.valueOf(parent.getItemAtPosition(position))) {
-            case "1 week has passed":
+            case ONE_WEEK:
                 realmService.getInstance().executeTransaction(realm1 -> {
                     contact.setReminderDuration(1);
                     contact.setReminderEnabled(true);
                 });
-            case "2 weeks have passed":
+            case TWO_WEEKS:
                 realmService.getInstance().executeTransaction(realm1 -> {
                     contact.setReminderDuration(2);
                     contact.setReminderEnabled(true);
                 });
                 break;
-            case "3 weeks have passed":
+            case THREE_WEEKS:
                 realmService.getInstance().executeTransaction(realm1 -> {
                     contact.setReminderDuration(3);
                     contact.setReminderEnabled(true);
                 });
                 break;
-            case "CANCEL":
+            case CANCEL:
                 realmService.getInstance().executeTransaction(realm1 -> {
                 });
                 break;
@@ -418,6 +427,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public void onDismiss(DialogInterface dialog) {
         this.dialog = initBottomSheetDialog(bottomSheetMenu);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
     }
 }
 

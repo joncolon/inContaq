@@ -90,6 +90,9 @@ android {
                 //Lib Phone Number
                 compile 'io.michaelrocks:libphonenumber-android:8.4.1'
 
+                //Material DatePicker
+                compile 'com.wdullaer:materialdatetimepicker:3.2.2'
+
                 testCompile 'junit:junit:4.12'
             }
         })

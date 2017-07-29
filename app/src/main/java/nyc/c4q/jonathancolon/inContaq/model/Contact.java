@@ -17,8 +17,6 @@ public class Contact extends RealmObject {
     private String firstName;
     private String lastName;
     private String nickname;
-    private String homePhoneNumber;
-    private String workPhoneNumber;
     private String mobileNumber;
     private String address;
     private String email;
@@ -92,22 +90,6 @@ public class Contact extends RealmObject {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getHomePhoneNumber() {
-        return homePhoneNumber;
-    }
-
-    public void setHomePhoneNumber(String homePhoneNumber) {
-        this.homePhoneNumber = homePhoneNumber;
-    }
-
-    public String getWorkPhoneNumber() {
-        return workPhoneNumber;
-    }
-
-    public void setWorkPhoneNumber(String workPhoneNumber) {
-        this.workPhoneNumber = workPhoneNumber;
     }
 
     public String getMobileNumber() {

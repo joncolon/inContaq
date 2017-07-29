@@ -29,6 +29,13 @@ public class AnalyticsFeedback {
     private static final int FRI = 6;
     private static final int SAT = 7;
 
+    private static final int MIDNIGHT = 0;
+    private static final int NOON = 4;
+    private static final int THREE_PM = 5;
+    private static final int SIX_PM = 6;
+    private static final int NINE_PM = 7;
+    private static final int TWELVE_AM = 8;
+
     // 12am=0, 3am=1, 6am=2 ,9am=3,12pm=4, (15)3pm=5, (18)6pm=6, (21)9pm=7, (24)12am=8
 
     private Context context;
@@ -68,27 +75,27 @@ public class AnalyticsFeedback {
     }
 
     private boolean isMorning(int hourInt) {
-        return hourInt > 0 && hourInt < 4 ;
+        return hourInt > MIDNIGHT && hourInt < NOON;
     }
 
     private boolean isNoon(int hourInt) {
-        return hourInt == 4;
+        return hourInt == NOON;
     }
 
     private boolean isAfternoon(int hourInt) {
-        return hourInt == 5;
+        return hourInt == THREE_PM;
     }
 
     private boolean isEvening(int hourInt) {
-        return hourInt == 6;
+        return hourInt == SIX_PM;
     }
 
     private boolean isNightTime(int hourInt) {
-        return hourInt == 7;
+        return hourInt == NINE_PM;
     }
 
     private boolean isMidnight(int hourInt) {
-        return hourInt == 8 || hourInt == 0;
+        return hourInt == TWELVE_AM || hourInt == MIDNIGHT;
     }
 
     public String dayOfWeekFeedback(String day) {

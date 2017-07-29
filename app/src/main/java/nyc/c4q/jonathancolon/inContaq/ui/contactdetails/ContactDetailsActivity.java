@@ -51,13 +51,13 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     }
 
     @Override
-    public void loadSelectedContact() {
+    public synchronized void loadSelectedContact() {
         long realmID = getIntent().getLongExtra(CONTACT_KEY, -1);
         contact = realmService.getByRealmID(realmID);
     }
 
     @Override
-    public void showViewPager() {
+    public synchronized void showViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager_contact_tabs);
         viewPager.setAdapter(new ContactPagerAdapter(getSupportFragmentManager(),
                 ContactDetailsActivity.this) {

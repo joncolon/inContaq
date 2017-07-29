@@ -79,7 +79,6 @@ public class ContactNotificationService extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, i, 0);
         am.setRepeating(AlarmManager.RTC_WAKEUP, 5000, ONE_DAY,
                 pendingIntent);
-        Log.e(TAG, "scheduleAlarm: " + am.getNextAlarmClock().toString());
     }
 
     private void checkInspectionTime() {
