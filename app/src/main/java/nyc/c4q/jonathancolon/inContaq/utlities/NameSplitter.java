@@ -24,6 +24,5 @@ public class NameSplitter {
         }
         throw new NullPointerException("NO NAME ENTERED");
     }
-
 }
 

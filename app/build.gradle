@@ -15,8 +15,8 @@ android {
 
         minSdkVersion 23
         targetSdkVersion 25
-        versionCode 5
-        versionName "1.4"
+        versionCode 9
+        versionName "1.62"
         aaptOptions {
             cruncherEnabled = false
         }
@@ -98,3 +98,8 @@ android {
         })
     }
 }
+
+dependencies {
+    compile 'com.google.firebase:firebase-crash:10.0.1'
+}
+apply plugin: 'com.google.gms.google-services'

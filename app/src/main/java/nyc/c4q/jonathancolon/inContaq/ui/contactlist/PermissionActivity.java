@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 
 public class PermissionActivity extends Activity {
 
+    private static final String PERMISSIONS_KEY = "request_permissions";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +28,7 @@ public class PermissionActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         PreferenceManager.getDefaultSharedPreferences(this).edit()
-                .putBoolean("request_permissions", false)
+                .putBoolean(PERMISSIONS_KEY, false)
                 .apply();
 
         startActivity(new Intent(this, ContactListActivity.class));

@@ -41,11 +41,21 @@ import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 
+import static android.content.DialogInterface.OnCancelListener;
+import static android.content.DialogInterface.OnDismissListener;
+import static android.view.View.*;
+import static android.widget.AdapterView.OnItemSelectedListener;
+import static android.widget.CompoundButton.OnCheckedChangeListener;
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
 
 public class ContactInfoFragment extends Fragment implements AlertDialogCallback<Integer>,
+<<<<<<< HEAD
         AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener,
         DialogInterface.OnCancelListener, DialogInterface.OnDismissListener, DatePickerDialog.OnDateSetListener {
+=======
+        OnItemSelectedListener, OnCheckedChangeListener,
+        OnCancelListener, OnDismissListener {
+>>>>>>> firebase
 
     private static final int RESULT_LOAD_BACKGROUND_IMG = 2;
     private static final int RESULT_LOAD_CONTACT_IMG = 1;
@@ -53,10 +63,23 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private static final String TWO_WEEKS = "2 weeks have passed";
     private static final String THREE_WEEKS = "3 weeks have passed";
     private static final String CANCEL = "CANCEL";
+<<<<<<< HEAD
     @Inject RealmService realmService;
     @Inject Context context;
     @Inject PicassoHelper pUtils;
     @Inject FontUtils fontUtils;
+=======
+
+    @Inject
+    Context context;
+    @Inject
+    FontUtils fontUtils;
+    @Inject
+    PicassoHelper pUtils;
+    @Inject
+    RealmService realmService;
+
+>>>>>>> firebase
     private Contact contact;
     private TextView mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV, sendMessageIV;
@@ -115,14 +138,23 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         initSpinner(view);
         initSwitch(view);
 
+<<<<<<< HEAD
         sendMessageIV.setOnClickListener(v -> dialog.show());
+=======
+        sendMessageIV.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
+>>>>>>> firebase
     }
 
     private void initSwitch(View view) {
         reminderSwitch = (Switch) view.findViewById(R.id.reminder_switch);
         if (reminderSwitch != null) {
             if (contact.isReminderEnabled()) {
-                dateSpinner.setVisibility(View.VISIBLE);
+                dateSpinner.setVisibility(VISIBLE);
             }
             reminderSwitch.setChecked(contact.isReminderEnabled());
             reminderSwitch.setOnCheckedChangeListener(this);
@@ -136,9 +168,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 R.layout.date_spinner_item);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.date_spinner_dropdown_item);
 
+
         dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         dateSpinner.setAdapter(spinnerArrayAdapter);
         dateSpinner.setOnItemSelectedListener(this);
+        dateSpinner.setSelection(contact.getReminderDuration());
     }
 
     private void setClickListeners() {
@@ -162,9 +196,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
             selection = 1;
-            ContactInfoFragment.this.alertDialogCallback(selection);
+            ContactInfoFragment.this.alertDialogCallback(selection, contact);
             anim.exitFab(saveButton);
-            saveButton.setVisibility(View.GONE);
+            saveButton.setVisibility(GONE);
             isEditTextEnabled = false;
 
         }).setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
@@ -178,7 +212,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     @Override
-    public void alertDialogCallback(Integer ret) {
+    public void alertDialogCallback(Integer ret, Contact contact) {
         ret = selection;
         if (ret == 1) {
             saveChanges();
@@ -206,7 +240,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void showFab() {
-        saveButton.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(VISIBLE);
         anim.enterFab(saveButton);
     }
 
@@ -253,23 +287,23 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
     synchronized private void showMobile() {
         if (isEditTextEnabled) {
-            mobile.setVisibility(View.VISIBLE);
+            mobile.setVisibility(VISIBLE);
 
         }
         if (contact.getMobileNumber() != null || Objects.equals(contact.getMobileNumber(), "")) {
-            mobile.setVisibility(View.VISIBLE);
+            mobile.setVisibility(VISIBLE);
         }
     }
 
     synchronized private void showEmail() {
         if (isEditTextEnabled) {
-            email.setVisibility(View.VISIBLE);
+            email.setVisibility(VISIBLE);
         }
     }
 
     synchronized private void showAddress() {
         if (isEditTextEnabled) {
-            mobile.setVisibility(View.VISIBLE);
+            mobile.setVisibility(VISIBLE);
         }
     }
 
@@ -281,6 +315,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                     contact.setReminderDuration(1);
                     contact.setReminderEnabled(true);
                 });
+<<<<<<< HEAD
+=======
+                break;
+>>>>>>> firebase
             case TWO_WEEKS:
                 realmService.getInstance().executeTransaction(realm1 -> {
                     contact.setReminderDuration(2);
@@ -327,12 +365,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (resultCode == Activity.RESULT_OK) {
-
                 switch (requestCode) {
-                    case 1:
+                    case RESULT_LOAD_CONTACT_IMG:
                         updateContactImage(data, picasso);
                         break;
-                    case 2:
+                    case RESULT_LOAD_BACKGROUND_IMG:
                         setBackgroundImage(data, picasso);
                         break;
                 }
@@ -375,10 +412,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
                 Toast.LENGTH_SHORT).show();
         if (isChecked) {
             realmService.toggleReminder(contact, true);
-            dateSpinner.setVisibility(View.VISIBLE);
+            dateSpinner.setVisibility(VISIBLE);
         } else {
             realmService.toggleReminder(contact, false);
-            dateSpinner.setVisibility(View.INVISIBLE);
+            dateSpinner.setVisibility(INVISIBLE);
         }
     }
 

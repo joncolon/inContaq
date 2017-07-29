@@ -8,14 +8,12 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import dagger.Module;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 
-@Module
 public class WordCount {
 
     private SmsHelper smsHelper;

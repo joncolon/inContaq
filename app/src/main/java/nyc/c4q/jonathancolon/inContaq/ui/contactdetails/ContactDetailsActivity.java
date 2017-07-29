@@ -54,6 +54,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     public synchronized void loadSelectedContact() {
         long realmID = getIntent().getLongExtra(CONTACT_KEY, -1);
         contact = realmService.getByRealmID(realmID);
+        realmService.closeRealm();
     }
 
     @Override

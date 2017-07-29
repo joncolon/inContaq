@@ -5,11 +5,12 @@ import javax.inject.Singleton;
 import dagger.Component;
 import nyc.c4q.jonathancolon.inContaq.common.application.App;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
+import nyc.c4q.jonathancolon.inContaq.notifications.DaysPassed;
+import nyc.c4q.jonathancolon.inContaq.notifications.WeeksPassed;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactinfo.ContactInfoFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.ContactSmsFragment;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.ContactStatsFragment;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.WordCount;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListPresenter;
 import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
@@ -26,7 +27,8 @@ import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
                 PhoneNumberUtilModule.class,
                 SmsHelperModule.class,
                 RxBusModule.class,
-                WordCount.class
+                WeeksPassedModule.class,
+                DaysPassedModule.class
         })
 
 public interface ApplicationComponent {
@@ -48,4 +50,8 @@ public interface ApplicationComponent {
     void inject(ContactDetailsActivity viewPagerActivity);
 
     void inject(ContactNotificationService contactNotificationService);
+
+    void inject(WeeksPassed weeksPassed);
+
+    void inject(DaysPassed daysPassed);
 }

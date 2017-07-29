@@ -20,7 +20,9 @@ public class FontUtils {
 
     public void applyFont(TextView textView) {
         context.getAssets();
-        Typeface customFont = Typeface.createFromAsset(context.getAssets(), context.getString(R.string.contact_list_font));
+        Typeface customFont = Typeface.createFromAsset(context.getAssets(),
+                context.getString(R.string.contact_list_font));
+
         textView.setTypeface(customFont);
     }
 }

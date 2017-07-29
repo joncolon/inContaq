@@ -7,9 +7,6 @@ import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 
-/**
- * Created by jonathancolon on 5/14/17.
- */
 
 public class GetMonthlyReceived {
 
@@ -24,7 +21,6 @@ public class GetMonthlyReceived {
         ArrayList<String> receivedSms = new ArrayList<>();
         PrepareMonthlyTreeMap treeMap = new PrepareMonthlyTreeMap();
         monthlyReceivedTreeMap = treeMap.setUpMonthlyTreeMap();
-
 
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals("1")) {

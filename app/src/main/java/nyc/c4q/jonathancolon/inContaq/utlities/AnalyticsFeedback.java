@@ -30,13 +30,20 @@ public class AnalyticsFeedback {
     private static final int SAT = 7;
 
     private static final int MIDNIGHT = 0;
+<<<<<<< HEAD
     private static final int NOON = 4;
+=======
+    private static final int TWELVE_PM = 4;
+>>>>>>> firebase
     private static final int THREE_PM = 5;
     private static final int SIX_PM = 6;
     private static final int NINE_PM = 7;
     private static final int TWELVE_AM = 8;
+<<<<<<< HEAD
 
     // 12am=0, 3am=1, 6am=2 ,9am=3,12pm=4, (15)3pm=5, (18)6pm=6, (21)9pm=7, (24)12am=8
+=======
+>>>>>>> firebase
 
     private Context context;
 
@@ -75,11 +82,19 @@ public class AnalyticsFeedback {
     }
 
     private boolean isMorning(int hourInt) {
+<<<<<<< HEAD
         return hourInt > MIDNIGHT && hourInt < NOON;
     }
 
     private boolean isNoon(int hourInt) {
         return hourInt == NOON;
+=======
+        return hourInt > MIDNIGHT && hourInt < TWELVE_PM;
+    }
+
+    private boolean isNoon(int hourInt) {
+        return hourInt == TWELVE_PM;
+>>>>>>> firebase
     }
 
     private boolean isAfternoon(int hourInt) {

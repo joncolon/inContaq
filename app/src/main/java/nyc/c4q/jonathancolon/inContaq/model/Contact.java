@@ -14,6 +14,7 @@ public class Contact extends RealmObject {
 
     private String contactID;
     private long birthDate;
+    private String fullName;
     private String firstName;
     private String lastName;
     private String nickname;
@@ -146,5 +147,9 @@ public class Contact extends RealmObject {
 
     public void setRealmID(Long realmID) {
         this.realmID = realmID;
+    }
+
+    public String getFullName(){
+        return firstName + " " + lastName;
     }
 }

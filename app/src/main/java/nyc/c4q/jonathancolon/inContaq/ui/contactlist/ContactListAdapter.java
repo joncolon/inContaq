@@ -18,8 +18,10 @@ import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
 
+import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 
-public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
+
+class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactViewHolder> {
     private final Listener listener;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private final Context context;
@@ -27,8 +29,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private List<Contact> contactList;
 
 
-    public ContactListAdapter(Listener listener, @NonNull Context context,
-                              @NonNull PicassoHelper picassoHelper) {
+    ContactListAdapter(Listener listener, @NonNull Context context,
+                       @NonNull PicassoHelper picassoHelper) {
         this.context = context;
         this.listener = listener;
         this.picassoHelper = picassoHelper;
@@ -41,7 +43,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     @Override
-    public ContactListAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.itemview_contactlist_rv, parent, false);
 
@@ -78,19 +80,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         notifyDataSetChanged();
     }
 
-    private boolean hasContactImage(Contact contact) {
-        return contact.getContactImage() != null;
-    }
-
-    private boolean hasBackgroundImage(Contact contact) {
-        return contact.getBackgroundImage() != null;
-    }
-
     interface Listener {
         void onContactClicked(Contact contact);
+        void onContactLongClicked(Contact contact);
     }
 
     //_____________________________________VIEWHOLDER_______________________________________________
+
     class ContactViewHolder extends RecyclerView.ViewHolder {
         private final ImageView mBackGroundImage;
         private final ImageView mContactImage;
@@ -116,24 +112,30 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             displayBackgroundImage(contact);
             displayContactImage(contact);
 
-            itemView.setOnClickListener(v -> listener.onContactClicked(contact));
-        }
-
-        private void displayContactImage(Contact contact) {
-            if (hasContactImage(contact)) {
-                picassoHelper.loadImageFromString(contact.getContactImage(), mContactImage);
-            } else {
-                mContactImage.refreshDrawableState();
-                mContactImage.setImageDrawable(null);
-            }
+            itemView.setOnClickListener(v -> {
+                listener.onContactClicked(contact);
+            });
+            itemView.setOnLongClickListener(v -> {
+                 listener.onContactLongClicked(contact);
+                return true;
+            });
         }
 
         private void displayBackgroundImage(Contact contact) {
-            if (hasBackgroundImage(contact)) {
+            if (!isNull(contact.getBackgroundImage())) {
                 picassoHelper.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
             } else {
                 mBackGroundImage.refreshDrawableState();
                 mBackGroundImage.setImageDrawable(null);
+            }
+        }
+
+        private void displayContactImage(Contact contact) {
+            if (!isNull(contact.getContactImage())) {
+                picassoHelper.loadImageFromString(contact.getContactImage(), mContactImage);
+            } else {
+                mContactImage.refreshDrawableState();
+                mContactImage.setImageDrawable(null);
             }
         }
     }
