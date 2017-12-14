@@ -4,7 +4,7 @@ import android.app.Application;
 
 import javax.inject.Inject;
 
-import nyc.c4q.jonathancolon.inContaq.common.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.common.dagger.Injector;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 
 public class App extends Application {

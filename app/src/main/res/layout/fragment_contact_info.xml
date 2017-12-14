@@ -236,13 +236,13 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/address"
+                    android:id="@+id/phoneNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/text_info_margin_bottom"
                     android:layout_marginStart="@dimen/card_margin_start"
                     android:enabled="false"
-                    android:text="@string/address"
+                    android:text="@string/phoneNumber"
                     android:textColor="@color/charcoal"
                     android:textSize="@dimen/info_title_text_size"
                     android:textStyle="bold"/>

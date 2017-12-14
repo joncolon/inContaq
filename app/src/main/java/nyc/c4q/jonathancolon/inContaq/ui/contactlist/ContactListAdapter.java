@@ -16,7 +16,7 @@ import java.util.List;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
-import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoUtils;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 
@@ -25,15 +25,15 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
     private final Listener listener;
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private final Context context;
-    private final PicassoHelper picassoHelper;
+    private final PicassoUtils picassoUtils;
     private List<Contact> contactList;
 
 
     ContactListAdapter(Listener listener, @NonNull Context context,
-                       @NonNull PicassoHelper picassoHelper) {
+                       @NonNull PicassoUtils picassoUtils) {
         this.context = context;
         this.listener = listener;
-        this.picassoHelper = picassoHelper;
+        this.picassoUtils = picassoUtils;
     }
 
     @Override
@@ -123,7 +123,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
 
         private void displayBackgroundImage(Contact contact) {
             if (!isNull(contact.getBackgroundImage())) {
-                picassoHelper.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
+                picassoUtils.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
             } else {
                 mBackGroundImage.refreshDrawableState();
                 mBackGroundImage.setImageDrawable(null);
@@ -132,7 +132,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
 
         private void displayContactImage(Contact contact) {
             if (!isNull(contact.getContactImage())) {
-                picassoHelper.loadImageFromString(contact.getContactImage(), mContactImage);
+                picassoUtils.loadImageFromString(contact.getContactImage(), mContactImage);
             } else {
                 mContactImage.refreshDrawableState();
                 mContactImage.setImageDrawable(null);

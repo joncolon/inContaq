@@ -52,8 +52,8 @@ import nyc.c4q.jonathancolon.inContaq.utlities.AnalyticsFeedback;
 import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
 
 import static android.view.View.GONE;
-import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getApplicationComponent;
-import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getRxBus;
+import static nyc.c4q.jonathancolon.inContaq.common.dagger.Injector.getApplicationComponent;
+import static nyc.c4q.jonathancolon.inContaq.common.dagger.Injector.getRxBus;
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 import static nyc.c4q.jonathancolon.inContaq.utlities.PixelToDp.convertPixelsToDp;
 
@@ -175,7 +175,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     }
 
     private long getDifferenceDays() {
-        Date date1 = new Date((Long.valueOf(smsList.get(smsList.size() - 1).getTime())));
+        Date date1 = new Date((Long.valueOf(smsList.get(smsList.size() - 1).getTimeStamp())));
         Date date2 = new Date(System.currentTimeMillis());
         long difference = date2.getTime() - date1.getTime();
         return difference / (1000 * 60 * 60 * 24);

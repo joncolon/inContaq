@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.common.di;
+package nyc.c4q.jonathancolon.inContaq.common.dagger;
 
 import javax.inject.Singleton;
 

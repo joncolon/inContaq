@@ -1,9 +1,9 @@
-package nyc.c4q.jonathancolon.inContaq.common.di;
+package nyc.c4q.jonathancolon.inContaq.common.dagger;
 
 import dagger.Module;
 import dagger.Provides;
 import nyc.c4q.jonathancolon.inContaq.notifications.WeeksPassed;
-import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 /**
  * Created by jonathancolon on 7/28/17.
@@ -13,7 +13,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 public class WeeksPassedModule {
 
     @Provides
-    WeeksPassed providesWeeksPassed(SmsHelper smsHelper) {
-        return new WeeksPassed(smsHelper);
+    WeeksPassed providesWeeksPassed(SmsUtils smsUtils) {
+        return new WeeksPassed(smsUtils);
     }
 }

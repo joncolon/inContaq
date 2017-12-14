@@ -9,12 +9,12 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-public class PicassoHelper {
+public class PicassoUtils {
 
     private Context context;
 
     @Inject
-    public PicassoHelper(@NonNull Context context) {
+    public PicassoUtils(@NonNull Context context) {
         this.context = context;
     }
 

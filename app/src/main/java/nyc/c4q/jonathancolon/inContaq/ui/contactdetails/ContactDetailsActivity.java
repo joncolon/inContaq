@@ -12,7 +12,7 @@ import nyc.c4q.jonathancolon.inContaq.common.base.BaseActivity;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 
-import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getApplicationComponent;
+import static nyc.c4q.jonathancolon.inContaq.common.dagger.Injector.getApplicationComponent;
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
 
 public class ContactDetailsActivity extends BaseActivity implements ContactDetailsContract.View {

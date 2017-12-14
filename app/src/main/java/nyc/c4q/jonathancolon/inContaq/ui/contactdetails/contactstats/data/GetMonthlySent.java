@@ -23,7 +23,7 @@ public class GetMonthlySent {
 
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals(SENT)) {
-                sentSms.add(smsList.get(i).getTime());
+                sentSms.add(smsList.get(i).getTimeStamp());
             }
         }
         monthlySentTreeMap = mapMonthlyTexts(sentSms);

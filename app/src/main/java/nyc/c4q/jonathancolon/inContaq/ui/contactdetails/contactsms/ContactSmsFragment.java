@@ -29,12 +29,12 @@ import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.data.GetAllSms;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.data.SmsReader;
 import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
-import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
-import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getApplicationComponent;
-import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getRxBus;
+import static nyc.c4q.jonathancolon.inContaq.common.dagger.Injector.getApplicationComponent;
+import static nyc.c4q.jonathancolon.inContaq.common.dagger.Injector.getRxBus;
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isEmptyList;
 
@@ -46,8 +46,10 @@ public class ContactSmsFragment extends Fragment {
     @BindView(R.id.progressBar) ProgressBar progressBar;
 
     @Inject RealmService realmService;
-    @Inject GetAllSms getAllSms;
-    @Inject SmsHelper smsHelper;
+    @Inject
+    SmsReader smsReader;
+    @Inject
+    SmsUtils smsUtils;
     private long realmID;
     private ArrayList<Sms> smsList;
     private RxBus rxBus;
@@ -96,7 +98,7 @@ public class ContactSmsFragment extends Fragment {
 
     public void retrieveSmsListInBackground(long contactId) {
         progressBar.setVisibility(View.VISIBLE);
-        Observable.fromCallable(() -> getAllSms.retrieveSmsList(contactId))
+        Observable.fromCallable(() -> smsReader.retrieveSmsList(contactId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(arrayList -> {
@@ -109,8 +111,8 @@ public class ContactSmsFragment extends Fragment {
                     ContactSmsFragment.this.scrollListToBottom();
 
                     if (!isEmptyList(smsList)) {
-                        long time = smsHelper.getLastContactedDate(contact);
-                        StringBuilder lastContacted = smsHelper.smsDateFormat(time);
+                        long time = smsUtils.getLastContactedDate(contact);
+                        StringBuilder lastContacted = smsUtils.smsDateFormat(time);
                         toolbar.setSubtitle(getString(R.string.last_contacted) + lastContacted);
                     } else {
                         toolbar.setSubtitle(R.string.no_sms_available);
@@ -119,7 +121,7 @@ public class ContactSmsFragment extends Fragment {
     }
 
     private void setupRecyclerView(Contact contact) {
-        SmsAdapter adapter = new SmsAdapter(contact, smsHelper);
+        SmsAdapter adapter = new SmsAdapter(contact, smsUtils);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         Collections.sort(smsList);
         adapter.setData(smsList);

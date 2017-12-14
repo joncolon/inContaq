@@ -32,12 +32,12 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.common.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.common.dagger.Injector;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
-import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoUtils;
 
 import static android.content.DialogInterface.OnCancelListener;
 import static android.content.DialogInterface.OnDismissListener;
@@ -62,14 +62,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Inject
     FontUtils fontUtils;
     @Inject
-    PicassoHelper pUtils;
+    PicassoUtils pUtils;
     @Inject
     RealmService realmService;
 
     private Contact contact;
     private TextView mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV, sendMessageIV;
-    private PicassoHelper picasso;
+    private PicassoUtils picasso;
     private EditText editMobile, editEmail, editAddress;
     private FloatingActionButton saveButton;
     private int selection;
@@ -91,7 +91,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         long contactId = getActivity().getIntent().getLongExtra(CONTACT_KEY, -1);
         contact = realmService.getByRealmID(contactId);
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
-        picasso = new PicassoHelper(context);
+        picasso = new PicassoUtils(context);
         appLauncher = new MessengerAppLauncher(getActivity(), contact.getMobileNumber());
 
         isEditTextEnabled = false;
@@ -354,14 +354,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         }
     }
 
-    private void updateContactImage(Intent data, PicassoHelper picasso) {
+    private void updateContactImage(Intent data, PicassoUtils picasso) {
         Uri contactImgUri = data.getData();
         picasso.loadImageFromUri(contactImgUri, contactImageIV);
         realmService.getInstance().executeTransaction(
                 realm1 -> contact.setContactImage(contactImgUri.toString()));
     }
 
-    public void setBackgroundImage(Intent data, PicassoHelper ph) {
+    public void setBackgroundImage(Intent data, PicassoUtils ph) {
         Uri bgImgUri = data.getData();
         ph.loadImageFromUri(bgImgUri, backgroundImageIV);
         realmService.getInstance().executeTransaction(

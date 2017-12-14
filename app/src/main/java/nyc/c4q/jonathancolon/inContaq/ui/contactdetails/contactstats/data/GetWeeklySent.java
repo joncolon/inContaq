@@ -24,7 +24,7 @@ public class GetWeeklySent {
 
         for (int i = 0; i < smsList.size(); i++) {
             if (smsList.get(i).getType().equals("2")) {
-                sentSms.add(smsList.get(i).getTime());
+                sentSms.add(smsList.get(i).getTimeStamp());
             }
         }
 

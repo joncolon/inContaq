@@ -62,8 +62,8 @@ dependencies {
             //beautiful parallax
             compile 'com.github.florent37:beautifulparallax:1.0.0'
 
-            //joda-time
-            compile 'joda-time:joda-time:2.9.7'
+            //joda-timeStamp
+            compile 'joda-timeStamp:joda-timeStamp:2.9.7'
             testCompile 'junit:junit:4.12'
 
             //TODO remove parceler

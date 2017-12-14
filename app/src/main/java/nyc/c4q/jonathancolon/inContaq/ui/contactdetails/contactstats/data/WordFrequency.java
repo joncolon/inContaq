@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 public class WordFrequency {
 
@@ -38,20 +38,20 @@ public class WordFrequency {
             "you've", "your", "yours", "yourself", "yourselves", "further", "had", "hadn't",
             "gonna", "Yeah", "yeah"));
 
-    private SmsHelper smsHelper;
+    private SmsUtils smsUtils;
 
     @Inject
-    public WordFrequency(SmsHelper smsHelper) {
-        this.smsHelper = smsHelper;
+    public WordFrequency(SmsUtils smsUtils) {
+        this.smsUtils = smsUtils;
     }
 
 
     public String mostCommonWordReceived(ArrayList<Sms> smsList) {
-        ArrayList<Sms> smsReceived = smsHelper.parseReceivedSms(smsList);
+        ArrayList<Sms> smsReceived = smsUtils.parseReceivedSms(smsList);
         ArrayList<String> wordArrayList = new ArrayList<>();
 
         for (int i = 0; i < smsReceived.size(); i++) {
-            String message = smsReceived.get(i).getMsg().toLowerCase();
+            String message = smsReceived.get(i).getMessage().toLowerCase();
             for (String word : message.split(" ")) {
                 if (word.length() >= 3 && !excludedWords.contains(word)) {
                     wordArrayList.add(word);
@@ -89,11 +89,11 @@ public class WordFrequency {
     }
 
     public String mostCommonWordSent(ArrayList<Sms> smsList) {
-        ArrayList<Sms> smsSent = smsHelper.parseSentSms(smsList);
+        ArrayList<Sms> smsSent = smsUtils.parseSentSms(smsList);
         ArrayList<String> wordArrayList = new ArrayList<>();
 
         for (int i = 0; i < smsSent.size(); i++) {
-            String message = smsSent.get(i).getMsg().toLowerCase();
+            String message = smsSent.get(i).getMessage().toLowerCase();
             for (String word : message.split(" ")) {
                 if (word.length() > 3 && !excludedWords.contains(word)) {
                     wordArrayList.add(word);

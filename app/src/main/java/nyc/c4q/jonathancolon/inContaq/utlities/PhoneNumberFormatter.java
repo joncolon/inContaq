@@ -10,17 +10,17 @@ import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import io.michaelrocks.libphonenumber.android.Phonenumber.PhoneNumber;
 
 
-public class PhoneNumberHelper {
+public class PhoneNumberFormatter {
 
     private PhoneNumberUtil instance;
 
     @Inject
-    public PhoneNumberHelper(PhoneNumberUtil instance) {
+    public PhoneNumberFormatter(PhoneNumberUtil instance) {
         this.instance = instance;
     }
 
     public String formatPhoneNumber(String phoneNumber) throws NumberParseException {
-        removeSpecialCharacters(phoneNumber);
+        phoneNumber = removeSpecialCharacters(phoneNumber);
         phoneNumber = removeCountryCode(phoneNumber);
         return phoneNumber;
     }
