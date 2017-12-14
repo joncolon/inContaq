@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.db.chart.view.LineChartView;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.HourlyGraph;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.HourlyChart;
 
 
 public class DailyGraphFragment extends Fragment {
@@ -43,7 +43,7 @@ public class DailyGraphFragment extends Fragment {
 
     private void showDailyGraph() {
         Log.e(TAG, "loading Daily Graph");
-        HourlyGraph hourlyGraph = new HourlyGraph(lineGraph, hourlySent, hourlyReceived);
-        hourlyGraph.showDailyGraph();
+        HourlyChart hourlyChart = new HourlyChart(lineGraph, hourlySent, hourlyReceived);
+        hourlyChart.showLineChart();
     }
 }

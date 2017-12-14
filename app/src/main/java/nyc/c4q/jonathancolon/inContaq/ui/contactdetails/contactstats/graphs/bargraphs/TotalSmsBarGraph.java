@@ -30,23 +30,27 @@ public class TotalSmsBarGraph extends BarGraph {
     }
 
 
+    @Override
     public void showBarGraph(ArrayList<Sms> smsList, WordCount wordCount) {
         getValues(smsList, wordCount);
         buildGraph();
         barChartView.show();
     }
 
+    @Override
     void getValues(ArrayList<Sms> smsList, WordCount wordCount) {
         totalWordsSent = wordCount.wordCountSent(smsList);
         totalWordsReceived = wordCount.wordCountReceived(smsList);
     }
 
+    @Override
     void buildGraph() {
         findHighestYValue();
         configureGraphData();
         configureGraphAttributes();
     }
 
+    @Override
     void findHighestYValue() {
         highestValue = Math.max(totalWordsReceived, totalWordsSent);
         if (highestValue == 0) {
@@ -54,6 +58,7 @@ public class TotalSmsBarGraph extends BarGraph {
         }
     }
 
+    @Override
     void configureGraphData() {
         BarSet barSet = new BarSet();
         Bar barSent = new Bar(mLabels[0], totalWordsSent);
@@ -66,6 +71,7 @@ public class TotalSmsBarGraph extends BarGraph {
         barChartView.addData(barSet);
     }
 
+    @Override
     void configureGraphAttributes() {
         barChartView.setBarSpacing(fromDpToPx(15));
         barChartView.setRoundCorners(fromDpToPx(2));
