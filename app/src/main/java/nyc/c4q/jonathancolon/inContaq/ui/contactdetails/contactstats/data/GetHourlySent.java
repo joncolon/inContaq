@@ -36,7 +36,7 @@ public class GetHourlySent {
         for (int i = 0; i < smsList.size(); i++) {
             String p = smsList.get(i).getType();
             if (p.equals("2")) {
-                sentSms.add(smsList.get(i).getTime());
+                sentSms.add(smsList.get(i).getTimeStamp());
             }
         }
         hourlySentTreeMap = mapHourlySms(sentSms);

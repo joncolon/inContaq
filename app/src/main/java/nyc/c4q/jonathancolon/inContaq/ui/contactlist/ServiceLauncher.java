@@ -10,9 +10,6 @@ import javax.inject.Inject;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.notifications.MyAlarmReceiver;
 
-/**
- * Created by jonathancolon on 6/9/17.
- */
 
 public class ServiceLauncher {
 
@@ -25,7 +22,6 @@ public class ServiceLauncher {
     }
 
     void checkServiceCreated() {
-
         if (!ContactNotificationService.hasStarted) {
             System.out.println("Starting service...");
             ContactNotificationService.hasStarted = true;

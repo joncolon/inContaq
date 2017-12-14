@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.db.chart.view.LineChartView;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.MonthlyGraph;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.MonthlyChart;
 
 
 public class MonthlyGraphFragment extends Fragment {
@@ -45,8 +45,8 @@ public class MonthlyGraphFragment extends Fragment {
     private void showMonthlyGraph() {
         Log.e(TAG, "loading Monthly Graph");
 
-        MonthlyGraph monthlyGraph = new MonthlyGraph(lineGraph, monthlyReceived,
+        MonthlyChart monthlyChart = new MonthlyChart(lineGraph, monthlyReceived,
                 monthlySent);
-        monthlyGraph.showMonthlyGraph();
+        monthlyChart.showLineChart();
     }
 }

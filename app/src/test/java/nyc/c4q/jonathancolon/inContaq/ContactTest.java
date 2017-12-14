@@ -9,7 +9,7 @@ import nyc.c4q.jonathancolon.inContaq.model.Contact;
  * Created by jonathancolon on 7/27/17.
  */
 
-public class ContactClassTest {
+public class ContactTest {
 
     @Test
     public void getFullNameTest(){

@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.MotionEvent;
 
 import javax.inject.Inject;
 
@@ -24,14 +25,15 @@ import nyc.c4q.jonathancolon.inContaq.notifications.MyAlarmReceiver;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactinfo.AlertDialogCallback;
 import nyc.c4q.jonathancolon.inContaq.utlities.DeviceUtils;
-import nyc.c4q.jonathancolon.inContaq.utlities.MaterialTapHelper;
-import nyc.c4q.jonathancolon.inContaq.utlities.PicassoHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils;
+import nyc.c4q.jonathancolon.inContaq.utlities.PicassoUtils;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 import static android.content.Intent.ACTION_PICK;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static android.provider.ContactsContract.Contacts.CONTENT_URI;
-import static nyc.c4q.jonathancolon.inContaq.common.di.Injector.getApplicationComponent;
+import static nyc.c4q.jonathancolon.inContaq.common.dagger.Injector.getApplicationComponent;
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isEmptyList;
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 
@@ -42,6 +44,7 @@ public class ContactListActivity extends BaseActivity implements
     private static final String PERMISSION_KEY = "request_permissions";
     private static final String TAG = ContactListActivity.class.getSimpleName();
     private static final int REQUEST_CODE_SELECT_CONTACT = 1;
+    public static final int DELETE_CONTACT = 1;
 
     @Inject
     RealmService realmService;
@@ -50,9 +53,9 @@ public class ContactListActivity extends BaseActivity implements
     @Inject
     ServiceLauncher serviceLauncher;
     @Inject
-    RetrieveSingleContact retrieveSingleContact;
+    ContactReader contactReader;
     @Inject
-    PicassoHelper pUtils;
+    PicassoUtils picasso;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -81,34 +84,55 @@ public class ContactListActivity extends BaseActivity implements
 
     @OnClick(R.id.fab_add_contact)
     public void onClick() {
-            startActivityForResult(new Intent(ACTION_PICK,
-                    CONTENT_URI), REQUEST_CODE_SELECT_CONTACT);
+        presenter.onAddContactClicked();
     }
 
     @Override
-    public void initializeMaterialTapPrompt(RealmResults<Contact> contactList) {
-        MaterialTapHelper tapHelper = new MaterialTapHelper(this, ContactListActivity.this,
-                getPreferences(MODE_PRIVATE), contactList);
-        tapHelper.addFirstContactPrompt();
+    public void selectContact() {
+        startActivityForResult(new Intent(ACTION_PICK,
+                CONTENT_URI), REQUEST_CODE_SELECT_CONTACT);
     }
 
-    private void buildSaveEditDialog(Contact contact) {
+    @Override
+    public void addFirstContactPrompt() {
+        if (ObjectUtils.isEmptyList(contactList)) {
+            new MaterialTapTargetPrompt.Builder(this)
+                    .setTarget(findViewById(R.id.fab_add_contact))
+                    .setPrimaryText(R.string.add_first_contact)
+                    .setSecondaryText(R.string.tap_here)
+                    .setBackgroundColour(getColor(R.color.charcoal))
+                    .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener() {
+                        @Override
+                        public void onHidePrompt(MotionEvent event, boolean tappedTarget) {
+                            presenter.onaddFirstContactPromptClicked();
+                        }
+
+                        @Override
+                        public void onHidePromptComplete() {
+                            //do nothing
+                        }
+                    }).show();
+        }
+    }
+
+    @Override
+    public void showDeleteContactDialog(Contact contact) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Delete this contact: " + contact.getFullName() + "?");
+        alertDialog.setTitle(getString(R.string.delete_this_contact) + contact.getFullName() +
+                getString(R.string.question_mark));
         alertDialog.setMessage(R.string.are_you_sure);
-
         alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
-            selection = 1;
+            selection = DELETE_CONTACT;
             ContactListActivity.this.alertDialogCallback(selection, contact);
-
         }).setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
+
         alertDialog.show();
     }
 
     @Override
     public void alertDialogCallback(Integer ret, Contact contact) {
         ret = selection;
-        if (ret == 1) {
+        if (ret == DELETE_CONTACT) {
             realmService.deleteContactFromRealmDB(contact);
             contactList = presenter.retrieveContacts();
             refreshContactList(contactList);
@@ -117,7 +141,7 @@ public class ContactListActivity extends BaseActivity implements
 
     @Override
     public void checkService() {
-        Log.e(TAG, String.valueOf(ContactNotificationService.hasStarted ));
+        Log.e(TAG, String.valueOf(ContactNotificationService.hasStarted));
         serviceLauncher.checkServiceCreated();
     }
 
@@ -142,7 +166,7 @@ public class ContactListActivity extends BaseActivity implements
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(this));
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ContactListAdapter(this, this, pUtils));
+        recyclerView.setAdapter(new ContactListAdapter(this, this, picasso));
         recyclerView.setItemViewCacheSize(30);
         recyclerView.setDrawingCacheEnabled(true);
     }
@@ -151,42 +175,60 @@ public class ContactListActivity extends BaseActivity implements
     public void preLoadContactListImages() {
         if (!isEmptyList(contactList)) {
             for (int i = 0; i < contactList.size(); i++) {
-                if (!isNull(contactList.get(i).getBackgroundImage())) {
-                    pUtils.preloadImages(contactList.get(i).getBackgroundImage());
+                Contact contact = contactList.get(i);
+                if (hasBackgroundImage(contact)) {
+                    picasso.preloadImages(contactList.get(i).getBackgroundImage());
                 }
-                if (!isNull(contactList.get(i).getContactImage())) {
-                    pUtils.preloadImages(contactList.get(i).getContactImage());
+                if (hasContactImage(contact)) {
+                    picasso.preloadImages(contactList.get(i).getContactImage());
                 }
             }
         }
     }
 
+    private boolean hasBackgroundImage(Contact contact) {
+        return !isNull(contact.getBackgroundImage());
+    }
+
+    private boolean hasContactImage(Contact contact) {
+        return !isNull(contact.getContactImage());
+    }
+
+    @Override
+    public void showNoMobileNumberError() {
+        Snackbar.make(recyclerView, getString(R.string.error_no_mobile_found), Snackbar.LENGTH_LONG).show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SELECT_CONTACT && resultCode == RESULT_OK) {
+        if (isContactSelected(requestCode, resultCode)) {
             Uri uri = data.getData();
-            Contact contact = retrieveSingleContact.createContact(uri);
-            realmService.addContactToRealmDB(contact);
+            Contact contact = contactReader.retrieveContact(uri);  //todo extract to presenter
+            presenter.addContactToDatabase(contact);
         }
+    }
+
+    private boolean isContactSelected(int requestCode, int resultCode) {
+        return requestCode == REQUEST_CODE_SELECT_CONTACT && resultCode == RESULT_OK;
     }
 
     @Override
     public void onContactClicked(Contact contact) {
-        if (!isNull(contact.getMobileNumber())) {
-            Intent intent = new Intent(this, ContactDetailsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(CONTACT_KEY, contact.getRealmID());
-            this.startActivity(intent);
-        } else {
-            Toast.makeText(this, "Contact does not have a mobile number",
-                    Toast.LENGTH_SHORT).show();
-        }
+        presenter.onContactClicked(contact);
+    }
+
+    @Override
+    public void navigateToContactDetailsActivity(Contact contact) {
+        Intent intent = new Intent(this, ContactDetailsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(CONTACT_KEY, contact.getRealmID());
+        this.startActivity(intent);
     }
 
     @Override
     public void onContactLongClicked(Contact contact) {
-        buildSaveEditDialog(contact);
+        presenter.onContactLongClicked(contact);
     }
 
     @Override

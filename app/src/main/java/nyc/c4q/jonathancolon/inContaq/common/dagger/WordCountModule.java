@@ -1,9 +1,9 @@
-package nyc.c4q.jonathancolon.inContaq.common.di;
+package nyc.c4q.jonathancolon.inContaq.common.dagger;
 
 import dagger.Module;
 import dagger.Provides;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.WordCount;
-import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 /**
  * Created by jonathancolon on 6/19/17.
@@ -13,7 +13,7 @@ import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
 public class WordCountModule {
 
     @Provides
-    WordCount providesWordCount(SmsHelper smsHelper){
-        return new WordCount(smsHelper);
+    WordCount providesWordCount(SmsUtils smsUtils){
+        return new WordCount(smsUtils);
     }
 }

@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.common.di;
+package nyc.c4q.jonathancolon.inContaq.common.dagger;
 
 import javax.inject.Singleton;
 
@@ -28,7 +28,8 @@ import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
                 SmsHelperModule.class,
                 RxBusModule.class,
                 WeeksPassedModule.class,
-                DaysPassedModule.class
+                DaysPassedModule.class,
+                SharedPrefModule.class
         })
 
 public interface ApplicationComponent {

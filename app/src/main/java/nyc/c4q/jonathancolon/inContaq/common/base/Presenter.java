@@ -21,8 +21,7 @@ public abstract class Presenter<T extends BaseView> {
         this.view = new WeakReference<>(view);
     }
 
-    public void initialize(Bundle extras) {
-    }
+    public void initialize(Bundle extras) {}
 
     public void start() {
         isViewAlive.set(true);

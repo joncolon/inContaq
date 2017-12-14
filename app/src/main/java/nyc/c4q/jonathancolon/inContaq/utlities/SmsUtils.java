@@ -18,7 +18,7 @@ import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.*;
 
 
-public class SmsHelper {
+public class SmsUtils {
 
     private static final String URI_ALL = "content://sms/";
     private static final String ADDRESS = "address";
@@ -26,12 +26,14 @@ public class SmsHelper {
     private ContentResolver contentResolver;
 
     @Inject
-    public SmsHelper(ContentResolver contentResolver) {
+    public SmsUtils(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
     }
 
     public long getLastContactedDate(Contact contact) {
-        Cursor cursor = contentResolver.query(Uri.parse(URI_ALL), null, ADDRESS + "='" + contact.getMobileNumber() + "'", null, null);
+        Cursor cursor = contentResolver.query(Uri.parse(URI_ALL), null,
+                useMobileNumberAsSelection(contact),null, null);
+
         if (!isNull(cursor)) {
             if (cursor.moveToFirst()) {
                 cursor.getCount();
@@ -44,6 +46,16 @@ public class SmsHelper {
             }
         }
         return -1;
+    }
+
+    @NonNull
+    private String useMobileNumberAsSelection(Contact contact) {
+        return new StringBuilder()
+                .append(ADDRESS)
+                .append("='")
+                .append(contact.getMobileNumber())
+                .append("'")
+                .toString();
     }
 
     public StringBuilder smsDateFormat(long timeInMilli) {

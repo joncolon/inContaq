@@ -1,5 +1,6 @@
 package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs;
 
+
 import android.view.animation.BounceInterpolator;
 
 import com.db.chart.Tools;
@@ -11,42 +12,26 @@ import static android.graphics.Color.parseColor;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.NONE;
 import static com.db.chart.renderer.AxisRenderer.LabelPosition.OUTSIDE;
 
-public class MonthlyGraph {
+abstract class LineChart {
 
+    private static final int MINIMUM_Y_AXIS = 100;
     private static final String SENT_COLOR = "#EF7674";
     private static final String LABEL_COLOR = "#FDFFFC";
     private static final String RECEIVED_COLOR = "#FDFFFC";
-    private LineChartView lineGraph;
-    private String[] xAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
-            "Oct", "Nov", "Dec"};
+    private String[] xAxisLabels;
+    private float[] sent;
+    private float[] received;
+    private LineChartView lineChartView;
 
-    private float[] monthlySent;
-    private float[] monthlyReceived;
-
-    public MonthlyGraph(LineChartView lineGraph, float[] monthlyReceived, float[] monthlySent) {
-        this.lineGraph = lineGraph;
-        this.monthlySent = monthlySent;
-        this.monthlyReceived = monthlyReceived;
+    LineChart(float[] sent, float[] received, LineChartView lineChartView) {
+        this.sent = sent;
+        this.received = received;
+        this.lineChartView = lineChartView;
     }
 
-    public void showMonthlyGraph() {
-        loadGraph();
-    }
-
-    synchronized private void loadGraph() {
-        setGraphData();
-        setGraphAttributes(getYValue());
-        animateGraph();
-    }
-
-    private void setGraphData() {
-        prepareReceivedLineSet(monthlyReceived);
-        prepareSentLineSet(monthlySent);
-    }
-
-    private void setGraphAttributes(int maxYvalue) {
-        lineGraph.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, maxYvalue)
+    private void setChartAttributes() {
+        lineChartView.setBorderSpacing(Tools.fromDpToPx(2))
+                .setAxisBorderValues(0, getYValue())
                 .setYLabels(NONE)
                 .setXLabels(OUTSIDE)
                 .setFontSize(24)
@@ -56,29 +41,13 @@ public class MonthlyGraph {
                 .setYAxis(false);
     }
 
-    private int getYValue() {
-        int maxSent = findMaximumValue(monthlySent);
-        int maxReceived = findMaximumValue(monthlyReceived);
-        int highestValue = Math.max(maxSent, maxReceived);
-
-        if (highestValue == 0) {
-            highestValue = 100;
-        }
-        return increaseByQuarter(highestValue);
-    }
-
-    private void animateGraph() {
-        Animation anim = new Animation().setEasing(new BounceInterpolator());
-        lineGraph.show(anim);
-    }
-
     private void prepareReceivedLineSet(float[] receivedValues) {
         LineSet dataReceivedValues = new LineSet(xAxisLabels, receivedValues);
         dataReceivedValues.setColor(parseColor(RECEIVED_COLOR))
                 .setDotsColor(parseColor(RECEIVED_COLOR))
                 .setThickness(4)
                 .beginAt(0);
-        lineGraph.addData(dataReceivedValues);
+        lineChartView.addData(dataReceivedValues);
     }
 
     private void prepareSentLineSet(float[] sentValues) {
@@ -88,10 +57,44 @@ public class MonthlyGraph {
                 .setDashed(new float[]{1f, 1f})
                 .setThickness(4)
                 .beginAt(0);
-        lineGraph.addData(dataSentValues);
+        lineChartView.addData(dataSentValues);
     }
 
-    private static int findMaximumValue(float[] input) {
+    public abstract void showLineChart();
+
+    private void setChartData() {
+        prepareReceivedLineSet(received);
+        prepareSentLineSet(sent);
+    }
+
+    synchronized void loadLineChart() {
+        setChartData();
+        setChartAttributes();
+        animateChart();
+    }
+
+    //this method to ensure empty space above the highest point in the graph.
+    private int addSpaceAboveHighestYValue(int YAxis) {
+        return (int) Math.round(YAxis * 1.25);
+    }
+
+    private int getYValue() {
+        int maxSent = findMaximumValue(sent);
+        int maxReceived = findMaximumValue(received);
+        int highestValue = Math.max(maxSent, maxReceived);
+
+        if (highestValue == 0) {
+            highestValue = MINIMUM_Y_AXIS;
+        }
+        return addSpaceAboveHighestYValue(highestValue);
+    }
+
+    private void animateChart() {
+        Animation anim = new Animation().setEasing(new BounceInterpolator());
+        lineChartView.show(anim);
+    }
+
+    private int findMaximumValue(float[] input) {
         float maxValue = input[0];
         for (int i = 1; i < input.length; i++) {
             if (input[i] > maxValue) {
@@ -101,7 +104,7 @@ public class MonthlyGraph {
         return (int) maxValue;
     }
 
-    private int increaseByQuarter(int input) {
-        return (int) Math.round(input * 1.25);
+    void setXAxisLabels(String[] labels) {
+        xAxisLabels = labels;
     }
 }

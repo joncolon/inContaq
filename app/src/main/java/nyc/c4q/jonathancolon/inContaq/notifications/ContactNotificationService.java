@@ -18,11 +18,11 @@ import javax.inject.Inject;
 
 import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.common.di.Injector;
+import nyc.c4q.jonathancolon.inContaq.common.dagger.Injector;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity;
-import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 import static android.app.Notification.PRIORITY_DEFAULT;
 import static android.media.RingtoneManager.TYPE_NOTIFICATION;
@@ -44,7 +44,7 @@ public class ContactNotificationService extends IntentService {
     @Inject
     RealmService realmService;
     @Inject
-    SmsHelper smsHelper;
+    SmsUtils smsUtils;
     @Inject
     Context context;
     @Inject

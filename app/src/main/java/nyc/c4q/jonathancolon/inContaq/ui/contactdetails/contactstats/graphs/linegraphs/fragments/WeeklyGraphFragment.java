@@ -10,8 +10,7 @@ import android.view.ViewGroup;
 import com.db.chart.view.LineChartView;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.fragments.MonthlyGraphFragment;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.WeeklyGraph;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.WeeklyChart;
 
 
 public class WeeklyGraphFragment extends Fragment {
@@ -25,7 +24,6 @@ public class WeeklyGraphFragment extends Fragment {
 
     public WeeklyGraphFragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,9 +44,8 @@ public class WeeklyGraphFragment extends Fragment {
 
     private void showWeeklyGraph() {
         Log.e(TAG, "loading Weekly Graph");
-
-        WeeklyGraph weeklyGraph = new WeeklyGraph(lineGraph, weeklyReceived, weeklySent);
-        weeklyGraph.showWeeklyGraph();
+        WeeklyChart weeklyChart = new WeeklyChart(lineGraph, weeklyReceived, weeklySent);
+        weeklyChart.showLineChart();
     }
 
 }

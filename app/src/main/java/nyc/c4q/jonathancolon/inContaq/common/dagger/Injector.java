@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.common.di;
+package nyc.c4q.jonathancolon.inContaq.common.dagger;
 
 import java.util.Objects;
 
@@ -16,6 +16,7 @@ public class Injector {
                 .applicationContextModule(new ApplicationContextModule(app))
                 .realmServiceModule(new RealmServiceModule())
                 .picassoModule(new PicassoModule())
+                .sharedPrefModule(new SharedPrefModule())
                 .build();
     }
 

@@ -29,6 +29,7 @@ public class WordCountBarGraph extends BarGraph {
         this.barChartView = barChartView;
     }
 
+    @Override
     public void showBarGraph(ArrayList<Sms> smsList, WordCount wordCount) {
         getValues(smsList, wordCount);
         buildGraph();
@@ -36,17 +37,20 @@ public class WordCountBarGraph extends BarGraph {
 
     }
 
+    @Override
     void getValues(ArrayList<Sms> smsList, WordCount wordCount) {
         averageWordCountSent = wordCount.averageWordCountSent(smsList);
         averageWordCountReceived = wordCount.averageWordCountReceived(smsList);
     }
 
+    @Override
     void buildGraph() {
         findHighestYValue();
         configureGraphData();
         configureGraphAttributes();
     }
 
+    @Override
     void findHighestYValue() {
         highestValue = Math.max(averageWordCountReceived, averageWordCountSent);
         if (highestValue == 0) {
@@ -54,6 +58,7 @@ public class WordCountBarGraph extends BarGraph {
         }
     }
 
+    @Override
     void configureGraphData() {
         BarSet barSet = new BarSet();
         Bar barSent = new Bar(mLabels[0], averageWordCountSent);
@@ -69,6 +74,7 @@ public class WordCountBarGraph extends BarGraph {
         barChartView.setBarBackgroundColor(Color.parseColor(FILL_COLOR));
     }
 
+    @Override
     void configureGraphAttributes() {
         barChartView.setBarSpacing(Tools.fromDpToPx(15));
         barChartView.setRoundCorners(Tools.fromDpToPx(2));

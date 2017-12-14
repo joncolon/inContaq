@@ -5,35 +5,35 @@ import android.support.annotation.NonNull;
 
 public class Sms implements Comparable<Sms> {
 
-    private String msg;
-    private String address;
-    private String time;
+    private String message;
+    private String phoneNumber;
+    private String timeStamp;
     private String type;
 
-    public Sms(String address, String msg, String time, String type) {
-        this.address = address;
-        this.msg = msg;
-        this.time = time;
+    public Sms(String address, String message, String timeStamp, String type) {
+        this.phoneNumber = address;
+        this.message = message;
+        this.timeStamp = timeStamp;
         this.type = type;
     }
 
     public Sms() {
     }
 
-    public String getAddress() {
-        return address;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getType() {
@@ -46,14 +46,14 @@ public class Sms implements Comparable<Sms> {
 
     @Override
     public int compareTo(@NonNull Sms sms) {
-        return getTime().compareTo(sms.getTime());
+        return getTimeStamp().compareTo(sms.getTimeStamp());
     }
 
-    public String getTime() {
-        return time;
+    public String getTimeStamp() {
+        return timeStamp;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

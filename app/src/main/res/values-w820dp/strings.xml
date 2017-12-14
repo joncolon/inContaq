@@ -3,7 +3,7 @@
     <string name="edit">EDIT</string>
     <string name="enter_mobile_number">Enter Mobile Number</string>
     <string name="email">Email:</string>
-    <string name="enter_valid_email_address">Enter valid email address</string>
+    <string name="enter_valid_email_address">Enter valid email phoneNumber</string>
     <string name="enter_text">Enter text</string>
     <string name="unknown">Unknown</string>
     <string name="type_not_found">type not found</string>
@@ -50,4 +50,6 @@
     <string name="nov_text">text each other the most in November</string>
     <string name="dec_text">text each other the most in December</string>
     <string name="no_sms_to_analyze">This contact has no messages to analyze. Try starting a conversation and come back later!</string>
+    <string name="error_no_mobile_found">No mobile number found.</string>
+    <string name="delete_this_contact">Delete this contact: </string>
 </resources>

@@ -12,19 +12,19 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 public class WordCount {
 
-    private SmsHelper smsHelper;
+    private SmsUtils smsUtils;
 
     @Inject
-    public WordCount(SmsHelper smsHelper) {
-        this.smsHelper = smsHelper;
+    public WordCount(SmsUtils smsUtils) {
+        this.smsUtils = smsUtils;
     }
 
     public int wordCountSent(ArrayList<Sms> smsList) {
-        ArrayList<Sms> smsSent = smsHelper.parseSentSms(smsList);
+        ArrayList<Sms> smsSent = smsUtils.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
         for (int i = 0; i < smsSent.size(); i++) {
@@ -35,7 +35,7 @@ public class WordCount {
     }
 
     private int getWordCountPerMessage(Sms sms) {
-        String input = sms.getMsg();
+        String input = sms.getMessage();
         if (input == null || input.isEmpty()) {
             return 0;
         }
@@ -58,7 +58,7 @@ public class WordCount {
     }
 
     public int wordCountReceived(ArrayList<Sms> smsList) {
-        ArrayList<Sms> receivedSms = smsHelper.parseReceivedSms(smsList);
+        ArrayList<Sms> receivedSms = smsUtils.parseReceivedSms(smsList);
         ArrayList<Integer> count = new ArrayList<>();
         for (int i = 0; i < receivedSms.size(); i++) {
             count.add(getWordCountPerMessage(smsList.get(i)));
@@ -74,7 +74,7 @@ public class WordCount {
     }
 
     public int averageWordCountSent(ArrayList<Sms> smsList) {
-        ArrayList<Sms> sentSms = smsHelper.parseSentSms(smsList);
+        ArrayList<Sms> sentSms = smsUtils.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
         for (int i = 0; i < sentSms.size(); i++) {
@@ -100,7 +100,7 @@ public class WordCount {
     }
 
     public int averageWordCountReceived(ArrayList<Sms> smsList) {
-        ArrayList<Sms> receivedSms = smsHelper.parseReceivedSms(smsList);
+        ArrayList<Sms> receivedSms = smsUtils.parseReceivedSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
         for (int i = 0; i < receivedSms.size(); i++) {

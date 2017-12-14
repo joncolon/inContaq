@@ -11,8 +11,8 @@ import javax.inject.Inject;
 import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.utlities.NameSplitter;
-import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.NameFormatter;
+import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberFormatter;
 
 import static android.provider.ContactsContract.CommonDataKinds.Email;
 import static android.provider.ContactsContract.CommonDataKinds.Email.CONTACT_ID;
@@ -25,9 +25,9 @@ import static android.provider.ContactsContract.Contacts.DISPLAY_NAME;
 import static android.provider.ContactsContract.Contacts._ID;
 
 
-public class RetrieveSingleContact {
+public class ContactReader {
 
-    private static final String TAG = RetrieveSingleContact.class.getSimpleName();
+    private static final String TAG = ContactReader.class.getSimpleName();
     private static final int FIRST_NAME = 0;
     private static final int LAST_NAME = 1;
     private ContentResolver contentResolver;
@@ -35,12 +35,12 @@ public class RetrieveSingleContact {
     private String contactID;
 
     @Inject
-    RetrieveSingleContact(ContentResolver contentResolver, Context context) {
+    ContactReader(ContentResolver contentResolver, Context context) {
         this.contentResolver = contentResolver;
         this.context = context;
     }
 
-    Contact createContact(Uri uri) {
+    Contact retrieveContact(Uri uri) {
         Contact contact = new Contact();
         retrieveContactName(contact, uri);
         retrieveContactNumber(contact, uri);
@@ -59,8 +59,8 @@ public class RetrieveSingleContact {
 
         Log.d(TAG, "Contact Name: " + contactName);
 
-        contact.setFirstName(NameSplitter.splitFirstAndLastName(contactName)[FIRST_NAME]);
-        contact.setLastName(NameSplitter.splitFirstAndLastName(contactName)[LAST_NAME]);
+        contact.setFirstName(NameFormatter.splitFirstAndLastName(contactName)[FIRST_NAME]);
+        contact.setLastName(NameFormatter.splitFirstAndLastName(contactName)[LAST_NAME]);
     }
 
     private void retrieveContactNumber(Contact contact, Uri uri) {
@@ -80,7 +80,7 @@ public class RetrieveSingleContact {
                 cursorPhone.close();
 
                 Log.d(TAG, "Contact Phone Number: " + contactNumber);
-                PhoneNumberHelper formatter = new PhoneNumberHelper(
+                PhoneNumberFormatter formatter = new PhoneNumberFormatter(
                         PhoneNumberUtil.createInstance(context));
                 String mobileNumber = formatter.formatPhoneNumber(contactNumber);
                 contact.setMobileNumber(mobileNumber);

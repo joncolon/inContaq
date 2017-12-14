@@ -40,7 +40,7 @@ public class GetHourlyReceived {
         for (int i = 0; i < smsList.size(); i++) {
             String p = smsList.get(i).getType();
             if (p.equals("1")) {
-                receivedSms.add(smsList.get(i).getTime());
+                receivedSms.add(smsList.get(i).getTimeStamp());
             }
         }
         hourlyReceivedTreeMap = mapHourlySms(receivedSms);

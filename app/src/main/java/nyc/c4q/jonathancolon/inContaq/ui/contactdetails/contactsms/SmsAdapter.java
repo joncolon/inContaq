@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
-import nyc.c4q.jonathancolon.inContaq.utlities.SmsHelper;
+import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 import static android.content.ContentValues.TAG;
 
@@ -26,13 +26,13 @@ import static android.content.ContentValues.TAG;
 public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String ON_BIND_VIEW_HOLDER = "onBindViewHolder: ";
     private final Contact contact;
-    private SmsHelper smsHelper;
+    private SmsUtils smsUtils;
     private Context context;
     private ArrayList<Sms> smsList;
 
-    public SmsAdapter(Contact contact, SmsHelper smsHelper) {
+    public SmsAdapter(Contact contact, SmsUtils smsUtils) {
         this.contact = contact;
-        this.smsHelper = smsHelper;
+        this.smsUtils = smsUtils;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     public void onBindViewHolder(SmsViewHolder holder, int position) {
         Sms smsDetail = smsList.get(position);
         holder.bind(smsDetail);
-        Log.d(TAG, ON_BIND_VIEW_HOLDER + smsDetail.getAddress());
+        Log.d(TAG, ON_BIND_VIEW_HOLDER + smsDetail.getPhoneNumber());
     }
 
     @Override
@@ -116,10 +116,10 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         }
 
         void populateTextViews(Sms sms) {
-            StringBuilder time = smsHelper.smsDateFormat(Long.parseLong(sms.getTime()));
-            senderId.setText(sms.getAddress());
+            StringBuilder time = smsUtils.smsDateFormat(Long.parseLong(sms.getTimeStamp()));
+            senderId.setText(sms.getPhoneNumber());
             timeDate.setText(time);
-            messageRecieved.setText(sms.getMsg());
+            messageRecieved.setText(sms.getMessage());
             messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
             type.setText(sms.getType());
         }
