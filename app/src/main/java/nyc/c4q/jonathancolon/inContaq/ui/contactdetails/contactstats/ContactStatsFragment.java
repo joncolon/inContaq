@@ -43,11 +43,8 @@ import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.TimeMo
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.TreeMapToFloatArray;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.WordCount;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.WordFrequency;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.bargraphs.TotalSmsBarGraph;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.bargraphs.WordCountBarGraph;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.fragments.DailyGraphFragment;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.fragments.MonthlyGraphFragment;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.fragments.WeeklyGraphFragment;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.barcharts.TotalSmsBarChart;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.barcharts.AverageWordCountBarChart;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnalyticsFeedback;
 import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
 
@@ -75,7 +72,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     @BindView(R.id.stat_summary) RelativeLayout statSummary;
     @BindView(R.id.card_total_sms) CardView totalCard;
     @BindView(R.id.card_word_count) CardView wordCard;
-    @BindView(R.id.daily_card) CardView dailyCard;
+    @BindView(R.id.hourly_card) CardView hourlyCard;
     @BindView(R.id.weekly_card) CardView weeklyCard;
     @BindView(R.id.monthly_card) CardView monthlyCard;
     @BindView(R.id.button_bar_card) CardView buttonBarCard;
@@ -184,7 +181,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     private void showGraphButtons() {
         monthlyCard.setVisibility(View.VISIBLE);
         weeklyCard.setVisibility(View.VISIBLE);
-        dailyCard.setVisibility(View.VISIBLE);
+        hourlyCard.setVisibility(View.VISIBLE);
     }
 
     private void enableTextViewVisibility() {
@@ -214,10 +211,15 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     }
 
     private void loadBarGraphs() {
-        WordCountBarGraph wordCountBarGraph = new WordCountBarGraph(wordAverageChart);
-        TotalSmsBarGraph totalSmsBarGraph = new TotalSmsBarGraph(totalWordCountChart);
-        wordCountBarGraph.showBarGraph(smsList, wordCount);
-        totalSmsBarGraph.showBarGraph(smsList, wordCount);
+        int totalWordCountReceived = wordCount.totalWordCountReceived(smsList);
+        int totalWordCountSent = wordCount.totalWordCountSent(smsList);
+        int averageWordsReceived = wordCount.averageWordCountReceived(smsList);
+        int averageWordsSent = wordCount.averageWordCountSent(smsList);
+
+        AverageWordCountBarChart averageWordCountBarChart = new AverageWordCountBarChart(wordAverageChart, averageWordsReceived, averageWordsSent);
+        TotalSmsBarChart totalSmsBarChart = new TotalSmsBarChart(totalWordCountChart, totalWordCountReceived, totalWordCountSent);
+        averageWordCountBarChart.showBarChart();
+        totalSmsBarChart.showBarChart();
     }
 
     public void getHourlyReceivedTreeMap() {
@@ -324,7 +326,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     private void showMonthlyGraphFragment() {
         if (!isNull(monthlyReceived) && !isNull(monthlySent)) {
-            Fragment monthlyGraphFragment = new MonthlyGraphFragment();
+            Fragment monthlyGraphFragment = new MonthlyChartFragment();
             Bundle monthlyGraphBundle = new Bundle();
             monthlyGraphBundle.putFloatArray("monthlyReceived", monthlyReceived);
             monthlyGraphBundle.putFloatArray("monthlySent", monthlySent);
@@ -332,20 +334,20 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
             getChildFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.graph_frag_container, monthlyGraphFragment)
+                    .replace(R.id.linechart_fragment_container, monthlyGraphFragment)
                     .commit();
         }
     }
 
-    @OnClick({R.id.daily_card, R.id.weekly_card, R.id.monthly_card})
+    @OnClick({R.id.hourly_card, R.id.weekly_card, R.id.monthly_card})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.monthly_card:
                 if (!isNull(monthlySent) && !isNull(monthlyReceived)) {
                     showMonthlyGraphFragment();
 
-                    dailyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
-                    dailyCard.setCardElevation(convertPixelsToDp(INACTIVE_ELEVATION, context));
+                    hourlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+                    hourlyCard.setCardElevation(convertPixelsToDp(INACTIVE_ELEVATION, context));
                     monthlyCard.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     monthlyCard.setCardElevation(convertPixelsToDp(ACTIVE_ELEVATION, context));
                     weeklyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
@@ -360,8 +362,8 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 if (!isNull(weeklySent) && !isNull(weeklyReceived)) {
                     showWeeklyGraphFragment();
 
-                    dailyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
-                    dailyCard.setCardElevation(convertPixelsToDp(INACTIVE_ELEVATION, context));
+                    hourlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
+                    hourlyCard.setCardElevation(convertPixelsToDp(INACTIVE_ELEVATION, context));
                     weeklyCard.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     weeklyCard.setCardElevation(convertPixelsToDp(ACTIVE_ELEVATION, context));
                     monthlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
@@ -372,12 +374,12 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 }
                 break;
 
-            case R.id.daily_card:
+            case R.id.hourly_card:
                 if (!isNull(hourlySent) && !isNull(hourlyReceived)) {
                     showHourlyGraphFragment();
 
-                    dailyCard.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
-                    dailyCard.setCardElevation(convertPixelsToDp(ACTIVE_ELEVATION, context));
+                    hourlyCard.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
+                    hourlyCard.setCardElevation(convertPixelsToDp(ACTIVE_ELEVATION, context));
                     weeklyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
                     weeklyCard.setCardElevation(convertPixelsToDp(INACTIVE_ELEVATION, context));
                     monthlyCard.setCardBackgroundColor(context.getColor(R.color.charcoal));
@@ -391,28 +393,28 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     }
 
     private void showWeeklyGraphFragment() {
-        Fragment weeklyGraphFragment = new WeeklyGraphFragment();
-        Bundle weeklyGraphBundle = new Bundle();
-        weeklyGraphBundle.putFloatArray("weeklyReceived", weeklyReceived);
-        weeklyGraphBundle.putFloatArray("weeklySent", weeklySent);
-        weeklyGraphFragment.setArguments(weeklyGraphBundle);
+        Fragment weeklyChartFragment = new WeeklyChartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putFloatArray("weeklyReceived", weeklyReceived);
+        bundle.putFloatArray("weeklySent", weeklySent);
+        weeklyChartFragment.setArguments(bundle);
 
         getChildFragmentManager()
                 .beginTransaction()
-                .replace(R.id.graph_frag_container, weeklyGraphFragment)
+                .replace(R.id.linechart_fragment_container, weeklyChartFragment)
                 .commit();
     }
 
     private void showHourlyGraphFragment() {
-        Fragment dailyGraphFragment = new DailyGraphFragment();
-        Bundle dailyGraphBundle = new Bundle();
-        dailyGraphBundle.putFloatArray("hourlyReceived", hourlyReceived);
-        dailyGraphBundle.putFloatArray("hourlySent", hourlySent);
-        dailyGraphFragment.setArguments(dailyGraphBundle);
+        Fragment hourlyChartFragment = new HourlyChartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putFloatArray("hourlyReceived", hourlyReceived);
+        bundle.putFloatArray("hourlySent", hourlySent);
+        hourlyChartFragment.setArguments(bundle);
 
         getChildFragmentManager()
                 .beginTransaction()
-                .replace(R.id.graph_frag_container, dailyGraphFragment)
+                .replace(R.id.linechart_fragment_container, hourlyChartFragment)
                 .commit();
     }
 

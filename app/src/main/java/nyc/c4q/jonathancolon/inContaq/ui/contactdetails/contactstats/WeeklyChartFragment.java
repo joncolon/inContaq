@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.fragments;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,41 +10,41 @@ import android.view.ViewGroup;
 import com.db.chart.view.LineChartView;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.WeeklyChart;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linecharts.WeeklyChart;
 
 
-public class WeeklyGraphFragment extends Fragment {
+public class WeeklyChartFragment extends Fragment {
 
-    final String TAG = MonthlyGraphFragment.class.getSimpleName();
+    final String TAG = MonthlyChartFragment.class.getSimpleName();
     final String SENT_KEY = "weeklySent";
     final String RECEIVED_KEY = "weeklyReceived";
 
-    private LineChartView lineGraph;
+    private LineChartView lineChart;
     private float[] weeklyReceived, weeklySent;
 
-    public WeeklyGraphFragment() {
+    public WeeklyChartFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_graph, container, false);
+        View view = inflater.inflate(R.layout.fragment_chart, container, false);
 
-        lineGraph = (LineChartView) view.findViewById(R.id.sms_over_time_graph);
+        lineChart = (LineChartView) view.findViewById(R.id.sms_trends_linechart_container);
         Bundle bundle = this.getArguments();
         weeklyReceived = bundle.getFloatArray(RECEIVED_KEY);
         weeklySent = bundle.getFloatArray(SENT_KEY);
 
-        lineGraph = (LineChartView) view.findViewById(R.id.sms_over_time_graph);
+        lineChart = (LineChartView) view.findViewById(R.id.sms_trends_linechart_container);
         if (weeklyReceived != null && weeklySent != null) {
-            showWeeklyGraph();
+            showWeeklyChart();
         }
         return view;
     }
 
-    private void showWeeklyGraph() {
-        Log.e(TAG, "loading Weekly Graph");
-        WeeklyChart weeklyChart = new WeeklyChart(lineGraph, weeklyReceived, weeklySent);
+    private void showWeeklyChart() {
+        Log.e(TAG, "Loading Weekly Chart");
+        WeeklyChart weeklyChart = new WeeklyChart(lineChart, weeklyReceived, weeklySent);
         weeklyChart.showLineChart();
     }
 

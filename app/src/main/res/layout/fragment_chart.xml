@@ -32,7 +32,7 @@
             />
 
         <com.db.chart.view.LineChartView
-            android:id="@+id/sms_over_time_graph"
+            android:id="@+id/sms_trends_linechart_container"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_gravity="bottom"

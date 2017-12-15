@@ -23,7 +23,7 @@ public class WordCount {
         this.smsUtils = smsUtils;
     }
 
-    public int wordCountSent(ArrayList<Sms> smsList) {
+    public int totalWordCountSent(ArrayList<Sms> smsList) {
         ArrayList<Sms> smsSent = smsUtils.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class WordCount {
         return sum;
     }
 
-    public int wordCountReceived(ArrayList<Sms> smsList) {
+    public int totalWordCountReceived(ArrayList<Sms> smsList) {
         ArrayList<Sms> receivedSms = smsUtils.parseReceivedSms(smsList);
         ArrayList<Integer> count = new ArrayList<>();
         for (int i = 0; i < receivedSms.size(); i++) {

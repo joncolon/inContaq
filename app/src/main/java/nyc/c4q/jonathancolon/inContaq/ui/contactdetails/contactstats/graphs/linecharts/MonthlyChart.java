@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linecharts;
 
 import com.db.chart.view.LineChartView;
 

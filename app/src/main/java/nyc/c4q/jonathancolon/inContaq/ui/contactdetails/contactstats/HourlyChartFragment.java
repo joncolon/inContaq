@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.fragments;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats;
 
 
 import android.os.Bundle;
@@ -11,39 +11,39 @@ import android.view.ViewGroup;
 import com.db.chart.view.LineChartView;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs.HourlyChart;
+import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linecharts.HourlyChart;
 
 
-public class DailyGraphFragment extends Fragment {
+public class HourlyChartFragment extends Fragment {
 
     final String SENT_KEY = "hourlySent";
     final String RECEIVED_KEY = "hourlyReceived";
-    final String TAG = DailyGraphFragment.class.getSimpleName();
+    final String TAG = HourlyChartFragment.class.getSimpleName();
 
-    private LineChartView lineGraph;
+    private LineChartView lineChart;
     private float[] hourlySent, hourlyReceived;
 
-    public DailyGraphFragment() {
+    public HourlyChartFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_graph, container, false);
-        lineGraph = (LineChartView) view.findViewById(R.id.sms_over_time_graph);
+        View view = inflater.inflate(R.layout.fragment_chart, container, false);
+        lineChart = (LineChartView) view.findViewById(R.id.sms_trends_linechart_container);
         Bundle bundle = this.getArguments();
         hourlyReceived = bundle.getFloatArray(RECEIVED_KEY);
         hourlySent = bundle.getFloatArray(SENT_KEY);
 
         if (hourlyReceived != null && hourlySent != null) {
-            showDailyGraph();
+            showHourlyChart();
         }
         return view;
     }
 
-    private void showDailyGraph() {
-        Log.e(TAG, "loading Daily Graph");
-        HourlyChart hourlyChart = new HourlyChart(lineGraph, hourlySent, hourlyReceived);
+    private void showHourlyChart() {
+        Log.e(TAG, "Loading Hourly Chart");
+        HourlyChart hourlyChart = new HourlyChart(lineChart, hourlySent, hourlyReceived);
         hourlyChart.showLineChart();
     }
 }

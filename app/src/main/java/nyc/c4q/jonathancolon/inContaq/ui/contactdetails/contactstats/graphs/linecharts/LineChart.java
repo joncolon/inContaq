@@ -1,4 +1,4 @@
-package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linegraphs;
+package nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.graphs.linecharts;
 
 
 import android.view.animation.BounceInterpolator;
@@ -31,7 +31,7 @@ abstract class LineChart {
 
     private void setChartAttributes() {
         lineChartView.setBorderSpacing(Tools.fromDpToPx(2))
-                .setAxisBorderValues(0, getYValue())
+                .setAxisBorderValues(0, getYAxisValue())
                 .setYLabels(NONE)
                 .setXLabels(OUTSIDE)
                 .setFontSize(24)
@@ -73,12 +73,11 @@ abstract class LineChart {
         animateChart();
     }
 
-    //this method to ensure empty space above the highest point in the graph.
     private int addSpaceAboveHighestYValue(int YAxis) {
         return (int) Math.round(YAxis * 1.25);
     }
 
-    private int getYValue() {
+    private int getYAxisValue() {
         int maxSent = findMaximumValue(sent);
         int maxReceived = findMaximumValue(received);
         int highestValue = Math.max(maxSent, maxReceived);

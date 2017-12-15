@@ -7,9 +7,6 @@ import java.util.TreeMap;
 
 import nyc.c4q.jonathancolon.inContaq.model.Sms;
 
-/**
- * Created by jonathancolon on 5/14/17.
- */
 
 public class GetHourlyReceived {
     private static final int TWELVE_AM = 0;
