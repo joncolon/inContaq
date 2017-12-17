@@ -16,8 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
-import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
+import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 import static android.content.ContentValues.TAG;
@@ -25,14 +25,14 @@ import static android.content.ContentValues.TAG;
 
 public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String ON_BIND_VIEW_HOLDER = "onBindViewHolder: ";
-    public static final int MARSHMALLOW = 23;
-    private final ContactModel contactModel;
+    private static final int MARSHMALLOW = 23;
+    private final Contact contact;
     private SmsUtils smsUtils;
     private Context context;
-    private ArrayList<SmsModel> smsList;
+    private ArrayList<Sms> smsList;
 
-    public SmsAdapter(ContactModel contactModel, SmsUtils smsUtils) {
-        this.contactModel = contactModel;
+    SmsAdapter(Contact contact, SmsUtils smsUtils) {
+        this.contact = contact;
         this.smsUtils = smsUtils;
     }
 
@@ -52,9 +52,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
     @Override
     public void onBindViewHolder(SmsViewHolder holder, int position) {
-        SmsModel smsModelDetail = smsList.get(position);
-        holder.bind(smsModelDetail);
-        Log.d(TAG, ON_BIND_VIEW_HOLDER + smsModelDetail.getPhoneNumber());
+        Sms smsDetail = smsList.get(position);
+        holder.bind(smsDetail);
+        Log.d(TAG, ON_BIND_VIEW_HOLDER + smsDetail.getPhoneNumber());
     }
 
     @Override
@@ -62,8 +62,8 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         return smsList.size();
     }
 
-    public void setData(ArrayList<SmsModel> smsModelDetails) {
-        this.smsList = smsModelDetails;
+    public void setData(ArrayList<Sms> smsDetails) {
+        this.smsList = smsDetails;
         notifyDataSetChanged();
     }
 
@@ -71,7 +71,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     class SmsViewHolder extends RecyclerView.ViewHolder {
 
         private static final String RECEIVED = "1";
-        private TextView senderId, messageRecieved, timeDate, type;
+        private TextView senderId, messageRecieved, timeDate, typeTV;
         private CardView cardBubble;
         private LinearLayout linearLayout;
 
@@ -83,27 +83,27 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         void initViews() {
             senderId = itemView.findViewById(R.id.senderId);
             messageRecieved = itemView.findViewById(R.id.messageDetails);
-            type = itemView.findViewById(R.id.type);
+            typeTV = itemView.findViewById(R.id.type);
             linearLayout = itemView.findViewById(R.id.chat_view);
             cardBubble = itemView.findViewById(R.id.chatBubble);
             timeDate = itemView.findViewById(R.id.timeDate);
         }
 
-        void bind(SmsModel smsModel) {
-            displaySmsByType(smsModel);
-            populateTextViews(smsModel);
+        void bind(Sms sms) {
+            displaySmsByType(sms);
+            populateTextViews(sms);
         }
 
-        void displaySmsByType(SmsModel smsModel) {
-            if (smsModel.getType().equals(RECEIVED)) {
-                if (contactModel.getMobileNumber() != null) {
+        void displaySmsByType(Sms sms) {
+            if (sms.getType().equals(RECEIVED)) {
+                if (contact.getMobileNumber() != null) {
                     String text = new StringBuilder()
-                            .append(contactModel.getFirstName())
+                            .append(contact.getFirstName())
                             .append(" ")
-                            .append(contactModel.getLastName())
+                            .append(contact.getLastName())
                             .toString();
 
-                    type.setText(text);
+                    typeTV.setText(text);
                     linearLayout.setGravity(Gravity.START);
 
                     if (Build.VERSION.SDK_INT >= MARSHMALLOW) {
@@ -122,13 +122,13 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             }
         }
 
-        void populateTextViews(SmsModel smsModel) {
-            StringBuilder time = smsUtils.smsDateFormat(Long.parseLong(smsModel.getTimeStamp()));
-            senderId.setText(smsModel.getPhoneNumber());
+        void populateTextViews(Sms sms) {
+            StringBuilder time = smsUtils.smsDateFormat(Long.parseLong(sms.getTimeStamp()));
+            senderId.setText(sms.getPhoneNumber());
             timeDate.setText(time);
-            messageRecieved.setText(smsModel.getMessage());
+            messageRecieved.setText(sms.getMessage());
             messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
-            type.setText(smsModel.getType());
+            typeTV.setText(sms.getType());
         }
     }
 }

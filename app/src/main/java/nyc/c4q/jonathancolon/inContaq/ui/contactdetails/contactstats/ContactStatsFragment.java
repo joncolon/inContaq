@@ -30,8 +30,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
-import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
+import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.GetHourlyReceived;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactstats.data.GetHourlySent;
@@ -82,12 +82,12 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     @Inject WordFrequency wordFrequency;
     @Inject AnalyticsFeedback analyticsFeedback;
 
-    private ArrayList<SmsModel> smsModelList;
+    private ArrayList<Sms> smsList;
     private CompositeDisposable disposables;
     private TimeMostContacted timeMostContacted;
     private Context context;
 
-    private ContactModel contactModel;
+    private Contact contact;
     private static final String TAG = ContactStatsFragment.class.getSimpleName();
     private static final float INACTIVE_ELEVATION = 70f;
 
@@ -112,7 +112,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         initProgressBar();
         context = getContext();
         timeMostContacted = new TimeMostContacted();
-        contactModel = ((ContactDetailsActivity) getActivity()).contactModel;
+        contact = ((ContactDetailsActivity) getActivity()).contact;
 
         return view;
     }
@@ -150,7 +150,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
                 .subscribe(event -> {
                     if (event instanceof ArrayList) {
                         Log.e(TAG, "received: " + ((ArrayList) event).size());
-                        smsModelList = ((ArrayList<SmsModel>) event);
+                        smsList = ((ArrayList<Sms>) event);
                         displayStats();
                     }
                 }));
@@ -159,9 +159,9 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     }
 
     public void displayStats() {
-        String phoneNumber = contactModel.getMobileNumber();
-        if (phoneNumber != null && smsModelList != null) {
-            if (smsModelList.size() > 0) {
+        String phoneNumber = contact.getMobileNumber();
+        if (phoneNumber != null && smsList != null) {
+            if (smsList.size() > 0) {
                 long daysSinceLastContacted = getDifferenceDays();
                 showGraphButtons();
                 enableTextViewVisibility();
@@ -172,7 +172,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     }
 
     private long getDifferenceDays() {
-        Date date1 = new Date((Long.valueOf(smsModelList.get(smsModelList.size() - 1).getTimeStamp())));
+        Date date1 = new Date((Long.valueOf(smsList.get(smsList.size() - 1).getTimeStamp())));
         Date date2 = new Date(System.currentTimeMillis());
         long difference = date2.getTime() - date1.getTime();
         return difference / (1000 * 60 * 60 * 24);
@@ -203,18 +203,18 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
         getMonthlySentTreeMap();
 
         daysSinceContactedTV.setText(String.valueOf(daysSinceLastContacted));
-        wordCount.setAvgWordCountSentText(smsModelList, avgWordSentTV);
-        wordCount.setAvgWordCountReceivedText(smsModelList, avgWordReceivedTV);
-        commonWordReceivedTV.setText(wordFrequency.mostCommonWordReceived(smsModelList));
-        commonWordSentTV.setText(wordFrequency.mostCommonWordSent(smsModelList));
+        wordCount.setAvgWordCountSentText(smsList, avgWordSentTV);
+        wordCount.setAvgWordCountReceivedText(smsList, avgWordReceivedTV);
+        commonWordReceivedTV.setText(wordFrequency.mostCommonWordReceived(smsList));
+        commonWordSentTV.setText(wordFrequency.mostCommonWordSent(smsList));
 
     }
 
     private void loadBarGraphs() {
-        int totalWordCountReceived = wordCount.totalWordCountReceived(smsModelList);
-        int totalWordCountSent = wordCount.totalWordCountSent(smsModelList);
-        int averageWordsReceived = wordCount.averageWordCountReceived(smsModelList);
-        int averageWordsSent = wordCount.averageWordCountSent(smsModelList);
+        int totalWordCountReceived = wordCount.totalWordCountReceived(smsList);
+        int totalWordCountSent = wordCount.totalWordCountSent(smsList);
+        int averageWordsReceived = wordCount.averageWordCountReceived(smsList);
+        int averageWordsSent = wordCount.averageWordCountSent(smsList);
 
         AverageWordCountBarChart averageWordCountBarChart = new AverageWordCountBarChart(wordAverageChart, averageWordsReceived, averageWordsSent);
         TotalSmsBarChart totalSmsBarChart = new TotalSmsBarChart(totalWordCountChart, totalWordCountReceived, totalWordCountSent);
@@ -224,7 +224,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     public void getHourlyReceivedTreeMap() {
         Observable.fromCallable(() -> {
-            GetHourlyReceived callable = new GetHourlyReceived(smsModelList);
+            GetHourlyReceived callable = new GetHourlyReceived(smsList);
             return callable.getHourlyReceived();
         })
                 .subscribeOn(Schedulers.io())
@@ -243,7 +243,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     public void getHourlySentTreeMap() {
         Observable.fromCallable(() -> {
             GetHourlySent callable = new GetHourlySent();
-            return callable.getHourlySent(smsModelList);
+            return callable.getHourlySent(smsList);
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -262,7 +262,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     public void getWeeklyReceivedTreeMap() {
         Observable.fromCallable(() -> {
-            GetWeeklyReceived callable = new GetWeeklyReceived(smsModelList);
+            GetWeeklyReceived callable = new GetWeeklyReceived(smsList);
             return callable.getWeeklyReceived();
         })
                 .subscribeOn(Schedulers.io())
@@ -276,7 +276,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     public void getWeeklySentTreeMap() {
         Observable.fromCallable(() -> {
-            GetWeeklySent callable = new GetWeeklySent(smsModelList);
+            GetWeeklySent callable = new GetWeeklySent(smsList);
             return callable.getWeeklySent();
         })
                 .subscribeOn(Schedulers.io())
@@ -290,7 +290,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
 
     public void getMonthlyReceivedTreeMap() {
         Observable.fromCallable(() -> {
-            GetMonthlyReceived callable = new GetMonthlyReceived(smsModelList);
+            GetMonthlyReceived callable = new GetMonthlyReceived(smsList);
             return callable.getMonthlyReceived();
         })
                 .subscribeOn(Schedulers.io())
@@ -307,7 +307,7 @@ public class ContactStatsFragment extends Fragment implements View.OnClickListen
     public void getMonthlySentTreeMap() {
         Observable.fromCallable(() -> {
             GetMonthlySent callable = new GetMonthlySent();
-            return callable.getMonthlySent(smsModelList);
+            return callable.getMonthlySent(smsList);
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

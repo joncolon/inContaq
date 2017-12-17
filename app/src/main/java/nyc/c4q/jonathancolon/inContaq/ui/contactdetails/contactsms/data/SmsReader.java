@@ -4,15 +4,19 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
 import io.michaelrocks.libphonenumber.android.NumberParseException;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
-import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
-import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
+import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberFormatter;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
@@ -27,9 +31,10 @@ public class SmsReader {
     private static final String TYPE = "type";
     private static final String DATE_DESC = "date desc";
     private static final int EMPTY = 0;
+    public static final String TAG = SmsReader.class.getSimpleName();
     private final RealmService realmService;
     private PhoneNumberFormatter phoneNumberFormatter;
-    private ArrayList<SmsModel> smsList;
+    private ArrayList<Sms> smsList;
     private ContentResolver contentResolver;
 
 
@@ -41,34 +46,30 @@ public class SmsReader {
         this.phoneNumberFormatter = phoneNumberFormatter;
     }
 
-    public ArrayList<SmsModel> retrieveSmsList(long realmID) throws Exception {
-        ContactModel contactModel = realmService.getByRealmID(realmID);
+    public Single<ArrayList<Sms>> retrieveSmsList(long realmID) {
+        Contact contact = realmService.getByRealmID(realmID);
         smsList = new ArrayList<>(EMPTY);
 
-        // The contactModel should NEVER be null.
-        if (isNull(contactModel)) {
-            throw new Exception("ContactModel is Null");
-        }
+        String formattedNumber = getFormattedNumber(contact.getMobileNumber());
 
-        if (isNull(contactModel.getMobileNumber())) {
-            throw new Exception("ContactModel does not have a Mobile Number");
-        }
-
-        String formattedNumber = getFormattedNumber(contactModel.getMobileNumber());
-        readContentProvider(formattedNumber);
-
-        return smsList;
+        return Single.fromCallable(() -> readContentProvider(formattedNumber))
+                .subscribeOn(Schedulers.io());
     }
 
-    private String getFormattedNumber(String mobileNumber) throws NumberParseException {
-        return phoneNumberFormatter.formatPhoneNumber(mobileNumber);
+    private String getFormattedNumber(String mobileNumber) {
+        try {
+            return phoneNumberFormatter.formatPhoneNumber(mobileNumber);
+        } catch (NumberParseException e) {
+            Log.e(TAG, "getFormattedNumber: " + Arrays.toString(e.getStackTrace()));
+        }
+        return mobileNumber;
     }
 
-    private void readContentProvider(String formattedNumber) throws NumberParseException {
+    private ArrayList<Sms> readContentProvider(String formattedNumber) throws NumberParseException {
         Uri uri = Uri.parse(URI_ALL);
         String[] projection = new String[]{ADDRESS, BODY, DATE, TYPE};
         Cursor cursor = contentResolver.query(uri,
-                projection, ADDRESS + "='" + formattedNumber + "'", null, DATE_DESC);
+                projection, getSelection(formattedNumber), null, DATE_DESC);
 
         if (!isNull(cursor)) {
             if (cursor.moveToFirst()) {
@@ -82,11 +83,23 @@ public class SmsReader {
                 }
             }
         }
+
+        return smsList;
     }
 
     @NonNull
-    private SmsModel createSmsModel(Cursor cursor) throws NumberParseException {
-        SmsModel sms = new SmsModel();
+    private String getSelection(String formattedNumber) {
+        return new StringBuilder()
+                .append(ADDRESS)
+                .append("='")
+                .append(formattedNumber)
+                .append("'")
+                .toString();
+    }
+
+    @NonNull
+    private Sms createSmsModel(Cursor cursor) throws NumberParseException {
+        Sms sms = new Sms();
         String phoneNumber = getFormattedNumber(
                 cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)));
 

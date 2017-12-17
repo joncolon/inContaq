@@ -5,16 +5,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
+import nyc.c4q.jonathancolon.inContaq.model.Sms;
 
 
 public class GetWeeklySent {
 
     private TreeMap<Integer, Integer> weeklyReceivedTreeMap;
-    private ArrayList<SmsModel> smsModelList;
+    private ArrayList<Sms> smsList;
 
-    public GetWeeklySent(ArrayList<SmsModel> smsModelList) {
-        this.smsModelList = smsModelList;
+    public GetWeeklySent(ArrayList<Sms> smsList) {
+        this.smsList = smsList;
     }
 
     public TreeMap<Integer, Integer> getWeeklySent() {
@@ -22,9 +22,9 @@ public class GetWeeklySent {
         PrepareWeeklyTreeMap treeMap = new PrepareWeeklyTreeMap();
         weeklyReceivedTreeMap = treeMap.setUpWeeklyTextMap();
 
-        for (int i = 0; i < smsModelList.size(); i++) {
-            if (smsModelList.get(i).getType().equals("2")) {
-                sentSms.add(smsModelList.get(i).getTimeStamp());
+        for (int i = 0; i < smsList.size(); i++) {
+            if (smsList.get(i).getType().equals("2")) {
+                sentSms.add(smsList.get(i).getTimeStamp());
             }
         }
 

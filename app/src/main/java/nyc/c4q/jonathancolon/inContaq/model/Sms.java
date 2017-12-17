@@ -3,21 +3,21 @@ package nyc.c4q.jonathancolon.inContaq.model;
 import android.support.annotation.NonNull;
 
 
-public class SmsModel implements Comparable<SmsModel> {
+public class Sms implements Comparable<Sms> {
 
     private String message;
     private String phoneNumber;
     private String timeStamp;
     private String type;
 
-    public SmsModel(String address, String message, String timeStamp, String type) {
+    public Sms(String address, String message, String timeStamp, String type) {
         this.phoneNumber = address;
         this.message = message;
         this.timeStamp = timeStamp;
         this.type = type;
     }
 
-    public SmsModel() {
+    public Sms() {
     }
 
     public String getPhoneNumber() {
@@ -45,8 +45,8 @@ public class SmsModel implements Comparable<SmsModel> {
     }
 
     @Override
-    public int compareTo(@NonNull SmsModel smsModel) {
-        return getTimeStamp().compareTo(smsModel.getTimeStamp());
+    public int compareTo(@NonNull Sms sms) {
+        return getTimeStamp().compareTo(sms.getTimeStamp());
     }
 
     public String getTimeStamp() {

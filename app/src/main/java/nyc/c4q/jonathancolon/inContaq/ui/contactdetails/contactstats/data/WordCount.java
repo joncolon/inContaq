@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
+import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 public class WordCount {
@@ -23,19 +23,19 @@ public class WordCount {
         this.smsUtils = smsUtils;
     }
 
-    public int totalWordCountSent(ArrayList<SmsModel> smsModelList) {
-        ArrayList<SmsModel> smsModelSent = smsUtils.parseSentSms(smsModelList);
+    public int totalWordCountSent(ArrayList<Sms> smsList) {
+        ArrayList<Sms> smsSent = smsUtils.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
-        for (int i = 0; i < smsModelSent.size(); i++) {
-            wordCount.add(getWordCountPerMessage(smsModelList.get(i)));
+        for (int i = 0; i < smsSent.size(); i++) {
+            wordCount.add(getWordCountPerMessage(smsList.get(i)));
 
         }
         return calculateTotalWords(wordCount);
     }
 
-    private int getWordCountPerMessage(SmsModel smsModel) {
-        String input = smsModel.getMessage();
+    private int getWordCountPerMessage(Sms sms) {
+        String input = sms.getMessage();
         if (input == null || input.isEmpty()) {
             return 0;
         }
@@ -57,24 +57,24 @@ public class WordCount {
         return sum;
     }
 
-    public int totalWordCountReceived(ArrayList<SmsModel> smsModelList) {
-        ArrayList<SmsModel> receivedSms = smsUtils.parseReceivedSms(smsModelList);
+    public int totalWordCountReceived(ArrayList<Sms> smsList) {
+        ArrayList<Sms> receivedSms = smsUtils.parseReceivedSms(smsList);
         ArrayList<Integer> count = new ArrayList<>();
         for (int i = 0; i < receivedSms.size(); i++) {
-            count.add(getWordCountPerMessage(smsModelList.get(i)));
+            count.add(getWordCountPerMessage(smsList.get(i)));
         }
         return calculateTotalWords(count);
     }
 
-    public void setAvgWordCountSentText(ArrayList<SmsModel> list, TextView tv) {
+    public void setAvgWordCountSentText(ArrayList<Sms> list, TextView tv) {
         Observable.fromCallable(() -> averageWordCountSent(list))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(wordCount -> tv.setText(String.valueOf(wordCount)));
     }
 
-    public int averageWordCountSent(ArrayList<SmsModel> smsModelList) {
-        ArrayList<SmsModel> sentSms = smsUtils.parseSentSms(smsModelList);
+    public int averageWordCountSent(ArrayList<Sms> smsList) {
+        ArrayList<Sms> sentSms = smsUtils.parseSentSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
         for (int i = 0; i < sentSms.size(); i++) {
@@ -92,15 +92,15 @@ public class WordCount {
         return sum;
     }
 
-    public void setAvgWordCountReceivedText(ArrayList<SmsModel> smsModelList, TextView tv) {
-        Observable.fromCallable(() -> averageWordCountReceived(smsModelList))
+    public void setAvgWordCountReceivedText(ArrayList<Sms> smsList, TextView tv) {
+        Observable.fromCallable(() -> averageWordCountReceived(smsList))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(wordCount -> tv.setText(String.valueOf(wordCount)));
     }
 
-    public int averageWordCountReceived(ArrayList<SmsModel> smsModelList) {
-        ArrayList<SmsModel> receivedSms = smsUtils.parseReceivedSms(smsModelList);
+    public int averageWordCountReceived(ArrayList<Sms> smsList) {
+        ArrayList<Sms> receivedSms = smsUtils.parseReceivedSms(smsList);
         ArrayList<Integer> wordCount = new ArrayList<>();
 
         for (int i = 0; i < receivedSms.size(); i++) {

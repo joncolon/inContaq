@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
+import nyc.c4q.jonathancolon.inContaq.model.Sms;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 public class WordFrequency {
@@ -46,12 +46,12 @@ public class WordFrequency {
     }
 
 
-    public String mostCommonWordReceived(ArrayList<SmsModel> smsModelList) {
-        ArrayList<SmsModel> smsModelReceived = smsUtils.parseReceivedSms(smsModelList);
+    public String mostCommonWordReceived(ArrayList<Sms> smsList) {
+        ArrayList<Sms> smsReceived = smsUtils.parseReceivedSms(smsList);
         ArrayList<String> wordArrayList = new ArrayList<>();
 
-        for (int i = 0; i < smsModelReceived.size(); i++) {
-            String message = smsModelReceived.get(i).getMessage().toLowerCase();
+        for (int i = 0; i < smsReceived.size(); i++) {
+            String message = smsReceived.get(i).getMessage().toLowerCase();
             for (String word : message.split(" ")) {
                 if (word.length() >= 3 && !excludedWords.contains(word)) {
                     wordArrayList.add(word);
@@ -88,12 +88,12 @@ public class WordFrequency {
         return mostCommonKey;
     }
 
-    public String mostCommonWordSent(ArrayList<SmsModel> smsModelList) {
-        ArrayList<SmsModel> smsModelSent = smsUtils.parseSentSms(smsModelList);
+    public String mostCommonWordSent(ArrayList<Sms> smsList) {
+        ArrayList<Sms> smsSent = smsUtils.parseSentSms(smsList);
         ArrayList<String> wordArrayList = new ArrayList<>();
 
-        for (int i = 0; i < smsModelSent.size(); i++) {
-            String message = smsModelSent.get(i).getMessage().toLowerCase();
+        for (int i = 0; i < smsSent.size(); i++) {
+            String message = smsSent.get(i).getMessage().toLowerCase();
             for (String word : message.split(" ")) {
                 if (word.length() > 3 && !excludedWords.contains(word)) {
                     wordArrayList.add(word);

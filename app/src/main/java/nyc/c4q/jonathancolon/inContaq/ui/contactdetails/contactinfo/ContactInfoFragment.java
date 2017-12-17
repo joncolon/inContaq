@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.common.dagger.Injector;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
-import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
+import nyc.c4q.jonathancolon.inContaq.model.Contact;
 import nyc.c4q.jonathancolon.inContaq.utlities.AnimationHelper;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoUtils;
@@ -66,7 +66,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Inject
     RealmService realmService;
 
-    private ContactModel contactModel;
+    private Contact contact;
     private TextView mobile, email, displayName, editOption;
     private ImageView contactImageIV, backgroundImageIV, sendMessageIV;
     private PicassoUtils picasso;
@@ -89,15 +89,15 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         Injector.getApplicationComponent().inject(this);
         long contactId = getActivity().getIntent().getLongExtra(CONTACT_KEY, -1);
-        contactModel = realmService.getByRealmID(contactId);
+        contact = realmService.getByRealmID(contactId);
         anim = new AnimationHelper(ContactInfoFragment.this.getActivity());
         picasso = new PicassoUtils(context);
-        appLauncher = new MessengerAppLauncher(getActivity(), contactModel.getMobileNumber());
+        appLauncher = new MessengerAppLauncher(getActivity(), contact.getMobileNumber());
 
         isEditTextEnabled = false;
         initViews(view);
         setClickListeners();
-        displayContactInfo(contactModel);
+        displayContactInfo(contact);
         return view;
     }
 
@@ -135,10 +135,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     private void initSwitch(View view) {
         reminderSwitch = (Switch) view.findViewById(R.id.reminder_switch);
         if (reminderSwitch != null) {
-            if (contactModel.isReminderEnabled()) {
+            if (contact.isReminderEnabled()) {
                 dateSpinner.setVisibility(VISIBLE);
             }
-            reminderSwitch.setChecked(contactModel.isReminderEnabled());
+            reminderSwitch.setChecked(contact.isReminderEnabled());
             reminderSwitch.setOnCheckedChangeListener(this);
         }
     }
@@ -154,7 +154,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
         dateSpinner.setAdapter(spinnerArrayAdapter);
         dateSpinner.setOnItemSelectedListener(this);
-        dateSpinner.setSelection(contactModel.getReminderDuration());
+        dateSpinner.setSelection(contact.getReminderDuration());
     }
 
     private void setClickListeners() {
@@ -170,7 +170,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
             selection = 1;
-            ContactInfoFragment.this.alertDialogCallback(selection, contactModel);
+            ContactInfoFragment.this.alertDialogCallback(selection, contact);
             anim.exitFab(saveButton);
             saveButton.setVisibility(GONE);
             isEditTextEnabled = false;
@@ -186,7 +186,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     @Override
-    public void alertDialogCallback(Integer ret, ContactModel contactModel) {
+    public void alertDialogCallback(Integer ret, Contact contact) {
         ret = selection;
         if (ret == 1) {
             saveChanges();
@@ -223,9 +223,9 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         String address = editAddress.getText().toString();
 
         realmService.getInstance().executeTransaction(realm1 -> {
-            contactModel.setEmail(email);
-            contactModel.setAddress(address);
-            contactModel.setMobileNumber(editMobile.getText().toString());
+            contact.setEmail(email);
+            contact.setAddress(address);
+            contact.setMobileNumber(editMobile.getText().toString());
         });
 
         disableEditText();
@@ -234,15 +234,15 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     @Override
     public void onResume() {
         super.onResume();
-        displayContactInfo(contactModel);
+        displayContactInfo(contact);
     }
 
-    private void displayContactInfo(ContactModel contactModel) {
-        String nameValue = contactModel.getFirstName() + " " + contactModel.getLastName();
+    private void displayContactInfo(Contact contact) {
+        String nameValue = contact.getFirstName() + " " + contact.getLastName();
         displayName.setText(nameValue);
-        editEmail.setText(contactModel.getEmail());
-        editAddress.setText(contactModel.getAddress());
-        editMobile.setText(contactModel.getMobileNumber());
+        editEmail.setText(contact.getEmail());
+        editAddress.setText(contact.getAddress());
+        editMobile.setText(contact.getMobileNumber());
 
         loadImages();
         showMobile();
@@ -251,11 +251,11 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
     }
 
     private void loadImages() {
-        if (contactModel.getBackgroundImage() != null) {
-            pUtils.loadImageFromString(contactModel.getBackgroundImage(), backgroundImageIV);
+        if (contact.getBackgroundImage() != null) {
+            pUtils.loadImageFromString(contact.getBackgroundImage(), backgroundImageIV);
         }
-        if (contactModel.getContactImage() != null) {
-            pUtils.loadImageFromString(contactModel.getContactImage(), contactImageIV);
+        if (contact.getContactImage() != null) {
+            pUtils.loadImageFromString(contact.getContactImage(), contactImageIV);
         }
     }
 
@@ -264,7 +264,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
             mobile.setVisibility(VISIBLE);
 
         }
-        if (contactModel.getMobileNumber() != null || Objects.equals(contactModel.getMobileNumber(), "")) {
+        if (contact.getMobileNumber() != null || Objects.equals(contact.getMobileNumber(), "")) {
             mobile.setVisibility(VISIBLE);
         }
     }
@@ -286,20 +286,20 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         switch (String.valueOf(parent.getItemAtPosition(position))) {
             case ONE_WEEK:
                 realmService.getInstance().executeTransaction(realm1 -> {
-                    contactModel.setReminderDuration(1);
-                    contactModel.setReminderEnabled(true);
+                    contact.setReminderDuration(1);
+                    contact.setReminderEnabled(true);
                 });
                 break;
             case TWO_WEEKS:
                 realmService.getInstance().executeTransaction(realm1 -> {
-                    contactModel.setReminderDuration(2);
-                    contactModel.setReminderEnabled(true);
+                    contact.setReminderDuration(2);
+                    contact.setReminderEnabled(true);
                 });
                 break;
             case THREE_WEEKS:
                 realmService.getInstance().executeTransaction(realm1 -> {
-                    contactModel.setReminderDuration(3);
-                    contactModel.setReminderEnabled(true);
+                    contact.setReminderDuration(3);
+                    contact.setReminderEnabled(true);
                 });
                 break;
             case CANCEL:
@@ -314,7 +314,7 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
 
         if (value == Configuration.ORIENTATION_PORTRAIT) {
             fontUtils.applyFont(displayName);
-            displayContactInfo(contactModel);
+            displayContactInfo(contact);
 
             contactImageIV.setOnClickListener(v -> {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK,
@@ -358,14 +358,14 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         Uri contactImgUri = data.getData();
         picasso.loadImageFromUri(contactImgUri, contactImageIV);
         realmService.getInstance().executeTransaction(
-                realm1 -> contactModel.setContactImage(contactImgUri.toString()));
+                realm1 -> contact.setContactImage(contactImgUri.toString()));
     }
 
     public void setBackgroundImage(Intent data, PicassoUtils ph) {
         Uri bgImgUri = data.getData();
         ph.loadImageFromUri(bgImgUri, backgroundImageIV);
         realmService.getInstance().executeTransaction(
-                realm1 -> contactModel.setBackgroundImage(bgImgUri.toString()));
+                realm1 -> contact.setBackgroundImage(bgImgUri.toString()));
     }
 
     @Override
@@ -382,10 +382,10 @@ public class ContactInfoFragment extends Fragment implements AlertDialogCallback
         Toast.makeText(getActivity(), "Reminders " + (isChecked ? "enabled" : "disabled"),
                 Toast.LENGTH_SHORT).show();
         if (isChecked) {
-            realmService.toggleReminder(contactModel, true);
+            realmService.toggleReminder(contact, true);
             dateSpinner.setVisibility(VISIBLE);
         } else {
-            realmService.toggleReminder(contactModel, false);
+            realmService.toggleReminder(contact, false);
             dateSpinner.setVisibility(INVISIBLE);
         }
     }
