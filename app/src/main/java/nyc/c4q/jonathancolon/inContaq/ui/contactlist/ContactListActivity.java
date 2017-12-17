@@ -3,13 +3,13 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
 
 import javax.inject.Inject;
 
@@ -101,15 +101,12 @@ public class ContactListActivity extends BaseActivity implements
                     .setPrimaryText(R.string.add_first_contact)
                     .setSecondaryText(R.string.tap_here)
                     .setBackgroundColour(getColor(R.color.charcoal))
-                    .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener() {
+                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
                         @Override
-                        public void onHidePrompt(MotionEvent event, boolean tappedTarget) {
-                            presenter.onaddFirstContactPromptClicked();
-                        }
-
-                        @Override
-                        public void onHidePromptComplete() {
-                            //do nothing
+                        public void onPromptStateChanged(@NonNull MaterialTapTargetPrompt prompt, int state) {
+                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                presenter.onaddFirstContactPromptClicked();
+                            }
                         }
                     }).show();
         }

@@ -43,7 +43,6 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-
                 <data android:scheme="sms"/>
                 <data android:scheme="smsto"/>
                 <data android:scheme="mms"/>
@@ -55,9 +54,10 @@
         <service
             android:name=".notifications.ContactNotificationService"
             android:enabled="true"/>
+
+        <receiver
+            android:name=".notifications.MyAlarmReceiver"></receiver>
     </application>
 
-    <receiver
-        android:name=".smsreminder.MyAlarmReceiver"></receiver>
 
 </manifest>
