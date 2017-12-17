@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 /**
@@ -23,17 +23,17 @@ public class WeeksPassed {
         this.smsUtils = smsUtils;
     }
 
-    boolean hasWeekPassed(Contact c) {
+    boolean hasWeekPassed(ContactModel c) {
         return System.currentTimeMillis() -
                 smsUtils.getLastContactedDate(c) > ONE_WEEK;
     }
 
-    boolean hasTwoWeeksPassed(Contact c) {
+    boolean hasTwoWeeksPassed(ContactModel c) {
         return System.currentTimeMillis() -
                 smsUtils.getLastContactedDate(c) > TWO_WEEKS;
     }
 
-    boolean hasThreeWeeksPassed(Contact c) {
+    boolean hasThreeWeeksPassed(ContactModel c) {
         return System.currentTimeMillis() -
                 smsUtils.getLastContactedDate(c) > THREE_WEEKS;
     }

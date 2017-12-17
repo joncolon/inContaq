@@ -26,8 +26,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
+import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.contactsms.data.SmsReader;
 import nyc.c4q.jonathancolon.inContaq.utlities.RxBus;
@@ -51,9 +51,9 @@ public class ContactSmsFragment extends Fragment {
     @Inject
     SmsUtils smsUtils;
     private long realmID;
-    private ArrayList<Sms> smsList;
+    private ArrayList<SmsModel> smsModelList;
     private RxBus rxBus;
-    private Contact contact;
+    private ContactModel contactModel;
     private Unbinder unbinder;
 
     public ContactSmsFragment() {
@@ -84,10 +84,10 @@ public class ContactSmsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contact_sms, container, false);
 
         unbinder = ButterKnife.bind(this, view);
-        contact = ((ContactDetailsActivity) getActivity()).contact;
+        contactModel = ((ContactDetailsActivity) getActivity()).contactModel;
         realmID = getActivity().getIntent().getLongExtra(CONTACT_KEY, -1);
 
-        toolbar.setTitle(contact.getFullName());
+        toolbar.setTitle(contactModel.getFullName());
         toolbar.setTitleTextColor(getActivity().getColor(R.color.light_font));
         toolbar.setSubtitleTextColor(getActivity().getColor(R.color.grey_font));
 
@@ -102,16 +102,16 @@ public class ContactSmsFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(arrayList -> {
-                    smsList = arrayList;
+                    smsModelList = arrayList;
                     progressBar.setVisibility(View.GONE);
-                    ContactSmsFragment.this.setupRecyclerView(contact);
+                    ContactSmsFragment.this.setupRecyclerView(contactModel);
                     ContactSmsFragment.this.showRecyclerView();
                     Log.e("RxBus: ", "sending: waiting to send ");
                     ContactSmsFragment.this.sendEvent();
                     ContactSmsFragment.this.scrollListToBottom();
 
-                    if (!isEmptyList(smsList)) {
-                        long time = smsUtils.getLastContactedDate(contact);
+                    if (!isEmptyList(smsModelList)) {
+                        long time = smsUtils.getLastContactedDate(contactModel);
                         StringBuilder lastContacted = smsUtils.smsDateFormat(time);
                         toolbar.setSubtitle(getString(R.string.last_contacted) + lastContacted);
                     } else {
@@ -120,11 +120,11 @@ public class ContactSmsFragment extends Fragment {
                 });
     }
 
-    private void setupRecyclerView(Contact contact) {
-        SmsAdapter adapter = new SmsAdapter(contact, smsUtils);
+    private void setupRecyclerView(ContactModel contactModel) {
+        SmsAdapter adapter = new SmsAdapter(contactModel, smsUtils);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Collections.sort(smsList);
-        adapter.setData(smsList);
+        Collections.sort(smsModelList);
+        adapter.setData(smsModelList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -137,8 +137,8 @@ public class ContactSmsFragment extends Fragment {
         Log.e("RxBus: ", "sending: SENT ");
         if (rxBus.hasObservers()) {
             rxBus.send(new ContactDetailsActivity.SmsLoaded());
-            if (!isEmptyList(smsList)) {
-                rxBus.send(smsList);
+            if (!isEmptyList(smsModelList)) {
+                rxBus.send(smsModelList);
             } else {
                 rxBus.send(new ContactDetailsActivity.SmsUnavailable());
             }
@@ -146,7 +146,7 @@ public class ContactSmsFragment extends Fragment {
     }
 
     synchronized private void scrollListToBottom() {
-        recyclerView.post(() -> recyclerView.scrollToPosition(smsList.size() - 1));
+        recyclerView.post(() -> recyclerView.scrollToPosition(smsModelList.size() - 1));
     }
 
     @Override

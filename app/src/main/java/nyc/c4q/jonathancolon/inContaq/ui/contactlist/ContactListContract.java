@@ -2,7 +2,7 @@ package nyc.c4q.jonathancolon.inContaq.ui.contactlist;
 
 import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.common.base.BaseView;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 
 
 public class ContactListContract {
@@ -13,7 +13,7 @@ public class ContactListContract {
 
         void addFirstContactPrompt();
 
-        void showDeleteContactDialog(Contact contact);
+        void showDeleteContactDialog(ContactModel contactModel);
 
         void checkService();
 
@@ -23,9 +23,9 @@ public class ContactListContract {
 
         void requestPermissions();
 
-        void navigateToContactDetailsActivity(Contact contact);
+        void navigateToContactDetailsActivity(ContactModel contactModel);
 
-        void refreshContactList(RealmResults<Contact> list);
+        void refreshContactList(RealmResults<ContactModel> list);
 
         void preLoadContactListImages();
 
@@ -34,15 +34,15 @@ public class ContactListContract {
     }
 
     interface Presenter {
-        RealmResults<Contact> retrieveContacts();
+        RealmResults<ContactModel> retrieveContacts();
 
         void onAddContactClicked();
 
-        void onContactClicked(Contact contact);
+        void onContactClicked(ContactModel contactModel);
 
-        void addContactToDatabase(Contact contact);
+        void addContactToDatabase(ContactModel contactModel);
 
-        void onContactLongClicked(Contact contact);
+        void onContactLongClicked(ContactModel contactModel);
 
         void onaddFirstContactPromptClicked();
     }

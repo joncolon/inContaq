@@ -5,16 +5,16 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
 
 
 public class GetMonthlyReceived {
 
     private TreeMap<Integer, Integer> monthlyReceivedTreeMap;
-    private ArrayList<Sms> smsList;
+    private ArrayList<SmsModel> smsModelList;
 
-    public GetMonthlyReceived(ArrayList<Sms> smsList) {
-        this.smsList = smsList;
+    public GetMonthlyReceived(ArrayList<SmsModel> smsModelList) {
+        this.smsModelList = smsModelList;
     }
 
     public TreeMap<Integer, Integer> getMonthlyReceived() {
@@ -22,9 +22,9 @@ public class GetMonthlyReceived {
         PrepareMonthlyTreeMap treeMap = new PrepareMonthlyTreeMap();
         monthlyReceivedTreeMap = treeMap.setUpMonthlyTreeMap();
 
-        for (int i = 0; i < smsList.size(); i++) {
-            if (smsList.get(i).getType().equals("1")) {
-                receivedSms.add(smsList.get(i).getTimeStamp());
+        for (int i = 0; i < smsModelList.size(); i++) {
+            if (smsModelList.get(i).getType().equals("1")) {
+                receivedSms.add(smsModelList.get(i).getTimeStamp());
             }
         }
         monthlyReceivedTreeMap = mapMonthlyTexts(receivedSms);

@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey;
 // Your model just have to extend RealmObject.
 // This will inherit an annotation which produces proxy getters and setters for all fields.
 
-public class Contact extends RealmObject {
+public class ContactModel extends RealmObject {
 
     // All fields are by default persisted.
     @PrimaryKey
@@ -29,19 +29,19 @@ public class Contact extends RealmObject {
     private boolean reminderEnabled = false;
     private int reminderDuration;
 
-    public Contact() {
+    public ContactModel() {
     }
 
-    public Contact(String firstName) {
+    public ContactModel(String firstName) {
         this.firstName = firstName;
     }
 
-    public Contact(String firstName, String lastName) {
+    public ContactModel(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Contact(String firstName, String lastName, String mobileNumber) {
+    public ContactModel(String firstName, String lastName, String mobileNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.mobileNumber = mobileNumber;

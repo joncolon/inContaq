@@ -19,7 +19,7 @@ import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.common.base.BaseActivity;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 import nyc.c4q.jonathancolon.inContaq.notifications.ContactNotificationService;
 import nyc.c4q.jonathancolon.inContaq.notifications.MyAlarmReceiver;
 import nyc.c4q.jonathancolon.inContaq.ui.contactdetails.ContactDetailsActivity;
@@ -40,7 +40,7 @@ import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.isNull;
 public class ContactListActivity extends BaseActivity implements
         ContactListAdapter.Listener, ContactListContract.View, AlertDialogCallback<Integer> {
 
-    public static final String CONTACT_KEY = "Contact";
+    public static final String CONTACT_KEY = "ContactModel";
     private static final String PERMISSION_KEY = "request_permissions";
     private static final String TAG = ContactListActivity.class.getSimpleName();
     private static final int REQUEST_CODE_SELECT_CONTACT = 1;
@@ -62,7 +62,7 @@ public class ContactListActivity extends BaseActivity implements
     @BindView(R.id.fab_add_contact)
     FloatingActionButton addContactFab;
 
-    private RealmResults<Contact> contactList;
+    private RealmResults<ContactModel> contactModelList;
     private MyAlarmReceiver receiver;
     private int selection;
 
@@ -95,7 +95,7 @@ public class ContactListActivity extends BaseActivity implements
 
     @Override
     public void addFirstContactPrompt() {
-        if (ObjectUtils.isEmptyList(contactList)) {
+        if (ObjectUtils.isEmptyList(contactModelList)) {
             new MaterialTapTargetPrompt.Builder(this)
                     .setTarget(findViewById(R.id.fab_add_contact))
                     .setPrimaryText(R.string.add_first_contact)
@@ -113,26 +113,26 @@ public class ContactListActivity extends BaseActivity implements
     }
 
     @Override
-    public void showDeleteContactDialog(Contact contact) {
+    public void showDeleteContactDialog(ContactModel contactModel) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(getString(R.string.delete_this_contact) + contact.getFullName() +
+        alertDialog.setTitle(getString(R.string.delete_this_contact) + contactModel.getFullName() +
                 getString(R.string.question_mark));
         alertDialog.setMessage(R.string.are_you_sure);
         alertDialog.setPositiveButton(R.string.positive_button, (dialog, which) -> {
             selection = DELETE_CONTACT;
-            ContactListActivity.this.alertDialogCallback(selection, contact);
+            ContactListActivity.this.alertDialogCallback(selection, contactModel);
         }).setNegativeButton(R.string.negative_button, (dialog, which) -> dialog.cancel());
 
         alertDialog.show();
     }
 
     @Override
-    public void alertDialogCallback(Integer ret, Contact contact) {
+    public void alertDialogCallback(Integer ret, ContactModel contactModel) {
         ret = selection;
         if (ret == DELETE_CONTACT) {
-            realmService.deleteContactFromRealmDB(contact);
-            contactList = presenter.retrieveContacts();
-            refreshContactList(contactList);
+            realmService.deleteContactFromRealmDB(contactModel);
+            contactModelList = presenter.retrieveContacts();
+            refreshContactList(contactModelList);
         }
     }
 
@@ -170,25 +170,25 @@ public class ContactListActivity extends BaseActivity implements
 
     @Override
     public void preLoadContactListImages() {
-        if (!isEmptyList(contactList)) {
-            for (int i = 0; i < contactList.size(); i++) {
-                Contact contact = contactList.get(i);
-                if (hasBackgroundImage(contact)) {
-                    picasso.preloadImages(contactList.get(i).getBackgroundImage());
+        if (!isEmptyList(contactModelList)) {
+            for (int i = 0; i < contactModelList.size(); i++) {
+                ContactModel contactModel = contactModelList.get(i);
+                if (hasBackgroundImage(contactModel)) {
+                    picasso.preloadImages(contactModelList.get(i).getBackgroundImage());
                 }
-                if (hasContactImage(contact)) {
-                    picasso.preloadImages(contactList.get(i).getContactImage());
+                if (hasContactImage(contactModel)) {
+                    picasso.preloadImages(contactModelList.get(i).getContactImage());
                 }
             }
         }
     }
 
-    private boolean hasBackgroundImage(Contact contact) {
-        return !isNull(contact.getBackgroundImage());
+    private boolean hasBackgroundImage(ContactModel contactModel) {
+        return !isNull(contactModel.getBackgroundImage());
     }
 
-    private boolean hasContactImage(Contact contact) {
-        return !isNull(contact.getContactImage());
+    private boolean hasContactImage(ContactModel contactModel) {
+        return !isNull(contactModel.getContactImage());
     }
 
     @Override
@@ -201,8 +201,8 @@ public class ContactListActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (isContactSelected(requestCode, resultCode)) {
             Uri uri = data.getData();
-            Contact contact = contactReader.retrieveContact(uri);  //todo extract to presenter
-            presenter.addContactToDatabase(contact);
+            ContactModel contactModel = contactReader.retrieveContact(uri);  //todo extract to presenter
+            presenter.addContactToDatabase(contactModel);
         }
     }
 
@@ -211,32 +211,32 @@ public class ContactListActivity extends BaseActivity implements
     }
 
     @Override
-    public void onContactClicked(Contact contact) {
-        presenter.onContactClicked(contact);
+    public void onContactClicked(ContactModel contactModel) {
+        presenter.onContactClicked(contactModel);
     }
 
     @Override
-    public void navigateToContactDetailsActivity(Contact contact) {
+    public void navigateToContactDetailsActivity(ContactModel contactModel) {
         Intent intent = new Intent(this, ContactDetailsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(CONTACT_KEY, contact.getRealmID());
+        intent.putExtra(CONTACT_KEY, contactModel.getRealmID());
         this.startActivity(intent);
     }
 
     @Override
-    public void onContactLongClicked(Contact contact) {
-        presenter.onContactLongClicked(contact);
+    public void onContactLongClicked(ContactModel contactModel) {
+        presenter.onContactLongClicked(contactModel);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        contactList = presenter.retrieveContacts();
-        refreshContactList(contactList);
+        contactModelList = presenter.retrieveContacts();
+        refreshContactList(contactModelList);
     }
 
     @Override
-    public void refreshContactList(RealmResults<Contact> list) {
+    public void refreshContactList(RealmResults<ContactModel> list) {
         ContactListAdapter adapter = (ContactListAdapter) recyclerView.getAdapter();
         adapter.setData(list);
     }

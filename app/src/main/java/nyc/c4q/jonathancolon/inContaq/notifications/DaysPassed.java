@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 /**
@@ -20,9 +20,9 @@ public class DaysPassed {
         this.smsUtils = smsUtils;
     }
 
-    long daysSinceLastMsg(Contact contact) {
+    long daysSinceLastMsg(ContactModel contactModel) {
         long currentTime = System.currentTimeMillis();
-        long lastMsg = smsUtils.getLastContactedDate(contact);
+        long lastMsg = smsUtils.getLastContactedDate(contactModel);
         if (lastMsg > 0) {
             long timeElapsed = currentTime - lastMsg;
             return timeElapsed / ONE_DAY;

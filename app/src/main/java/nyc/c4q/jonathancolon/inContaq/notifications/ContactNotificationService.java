@@ -20,7 +20,7 @@ import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.common.dagger.Injector;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 import nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
@@ -96,41 +96,41 @@ public class ContactNotificationService extends IntentService {
     }
 
     private void checkInspectionTime() {
-        RealmResults<Contact> contactList = realmService.findByReminderEnabled();
-        ArrayList<Contact> contacts = new ArrayList<>(contactList);
+        RealmResults<ContactModel> contactModelList = realmService.findByReminderEnabled();
+        ArrayList<ContactModel> contactModels = new ArrayList<>(contactModelList);
 
         if (lastNotified + ONE_MIN < System.currentTimeMillis()) {
             lastNotified = System.currentTimeMillis();
 
-            if (contacts.size() > 0) {
+            if (contactModels.size() > 0) {
                 int i = 0;
 
                 inboxStyle = new InboxStyle();
 
-                while (i < contacts.size()) {
-                    Contact contact = contactList.get(i);
-                    long daysSince = daysPassed.daysSinceLastMsg(contact);
+                while (i < contactModels.size()) {
+                    ContactModel contactModel = contactModelList.get(i);
+                    long daysSince = daysPassed.daysSinceLastMsg(contactModel);
 
-                    if (contact.isReminderEnabled() && daysSince > 0) {
-                        switch (contact.getReminderDuration()) {
+                    if (contactModel.isReminderEnabled() && daysSince > 0) {
+                        switch (contactModel.getReminderDuration()) {
                             case 1:
-                                if (weeksPassed.hasWeekPassed(contact) &&
-                                        contact.getReminderDuration() == 1) {
-                                    inboxStyle.addLine(addNotificationMessage(contact, daysSince));
+                                if (weeksPassed.hasWeekPassed(contactModel) &&
+                                        contactModel.getReminderDuration() == 1) {
+                                    inboxStyle.addLine(addNotificationMessage(contactModel, daysSince));
                                     notificationCount++;
                                     break;
                                 }
                             case 2:
-                                if (weeksPassed.hasTwoWeeksPassed(contact) &&
-                                        contact.getReminderDuration() == 2) {
-                                    inboxStyle.addLine(addNotificationMessage(contact, daysSince));
+                                if (weeksPassed.hasTwoWeeksPassed(contactModel) &&
+                                        contactModel.getReminderDuration() == 2) {
+                                    inboxStyle.addLine(addNotificationMessage(contactModel, daysSince));
                                     notificationCount++;
                                     break;
                                 }
                             case 3:
-                                if (weeksPassed.hasThreeWeeksPassed(contact) &&
-                                        contact.getReminderDuration() == 3) {
-                                    inboxStyle.addLine(addNotificationMessage(contact, daysSince));
+                                if (weeksPassed.hasThreeWeeksPassed(contactModel) &&
+                                        contactModel.getReminderDuration() == 3) {
+                                    inboxStyle.addLine(addNotificationMessage(contactModel, daysSince));
                                     notificationCount++;
                                     break;
                                 }
@@ -147,8 +147,8 @@ public class ContactNotificationService extends IntentService {
     }
 
     @NonNull
-    private String addNotificationMessage(Contact contact, long daysSince) {
-        return contact.getFirstName() + ": " + " It's been " + daysSince + " days";
+    private String addNotificationMessage(ContactModel contactModel, long daysSince) {
+        return contactModel.getFirstName() + ": " + " It's been " + daysSince + " days";
     }
 
     public void startNotification(Context context) {

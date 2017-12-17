@@ -3,25 +3,25 @@ package nyc.c4q.jonathancolon.inContaq;
 import org.junit.Assert;
 import org.junit.Test;
 
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 
 /**
  * Created by jonathancolon on 7/27/17.
  */
 
-public class ContactTest {
+public class ContactModelTest {
 
     @Test
     public void getFullNameTest(){
-        Contact testOne = new Contact();
+        ContactModel testOne = new ContactModel();
         testOne.setFirstName("John");
         testOne.setLastName("Doe");
 
-        Contact testTwo = new Contact();
+        ContactModel testTwo = new ContactModel();
         testTwo.setFirstName("John");
         testTwo.setLastName("");
 
-        Contact testThree = new Contact();
+        ContactModel testThree = new ContactModel();
         testThree.setFirstName("John");
         testThree.setLastName(" ");
 

@@ -14,7 +14,7 @@ import com.github.florent37.beautifulparallax.ParallaxViewController;
 import java.util.List;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 import nyc.c4q.jonathancolon.inContaq.utlities.FontUtils;
 import nyc.c4q.jonathancolon.inContaq.utlities.PicassoUtils;
 
@@ -26,7 +26,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
     private final ParallaxViewController parallaxViewController = new ParallaxViewController();
     private final Context context;
     private final PicassoUtils picassoUtils;
-    private List<Contact> contactList;
+    private List<ContactModel> contactModelList;
 
 
     ContactListAdapter(Listener listener, @NonNull Context context,
@@ -55,8 +55,8 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
 
     @Override
     public void onBindViewHolder(ContactViewHolder holder, int position) {
-        Contact contact = contactList.get(position);
-        holder.bind(contact);
+        ContactModel contactModel = contactModelList.get(position);
+        holder.bind(contactModel);
     }
 
     @Override
@@ -71,18 +71,18 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
 
     @Override
     public int getItemCount() {
-        return contactList.size();
+        return contactModelList.size();
     }
 
 
-    public void setData(List<Contact> contacts) {
-        this.contactList = contacts;
+    public void setData(List<ContactModel> contactModels) {
+        this.contactModelList = contactModels;
         notifyDataSetChanged();
     }
 
     interface Listener {
-        void onContactClicked(Contact contact);
-        void onContactLongClicked(Contact contact);
+        void onContactClicked(ContactModel contactModel);
+        void onContactLongClicked(ContactModel contactModel);
     }
 
     //_____________________________________VIEWHOLDER_______________________________________________
@@ -104,35 +104,35 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.Contact
             fontUtils.applyFont(mContactInitials);
         }
 
-        void bind(Contact c) {
-            final Contact contact = c;
-            mContactName.setText(contact.getFirstName() + " " + contact.getLastName());
-            mContactInitials.setText((contact.getFirstName().substring(0, 1).toUpperCase()));
+        void bind(ContactModel c) {
+            final ContactModel contactModel = c;
+            mContactName.setText(contactModel.getFirstName() + " " + contactModel.getLastName());
+            mContactInitials.setText((contactModel.getFirstName().substring(0, 1).toUpperCase()));
 
-            displayBackgroundImage(contact);
-            displayContactImage(contact);
+            displayBackgroundImage(contactModel);
+            displayContactImage(contactModel);
 
             itemView.setOnClickListener(v -> {
-                listener.onContactClicked(contact);
+                listener.onContactClicked(contactModel);
             });
             itemView.setOnLongClickListener(v -> {
-                 listener.onContactLongClicked(contact);
+                 listener.onContactLongClicked(contactModel);
                 return true;
             });
         }
 
-        private void displayBackgroundImage(Contact contact) {
-            if (!isNull(contact.getBackgroundImage())) {
-                picassoUtils.loadImageFromString(contact.getBackgroundImage(), mBackGroundImage);
+        private void displayBackgroundImage(ContactModel contactModel) {
+            if (!isNull(contactModel.getBackgroundImage())) {
+                picassoUtils.loadImageFromString(contactModel.getBackgroundImage(), mBackGroundImage);
             } else {
                 mBackGroundImage.refreshDrawableState();
                 mBackGroundImage.setImageDrawable(null);
             }
         }
 
-        private void displayContactImage(Contact contact) {
-            if (!isNull(contact.getContactImage())) {
-                picassoUtils.loadImageFromString(contact.getContactImage(), mContactImage);
+        private void displayContactImage(ContactModel contactModel) {
+            if (!isNull(contactModel.getContactImage())) {
+                picassoUtils.loadImageFromString(contactModel.getContactImage(), mContactImage);
             } else {
                 mContactImage.refreshDrawableState();
                 mContactImage.setImageDrawable(null);

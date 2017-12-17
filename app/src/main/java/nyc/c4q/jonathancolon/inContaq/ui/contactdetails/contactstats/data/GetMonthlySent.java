@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
 
 
 public class GetMonthlySent {
@@ -16,14 +16,14 @@ public class GetMonthlySent {
     public GetMonthlySent() {
     }
 
-    public TreeMap<Integer, Integer> getMonthlySent(ArrayList<Sms> smsList) {
+    public TreeMap<Integer, Integer> getMonthlySent(ArrayList<SmsModel> smsModelList) {
         ArrayList<String> sentSms = new ArrayList<>();
         PrepareMonthlyTreeMap treeMap = new PrepareMonthlyTreeMap();
         monthlySentTreeMap = treeMap.setUpMonthlyTreeMap();
 
-        for (int i = 0; i < smsList.size(); i++) {
-            if (smsList.get(i).getType().equals(SENT)) {
-                sentSms.add(smsList.get(i).getTimeStamp());
+        for (int i = 0; i < smsModelList.size(); i++) {
+            if (smsModelList.get(i).getType().equals(SENT)) {
+                sentSms.add(smsModelList.get(i).getTimeStamp());
             }
         }
         monthlySentTreeMap = mapMonthlyTexts(sentSms);

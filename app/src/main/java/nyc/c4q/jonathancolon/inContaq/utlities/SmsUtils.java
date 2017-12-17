@@ -12,8 +12,8 @@ import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
+import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
 
 import static nyc.c4q.jonathancolon.inContaq.utlities.ObjectUtils.*;
 
@@ -30,9 +30,9 @@ public class SmsUtils {
         this.contentResolver = contentResolver;
     }
 
-    public long getLastContactedDate(Contact contact) {
+    public long getLastContactedDate(ContactModel contactModel) {
         Cursor cursor = contentResolver.query(Uri.parse(URI_ALL), null,
-                useMobileNumberAsSelection(contact),null, null);
+                useMobileNumberAsSelection(contactModel),null, null);
 
         if (!isNull(cursor)) {
             if (cursor.moveToFirst()) {
@@ -41,7 +41,7 @@ public class SmsUtils {
                 Long timestamp = Long.parseLong(date);
                 cursor.close();
 
-                Log.d(Contact.class.getName(), String.valueOf(smsDateFormat(timestamp)));
+                Log.d(ContactModel.class.getName(), String.valueOf(smsDateFormat(timestamp)));
                 return timestamp;
             }
         }
@@ -49,11 +49,11 @@ public class SmsUtils {
     }
 
     @NonNull
-    private String useMobileNumberAsSelection(Contact contact) {
+    private String useMobileNumberAsSelection(ContactModel contactModel) {
         return new StringBuilder()
                 .append(ADDRESS)
                 .append("='")
-                .append(contact.getMobileNumber())
+                .append(contactModel.getMobileNumber())
                 .append("'")
                 .toString();
     }
@@ -124,23 +124,23 @@ public class SmsUtils {
     }
 
     @NonNull
-    public ArrayList<Sms> parseSentSms(ArrayList<Sms> smsList) {
-        ArrayList<Sms> sentSms = new ArrayList<>();
+    public ArrayList<SmsModel> parseSentSms(ArrayList<SmsModel> smsModelList) {
+        ArrayList<SmsModel> sentSms = new ArrayList<>();
 
-        for (int i = 0; i < smsList.size(); i++) {
-            if (smsList.get(i).getType().equals("2")) {
-                sentSms.add(smsList.get(i));
+        for (int i = 0; i < smsModelList.size(); i++) {
+            if (smsModelList.get(i).getType().equals("2")) {
+                sentSms.add(smsModelList.get(i));
             }
         }
         return sentSms;
     }
 
     @NonNull
-    public ArrayList<Sms> parseReceivedSms(ArrayList<Sms> smsList) {
-        ArrayList<Sms> receivedSms = new ArrayList<>();
-        for (int i = 0; i < smsList.size(); i++) {
-            if (smsList.get(i).getType().equals("1")) {
-                receivedSms.add(smsList.get(i));
+    public ArrayList<SmsModel> parseReceivedSms(ArrayList<SmsModel> smsModelList) {
+        ArrayList<SmsModel> receivedSms = new ArrayList<>();
+        for (int i = 0; i < smsModelList.size(); i++) {
+            if (smsModelList.get(i).getType().equals("1")) {
+                receivedSms.add(smsModelList.get(i));
             }
         }
         return receivedSms;

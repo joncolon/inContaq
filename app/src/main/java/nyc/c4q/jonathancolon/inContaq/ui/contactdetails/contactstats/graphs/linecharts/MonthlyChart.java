@@ -4,7 +4,7 @@ import com.db.chart.view.LineChartView;
 
 public class MonthlyChart extends LineChart {
 
-    private String[] xAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+    private final String[] xAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
             "Oct", "Nov", "Dec"};
 
     public MonthlyChart(LineChartView lineChartView, float[] monthlyReceived, float[] monthlySent) {

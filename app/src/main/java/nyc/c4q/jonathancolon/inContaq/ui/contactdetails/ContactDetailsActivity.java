@@ -10,7 +10,7 @@ import butterknife.BindView;
 import nyc.c4q.jonathancolon.inContaq.R;
 import nyc.c4q.jonathancolon.inContaq.common.base.BaseActivity;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 
 import static nyc.c4q.jonathancolon.inContaq.common.dagger.Injector.getApplicationComponent;
 import static nyc.c4q.jonathancolon.inContaq.ui.contactlist.ContactListActivity.CONTACT_KEY;
@@ -21,7 +21,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     @BindView(R.id.viewpager_contact_tabs)ViewPager viewPager;
 
     @Inject ContactDetailsPresenter presenter;
-    public Contact contact;
+    public ContactModel contactModel;
 
     @Inject
     RealmService realmService;
@@ -53,7 +53,7 @@ public class ContactDetailsActivity extends BaseActivity implements ContactDetai
     @Override
     public void loadSelectedContact() {
         long realmID = getIntent().getLongExtra(CONTACT_KEY, -1);
-        contact = realmService.getByRealmID(realmID);
+        contactModel = realmService.getByRealmID(realmID);
         realmService.closeRealm();
     }
 

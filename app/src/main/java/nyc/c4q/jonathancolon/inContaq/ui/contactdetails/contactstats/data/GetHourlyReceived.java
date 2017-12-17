@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
 
 
 public class GetHourlyReceived {
@@ -23,10 +23,10 @@ public class GetHourlyReceived {
 
 
     private TreeMap<Integer, Integer> hourlyReceivedTreeMap;
-    private ArrayList<Sms> smsList;
+    private ArrayList<SmsModel> smsModelList;
 
-    public GetHourlyReceived(ArrayList<Sms> smsList) {
-        this.smsList = smsList;
+    public GetHourlyReceived(ArrayList<SmsModel> smsModelList) {
+        this.smsModelList = smsModelList;
     }
 
     public TreeMap<Integer, Integer> getHourlyReceived() {
@@ -34,10 +34,10 @@ public class GetHourlyReceived {
         hourlyReceivedTreeMap = treeMapPrep.setUpHourlyTreeMap();
         ArrayList<String> receivedSms = new ArrayList<>();
 
-        for (int i = 0; i < smsList.size(); i++) {
-            String p = smsList.get(i).getType();
+        for (int i = 0; i < smsModelList.size(); i++) {
+            String p = smsModelList.get(i).getType();
             if (p.equals("1")) {
-                receivedSms.add(smsList.get(i).getTimeStamp());
+                receivedSms.add(smsModelList.get(i).getTimeStamp());
             }
         }
         hourlyReceivedTreeMap = mapHourlySms(receivedSms);

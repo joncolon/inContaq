@@ -44,9 +44,9 @@
     <string name="error_message_general">Something went wrong</string>
     <string name="are_you_sure">Are you sure you want to save your changes?</string>
     <string name="save_changes">Save changes?</string>
-    <string name="enter_name">Enter contact\'s name</string>
+    <string name="enter_name">Enter contactModel\'s name</string>
     <string name="sms_no_result">no result!</string>
-    <string name="add_contact">Add a contact</string>
+    <string name="add_contact">Add a contactModel</string>
     <string name="edit">EDIT</string>
     <string name="enter_mobile_number">Enter Mobile Number</string>
     <string name="email">Email:</string>
@@ -84,8 +84,8 @@
     <string name="days_since_last_contacted">days since last contacted</string>
     <string name="total_message_count">Total Message Count</string>
     <string name="average_text_length">Average Text Length</string>
-    <string name="add_first_contact">Add your first contact</string>
-    <string name="tap_here">Tap here to import your first contact</string>
+    <string name="add_first_contact">Add your first contactModel</string>
+    <string name="tap_here">Tap here to import your first contactModel</string>
     <string name="select_a_contact">Select a Contact</string>
     <string name="last_contacted">Last Contacted:</string>
     <string name="no_sms_available">No SMS data available</string>
@@ -114,9 +114,9 @@
     <string name="oct_text">text each other the most in October</string>
     <string name="nov_text">text each other the most in November</string>
     <string name="dec_text">text each other the most in December</string>
-    <string name="no_sms_to_analyze">This contact has no messages to analyze. Try starting a conversation and come back later!</string>
+    <string name="no_sms_to_analyze">This contactModel has no messages to analyze. Try starting a conversation and come back later!</string>
     <string name="error_no_mobile_found">No mobile number found.</string>
-    <string name="delete_this_contact">Delete this contact: </string>
+    <string name="delete_this_contact">Delete this contactModel: </string>
     <string name="question_mark">\?</string>
 
 </resources>

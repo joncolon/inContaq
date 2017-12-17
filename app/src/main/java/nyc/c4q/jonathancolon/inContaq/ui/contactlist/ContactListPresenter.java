@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import io.realm.RealmResults;
 import nyc.c4q.jonathancolon.inContaq.database.RealmService;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 import nyc.c4q.jonathancolon.inContaq.common.base.Presenter;
 import nyc.c4q.jonathancolon.inContaq.utlities.SharedPrefsUtils;
 
@@ -36,7 +36,7 @@ public class ContactListPresenter extends Presenter<ContactListContract.View> im
     }
 
     @Override
-    public RealmResults<Contact> retrieveContacts() {
+    public RealmResults<ContactModel> retrieveContacts() {
         return realmService.fetchAllContacts();
     }
 
@@ -46,22 +46,22 @@ public class ContactListPresenter extends Presenter<ContactListContract.View> im
     }
 
     @Override
-    public void onContactClicked(Contact contact) {
-        if (!isEmpty(contact.getMobileNumber())) {
-            getView().navigateToContactDetailsActivity(contact);
+    public void onContactClicked(ContactModel contactModel) {
+        if (!isEmpty(contactModel.getMobileNumber())) {
+            getView().navigateToContactDetailsActivity(contactModel);
         } else {
             getView().showNoMobileNumberError();
         }
     }
 
     @Override
-    public void addContactToDatabase(Contact contact) {
-        realmService.addContactToRealmDB(contact);
+    public void addContactToDatabase(ContactModel contactModel) {
+        realmService.addContactToRealmDB(contactModel);
     }
 
     @Override
-    public void onContactLongClicked(Contact contact) {
-        getView().showDeleteContactDialog(contact);
+    public void onContactLongClicked(ContactModel contactModel) {
+        getView().showDeleteContactDialog(contactModel);
     }
 
     @Override

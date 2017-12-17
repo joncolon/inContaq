@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
 import nyc.c4q.jonathancolon.inContaq.utlities.NameFormatter;
 import nyc.c4q.jonathancolon.inContaq.utlities.PhoneNumberFormatter;
 
@@ -40,15 +40,15 @@ public class ContactReader {
         this.context = context;
     }
 
-    Contact retrieveContact(Uri uri) {
-        Contact contact = new Contact();
-        retrieveContactName(contact, uri);
-        retrieveContactNumber(contact, uri);
-        retrieveContactEmail(contact);
-        return contact;
+    ContactModel retrieveContact(Uri uri) {
+        ContactModel contactModel = new ContactModel();
+        retrieveContactName(contactModel, uri);
+        retrieveContactNumber(contactModel, uri);
+        retrieveContactEmail(contactModel);
+        return contactModel;
     }
 
-    private void retrieveContactName(Contact contact, Uri uri) {
+    private void retrieveContactName(ContactModel contactModel, Uri uri) {
         String contactName = null;
         Cursor cursor = contentResolver.query(uri, null, null, null, null);
 
@@ -57,17 +57,17 @@ public class ContactReader {
             cursor.close();
         }
 
-        Log.d(TAG, "Contact Name: " + contactName);
+        Log.d(TAG, "ContactModel Name: " + contactName);
 
-        contact.setFirstName(NameFormatter.splitFirstAndLastName(contactName)[FIRST_NAME]);
-        contact.setLastName(NameFormatter.splitFirstAndLastName(contactName)[LAST_NAME]);
+        contactModel.setFirstName(NameFormatter.splitFirstAndLastName(contactName)[FIRST_NAME]);
+        contactModel.setLastName(NameFormatter.splitFirstAndLastName(contactName)[LAST_NAME]);
     }
 
-    private void retrieveContactNumber(Contact contact, Uri uri) {
+    private void retrieveContactNumber(ContactModel contactModel, Uri uri) {
         String contactNumber;
         retrieveContactID(uri);
 
-        Log.d(TAG, "Contact ID: " + contactID);
+        Log.d(TAG, "ContactModel ID: " + contactID);
         Cursor cursorPhone = contentResolver.query(Phone.CONTENT_URI,
                 new String[]{NUMBER},
                 Phone.CONTACT_ID + " = ? AND " + TYPE + " = " + TYPE_MOBILE,
@@ -79,11 +79,11 @@ public class ContactReader {
                 contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(NUMBER));
                 cursorPhone.close();
 
-                Log.d(TAG, "Contact Phone Number: " + contactNumber);
+                Log.d(TAG, "ContactModel Phone Number: " + contactNumber);
                 PhoneNumberFormatter formatter = new PhoneNumberFormatter(
                         PhoneNumberUtil.createInstance(context));
                 String mobileNumber = formatter.formatPhoneNumber(contactNumber);
-                contact.setMobileNumber(mobileNumber);
+                contactModel.setMobileNumber(mobileNumber);
             }
         } catch (NumberParseException e) {
             e.printStackTrace();
@@ -94,7 +94,7 @@ public class ContactReader {
         }
     }
 
-    private void retrieveContactEmail(Contact contact) {
+    private void retrieveContactEmail(ContactModel contactModel) {
         String DATA = Email.DATA;
         String email;
 
@@ -103,8 +103,8 @@ public class ContactReader {
         if (emailCursor != null) {
             while (emailCursor.moveToNext()) {
                 email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
-                Log.d(TAG, "Contact Email: " + email);
-                contact.setEmail(email);
+                Log.d(TAG, "ContactModel Email: " + email);
+                contactModel.setEmail(email);
             }
             emailCursor.close();
         }

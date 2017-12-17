@@ -5,13 +5,14 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import nyc.c4q.jonathancolon.inContaq.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
 
 /**
  * Created by jonathancolon on 5/14/17.
  */
 
 public class GetHourlySent {
+    public static final String TYPE_SENT = "2";
     TreeMap<Integer, Integer> hourlySentTreeMap;
 
     private static final int TWELVE_AM = 0;
@@ -28,15 +29,15 @@ public class GetHourlySent {
     public GetHourlySent() {
     }
 
-    public TreeMap<Integer, Integer> getHourlySent(ArrayList<Sms> smsList) {
+    public TreeMap<Integer, Integer> getHourlySent(ArrayList<SmsModel> smsModelList) {
         PrepareHourlyTreeMap prepareHourlyTreeMap = new PrepareHourlyTreeMap();
         hourlySentTreeMap = prepareHourlyTreeMap.setUpHourlyTreeMap();
         ArrayList<String> sentSms = new ArrayList<>();
 
-        for (int i = 0; i < smsList.size(); i++) {
-            String p = smsList.get(i).getType();
-            if (p.equals("2")) {
-                sentSms.add(smsList.get(i).getTimeStamp());
+        for (int i = 0; i < smsModelList.size(); i++) {
+            String type = smsModelList.get(i).getType();
+            if (type.equals(TYPE_SENT)) {
+                sentSms.add(smsModelList.get(i).getTimeStamp());
             }
         }
         hourlySentTreeMap = mapHourlySms(sentSms);

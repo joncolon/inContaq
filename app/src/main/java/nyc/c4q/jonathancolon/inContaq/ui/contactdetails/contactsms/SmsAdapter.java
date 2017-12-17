@@ -16,8 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import nyc.c4q.jonathancolon.inContaq.R;
-import nyc.c4q.jonathancolon.inContaq.model.Contact;
-import nyc.c4q.jonathancolon.inContaq.model.Sms;
+import nyc.c4q.jonathancolon.inContaq.model.ContactModel;
+import nyc.c4q.jonathancolon.inContaq.model.SmsModel;
 import nyc.c4q.jonathancolon.inContaq.utlities.SmsUtils;
 
 import static android.content.ContentValues.TAG;
@@ -25,13 +25,14 @@ import static android.content.ContentValues.TAG;
 
 public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
     private static final String ON_BIND_VIEW_HOLDER = "onBindViewHolder: ";
-    private final Contact contact;
+    public static final int MARSHMALLOW = 23;
+    private final ContactModel contactModel;
     private SmsUtils smsUtils;
     private Context context;
-    private ArrayList<Sms> smsList;
+    private ArrayList<SmsModel> smsList;
 
-    public SmsAdapter(Contact contact, SmsUtils smsUtils) {
-        this.contact = contact;
+    public SmsAdapter(ContactModel contactModel, SmsUtils smsUtils) {
+        this.contactModel = contactModel;
         this.smsUtils = smsUtils;
     }
 
@@ -51,9 +52,9 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
 
     @Override
     public void onBindViewHolder(SmsViewHolder holder, int position) {
-        Sms smsDetail = smsList.get(position);
-        holder.bind(smsDetail);
-        Log.d(TAG, ON_BIND_VIEW_HOLDER + smsDetail.getPhoneNumber());
+        SmsModel smsModelDetail = smsList.get(position);
+        holder.bind(smsModelDetail);
+        Log.d(TAG, ON_BIND_VIEW_HOLDER + smsModelDetail.getPhoneNumber());
     }
 
     @Override
@@ -61,8 +62,8 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         return smsList.size();
     }
 
-    public void setData(ArrayList<Sms> smsDetails) {
-        this.smsList = smsDetails;
+    public void setData(ArrayList<SmsModel> smsModelDetails) {
+        this.smsList = smsModelDetails;
         notifyDataSetChanged();
     }
 
@@ -80,26 +81,32 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
         }
 
         void initViews() {
-            senderId = (TextView) itemView.findViewById(R.id.senderId);
-            messageRecieved = (TextView) itemView.findViewById(R.id.messageDetails);
-            type = (TextView) itemView.findViewById(R.id.type);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.chat_view);
-            cardBubble = (CardView) itemView.findViewById(R.id.chatBubble);
-            timeDate = (TextView) itemView.findViewById(R.id.timeDate);
+            senderId = itemView.findViewById(R.id.senderId);
+            messageRecieved = itemView.findViewById(R.id.messageDetails);
+            type = itemView.findViewById(R.id.type);
+            linearLayout = itemView.findViewById(R.id.chat_view);
+            cardBubble = itemView.findViewById(R.id.chatBubble);
+            timeDate = itemView.findViewById(R.id.timeDate);
         }
 
-        void bind(Sms sms) {
-            displaySmsByType(sms);
-            populateTextViews(sms);
+        void bind(SmsModel smsModel) {
+            displaySmsByType(smsModel);
+            populateTextViews(smsModel);
         }
 
-        void displaySmsByType(Sms sms) {
-            if (sms.getType().equals(RECEIVED)) {
-                if (contact.getMobileNumber() != null) {
-                    type.setText(contact.getFirstName() + " " + contact.getLastName());
+        void displaySmsByType(SmsModel smsModel) {
+            if (smsModel.getType().equals(RECEIVED)) {
+                if (contactModel.getMobileNumber() != null) {
+                    String text = new StringBuilder()
+                            .append(contactModel.getFirstName())
+                            .append(" ")
+                            .append(contactModel.getLastName())
+                            .toString();
+
+                    type.setText(text);
                     linearLayout.setGravity(Gravity.START);
 
-                    if (Build.VERSION.SDK_INT >= 23) {
+                    if (Build.VERSION.SDK_INT >= MARSHMALLOW) {
                         cardBubble.setCardBackgroundColor(context.getColor(R.color.charcoal));
                         messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
                         timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
@@ -107,7 +114,7 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
                 }
             } else {
                 linearLayout.setGravity(Gravity.END);
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (Build.VERSION.SDK_INT >= MARSHMALLOW) {
                     cardBubble.setCardBackgroundColor(context.getColor(R.color.carmine_pink_lite));
                     messageRecieved.setTextColor(context.getColor(R.color.cardBackgroundColor));
                     timeDate.setTextColor(context.getColor(R.color.cardBackgroundColor));
@@ -115,13 +122,13 @@ public class SmsAdapter extends RecyclerView.Adapter<SmsAdapter.SmsViewHolder> {
             }
         }
 
-        void populateTextViews(Sms sms) {
-            StringBuilder time = smsUtils.smsDateFormat(Long.parseLong(sms.getTimeStamp()));
-            senderId.setText(sms.getPhoneNumber());
+        void populateTextViews(SmsModel smsModel) {
+            StringBuilder time = smsUtils.smsDateFormat(Long.parseLong(smsModel.getTimeStamp()));
+            senderId.setText(smsModel.getPhoneNumber());
             timeDate.setText(time);
-            messageRecieved.setText(sms.getMessage());
+            messageRecieved.setText(smsModel.getMessage());
             messageRecieved.setMovementMethod(LinkMovementMethod.getInstance());
-            type.setText(sms.getType());
+            type.setText(smsModel.getType());
         }
     }
 }
